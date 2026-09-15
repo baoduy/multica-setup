@@ -1,0 +1,27 @@
+{
+  "id": "846ed794-1ab2-4b30-8f0c-538e39ddcc5f",
+  "title": "🚀 Monthly Architecture Review — DKNet + DKNet.Templates",
+  "execution_mode": "create_issue",
+  "status": "active",
+  "project_id": "acdcbdaa-cf5e-41db-a9c8-87c15649576f",
+  "issue_title_template": "Monthly Architecture Review — DKNet + Templates ({{date}})",
+  "subscribers": [
+    {
+      "created_at": "2026-08-04T03:57:56Z",
+      "user_id": "04aadf2b-6674-4791-97e6-f8360575f317",
+      "user_type": "member"
+    }
+  ],
+  "assignee_name": "arch-reviewer",
+  "project_name": "drunk-net",
+  "triggers": [
+    {
+      "id": "9ae8a118-e89c-460c-8279-18072b49ec6b",
+      "kind": "schedule",
+      "cron_expression": "0 3 1 * *",
+      "timezone": "Asia/Singapore",
+      "enabled": true
+    }
+  ],
+  "description_file": "autopilots/monthly-architecture-review-dknet-dknet-templates.description.md"
+}

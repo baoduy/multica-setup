@@ -1,0 +1,43 @@
+{
+  "title": "mx-code",
+  "icon": "👨‍💻",
+  "priority": "high",
+  "status": "in_progress",
+  "due_date": null,
+  "start_date": null,
+  "source_id": "9818cf63-3006-4876-ae74-82b746744f2b",
+  "lead_type": "agent",
+  "lead_name": "dev-leader",
+  "lead_source_id": "9ec725c6-a4d7-4d08-bbbb-8034b29e307f",
+  "resources": [
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/the-wixo/monxa.email-service.git"
+      },
+      "label": null
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/the-wixo/monxa.auth-api.git"
+      },
+      "label": null
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/the-wixo/monxa.payment-gateway.git"
+      },
+      "label": null
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/the-wixo/monxa.web-hook-deliverer.git"
+      },
+      "label": null
+    }
+  ],
+  "description_file": "projects/mx-code.description.md"
+}

@@ -1,0 +1,33 @@
+{
+  "name": "blog-writer",
+  "model": "claude-opus-5",
+  "visibility": "workspace",
+  "avatar_url": "emoji:🐯",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "invocation_targets": [
+    {
+      "target_id": "4539126d-0687-4993-8852-3554b7c5fb50",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 3,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "high",
+  "source_runtime_provider": "claude",
+  "source_id": "8fd8e2cb-863c-400c-88c1-29a9652da8b3",
+  "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+  "skill_names": [
+    "astro-paper-blog-conventions",
+    "blocker-report",
+    "interview-me",
+    "sdlc-flow-squad-worker-playbook",
+    "sdlc-gitflow"
+  ],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "instructions_file": "agents/blog-writer.md",
+  "description_file": "agents/blog-writer.description.md"
+}

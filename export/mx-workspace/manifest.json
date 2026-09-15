@@ -1,0 +1,512 @@
+{
+  "version": "1",
+  "scope": "all",
+  "source_workspace_id": "ed38be16-b92f-48cc-9611-89bf09102d84",
+  "skills": [
+    {
+      "name": "architecture-review-sweep",
+      "dir": "skills/architecture-review-sweep",
+      "source_id": "089cc178-c2d1-4f4a-a852-35f2d7eddc70"
+    },
+    {
+      "name": "autopilot-spec",
+      "dir": "skills/autopilot-spec",
+      "source_id": "9ca24a8d-51f3-4c2a-ad17-d9c690fadc93"
+    },
+    {
+      "name": "bdd-report",
+      "dir": "skills/bdd-report",
+      "source_id": "9cf2ef1e-dd3e-4641-950d-e2ba96490ee6"
+    },
+    {
+      "name": "bdd-review-sweep",
+      "dir": "skills/bdd-review-sweep",
+      "source_id": "13c3383e-7e81-444d-9a19-fa62490f3982"
+    },
+    {
+      "name": "blocker-report",
+      "dir": "skills/blocker-report",
+      "source_id": "2a80ad9c-66ef-4f50-a2c5-a8853b85138c"
+    },
+    {
+      "name": "bug-report",
+      "dir": "skills/bug-report",
+      "source_id": "e90701b5-cc87-4473-a7d5-12ce86dfd794"
+    },
+    {
+      "name": "codegraph",
+      "dir": "skills/codegraph",
+      "source_id": "f2dafc8e-f6d9-481c-aafd-1bbe50109382"
+    },
+    {
+      "name": "compose-delivery",
+      "dir": "skills/compose-delivery",
+      "source_id": "9f812d26-d2dd-4452-aad8-9436094d15ff"
+    },
+    {
+      "name": "dknet-ddd-conventions",
+      "dir": "skills/dknet-ddd-conventions",
+      "source_id": "8bcb500a-c840-4388-a826-cb50364a485c"
+    },
+    {
+      "name": "dotnet10-efcore10-standards",
+      "dir": "skills/dotnet10-efcore10-standards",
+      "source_id": "62ab77c6-1015-4f61-aa94-41136cb54caa"
+    },
+    {
+      "name": "helm-chart-delivery",
+      "dir": "skills/helm-chart-delivery",
+      "source_id": "70d4a17d-0557-4759-9af2-b41bb17827e4"
+    },
+    {
+      "name": "interview-me",
+      "dir": "skills/interview-me",
+      "source_id": "cc39eb74-fef9-4faa-945d-cce8779d1887"
+    },
+    {
+      "name": "leader-gitops",
+      "dir": "skills/leader-gitops",
+      "source_id": "4e9756f2-2554-4100-a7a4-4b7f62f48526"
+    },
+    {
+      "name": "multica-brainstorming",
+      "dir": "skills/multica-brainstorming",
+      "source_id": "ad74346f-10ca-4941-8491-4c94dfaf335e"
+    },
+    {
+      "name": "prd-release-runbook",
+      "dir": "skills/prd-release-runbook",
+      "source_id": "dcdb49d6-60ec-40e8-b0c1-c6d85e7bc601"
+    },
+    {
+      "name": "pr-review-gate",
+      "dir": "skills/pr-review-gate",
+      "source_id": "76237b6a-b31d-4c69-a2b3-4a8c25a28d97"
+    },
+    {
+      "name": "sdlc-flow-delivery-pipeline",
+      "dir": "skills/sdlc-flow-delivery-pipeline",
+      "source_id": "5b9a04e0-2bd8-42a3-be56-5d05df77f8ff"
+    },
+    {
+      "name": "sdlc-flow-po-orchestration",
+      "dir": "skills/sdlc-flow-po-orchestration",
+      "source_id": "f83252b8-b989-41f1-977a-e0417af647fb"
+    },
+    {
+      "name": "sdlc-flow-squad-leader-playbook",
+      "dir": "skills/sdlc-flow-squad-leader-playbook",
+      "source_id": "d80ae513-4692-4d91-8837-047d4485754a"
+    },
+    {
+      "name": "sdlc-flow-squad-member-protocol",
+      "dir": "skills/sdlc-flow-squad-member-protocol",
+      "source_id": "bac8f0a3-399d-4e41-9d38-9150bf47dbbb"
+    },
+    {
+      "name": "sdlc-gitflow",
+      "dir": "skills/sdlc-gitflow",
+      "source_id": "a87637bd-3edf-4fec-b9d7-9808e4b723f6"
+    },
+    {
+      "name": "sdlc-impl-brief",
+      "dir": "skills/sdlc-impl-brief",
+      "source_id": "2513f650-0e09-438d-b73d-fd4b56166c7b"
+    },
+    {
+      "name": "sdlc-spec-template",
+      "dir": "skills/sdlc-spec-template",
+      "source_id": "7419da92-2a8d-40ec-aae6-c2f91469699e"
+    },
+    {
+      "name": "spec-review-gate",
+      "dir": "skills/spec-review-gate",
+      "source_id": "4497138f-e441-4428-a362-e5b783ca0074"
+    },
+    {
+      "name": "test-driven-development",
+      "dir": "skills/test-driven-development",
+      "source_id": "6508749b-830e-41a5-8f10-588853206caf"
+    },
+    {
+      "name": "testing-standards",
+      "dir": "skills/testing-standards",
+      "source_id": "b35d7e2b-75f1-4a55-bc65-3e7d6db2d0d4"
+    }
+  ],
+  "agents": [
+    {
+      "name": "default",
+      "file": "agents/default.json",
+      "source_id": "7fb21c77-f4db-431c-bd6e-51d95a9c2deb",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "autopilot-spec",
+        "blocker-report",
+        "interview-me",
+        "multica-brainstorming"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "dev-leader",
+      "file": "agents/dev-leader.json",
+      "source_id": "9ec725c6-a4d7-4d08-bbbb-8034b29e307f",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "codegraph",
+        "leader-gitops",
+        "multica-brainstorming",
+        "sdlc-flow-delivery-pipeline",
+        "sdlc-flow-squad-leader-playbook",
+        "sdlc-gitflow",
+        "sdlc-impl-brief"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "dev-backend",
+      "file": "agents/dev-backend.json",
+      "source_id": "52973d4e-b4cf-4b29-b5ad-6f120403c857",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "codegraph",
+        "dknet-ddd-conventions",
+        "dotnet10-efcore10-standards",
+        "sdlc-flow-squad-member-protocol",
+        "sdlc-gitflow",
+        "testing-standards"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "claude_ultra",
+      "file": "agents/claude-ultra.json",
+      "source_id": "cd22df44-6345-4a8f-8eef-132a09e929df",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "autopilot-spec",
+        "blocker-report",
+        "interview-me",
+        "multica-brainstorming"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "product-owner",
+      "file": "agents/product-owner.json",
+      "source_id": "b1546eca-c984-4b7a-99a6-25bc5e1c12b0",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "bug-report",
+        "codegraph",
+        "interview-me",
+        "multica-brainstorming",
+        "sdlc-flow-delivery-pipeline",
+        "sdlc-flow-po-orchestration",
+        "sdlc-spec-template"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "qc-leader",
+      "file": "agents/qc-leader.json",
+      "source_id": "a72a6d00-9bc8-4016-9483-b33df2ce9911",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "bdd-report",
+        "blocker-report",
+        "bug-report",
+        "codegraph",
+        "leader-gitops",
+        "multica-brainstorming",
+        "sdlc-flow-delivery-pipeline",
+        "sdlc-flow-squad-leader-playbook",
+        "sdlc-impl-brief"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "qc-tester",
+      "file": "agents/qc-tester.json",
+      "source_id": "2b1a96fd-3354-4051-b8db-548c8dc7b20a",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "bdd-report",
+        "blocker-report",
+        "codegraph",
+        "sdlc-flow-squad-member-protocol"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "qc-runner",
+      "file": "agents/qc-runner.json",
+      "source_id": "d7a77bd0-5dd1-429f-8d00-35594c882856",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "bdd-report",
+        "blocker-report",
+        "codegraph",
+        "sdlc-flow-squad-member-protocol"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "devops",
+      "file": "agents/devops.json",
+      "source_id": "9b9855ae-21bd-4196-a9a9-6d39412bfef8",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "codegraph",
+        "compose-delivery",
+        "helm-chart-delivery",
+        "multica-brainstorming",
+        "sdlc-flow-delivery-pipeline",
+        "sdlc-flow-squad-member-protocol",
+        "sdlc-gitflow"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "pr-reviewer",
+      "file": "agents/pr-reviewer.json",
+      "source_id": "74c810b2-ead5-4198-a141-eb4bc4409939",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "codegraph",
+        "dknet-ddd-conventions",
+        "pr-review-gate",
+        "sdlc-flow-delivery-pipeline",
+        "sdlc-flow-squad-member-protocol"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "spec-reviewer",
+      "file": "agents/spec-reviewer.json",
+      "source_id": "960bf485-913f-4f97-9588-aa5ef638c1e6",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "codegraph",
+        "sdlc-flow-delivery-pipeline",
+        "sdlc-flow-squad-member-protocol",
+        "sdlc-spec-template",
+        "spec-review-gate"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "issue-janitor",
+      "file": "agents/issue-janitor.json",
+      "source_id": "c525df5b-88bb-4772-9102-0d17a22eaad5",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "prd-release",
+      "file": "agents/prd-release.json",
+      "source_id": "9366b7eb-b852-4d21-b6d4-6702916014c5",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "prd-release-runbook",
+        "sdlc-gitflow"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "release-manager",
+      "file": "agents/release-manager.json",
+      "source_id": "436c6752-c3a2-4667-ac36-b521e34e6a8d",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "sdlc-flow-squad-member-protocol",
+        "sdlc-gitflow"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "arch-reviewer",
+      "file": "agents/arch-reviewer.json",
+      "source_id": "b10219fb-a1d5-417f-abe9-2f3fb486bb1b",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "architecture-review-sweep",
+        "blocker-report",
+        "bug-report",
+        "codegraph",
+        "dknet-ddd-conventions",
+        "dotnet10-efcore10-standards",
+        "sdlc-gitflow"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "Mika",
+      "file": "agents/mika.json",
+      "source_id": "fcef49f6-c684-4b4e-a6f4-3ccb5563618e",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [],
+      "had_secrets": false
+    },
+    {
+      "name": "bdd-reviewer",
+      "file": "agents/bdd-reviewer.json",
+      "source_id": "ff3ab04a-3091-43a1-822c-8048048c0c7d",
+      "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "bdd-report",
+        "bdd-review-sweep",
+        "blocker-report",
+        "codegraph",
+        "testing-standards"
+      ],
+      "had_secrets": false
+    }
+  ],
+  "squads": [
+    {
+      "name": "dev-team",
+      "file": "squads/dev-team.json",
+      "avatar_url": "emoji:🦍",
+      "leader_name": "dev-leader",
+      "members": [
+        {
+          "agent_name": "dev-leader",
+          "role": "leader"
+        },
+        {
+          "agent_name": "dev-backend",
+          "role": "developer"
+        },
+        {
+          "agent_name": "pr-reviewer",
+          "role": "pr-review-gate"
+        }
+      ],
+      "instructions_file": "squads/dev-team.md"
+    },
+    {
+      "name": "qc-team",
+      "file": "squads/qc-team.json",
+      "avatar_url": "emoji:🐸",
+      "leader_name": "qc-leader",
+      "members": [
+        {
+          "agent_name": "qc-leader",
+          "role": "leader"
+        },
+        {
+          "agent_name": "qc-tester",
+          "role": "scenario-developer"
+        },
+        {
+          "agent_name": "qc-runner",
+          "role": "scenario-review-and-execution-gate"
+        },
+        {
+          "agent_name": "pr-reviewer",
+          "role": "pr-review-gate"
+        }
+      ],
+      "instructions_file": "squads/qc-team.md",
+      "description_file": "squads/qc-team.description.md"
+    },
+    {
+      "name": "product-team",
+      "file": "squads/product-team.json",
+      "avatar_url": "emoji:🦊",
+      "leader_name": "product-owner",
+      "members": [
+        {
+          "agent_name": "product-owner",
+          "role": "leader"
+        },
+        {
+          "agent_name": "spec-reviewer",
+          "role": "spec-review-gate"
+        },
+        {
+          "agent_name": "release-manager",
+          "role": "release-custodian"
+        },
+        {
+          "agent_name": "devops",
+          "role": "cicd-and-helm-specialist"
+        },
+        {
+          "agent_name": "pr-reviewer",
+          "role": "pr-review-gate"
+        }
+      ],
+      "instructions_file": "squads/product-team.md",
+      "description_file": "squads/product-team.description.md"
+    }
+  ],
+  "projects": [
+    {
+      "title": "mx-prd-releases",
+      "file": "projects/mx-prd-releases.json",
+      "source_id": "e2ffb49d-9d34-4d8a-9147-0ead4171de8c",
+      "lead_name": "prd-release",
+      "lead_type": "agent"
+    },
+    {
+      "title": "mx-main",
+      "file": "projects/mx-main.json",
+      "source_id": "8008ea4e-76ce-4035-9824-8041e82d1b68",
+      "lead_name": "product-owner",
+      "lead_type": "agent"
+    },
+    {
+      "title": "mx-jobs",
+      "file": "projects/mx-jobs.json",
+      "source_id": "e301fbc6-2ee9-48bd-8587-d5626b6176f2",
+      "lead_name": null,
+      "lead_type": null
+    },
+    {
+      "title": "mx-qc-board",
+      "file": "projects/mx-qc-board.json",
+      "source_id": "32f538b8-2030-4ca4-b2e7-c3b9f1e07066",
+      "lead_name": "qc-leader",
+      "lead_type": "agent"
+    },
+    {
+      "title": "mx-code",
+      "file": "projects/mx-code.json",
+      "source_id": "9818cf63-3006-4876-ae74-82b746744f2b",
+      "lead_name": "dev-leader",
+      "lead_type": "agent"
+    }
+  ],
+  "autopilots": []
+}

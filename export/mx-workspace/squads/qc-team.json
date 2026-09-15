@@ -1,0 +1,26 @@
+{
+  "name": "qc-team",
+  "file": "squads/qc-team.json",
+  "avatar_url": "emoji:🐸",
+  "leader_name": "qc-leader",
+  "members": [
+    {
+      "agent_name": "qc-leader",
+      "role": "leader"
+    },
+    {
+      "agent_name": "qc-tester",
+      "role": "scenario-developer"
+    },
+    {
+      "agent_name": "qc-runner",
+      "role": "scenario-review-and-execution-gate"
+    },
+    {
+      "agent_name": "pr-reviewer",
+      "role": "pr-review-gate"
+    }
+  ],
+  "instructions_file": "squads/qc-team.md",
+  "description_file": "squads/qc-team.description.md"
+}

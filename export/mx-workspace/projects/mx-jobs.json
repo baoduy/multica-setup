@@ -1,0 +1,64 @@
+{
+  "title": "mx-jobs",
+  "icon": "♻️",
+  "priority": "medium",
+  "status": "in_progress",
+  "due_date": null,
+  "start_date": null,
+  "source_id": "e301fbc6-2ee9-48bd-8587-d5626b6176f2",
+  "lead_type": null,
+  "lead_name": null,
+  "lead_source_id": null,
+  "resources": [
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/the-wixo/monxa.email-service.git"
+      },
+      "label": "Email Service"
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/the-wixo/monxa.auth-api.git"
+      },
+      "label": "Auth API"
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/the-wixo/monxa.payment-gateway.git"
+      },
+      "label": "Payment Gateway"
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/the-wixo/monxa.web-hook-deliverer.git"
+      },
+      "label": "Webhook Deliverer"
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/the-wixo/monxa.bdd-integration.git"
+      },
+      "label": "BDD Integration"
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/the-wixo/infra-v2.helm-charts.git"
+      },
+      "label": "Helm Charts (SANDBOX)"
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/the-wixo/monxa.helm-charts.git"
+      },
+      "label": "Helm Charts (PRD)"
+    }
+  ],
+  "description_file": "projects/mx-jobs.description.md"
+}

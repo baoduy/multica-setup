@@ -1,0 +1,24 @@
+{
+  "title": "🚀 Monthly Architecture Review — Monxa Backend Services",
+  "source_id": "c207e0dc-5636-4f9c-918b-2082dd5cd573",
+  "execution_mode": "create_issue",
+  "issue_title_template": "Monthly Architecture Review — Monxa Backend Services ({{date}})",
+  "priority": null,
+  "project_title": "mx-jobs",
+  "assignee_type": "agent",
+  "assignee_name": "default",
+  "subscriber_names": [
+    "drunkcoding"
+  ],
+  "had_webhook_trigger": false,
+  "triggers": [
+    {
+      "kind": "schedule",
+      "label": "Monthly, 1st at 02:00 SGT",
+      "enabled": true,
+      "cron_expression": "0 2 1 * *",
+      "timezone": "Asia/Singapore"
+    }
+  ],
+  "description_file": "autopilots/monthly-architecture-review-monxa-backend-services.description.md"
+}

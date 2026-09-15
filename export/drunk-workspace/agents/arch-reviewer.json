@@ -1,0 +1,41 @@
+{
+  "name": "arch-reviewer",
+  "model": "claude-opus-5",
+  "visibility": "workspace",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/019fb5a7-fada-71c3-9bf4-c586ca73f44e.png",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "invocation_targets": [
+    {
+      "target_id": "4539126d-0687-4993-8852-3554b7c5fb50",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 1,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "max",
+  "source_runtime_provider": "claude",
+  "source_id": "b8b037b4-e542-4bd3-b3e7-3b3bba920b61",
+  "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+  "skill_names": [
+    "architecture-review-sweep",
+    "blocker-report",
+    "bug-report",
+    "codegraph",
+    "dknet-ddd-conventions",
+    "docker-image-standards",
+    "dotnet10-efcore10-standards",
+    "helm-k8s-conventions",
+    "nodejs-typescript-standards",
+    "pulumi-azure-iac-standards",
+    "python-mcp-standards",
+    "sdlc-gitflow"
+  ],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "avatar_file": "agents/arch-reviewer.avatar.png",
+  "instructions_file": "agents/arch-reviewer.md",
+  "description_file": "agents/arch-reviewer.description.md"
+}

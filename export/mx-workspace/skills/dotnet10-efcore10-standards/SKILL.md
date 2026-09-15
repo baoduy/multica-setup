@@ -1,0 +1,167 @@
+---
+name: dotnet10-efcore10-standards
+description: Verified .NET 10 / C# 14 / EF Core 10 / ASP.NET Core 10 coding standards — the XML-documentation standard (DOC-*) every public member must meet, language features by correct version, EF Core 10 breaking changes, EF query anti-patterns with official doc links, DRY/SOLID thresholds, and the CA/Meziantou analyzer rule IDs. Use when WRITING, reviewing, or modernizing C# code targeting .NET 10 and EF Core 10.
+---
+
+# .NET 10 / EF Core 10 Review Standards
+
+Verified against Microsoft Learn and dotnet/efcore, 2026-07-29. Every rule carries stable `rule-id` for use as finding fingerprint.
+
+## Repository layout
+
+- `NET10-STR-001` **Code outside `src/`.** New repo puts all application/library projects under `src/` (`src/<Project>/<Project>.csproj`), tests under `tests/` alongside it, and single `.sln`/`.slnx` at repo root. Don't scatter `.csproj`s at root or invent bespoke top-level layout. Existing repos that predate this keep their layout until restructure; new repos and new top-level projects follow it. (Implements policy [01](../../docs/policies/01-coding-standards-dotnet.md) statement 16.)
+
+## Get version attribution right
+
+Most common way to be wrong here is flagging something as "not using C# 14 feature" when feature shipped two versions ago. Reviewers lose credibility fast doing that.
+
+**Actually C# 14 / .NET 10:** extension members (`extension(Type x) { }` blocks — extension *properties*, static members, operators), the `field` keyword, null-conditional assignment (`x?.Prop = v`), `nameof` on unbound generics, modifiers on simple lambda parameters, partial constructors and events, more implicit `Span<T>` conversions, user-defined compound assignment.
+→ https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-14
+
+**NOT C# 14 — do not attribute these to it:**
+- Collection expressions (`[..]`) and primary constructors → **C# 12 / .NET 8**
+- `params` collections and `System.Threading.Lock` → **C# 13 / .NET 9**
+
+They are still fine to raise in modernization pass — cite right version.
+
+### Language rules
+
+- `NET10-LANG-001` **Manual backing field for trivial property.** `private T _x; public T X { get => _x; set => _x = Normalize(value); }` collapses to `field` keyword.
+- `NET10-LANG-002` **Null-guard that collapses to null-conditional assignment.** `if (x is not null) x.P = v;` → `x?.P = v;`. (`++`/`--` still not allowed with `?.`.)
+- `NET10-LANG-003` **Extension method that reads as property.** `IsEmpty()` where extension property fits better. Only raise when it genuinely improves call site.
+- `NET10-LANG-004` **Pre-C#12 collection construction.** `new List<T> { a, b }` / `.ToArray()` chains where collection expression is clearer.
+- `NET10-LANG-005` **Source-generator workaround** (factory/init methods) that partial constructors or events now replace.
+
+## EF Core 10
+
+### What changed that reviewer must know
+
+- **Complex types matured** — optional complex types, complex-type→JSON mapping, struct-backed complex types. Official guidance: prefer complex types over owned entity types for table-splitting and JSON.
+- **Parameterized collections** — `.Contains(array)` now emits multiple scalar parameters (`IN (@id1, @id2)`) instead of one JSON array, giving planner cardinality. Tunable via `UseParameterizedCollectionMode`, `EF.Constant`, `EF.Parameter`, `EF.MultipleParameters`.
+- **`ExecuteUpdateAsync`** takes plain lambda (no longer expression tree) and supports JSON columns on `ToJson()` complex types.
+- **Named query filters** — `HasQueryFilter("Name", ...)`, multiple filters per entity, selective `IgnoreQueryFilters(["Name"])`. This removes old one-filter-per-type limit.
+- **`LeftJoin`/`RightJoin`** LINQ operators are translated — retire `SelectMany` + `GroupJoin` + `DefaultIfEmpty`.
+- **Split-query ordering fix** — consistent `ORDER BY` across split queries, closing real data-correctness bug.
+- **Security** — `EF.Constant` values redacted from logs by default; new build-time analyzer for string concatenation in raw-SQL APIs.
+- **SQL Server/Azure SQL native `json` and `vector` types**; `EF.Functions.VectorDistance()`.
+
+→ https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-10.0/whatsnew
+
+### Breaking changes to check on upgrade
+
+EF tools need `--framework` on multi-targeted projects · Application Name auto-injected into connection strings (can escalate distributed transactions when EF and Dapper share connection) · SQL Server `json` type by default at compat ≥170 / `UseAzureSql` · parameterized-collection default change (plan-cache impact) · `ExecuteUpdateAsync` source break · complex-type column names uniquified and nested ones use full path names · `IDiscriminatorPropertySetConvention` signature change · `IRelationalCommandDiagnosticsLogger` gained `logCommandText` · **SQL parameter names simplified** (`@city`, not `@__city_0`) — breaks any test asserting on generated SQL and can spike plan recompilation on deploy · **Microsoft.Data.Sqlite 10** has high-impact `DateTime`/`DateTimeOffset` UTC handling changes.
+
+→ https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-10.0/breaking-changes
+
+### EF query anti-patterns
+
+- `EFC-001` **N+1 from lazy loading.** Navigation accessed in loop. → https://learn.microsoft.com/en-us/ef/core/querying/related-data/lazy
+- `EFC-002` **Missing `AsNoTracking()` on read-only path.** Query result is projected/returned and never mutated. → https://learn.microsoft.com/en-us/ef/core/querying/tracking
+- `EFC-003` **Cartesian explosion.** Multiple sibling `Include`s on collection navigations without `AsSplitQuery()`. → https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries
+- `EFC-004` **Client-side evaluation.** `.AsEnumerable()`/`.ToList()` mid-query, or predicate calling non-translatable method. → https://learn.microsoft.com/en-us/ef/core/performance/efficient-querying
+- `EFC-005` **Raw SQL injection risk.** Concatenated or interpolated user input into `FromSqlRaw`/`ExecuteSqlRaw`. Use `FromSql` or parameterized overloads. EF10 ships analyzer for this. → https://learn.microsoft.com/en-us/ef/core/querying/sql-queries
+- `EFC-006` **`SaveChangesAsync` inside loop.** Batch into one unit of work. *(No dedicated official page — cite two performance pages.)* → https://learn.microsoft.com/en-us/ef/core/performance/efficient-querying
+- `EFC-007` **Global query filter pitfall.** Filter defined on non-root type of hierarchy, filter cycles, or reliance on filters with compiled models. → https://learn.microsoft.com/en-us/ef/core/querying/filters
+- `EFC-008` **`DbContext` lifetime/pooling misuse.** Context captured by background worker or parallel task without `AddDbContextFactory`/`AddPooledDbContextFactory`. → https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/
+- `EFC-009` **Over-materialisation.** Whole entity graph loaded to read two columns; project to DTO instead. → https://learn.microsoft.com/en-us/ef/core/performance/advanced-performance-topics
+- `EFC-010` **Migration hygiene.** Divergent model snapshots from parallel branches, or `dotnet ef database update` against production instead of idempotent SQL scripts. → https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/teams
+- `EFC-011` **Unbounded query.** List endpoint or job query with no pagination or row cap.
+- `EFC-012` **Owned entity type used where complex type now fits** (table-splitting / JSON) under EF10 guidance.
+
+## ASP.NET Core 10
+
+- `ASP-001` **Hand-rolled validation** duplicating built-in Minimal API validation (`AddValidation()`, `Microsoft.Extensions.Validation`, per-endpoint `.DisableValidation()`).
+- `ASP-002` **OpenAPI 3.1 assumptions.** Nullable is now `oneOf` / `type: [null, T]`, not `nullable: true`; `OpenApiAny` → `JsonNode`; `OpenApiSchema.Nullable` removed. Flag snapshot tests and consumers that assume 3.0 shape.
+- `ASP-003` **Business logic in endpoint.** Endpoints map request → bus/handler → response, nothing more.
+- `ASP-004` **Missing idempotency on state-changing POST** where solution has idempotency convention.
+- `ASP-005` **Cookie-auth 401 behaviour change** — API endpoints now return 401/403 rather than redirecting to login. Flag code that depended on redirect.
+
+→ https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-10.0
+
+## Async, cancellation, logging
+
+- `ASYNC-001` **`CancellationToken` not forwarded** to call that accepts one (**CA2016**, Meziantou **MA0040**). → https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2016
+- `ASYNC-002` **No `CancellationToken` parameter** on async method that performs I/O (Meziantou **MA0032**).
+- `ASYNC-003` **`async void`** outside event handler.
+- `ASYNC-004` **Sync-over-async** — `.Result`, `.Wait()`, `.GetAwaiter().GetResult()`.
+- `ASYNC-005` **Missing `ConfigureAwait`** in *library* projects (**CA2007**, Meziantou **MA0004**). Not applicable to ASP.NET Core app code — no `SynchronizationContext`. Do not flag it there. → https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2007
+- `ASYNC-006` **Missing `Async` suffix** on async method.
+- `LOG-001` **Non-source-generated logging on hot path** (**CA1848**) — use `[LoggerMessage]`. → https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1848
+- `LOG-002` **Sensitive data in logs** — PAN, tokens, full request bodies, secrets.
+
+## Clean code — DRY / SOLID / less code
+
+Thresholds are triggers for look, not automatic defects. Say why specific instance is problem, or don't file it.
+
+- `CLEAN-DRY-001` **Duplicated logic.** Same non-trivial block in 3+ places, or 2 places in different slices.
+- `CLEAN-DRY-002` **Copy-paste divergence.** Near-identical blocks that have drifted — dangerous kind, since one gets fixed and other doesn't.
+- `CLEAN-SRP-001` **Class over ~300 lines** or with more than one reason to change.
+- `CLEAN-SRP-002` **Method over ~50 lines** or cyclomatic complexity > 10.
+- `CLEAN-SRP-003` **Constructor with 7+ dependencies** — type is doing too much.
+- `CLEAN-OCP-001` **Type-switch on enum/type** repeated across files where polymorphism or keyed service fits.
+- `CLEAN-LSP-001` **Override that throws `NotSupportedException`** or silently no-ops.
+- `CLEAN-ISP-001` **Fat interface** — implementers forced to stub members they don't need.
+- `CLEAN-DIP-001` **Concrete infrastructure dependency** where abstraction exists.
+- `CLEAN-LESS-001` **Dead code** — unreferenced public types/members, commented-out blocks, unreachable branches.
+- `CLEAN-LESS-002` **Speculative abstraction** — interface with exactly one implementation and no test-double or extension need.
+- `CLEAN-LESS-003` **Redundant wrapper** — service that only forwards to another.
+- `CLEAN-LESS-004` **Reinvented BCL/framework behaviour.**
+- `CLEAN-ORG-001` **Misplaced file** — type not in feature slice it belongs to.
+- `CLEAN-ORG-002` **Grab-bag `Helpers`/`Utils`/`Common` type** accumulating unrelated members.
+- `CLEAN-ORG-003` **Inconsistent solution** — same concern solved two ways. Name newer / better-tested one as winner and flag other for cleanup. Do not split difference.
+
+## XML documentation — WHY, not WHAT
+
+Applies when **writing** code, not only when reviewing it. Every `public` and `protected` member in `Domains`, `AppServices`, and `Share` carries XML doc comment.
+
+Bar is not "describe signature" — compiler already did that, and so did name. Bar is: **what business rule does this encode, and what must caller know that declaration does not say.**
+
+- `DOC-001` **Missing XML doc on public/protected member.** Types, methods, properties, events, public constructors. `internal`/`private` members only when logic is non-obvious.
+- `DOC-002` **Restating signature.** `/// <summary>Gets or sets the amount.</summary>` on `decimal Amount` is noise. Say why it exists ("gross amount charged to merchant, before FX and scheme fees") or delete comment.
+- `DOC-003` **Over 500 characters.** Hard cap on whole doc block per member. Past that explanation is architecture, not API docs — move it to type-level `<remarks>` or ADR and link it.
+- `DOC-004` **Undocumented business constraint.** Member that enforces invariant, returns `IResultBase` failures, throws, or mutates conditionally must state conditions in `<returns>` / `<exception>` / `<remarks>`.
+- `DOC-005` **Stale doc.** Doc describes behaviour body no longer has. This is defect, not nit — confidently wrong doc is worse than no doc. Changing method's rules means changing its doc in same commit.
+- `DOC-006` **Documented triviality.** `Id`, `CreatedOn`, plain DTO mirror properties, obvious `ToString()`. Skip them — `DOC-001` does not apply, and forcing docs here is how `DOC-002` noise gets born.
+- `DOC-007` **`<inheritdoc/>` not used on implementation.** Interface/base declares contract; implementation writes `/// <inheritdoc/>` and adds `<remarks>` only where its behaviour differs. Re-typing parent's summary is `CLEAN-DRY-001` violation in prose.
+
+### Shape
+
+```csharp
+/// <summary>
+/// A payment intent a merchant has authorised but not yet captured.
+/// Funds are reserved at the scheme; the merchant is only debited on capture.
+/// </summary>
+/// <remarks>Expires after the scheme's auth window (7 days card, 28 days SEPA); an expired intent can no longer be captured.</remarks>
+public sealed class PaymentIntent : AuditedEntity
+{
+    /// <summary>Gross amount reserved at authorisation, in <see cref="Currency"/> minor units. Immutable — a different amount requires a new intent, because the scheme auth cannot be amended.</summary>
+    public Money Amount { get; private set; }
+
+    /// <summary>
+    /// Captures the reserved funds and raises <see cref="PaymentCapturedEvent"/>.
+    /// Partial capture is allowed once; the residual authorisation is released.
+    /// </summary>
+    /// <param name="amount">Amount to capture. Must be &gt; 0 and &lt;= <see cref="Amount"/>.</param>
+    /// <returns>Failure when the intent is already captured, voided, or past its auth window.</returns>
+    public IResultBase Capture(Money amount, string byUser) { /* ... */ }
+}
+```
+
+Note what docs carry that signature cannot: *why* `Amount` has no setter, *when* `Capture` fails, *what* expiry rule is. That is whole test — if deleting doc loses no information, it was `DOC-002`.
+
+### Make it mechanical
+
+Set it in `Directory.Build.props` so compiler enforces `DOC-001` instead of reviewer:
+
+```xml
+<GenerateDocumentationFile>true</GenerateDocumentationFile>
+<NoWarn>$(NoWarn);CS1591</NoWarn> <!-- drop this line to turn missing-doc into a build error -->
+```
+
+CS1591 catches *missing*. `DOC-002` through `DOC-005` are judgement — they stay with author and reviewer.
+
+## Not independently verified
+
+Flagged honestly rather than presented as fact:
+- Exact verbatim wording of Meziantou **MA0032** / **MA0040** — intent above is correct; fetch `docs/Rules/MA0032.md` and `MA0040.md` from github.com/meziantou/Meziantou.Analyzer before quoting them in style guide.
+- `EFC-006` has no dedicated official page; two performance pages cited are real sources.

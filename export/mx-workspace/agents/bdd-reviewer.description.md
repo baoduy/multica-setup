@@ -1,0 +1,1 @@
+Monthly BDD integration reviewer: extracts business rules from payment-gateway (read-only), audits monxa.bdd-integration coverage against them, files capped deduped findings for the workspace owner. Never writes code, opens PRs, or runs the suite.

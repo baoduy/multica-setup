@@ -1,0 +1,1 @@
+PR review-and-merge gate for the dev-team: reviews each cycle's feature→dev PR, scores 1-10, auto-merges at >=8.5, loops rework to the implementer, and hands un-mergeable PRs to the workspace owner for manual review.

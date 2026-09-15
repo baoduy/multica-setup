@@ -1,0 +1,29 @@
+{
+  "name": "blog-team",
+  "file": "squads/blog-team.json",
+  "avatar_url": "emoji:🦉",
+  "leader_name": "dev-leader",
+  "members": [
+    {
+      "agent_name": "blog-writer",
+      "role": "member"
+    },
+    {
+      "agent_name": "dev-leader",
+      "role": "leader"
+    },
+    {
+      "agent_name": "dev-backend",
+      "role": "member"
+    },
+    {
+      "agent_name": "pr-reviewer",
+      "role": "member"
+    },
+    {
+      "agent_name": "devops",
+      "role": "member"
+    }
+  ],
+  "description_file": "squads/blog-team.description.md"
+}

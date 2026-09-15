@@ -1,0 +1,28 @@
+{
+  "name": "medium-publisher",
+  "model": "",
+  "visibility": "private",
+  "avatar_url": "emoji:🦁",
+  "service_tier": "",
+  "permission_mode": "private",
+  "invocation_targets": [],
+  "max_concurrent_tasks": 6,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "",
+  "source_runtime_provider": "claude",
+  "source_id": "aada2a10-d43e-4adb-94a9-a6fc8639c1de",
+  "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+  "skill_names": [
+    "astro-paper-blog-conventions",
+    "medium-publishing"
+  ],
+  "mcp_config": null,
+  "custom_env": {
+    "MEDIUM_TOKEN": "****",
+    "MEDIUM_USER_ID": "****"
+  },
+  "had_secrets": true,
+  "instructions_file": "agents/medium-publisher.md",
+  "description_file": "agents/medium-publisher.description.md"
+}

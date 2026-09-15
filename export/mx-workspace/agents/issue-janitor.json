@@ -1,0 +1,29 @@
+{
+  "name": "issue-janitor",
+  "model": "claude-sonnet-5",
+  "visibility": "workspace",
+  "avatar_url": "emoji:🐝",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "invocation_targets": [
+    {
+      "target_id": "ed38be16-b92f-48cc-9611-89bf09102d84",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 1,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "",
+  "source_runtime_provider": "claude",
+  "source_id": "c525df5b-88bb-4772-9102-0d17a22eaad5",
+  "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+  "skill_names": [
+    "blocker-report"
+  ],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "instructions_file": "agents/issue-janitor.md",
+  "description_file": "agents/issue-janitor.description.md"
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Mika",
+  "model": "",
+  "visibility": "workspace",
+  "avatar_url": "emoji:🦄",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "invocation_targets": [
+    {
+      "target_id": "4539126d-0687-4993-8852-3554b7c5fb50",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 3,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "",
+  "source_runtime_provider": "hermes",
+  "source_id": "ed486cd5-9d44-4058-89f3-0c92f3d8512f",
+  "source_runtime_id": "8c109428-3093-494f-aad9-856cced56b69",
+  "skill_names": [
+    "codegraph"
+  ],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "instructions_file": "agents/mika.md",
+  "description_file": "agents/mika.description.md"
+}

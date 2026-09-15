@@ -1,0 +1,1 @@
+DEV Team developer: two runs per cycle - writes the spec's acceptance criteria as RED Reqnroll scenarios; after the leader freezes them (at_sha) implements to green with >=80% coverage and a mutation report per touched class. Owns code and tests.

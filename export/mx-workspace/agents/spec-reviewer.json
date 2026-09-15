@@ -1,0 +1,35 @@
+{
+  "name": "spec-reviewer",
+  "model": "claude-sonnet-5",
+  "visibility": "workspace",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/ed38be16-b92f-48cc-9611-89bf09102d84/019fb5a7-5096-762d-bb4f-ad1f61af305c.png",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "invocation_targets": [
+    {
+      "target_id": "ed38be16-b92f-48cc-9611-89bf09102d84",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 6,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "xhigh",
+  "source_runtime_provider": "claude",
+  "source_id": "960bf485-913f-4f97-9588-aa5ef638c1e6",
+  "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+  "skill_names": [
+    "blocker-report",
+    "codegraph",
+    "sdlc-flow-delivery-pipeline",
+    "sdlc-flow-squad-member-protocol",
+    "sdlc-spec-template",
+    "spec-review-gate"
+  ],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "avatar_file": "agents/spec-reviewer.avatar.png",
+  "instructions_file": "agents/spec-reviewer.md",
+  "description_file": "agents/spec-reviewer.description.md"
+}

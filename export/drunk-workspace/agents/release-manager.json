@@ -1,0 +1,32 @@
+{
+  "name": "release-manager",
+  "model": "claude-sonnet-5",
+  "visibility": "workspace",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/019fb5a8-138b-710f-ba0e-97218fb08c92.png",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "invocation_targets": [
+    {
+      "target_id": "4539126d-0687-4993-8852-3554b7c5fb50",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 6,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "high",
+  "source_runtime_provider": "claude",
+  "source_id": "917f3050-786b-4b9e-8309-5d8415d9835d",
+  "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+  "skill_names": [
+    "blocker-report",
+    "sdlc-flow-squad-worker-playbook",
+    "sdlc-gitflow"
+  ],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "avatar_file": "agents/release-manager.avatar.png",
+  "instructions_file": "agents/release-manager.md",
+  "description_file": "agents/release-manager.description.md"
+}

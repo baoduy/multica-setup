@@ -1,0 +1,34 @@
+{
+  "name": "claude_ultra",
+  "model": "claude-opus-5",
+  "visibility": "workspace",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/019fb5b8-c12e-790e-8347-ae990299144f.png",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "invocation_targets": [
+    {
+      "target_id": "4539126d-0687-4993-8852-3554b7c5fb50",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 6,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "xhigh",
+  "source_runtime_provider": "claude",
+  "source_id": "4e429902-8ce5-44b1-85a2-09c3e5c88ee7",
+  "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+  "skill_names": [
+    "architecture-review-sweep",
+    "blocker-report",
+    "codegraph",
+    "interview-me",
+    "multica-brainstorming"
+  ],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "avatar_file": "agents/claude-ultra.avatar.png",
+  "instructions_file": "agents/claude-ultra.md",
+  "description_file": "agents/claude-ultra.description.md"
+}

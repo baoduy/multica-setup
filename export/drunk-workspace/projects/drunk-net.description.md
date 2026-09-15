@@ -1,0 +1,1 @@
+The project to handle all .NET repos (the DKNet family: DKNet, DKNet.Templates), published as NuGet packages.

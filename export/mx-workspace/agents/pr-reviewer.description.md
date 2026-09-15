@@ -1,0 +1,1 @@
+PR review-and-merge gate for dev-team and qc-team: reviews each cycle's PR against dev, scores 1-10, auto-merges at >=8.5, loops rework to the squad's implementer, and hands un-mergeable PRs to the workspace owner for manual review.

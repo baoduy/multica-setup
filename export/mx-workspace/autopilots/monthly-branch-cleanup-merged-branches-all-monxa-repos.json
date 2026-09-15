@@ -1,0 +1,22 @@
+{
+  "title": "🧹 Monthly branch cleanup — merged branches (all Monxa repos)",
+  "source_id": "8040590e-7be2-48d9-a254-d105fb433ce3",
+  "execution_mode": "create_issue",
+  "issue_title_template": "Monthly branch cleanup — merged branches ({{date}})",
+  "priority": null,
+  "project_title": "mx-jobs",
+  "assignee_type": "agent",
+  "assignee_name": "dev-leader",
+  "subscriber_names": [],
+  "had_webhook_trigger": false,
+  "triggers": [
+    {
+      "kind": "schedule",
+      "label": "Monthly, 1st at 03:00 SGT",
+      "enabled": true,
+      "cron_expression": "0 3 1 * *",
+      "timezone": "Asia/Singapore"
+    }
+  ],
+  "description_file": "autopilots/monthly-branch-cleanup-merged-branches-all-monxa-repos.description.md"
+}
