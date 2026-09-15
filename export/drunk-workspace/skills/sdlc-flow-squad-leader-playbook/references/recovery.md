@@ -5,13 +5,13 @@ Open this when the wake-up checklist finds a child that is `blocked`, failed, si
 ## Loop
 
 1. **Diagnose** the root-cause stage: the stuck sub-task itself, or an earlier stage whose deliverable is defective (missing branch, broken build, wrong artifact, wrong approved AT).
-2. **Loop back**: re-arm the root-cause sub-task (`blocked`→`todo`) with ONE corrective comment carrying the assignee's mention: the exact defect, the evidence, and what "fixed" looks like. If it is already `done`, leave it `done` and send only the comment with the mention. Downstream stays `blocked`/`backlog`. A wrong approved AT is fixed by re-arming Acceptance tests and re-pinning `at_sha`, never by editing it in Build.
-3. **Resume forward** when it returns: verify the failure is actually resolved, then re-arm the stalled downstream sub-task (`todo` + assignee mention).
+2. **Loop back**: re-arm the root-cause sub-task — flip it `in_progress` (`multica issue status <id> in_progress --no-start`) whether it sits `blocked` or `done`, then ONE corrective comment carrying the assignee's mention: the exact defect, the evidence, and what "fixed" looks like. Flip first, mention last; its return to `done` re-fires the barrier and wakes you to verify. Downstream stays `blocked`/`backlog`. A wrong approved AT is fixed by re-arming Acceptance tests and re-pinning `at_sha`, never by editing it in Build.
+3. **Resume forward** when it returns: verify the failure is actually resolved, then re-arm the stalled downstream sub-task (`in_progress --no-start` + assignee mention).
 4. **Escalate instead of spinning** after 2 failed fix attempts on one root cause, or when the cause is outside squad control (product decision, credentials, environment, scope): phase-ticket cycle → ONE comment on your own phase ticket with product-owner's mention; root-ticket cycle → reassign the stuck ticket to the resolved owner at `todo` with a `## BLOCKER` comment (`blocker-report`). Never take back a ticket a human holds.
 
 ## Stall detection
 
-A `blocked` Review with no implementer report for a full run window means the implementer's wake was lost: post ONE comment on the implementer's Build sub-task with its mention pointing at pr-reviewer's findings comment. Nothing else. An `in_progress` sub-task with a silent assignee for a run window: check `multica issue runs <id> --active --output json`; no active run → re-arm with a corrective comment and mention.
+A `blocked` Review with no implementer report for a full run window means the implementer's wake MAY be lost. First `multica issue runs <build-sub-task> --siblings`: an implementer run in flight means the wake landed and the fix is under way — do nothing, and say so if a human asked (never file a fix sub-task or re-mention next to a live run; a second run on the same branch duplicates the fix and burns a rework round). No active run: flip the Build sub-task `in_progress` (`multica issue status <id> in_progress --no-start`), then post ONE comment on it with the implementer's mention pointing at pr-reviewer's findings comment. Nothing else. An `in_progress` sub-task with a silent assignee for a run window: check `multica issue runs <id> --active --output json`; no active run → re-arm (it is already `in_progress`) with a corrective comment and mention.
 
 ## Barrier frontier
 

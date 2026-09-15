@@ -44,7 +44,7 @@ No deliverable while any open question remains. Resolve what the code can answer
 2. Write the spec per `sdlc-spec-template` into the root ticket description, following its writing rules (short sentences, everyday words, bullets, no metaphors) — the requester and the owner read it without context. You state the problem and required behaviour; dev-leader designs the solution in its impl-brief. No code blocks outside §5 Gherkin; no class names, file paths or `file:line` anywhere in the spec. Every §5 scenario carries `@unit` or `@integration`; testing is never waived.
 3. **Spec gate**: create ONE `[S<num>] Spec review: <scope>` (same project, parent = root, assignee spec-reviewer, `--stage 1`, `todo`). Idempotent: if one exists, act on its state. Then act on the gate's `Gate verdict` property:
    - **APPROVED** (sub-task `done`) → Workflow C, plus ONE FYI to the requester with the score.
-   - **REWORK** (sub-task `blocked`) → revise the spec (a finding that exposes a business question goes through the clarification gate first), then re-arm: set the sub-task `todo` AND post ONE resume comment on it carrying spec-reviewer's mention. The flip alone wakes nobody; the mention is the wake.
+   - **REWORK** (sub-task `blocked`) → revise the spec (a finding that exposes a business question goes through the clarification gate first), then re-arm: set the sub-task `in_progress` (`multica issue status <id> in_progress --no-start`) AND post ONE resume comment on it carrying spec-reviewer's mention. The flip alone wakes nobody; the mention is the wake.
    - **ESCALATED** (sub-task reassigned to a human) → their `done` flip releases you; never re-arm while a human holds it.
    - Never delegate while the review sub-task is not `done`.
 

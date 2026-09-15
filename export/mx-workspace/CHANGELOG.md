@@ -4,6 +4,34 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-15 — rework wake hygiene + re-trigger flips `in_progress` (drunk-workspace live; mx-workspace bundle NOT yet updated)
+
+Incident on DRK-1282 (DKNet.Accounts.Api PR #4): pr-reviewer's round-1 findings comment quoted
+its own mention link inside the "closing instruction verbatim", Multica woke pr-reviewer on its
+own comment, it declared the wake "misrouted" and re-mentioned dev-backend; the owner then had
+dev-leader file a fix sub-task. Result: three dev-backend fix runs on one branch for a two-line
+fix. Two duplicates were cancelled by hand.
+
+- **Mention links are wakes, wherever they sit.** `workspace/context.md`: every
+  `mention://agent/<uuid>` link in a comment or description enqueues a run, backticks and quotes
+  included; write instructions about mentioning in prose. `pr-review-gate/references/multica-flow.md`
+  closing instruction no longer carries pr-reviewer's own link; a findings comment carries exactly
+  ONE mention link, the implementer's.
+- **Check for a live run before re-sending or filing.** pr-reviewer: first command on a wake on an
+  implementer's sub-task is `multica issue runs <id> --active`; own findings comment or implementer
+  run in flight → end with nothing. An implementer mention with an unchanged PR head is not a new
+  round. Worker playbook: `--siblings` first on a rework wake; another own run in flight → no push,
+  no mention. Leader `recovery.md` stall detection: `--siblings` before re-mentioning or filing.
+- **Re-triggering a `done`/`blocked` sub-task flips it `in_progress` first, mention last.**
+  Owner request. Leader (any re-arm, corrective comment, failed-report send-back, AT reject,
+  product-owner spec re-arm) and pr-reviewer (REWORK/POLISH round) run
+  `multica issue status <id> in_progress --no-start`, then the ONE mention comment. Worker ends the
+  turn at `done`/`blocked` as always; the re-fired barrier is expected and the leader treats it as
+  a report to verify (Review still `blocked` → no promotion, no new sub-task). Replaces
+  `blocked`→`todo` re-arms and "never flip out of `done`" (now: nobody flips their OWN sub-task
+  out of `done`). Files: delivery-pipeline, leader playbook + recovery.md, worker playbook,
+  po-orchestration, `squads/dev-team.md`, `agents/dev-backend.md`, `agents/pr-reviewer.md`.
+
 ## 2026-09-11 — acceptance-test-first: Build split into `Acceptance tests` → `Build`, frozen at `at_sha` (bundle; both workspaces)
 
 Reshaped dev-backend's testing flow after Böckeler's "TDD inside the agent loop — theater or

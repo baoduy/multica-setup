@@ -28,7 +28,7 @@ There is no QC member: dev-backend writes the tests in their own stage and imple
 |---|---|---|---|
 | ⚙ | branch cut, inline (`leader-gitops`) | you | `ls-remote` shows the branch; name + base SHA go into every implementing brief |
 | 1 | `[D<num>-1] Acceptance tests: <scope>` | dev-backend | `done` with RED SHA + per-scenario table; description = `sdlc-impl-brief` with `Mode: acceptance-tests` |
-| ⚙ | AT approval, inline | you | read the AT files against the spec (present, not softened, literal expected values); reject → re-arm stage 1 naming the scenario; accept → append `at_sha` + AT paths to the Build description, promote stage 2 |
+| ⚙ | AT approval, inline | you | read the AT files against the spec (present, not softened, literal expected values); reject → re-arm stage 1 (`in_progress --no-start` + mention) naming the scenario; accept → append `at_sha` + AT paths to the Build description, promote stage 2 |
 | 2 | `[D<num>-2] Build: <scope>` (same brief, `Mode: build`, `at_sha` header row filled; + `[D<num>-2] Docs: <scope>` for docs-writer when the spec needs user-facing docs; disjoint files) | dev-backend (docs-writer) | `done` with green suite, per-touched-class coverage ≥80%, mutation report, clean pack, empty drift check, push verified by `ls-remote` |
 | ⚙ | PR open, inline (`leader-gitops`) | you | every stage-2 sub-task `done` or dropped on the parent; head = feature branch, base = `dev`, `MERGEABLE`; URL posted on the parent |
 | 3 | `[D<num>-3] Review: <scope>` | pr-reviewer | created `backlog` at decomposition, promoted after the PR URL is posted; description = pointer table (repo · branch · `at_sha` + AT paths · Build sub-task(s) for rework · root ticket) |
@@ -38,4 +38,4 @@ The ⚙ rows are never sub-tasks. Docs always shares Build's stage. Independent 
 
 ## Rework and gates
 
-Rework runs member to member on existing sub-tasks; you stay out (playbook). A `blocked` Acceptance-tests or Build sub-task is yours: answer on it and re-arm (`todo` + mention). While any Build or Review is `blocked`, or `at_sha` is unpinned: no PR, no promotion, no finalize; the parent stays `in_progress`.
+Rework runs member to member on existing sub-tasks; you stay out (playbook). A `blocked` Acceptance-tests or Build sub-task is yours: answer on it and re-arm (`in_progress --no-start` + mention). Any `done` or `blocked` sub-task you re-trigger for fix work goes `in_progress` first, mention last. While any Build or Review is `blocked`, or `at_sha` is unpinned: no PR, no promotion, no finalize; the parent stays `in_progress`.

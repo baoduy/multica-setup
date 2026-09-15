@@ -29,7 +29,7 @@ Inside dev-team a cycle is `[D<num>-1] Acceptance tests` → leader's inline AT 
 | Ticket | Owner | Created by | Starts when |
 |---|---|---|---|
 | root ticket | product-owner (spec, CI/CD) or dev-team (confirmed bug, docs, direct-door ticket) | requester or Mika | assignment at `todo`; product-owner reassigns a bug/docs root to dev-team after its gate |
-| `[S<num>]` | spec-reviewer | product-owner | `todo`; re-armed `blocked`→`todo` + mention |
+| `[S<num>]` | spec-reviewer | product-owner | `todo`; re-armed `blocked`→`in_progress --no-start` + mention |
 | `[P<num>-1]` | dev-team → dev-leader, or devops | product-owner | created `todo` |
 | `[P<num>-1c]` | pr-reviewer | product-owner | promoted once the devops PR URL is posted |
 | `[P<num>-2]` | release-manager | product-owner | promoted after `[P<num>-1]` verifies |
@@ -45,7 +45,7 @@ Inside dev-team a cycle is `[D<num>-1] Acceptance tests` → leader's inline AT 
 
 ## Stage barriers
 
-Stage N's barrier fires only when every sub-task at stage ≤ N is terminal (`done`/`cancelled`). A `blocked` gate at stage 3 keeps every higher stage's `done` silent, so a sub-task filed above a non-terminal stage must end its completion report with the leader's mention. A re-entry into `done` re-fires the barrier: never flip out of `done`.
+Stage N's barrier fires only when every sub-task at stage ≤ N is terminal (`done`/`cancelled`). A `blocked` gate at stage 3 keeps every higher stage's `done` silent, so a sub-task filed above a non-terminal stage must end its completion report with the leader's mention. A re-entry into `done` re-fires the barrier. Nobody flips their own sub-task out of `done`. The leader (any re-trigger) and pr-reviewer (a REWORK or POLISH round) do, only to `in_progress` (`multica issue status <id> in_progress --no-start`) and only as the first step of re-triggering fix work on a `done` or `blocked` sub-task, mention posted after; the barrier that re-fires when it returns to `done` is expected, and the leader treats it as a report to verify, not as a new stage.
 
 ## Human touch points
 
