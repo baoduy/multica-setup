@@ -4,6 +4,24 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-15 — `Retrigger on done` property: leader bookkeeping for which blocked gate a fix re-arms (drunk-workspace live; mx-workspace NOT yet updated)
+
+Owner recommendation. A fix that lands above a parked gate's stage (a `[D#-5] Fix:` sub-task while
+`[D#-4] Review` sits `blocked`) fires no barrier when it goes `done`, and the leader had no durable
+record of which issue to re-arm. New workspace custom property `Retrigger on done` (text, issue
+key; id `12f1ef46-e5df-42ec-a5d4-ae6d66f384d9` in drunk-workspace).
+
+- Leader sets it on every sub-task it re-triggers for fix work (re-armed Build, or a Fix sub-task
+  it files — leader may file one when the fix deserves its own brief; pr-reviewer still never
+  files). Wake-up checklist item 1: any `done` child carrying it → verify, flip the named issue
+  `in_progress --no-start`, ONE comment there with its assignee's mention pointing at the fix
+  report, unset the property. Several children naming one issue → re-arm once, when all are `done`.
+- Worker: a Fix sub-task above a blocked stage ends its report with the leader's mention (rule 5,
+  already there); members never set or clear the property.
+- Recovery: a `done` child still carrying the property while its target is `blocked` = lost re-arm.
+- Files: `workspace/context.md`, delivery-pipeline, leader playbook + `recovery.md`, worker
+  playbook, `squads/dev-team.md`.
+
 ## 2026-09-15 — no member-to-member traffic: review rework routed through the squad leader (drunk-workspace live; mx-workspace bundle NOT yet updated)
 
 Owner policy: a member writes only on its own ticket (comments, status, properties) and mentions

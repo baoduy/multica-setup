@@ -45,7 +45,7 @@ All traffic inside a squad is routed by its leader: members write only on their 
 
 ## Stage barriers
 
-Stage N's barrier fires only when every sub-task at stage ≤ N is terminal (`done`/`cancelled`). A `blocked` gate at stage 3 keeps every higher stage's `done` silent, so a sub-task filed above a non-terminal stage must end its completion report with the leader's mention. A re-entry into `done` re-fires the barrier. Nobody flips their own sub-task out of `done`. The leader does, only to `in_progress` (`multica issue status <id> in_progress --no-start`) and only as the first step of re-triggering fix work on a `done` or `blocked` sub-task, mention posted after; the barrier that re-fires when it returns to `done` is expected, and the leader treats it as a report to verify, not as a new stage.
+Stage N's barrier fires only when every sub-task at stage ≤ N is terminal (`done`/`cancelled`). A `blocked` gate at stage 3 keeps every higher stage's `done` silent, so a sub-task filed above a non-terminal stage must end its completion report with the leader's mention. A re-entry into `done` re-fires the barrier. Nobody flips their own sub-task out of `done`. The leader does, only to `in_progress` (`multica issue status <id> in_progress --no-start`) and only as the first step of re-triggering fix work on a `done` or `blocked` sub-task, mention posted after; the barrier that re-fires when it returns to `done` is expected, and the leader treats it as a report to verify, not as a new stage. Every re-triggered sub-task carries `Retrigger on done` = the blocked gate's key (workspace context), so a fix landing above the gate's stage — where `done` fires no barrier — still tells the leader exactly which issue to re-arm.
 
 ## Human touch points
 

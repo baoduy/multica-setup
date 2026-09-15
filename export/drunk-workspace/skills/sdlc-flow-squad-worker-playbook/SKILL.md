@@ -28,7 +28,7 @@ EVIDENCE carries one row per check with its measured result. Anything a check fo
 2. On PASS: ONE plain comment on your own sub-task in completion shape (`blocker-report`: RESULT / EVIDENCE / LEFT OPEN, measured numbers), no mention, then flip `done`. The barrier wakes the leader; routing is the leader's job.
 3. `done` means your work is complete, not that the leader approved it. A PR being up and awaiting review is exactly `done`.
 4. Flip the status in the same turn as the report. A PASS comment with the ticket still `in_progress` wakes nobody.
-5. After flipping `done`, check `multica issue children <parent-id>`: if a sibling at your stage or below is `blocked`, your `done` fired no barrier. Post one more comment on your own sub-task with your leader's mention.
+5. After flipping `done`, check `multica issue children <parent-id>`: if a sibling at your stage or below is `blocked` (a Fix sub-task above a parked gate is the usual case), your `done` fired no barrier. Post one more comment on your own sub-task with your leader's mention. Your sub-task may carry `Retrigger on done`: that is the leader's bookkeeping for which gate to re-arm — never set, change or clear it.
 
 ## You never create issues
 
