@@ -52,7 +52,7 @@ If `gh pr merge` fails (branch protection, missing permission, late conflict): d
 REWORK:
 
 ```bash
-gh pr review $PR -R $R --request-changes --body "Automated review gate: score {SCORE}/10 — changes requested. Findings are in the PR comments and on the implementer's Build sub-task in Multica."
+gh pr review $PR -R $R --request-changes --body "Automated review gate: score {SCORE}/10 — changes requested. Findings are in the PR comments and on the Review sub-task in Multica."
 ```
 
 **Self-authored fallback:** when `author.login == $SELF`, GitHub rejects BOTH `--approve` and `--request-changes`. Do not treat the rejection as a run failure: post the report comment only, and note in the Multica report that the vote was skipped (self-authored) — a skipped vote does NOT block the merge. The Multica rework comment on the implementer's Build sub-task carries the enforcement. Configuring a dedicated `GH_TOKEN` on this agent gives it its own identity and enables real votes — recheck `$SELF` every run rather than caching the limitation.

@@ -37,9 +37,15 @@ Verify each stage against the plan before promoting. On every promotion or hold,
 
 **AT approval** (between Acceptance tests and Build): `ls-remote` confirms the RED SHA; read the AT files against the spec (present, not softened, literal expected values, readable), never run them. Reject → re-arm stage 1 (`in_progress --no-start` + mention) naming the scenario. Accept → append `at_sha` and AT paths to the Build description, promote Build.
 
-## Rework: member to member, you stay out
+## Rework: routed through you
 
-pr-reviewer posts findings on the implementer's Build sub-task and parks its Review sub-task `blocked`; the implementer fixes and mentions pr-reviewer back. Do not file fix tickets, do not re-arm Review, do not relay findings. A Review sub-task `blocked` with a recent REWORK or POLISH comment, and the implementer's sub-task `in_progress` beside it, is healthy: that is the fix in flight, not a stall. While any Build or Review sub-task is `blocked`, or `at_sha` is not pinned: no PR, no promotion past the gate, no finalize. You resume on Review `done` (verify merged state, finalize), a handoff report, or your own mention on a `blocked` Build. A Build you re-armed re-fires its barrier when it returns to `done`: verify its report; if Review is still `blocked`, that is the whole wake — no promotion, no new sub-task.
+Members never write on each other's tickets; every hop of a review round passes through you. No fix tickets at any hop.
+
+1. **REWORK/POLISH lands on you.** pr-reviewer posts ONE findings comment on its OWN Review sub-task (grouped per implementer, `file:line`, acceptance criteria, `round N of 2`), parks Review `blocked`, and ends with your mention. For each implementer the findings name (dev-backend for code/test/coverage, docs-writer for docs): flip that sub-task `in_progress` (`multica issue status <id> in_progress --no-start`), then ONE comment on it with that implementer's mention pointing at the findings comment (Review key + timestamp) and restating what "fixed" looks like. One comment per sub-task, one mention each. Git/PR-mechanics findings are yours: fix per `leader-gitops`, report on the Review sub-task when re-arming it.
+2. **Fix returns to you.** The implementer reports on its own sub-task and flips `done`; that re-entry re-fires the barrier and wakes you. Verify the report (commits on the feature branch via `ls-remote`, a closure row per finding). Implementers still `in_progress` from this round → end the wake, nothing to do yet. All reported → re-arm Review: flip it `in_progress` (`multica issue status <id> in_progress --no-start`), then ONE comment on it with pr-reviewer's mention pointing at the fix report(s). Never re-review or re-score yourself.
+3. **Verdict.** pr-reviewer re-reviews and ends in APPROVED (merges, Review `done` → you finalize), REWORK round 2 (back to step 1), or a handoff to the resolved owner.
+
+A Review sub-task `blocked` with a recent REWORK or POLISH comment, and the implementer's sub-task `in_progress` beside it, is healthy: that is the fix in flight. While any Build or Review sub-task is `blocked`, or `at_sha` is not pinned: no PR, no promotion past the gate, no finalize.
 
 ## Parent status and finalize
 

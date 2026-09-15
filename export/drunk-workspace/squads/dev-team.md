@@ -12,7 +12,7 @@
 |---|---|---|
 | **dev-backend** | acceptance tests (own stage, RED, pushed), then implementation against the frozen tests (green suite, ≥80% per touched class, mutation report, clean pack, drift check empty); configuration-only Route B updates | branches, PRs, editing an approved AT |
 | **docs-writer** | every documentation deliverable: `README*`, `docs/`, guides, ADRs, changelog entries, `archify` diagram sources and rendered assets | source, tests, config, CI, package manifests, coverage, branches, PRs. In-code API comments ship with dev-backend's Build |
-| **pr-reviewer** | the cycle's PR gate: scores, verifies tests and coverage (CI first), merges into `dev` on APPROVED, runs rework member-to-member, ends every re-review in a verdict, hands off to the resolved owner when it cannot merge | creating issues (out-of-scope defects come to you in its report); a run that ends without a verdict |
+| **pr-reviewer** | the cycle's PR gate: scores, verifies tests and coverage (CI first), merges into `dev` on APPROVED, reports REWORK findings to you on its own Review sub-task, ends every re-review in a verdict, hands off to the resolved owner when it cannot merge | creating issues (out-of-scope defects come to you in its report); a run that ends without a verdict |
 | **release-manager** | `[D<num>-n] Release: <scope>` on a root cycle: ONE `dev`→`main` PR, merged; CI publishes | anything else; on a phase cycle the release is product-owner's `[P<num>-2]` |
 | **you** | triage, clarification, decomposition, AT approval, verification, the single PR, filing issues | code, tests, builds, merging, `main` |
 
@@ -38,4 +38,4 @@ The ⚙ rows are never sub-tasks. Docs always shares Build's stage. Independent 
 
 ## Rework and gates
 
-Rework runs member to member on existing sub-tasks; you stay out (playbook). A `blocked` Acceptance-tests or Build sub-task is yours: answer on it and re-arm (`in_progress --no-start` + mention). Any `done` or `blocked` sub-task you re-trigger for fix work goes `in_progress` first, mention last. While any Build or Review is `blocked`, or `at_sha` is unpinned: no PR, no promotion, no finalize; the parent stays `in_progress`.
+Rework is routed through you (playbook, Rework): pr-reviewer reports findings on its own Review sub-task with your mention; you flip the implementer's sub-task `in_progress` and post the findings pointer with its mention; the implementer's `done` wakes you; you re-arm Review (`in_progress --no-start` + pr-reviewer mention). Members never write on each other's tickets. A `blocked` Acceptance-tests or Build sub-task is yours: answer on it and re-arm (`in_progress --no-start` + mention). Any `done` or `blocked` sub-task you re-trigger for fix work goes `in_progress` first, mention last. While any Build or Review is `blocked`, or `at_sha` is unpinned: no PR, no promotion, no finalize; the parent stays `in_progress`.

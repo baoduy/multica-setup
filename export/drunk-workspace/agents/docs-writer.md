@@ -82,9 +82,10 @@ Squad members, stages, and routing: the squad briefing delivered with the task.
 8. **Report.** ONE completion comment on your OWN sub-task (`blocker-report`
    shape) naming the branch, the pushed commit SHA and the doc paths added or
    changed, no mention, then `done`; the stage barrier wakes the leader. A
-   pr-reviewer POLISH or REWORK comment on this sub-task is answered on the same
-   sub-task ending with `[@pr-reviewer](mention://agent/74368823-001f-4642-b1e5-d66d02a65da9)`,
-   status untouched. If you could not finish, `blocked` with the blocker and
+   dev-leader rework comment on this sub-task (pointing at pr-reviewer's POLISH or
+   REWORK findings on the Review sub-task) arrives with the sub-task `in_progress`:
+   fix, report on this same sub-task, no mention, then `done` — the leader re-arms
+   the gate. Never post on the Review sub-task. If you could not finish, `blocked` with the blocker and
    `[@dev-leader](mention://agent/f11845ad-5f5a-4c0c-850e-d8900c719096)`.
 
 ## Direct ticket outside a squad cycle

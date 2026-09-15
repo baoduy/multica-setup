@@ -22,7 +22,7 @@ The one-page contract every pipeline agent shares: actors, flows, stage ownershi
 | CI/CD or build/publish automation | **D** | D1 analysis-only ends at the report; D2 `[P<num>-1] CI/CD change` (devops, stage 1) → `[P<num>-1c] Review CI/CD PR` (pr-reviewer, stage 2) → root `done`. No spec gate, no release phase |
 | docs-only change to a library repo | **E** | the ROOT is reassigned to dev-team with a `## Brief` (Route B) → dev-leader finalizes `in_review`. No spec gate, no release. A docs ticket may also be assigned to dev-team directly, bypassing product-owner |
 
-Inside dev-team a cycle is `[D<num>-1] Acceptance tests` → leader's inline AT approval (pins `at_sha`) → `[D<num>-2] Build` (+ `Docs` at the same stage) → leader opens the PR → `[D<num>-3] Review` (→ `[D<num>-4] Release` on a root cycle that republishes). Route B (docs/config only) is a single `[D<num>-1] Update` then Review. Squad specifics are in the squad briefing the leader receives.
+All traffic inside a squad is routed by its leader: members write only on their own sub-task and mention only the leader; a review REWORK travels pr-reviewer → dev-leader → implementer → dev-leader → pr-reviewer, never member to member. Inside dev-team a cycle is `[D<num>-1] Acceptance tests` → leader's inline AT approval (pins `at_sha`) → `[D<num>-2] Build` (+ `Docs` at the same stage) → leader opens the PR → `[D<num>-3] Review` (→ `[D<num>-4] Release` on a root cycle that republishes). Route B (docs/config only) is a single `[D<num>-1] Update` then Review. Squad specifics are in the squad briefing the leader receives.
 
 ## Stage ownership
 
@@ -45,7 +45,7 @@ Inside dev-team a cycle is `[D<num>-1] Acceptance tests` → leader's inline AT 
 
 ## Stage barriers
 
-Stage N's barrier fires only when every sub-task at stage ≤ N is terminal (`done`/`cancelled`). A `blocked` gate at stage 3 keeps every higher stage's `done` silent, so a sub-task filed above a non-terminal stage must end its completion report with the leader's mention. A re-entry into `done` re-fires the barrier. Nobody flips their own sub-task out of `done`. The leader (any re-trigger) and pr-reviewer (a REWORK or POLISH round) do, only to `in_progress` (`multica issue status <id> in_progress --no-start`) and only as the first step of re-triggering fix work on a `done` or `blocked` sub-task, mention posted after; the barrier that re-fires when it returns to `done` is expected, and the leader treats it as a report to verify, not as a new stage.
+Stage N's barrier fires only when every sub-task at stage ≤ N is terminal (`done`/`cancelled`). A `blocked` gate at stage 3 keeps every higher stage's `done` silent, so a sub-task filed above a non-terminal stage must end its completion report with the leader's mention. A re-entry into `done` re-fires the barrier. Nobody flips their own sub-task out of `done`. The leader does, only to `in_progress` (`multica issue status <id> in_progress --no-start`) and only as the first step of re-triggering fix work on a `done` or `blocked` sub-task, mention posted after; the barrier that re-fires when it returns to `done` is expected, and the leader treats it as a report to verify, not as a new stage.
 
 ## Human touch points
 

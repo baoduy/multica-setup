@@ -4,6 +4,29 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-15 — no member-to-member traffic: review rework routed through the squad leader (drunk-workspace live; mx-workspace bundle NOT yet updated)
+
+Owner policy: a member writes only on its own ticket (comments, status, properties) and mentions
+only its leader; anything for another member goes on the member's own ticket with the leader's
+mention, and the leader routes it. Only the leader writes on tickets it does not own.
+
+- **Review round, new shape.** pr-reviewer: ONE findings comment on its OWN Review sub-task
+  (grouped per implementer, `file:line`, acceptance criteria, `round N of 2`), Review `blocked`,
+  ends with dev-leader's mention — the only mention link. dev-leader: per implementer, flip that
+  sub-task `in_progress --no-start` + ONE comment with its mention pointing at the findings.
+  Implementer: fix, push, report on own sub-task with a closure row per finding, flip `done`, no
+  mention — the re-fired barrier wakes the leader (confirmed live on DRK-1280, 08:01Z). dev-leader:
+  verify, then re-arm Review `in_progress --no-start` + ONE comment with pr-reviewer's mention.
+  pr-reviewer re-reviews in full; a re-arm with unchanged PR head is not a round.
+- **Removed.** "Rework runs member to member, leader stays out", the implementer's
+  `@pr-reviewer` mention-back, pr-reviewer flipping/commenting on the implementer's sub-task,
+  the stall-sweep autopilot nudging implementers directly (now nudges the leader on the phase
+  ticket).
+- **Files.** `workspace/context.md`, delivery-pipeline, leader playbook (Rework section rewritten
+  as three steps) + `recovery.md`, worker playbook, `pr-review-gate` (SKILL.md, multica-flow.md,
+  github.md), `squads/dev-team.md`, agents dev-backend / docs-writer / pr-reviewer / dev-leader
+  description, autopilot daily digest, policies 04 / 05 / 07 / 09.
+
 ## 2026-09-15 — rework wake hygiene + re-trigger flips `in_progress` (drunk-workspace live; mx-workspace bundle NOT yet updated)
 
 Incident on DRK-1282 (DKNet.Accounts.Api PR #4): pr-reviewer's round-1 findings comment quoted
