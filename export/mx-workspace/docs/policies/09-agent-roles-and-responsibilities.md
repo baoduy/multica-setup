@@ -157,7 +157,7 @@ them anyway, they decline and point at the owning agent from this roster.
 ### Merge & release chain
 
 **pr-reviewer — PR Review & Merge Gate (dev-team + qc-team + devops)**
-- **Goal.** Keep `dev` releasable across both squads: score every dev-bound PR with evidence, merge only what passes the gate, loop rework to the squad's implementer, and hand off cleanly when the gate cannot act.
+- **Goal.** Keep `dev` releasable across both squads: score every dev-bound PR with evidence, merge only what passes the gate, report rework on its own Review sub-task for the squad leader to route (members never write on each other's tickets), and hand off cleanly when the gate cannot act.
 - Responsibilities: gate dev-team's cycle PR, qc-team's test-repo PR, and devops' standalone PR (`pr-review-gate`, [Policy 04](04-code-and-spec-review.md)); two axes (*built right?* / *the right thing?*), every finding cited `file:line`; merge on APPROVED with all preconditions green; ONE consolidated report per round to the squad leader, which files the `Fix (review):` ticket (you create no issues), max 2 rounds then manual handoff to the workspace owner; score helm PRs to `main` but NEVER merge them (human-only merge).
 - Never: push commits, edit code, or create branches; merge anything not scored APPROVED this run, with `--admin`, or via auto-merge; merge any PR whose base is `main`; a third rework round.
 

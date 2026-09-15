@@ -4,6 +4,41 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-15 — mx-workspace: mention hygiene, re-trigger flips in_progress, leader-routed rework, `Retrigger on done` (dev-team + qc-team; live)
+
+Port of the three drunk-workspace changes made earlier today (see the entries below), applied to
+both squads and to the shared skills. mx already had "the gate creates nothing, the leader files
+the Fix"; what changed is the wake mechanics around it.
+
+- **Mention hygiene.** Every `mention://agent/<uuid>` link in a posted comment is a wake, quoted or
+  in backticks alike. pr-reviewer's `multica-flow.md` now lists LEADER links only (dev-leader,
+  qc-leader, product-owner) — it never mentions dev-backend / qc-tester / devops; one link per
+  comment. Wake sanity check first (`multica issue runs <own> --siblings`; own comment or own run
+  in flight → end). Leader fix-loop checks `--siblings` before filing or re-mentioning.
+- **Re-trigger flips `in_progress` first.** Every leader re-arm (`blocked` Build/Scenarios/
+  Verify/Review, a `done` sub-task sent back, answered blocker, spec-review re-arm, `[P-1c]`
+  re-arm) is `multica issue status <id> in_progress --no-start` THEN the one mention. Replaces every
+  `blocked→todo`. "done is one-way" now reads: members never flip their own sub-task out of `done`;
+  the leader does, to `in_progress`, only to re-trigger; the re-fired barrier is the expected
+  "fix is back" signal.
+- **No member-to-member traffic.** Stated in the delivery pipeline wake contract and the member
+  protocol: a member writes only on its own ticket and mentions only its leader; the leader routes.
+  Removed: polish-round "implementer mentions you back", "mention whoever raised the findings",
+  product-team's pr-reviewer→devops direct loop (now via product-owner), blocker-report's
+  any-agent re-arm (leader's move; a member reports on its own ticket).
+- **`Retrigger on done`** (text property, id `23673c24-9f49-4584-a228-48d315c3e3cd` in
+  mx-workspace). Leader sets it on every re-triggered sub-task / Fix it files with the key of the
+  blocked issue to re-arm — dev-team: the Review; qc-team: the stage-2 Verify (stage 2 first, its
+  `done` then wakes the leader to re-arm Review 3); product-team: `[P-1c]`. Wake-up checklist item 1:
+  a `done` child carrying it → verify, flip the named issue `in_progress --no-start`, ONE comment
+  with its assignee's mention, unset. Members never set or clear it. mx has no workspace context,
+  so the rule lives in `sdlc-flow-delivery-pipeline` + the leader playbook + the briefings.
+- **Files.** `pr-review-gate` (SKILL.md, references/multica-flow.md), `sdlc-flow-delivery-pipeline`,
+  `sdlc-flow-squad-leader-playbook`, `sdlc-flow-squad-member-protocol`, `sdlc-flow-po-orchestration`,
+  `spec-review-gate`, `blocker-report`, squads dev-team / qc-team / product-team, agents dev-leader /
+  qc-leader / pr-reviewer / dev-backend, policies 04 / 09, `README.md`, `CLAUDE.md`. 15 live resources
+  pushed and verified by hash/text against the bundle.
+
 ## 2026-09-15 — `Retrigger on done` property: leader bookkeeping for which blocked gate a fix re-arms (drunk-workspace live; mx-workspace NOT yet updated)
 
 Owner recommendation. A fix that lands above a parked gate's stage (a `[D#-5] Fix:` sub-task while

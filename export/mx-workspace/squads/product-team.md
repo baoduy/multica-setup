@@ -112,7 +112,7 @@ Nothing else qualifies — not your own view that the pipeline could be better, 
 
 Never commit to `dev` in a helm repo (inert) and never let any agent merge to `main` there. Image-tag promotion for a production release stays with `prd-release`, never devops.
 
-`[P<num>-1c]` is created `backlog` and promoted only once devops has posted the PR URL. On REWORK, pr-reviewer loops the fix straight back to devops and flips `[P<num>-1c]` `blocked`; re-arm it after the fix lands, exactly like a squad review gate. `[P<num>-2a]` never promotes while `[P<num>-1c]` is unresolved — shipping code onto a pipeline that has not been gated is how a release breaks.
+`[P<num>-1c]` is created `backlog` and promoted only once devops has posted the PR URL. On REWORK, pr-reviewer flips `[P<num>-1c]` `blocked` and reports on it with YOUR mention — it never writes on devops' ticket; you flip `[P<num>-1b]` `in_progress` (`multica issue status <id> in_progress --no-start`), set `Retrigger on done` = the `[P<num>-1c]` key on it, and post ONE comment there with devops' mention pointing at the findings. When `[P<num>-1b]` returns `done`, re-arm `[P<num>-1c]` (`in_progress --no-start` + pr-reviewer mention) and clear the property, exactly like a squad review gate. `[P<num>-2a]` never promotes while `[P<num>-1c]` is unresolved — shipping code onto a pipeline that has not been gated is how a release breaks.
 
 ## Promotion gates — what "verifies" means at each hop
 

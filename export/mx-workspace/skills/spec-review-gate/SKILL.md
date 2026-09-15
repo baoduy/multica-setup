@@ -89,7 +89,7 @@ Let `R` = current `spec_review_round` (0 if unset) — number of REWORK verdicts
 **REWORK** — (score < 8.0 OR any `blocker`) AND R < 5:
 1. Set `spec_review_round=<R+1>` (type number) on YOUR sub-task; pin `spec_review_verdict=REWORK`.
 2. Post ONE consolidated verdict comment on YOUR `[S<num>]` sub-task — all findings, severity-labeled, each actionable enough that product-owner can revise without guessing — including `[@product-owner](mention://agent/b1546eca-c984-4b7a-99a6-25bc5e1c12b0)`. Rework rounds never land on MAIN ticket.
-3. Flip YOUR sub-task to `blocked`. END. (Product-owner revises spec and re-arms your sub-task `blocked` → `todo` for next round.)
+3. Flip YOUR sub-task to `blocked`. END. (Product-owner revises spec and re-arms your sub-task `blocked` → `in_progress --no-start` + your mention for next round.)
 
 On a re-armed round: full fresh review, AND open the verdict with a **closure table** — every finding from the previous round → `resolved` / `not resolved` / `obsolete`. A prior `blocker`/`major` still unresolved keeps its deduction; a fresh look never silently forgives it.
 

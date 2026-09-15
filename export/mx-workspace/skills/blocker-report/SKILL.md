@@ -114,7 +114,7 @@ carries your best guess so human can confirm with one word.
 
 ## Resolving blocker — answer is not resolution
 
-Any agent answering someone else's `## BLOCKER`: an answer alone moves nothing — only a status transition or agent mention enqueues a run (wake contract: `sdlc-flow-delivery-pipeline`; MXW-1016 stalled on a correct answer nobody actuated). So: (1) reply INSIDE the `## BLOCKER` thread, never as a new root comment; (2) actuate in the SAME wake — flip the blocked issue `blocked`→`todo` with a resume comment carrying the assignee's mention link, or, when you lack authority over that issue, mention one agent who has it; (3) end-of-turn self-check: turn changed no status and enqueued no run → go back and actuate before ending.
+Any agent answering someone else's `## BLOCKER`: an answer alone moves nothing — only a status transition or agent mention enqueues a run (wake contract: `sdlc-flow-delivery-pipeline`; MXW-1016 stalled on a correct answer nobody actuated). So: (1) reply INSIDE the `## BLOCKER` thread, never as a new root comment; (2) actuate in the SAME wake — flip the blocked issue `blocked`→`in_progress` (`multica issue status <id> in_progress --no-start`) with a resume comment carrying the assignee's mention link — a leader's move; a member answering another member's blocker instead reports on its OWN ticket with the leader's mention, or, when you lack authority over that issue, mention one agent who has it; (3) end-of-turn self-check: turn changed no status and enqueued no run → go back and actuate before ending.
 
 ## Options rules
 

@@ -55,10 +55,17 @@ and confirm it says what your report says — finished work reads `done`, parked
 work reads `blocked`. This applies to EVERY completion on a sub-task that has
 not yet reached `done` (completion comment with status left at `todo` wakes
 nobody — this stranded MXW-562). **Rework on a sub-task that already reached
-`done` is the exception: leave it `done` and mention instead.** A re-entry into
-`done` re-fires the stage barrier and wakes your leader again for a stage it
-already reviewed, so the mention of whoever raised the findings is the wake —
-never a re-flip. The same applies to a NEW sub-task the leader files above a
+`done` comes back to you from the LEADER only:** the leader flips it
+`in_progress` (never you — you never flip your own sub-task out of `done`) and
+posts ONE comment on it with your mention pointing at the gate's findings. Fix,
+report on your own sub-task, flip `done`, no mention: that second `done` is
+expected and wakes the leader, who re-arms the gate. You never post on the
+gate's sub-task and never mention the reviewer or verifier — a member writes
+only on its own ticket and mentions only its leader; anything for another
+member goes on YOUR ticket with `<@leader>`, and the leader routes it. Your
+sub-task may carry the `Retrigger on done` property: that is the leader's
+bookkeeping for which gate to re-arm — never set, change or clear it. The same
+applies to a NEW sub-task the leader files at or above a
 `blocked` gate (a fix round or scope change at stage 4 while Review sits
 `blocked` at stage 3): the server closes a stage barrier only when every
 sub-task at that stage and below is terminal, so your `done` there fires
@@ -110,7 +117,7 @@ Then report it. EVIDENCE carries one row per check with its measured result — 
 5. **Self-service resume.** If you are woken while your own sub-task sits
    `blocked` (reply landed in your `## BLOCKER` thread) and reply
    actually answers your **Need** (option letter, decision,
-   access): flip YOUR sub-task back to `todo`/`in_progress` yourself, reply
+   access): flip YOUR sub-task back to `in_progress` yourself, reply
    in thread that you are resuming, and continue — do not wait for
    leader to re-arm you. If reply does NOT settle Need, say exactly
    what is still missing in same thread and stay `blocked`.
@@ -149,8 +156,10 @@ verifying. For clear IMPLEMENTATION defect (failing test, spec violation):
    commit your tests are pushed on. State that you are parked pending
    re-verification. The leader files the consolidated fix issue from this
    report and re-arms you when it lands.
-4. **Re-verify when re-armed.** Leader flips your sub-task back to `todo`
-   with resume comment. Sync to updated branch tip, re-run FULL
+4. **Re-verify when re-armed.** Leader flips your sub-task back to
+   `in_progress` with resume comment carrying your mention. First command on
+   that wake: `multica issue runs <your sub-task> --siblings` — another run of
+   yours already in flight means this wake is a duplicate; end with no action. Sync to updated branch tip, re-run FULL
    suite — never only previously failing scenarios. Green → PASS
    protocol above. Still red → NEW round (steps 1–3) with a NEW consolidated
    report to the leader. After 2 rounds on same root cause leader escalates
@@ -163,7 +172,10 @@ Receiving `[D<num>-n] Fix:` sub-issue:
 1. Reproduce listed failing tests first, then fix IMPLEMENTATION. (A fix
    sub-issue reaches you already reviewed: the leader consolidated it and the
    workspace owner assigned it. It arrives unassigned and starts only when the
-   owner assigns it to you — never adopt one that is still unassigned.)
+   owner assigns it to you — never adopt one that is still unassigned.) First
+   command: `multica issue runs <fix-sub-issue> --siblings` — another run of
+   yours already in flight on this cycle means this wake is a duplicate; end
+   with no action, no push, no mention. One fix run per round.
 2. **Never edit verifier's tests to make them pass.** If you believe test
    itself is wrong, flip fix sub-issue to `blocked` and raise it on
    fix sub-issue itself with `<@leader>`.

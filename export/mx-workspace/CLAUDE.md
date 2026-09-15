@@ -70,9 +70,11 @@ Instruction discipline (learned conventions, keep them):
   comments. Resolve UUIDs at runtime (`multica agent list --output json`) — don't trust a
   hardcoded UUID in prose. **Mentions are NOT deduped** — one mention, one run, even when
   the target is already `queued` or `running`; post ONE mention comment per turn.
-- **`done` is one-way.** A stage barrier re-fires on every re-entry into `done`, so never
-  flip a sub-task out of `done` to send work back — rework is a findings comment plus a
-  mention on the still-`done` sub-task.
+- **Members never flip their own sub-task out of `done`.** A stage barrier re-fires on every
+  re-entry into `done`; only the LEADER re-triggers fix work, by flipping the sub-task
+  `in_progress --no-start` (setting `Retrigger on done` to the blocked gate's key) and then
+  posting the ONE mention. Members write only on their own ticket and mention only their
+  leader — no member-to-member traffic.
 - Git boundaries are deliberate: only the squad leaders (`dev-leader`, `qc-leader`) cut
   feature branches and open PRs into `dev` — inline, per `leader-gitops`, never as
   Branch/PR sub-tasks; only `release-manager` opens/merges the `dev`→`main` release.

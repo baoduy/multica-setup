@@ -99,7 +99,7 @@ without jargon. 🦊 the "foreman" always knows which step you're on.*
 
 **Legend** — 👤 human · 🦊 product-owner · 🦉 spec-reviewer · 🐺 dev-leader · 🔨 dev-backend · 🐳 release-manager · 🦅 pr-reviewer · 🐝 qc-leader · 🐜 qc-tester · 🐞 qc-runner
 
-**Trigger mechanics** — assignment at `todo` starts the assignee · `backlog→todo` promotion starts the assignee · child `done` fires the stage barrier that wakes the parent's owner · agent mention triggers a run (NOT deduped — one mention, one run, even when the target is already running) · member (human) mention notifies only. A stage barrier re-fires on every re-entry into `done`, so `done` is one-way: rework is a mention on the still-`done` sub-task, never a status flip.
+**Trigger mechanics** — assignment at `todo` starts the assignee · `backlog→todo` promotion starts the assignee · child `done` fires the stage barrier that wakes the parent's owner · agent mention triggers a run (NOT deduped — one mention, one run, even when the target is already running) · member (human) mention notifies only. A stage barrier re-fires on every re-entry into `done`, so members never flip their own sub-task out of `done`; the LEADER re-triggers fix work by flipping the sub-task `in_progress --no-start` (with `Retrigger on done` = the blocked gate's key) and then posting the ONE mention — the re-fired barrier is the expected "fix is back" signal. Every mention link in a posted comment is a wake, quoted or not. Members write only on their own ticket and mention only their leader.
 
 ---
 
@@ -258,7 +258,7 @@ web-hook-deliverer). **No devops in this squad** — pipeline/helm work is never
 full cycle): leader cuts the branch inline → `D-1 UPDATE 🔨` → leader opens the PR inline →
 `D-2 REVIEW 🦅` — no Verify stage, because there is no test surface to verify. The 🦅 gate
 still scores and merges (its coverage precondition is satisfied vacuously on a
-no-coverable-lines diff); REWORK loops a fix to 🔨 and re-arms the Review stage directly,
+no-coverable-lines diff); REWORK loops a fix to 🔨 via the leader and re-arms the Review stage directly,
 same 2-round cap. The moment a change touches code or a config value that existing tests
 assert, it is the full cycle.
 

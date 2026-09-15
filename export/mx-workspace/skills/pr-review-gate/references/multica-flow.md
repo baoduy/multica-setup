@@ -12,16 +12,15 @@ You serve THREE callers. Resolve the context FIRST from your review sub-task's t
 
 **`[P<num>-1c]` — the helm exception.** When the PR you are gating targets `main` in `infra-v2.helm-charts` or `monxa.helm-charts`, base `main` is CORRECT (the base-must-be-`dev` precondition does not apply) and **you never merge it** — merging a chart PR IS the deploy. On APPROVED: report comment + approve vote, state that the merge is the requester's deploy decision, pin metadata, flip `done`, stop. A devops PR to `dev` in an app repo is merged normally, exactly like a squad PR.
 
-Mention links (copy exactly — a plain name or wrong UUID silently does nothing):
+Mention links (copy exactly — a plain name or wrong UUID silently does nothing). You mention LEADERS only — a member never writes on, mentions, or changes another member's ticket; the leader routes everything to the implementer:
 
 - dev-leader: `[@dev-leader](mention://agent/9ec725c6-a4d7-4d08-bbbb-8034b29e307f)`
-- dev-backend: `[@dev-backend](mention://agent/52973d4e-b4cf-4b29-b5ad-6f120403c857)`
 - qc-leader: `[@qc-leader](mention://agent/a72a6d00-9bc8-4016-9483-b33df2ce9911)`
-- qc-tester: `[@qc-tester](mention://agent/2b1a96fd-3354-4051-b8db-548c8dc7b20a)`
 - product-owner: `[@product-owner](mention://agent/b1546eca-c984-4b7a-99a6-25bc5e1c12b0)`
-- devops: `[@devops](mention://agent/9b9855ae-21bd-4196-a9a9-6d39412bfef8)`
 
-Mention exactly ONE agent per comment — the one who must act. Write comment bodies to a file in your working directory and post with `--content-file`; clean up after.
+Exactly ONE `mention://agent/<uuid>` link per comment — the leader who must act. Multica enqueues a run for EVERY mention link in a posted comment, whatever the surrounding text says, backticks and quotes included: a pasted copy of your own link, or an implementer's, wakes that agent and duplicates the round. Refer to everyone else in prose. Write comment bodies to a file in your working directory and post with `--content-file`; clean up after.
+
+**Wake sanity check (first command of every wake):** `multica issue runs <own-subtask> --siblings`. If the trigger comment is your own report, or another run of yours is already in flight, END with no comment, no status change and no re-sent mention. Never conclude a wake was misrouted from your own runtime identity alone.
 
 ## Round tracking (before anything else in pipeline mode)
 
@@ -33,7 +32,7 @@ multica issue metadata set <own-subtask-id> --key review_score --value <X.X>
 multica issue metadata set <own-subtask-id> --key review_verdict --value <APPROVED|DEFERRED|REWORK|POLISH|ESCALATED>
 ```
 
-A promotion from `blocked` to `todo` after a fix means: re-review the UPDATED PR in full (fresh collect + analyze + score — never a delta-only skim), AND open the new report with a **closure table**: every finding from the previous round → `resolved` / `not resolved` / `obsolete`, each with `file:line` evidence. A prior `blocking` or `important` finding still unresolved keeps its deduction — a fresh look never silently forgives it.
+The leader's re-arm after a fix (your sub-task flipped `blocked`→`in_progress` plus ONE resume comment carrying your mention; legacy: a promotion to `todo`) means: re-review the UPDATED PR in full (fresh collect + analyze + score — never a delta-only skim), AND open the new report with a **closure table**: every finding from the previous round → `resolved` / `not resolved` / `obsolete`, each with `file:line` evidence. A prior `blocking` or `important` finding still unresolved keeps its deduction — a fresh look never silently forgives it.
 
 ## Already-merged short-circuit (pipeline mode only)
 
@@ -85,7 +84,7 @@ Use the CURRENT squad's project and title prefix:
 The leader files ONE consolidated fix sub-task from that report — staged to match your stage, unassigned, `Owner` set, handed to the workspace owner by member mention (`sdlc-flow-squad-leader-playbook`, Fix-loop pattern). The cycle waits on that assignment by design: never file the ticket yourself to hurry it along, and never treat the pause as a defect.
 
 3. Flip your OWN review sub-task to `blocked` (never `done`).
-4. Post the defect report on YOUR review sub-task: score announcement, findings in the filable shape above, `round N of 2`, ending with the squad leader's mention link. The leader files the consolidated fix sub-task, the owner assigns it, and once the fix lands the leader verifies the commit and re-arms your sub-task (`blocked` → `todo`).
+4. Post the defect report on YOUR review sub-task: score announcement, findings in the filable shape above, `round N of 2`, ending with the squad leader's mention link. The leader files the consolidated fix sub-task, the owner assigns it, and once the fix lands the leader verifies the commit and re-arms your sub-task (`blocked` → `in_progress --no-start` + your mention). A re-arm with no new commit on the feature branch since your last verdict (`gh pr view --json headRefOid` unchanged) is not a new round: say so in one plain comment with the leader's mention and END.
 
 ### ESCALATE (rework rounds exhausted, or repeated same-root-cause failure)
 
@@ -115,7 +114,7 @@ Classify every finding by SCOPE first, and never by "did this PR introduce it":
 You never merge with an open in-scope finding above `suggestion`, and you never ask for a `Review follow-ups:` ticket for one.
 
 - `blocking` / `important` → REWORK (Verdict actions above). Unchanged.
-- `nit`-only → ONE **polish round**. Same mechanics as REWORK — one consolidated fix sub-issue, routed by WHAT MUST CHANGE, your own review sub-task `blocked` — with two differences: pin `review_verdict=POLISH` and do **not** increment `review_round` (a polish round must not spend the rework budget), and take at most ONE per cycle. Say in the ticket that these are non-gating nits being cleared before merge. The implementer pushes to the SAME branch and mentions you back; you re-review, and if nothing new gates it, merge.
+- `nit`-only → ONE **polish round**. Same mechanics as REWORK — one consolidated fix sub-issue, routed by WHAT MUST CHANGE, your own review sub-task `blocked` — with two differences: pin `review_verdict=POLISH` and do **not** increment `review_round` (a polish round must not spend the rework budget), and take at most ONE per cycle. Say in the report that these are non-gating nits being cleared before merge. The implementer pushes to the SAME branch and reports to the leader; the leader re-arms you; you re-review, and if nothing new gates it, merge.
 - A leftover whose deliverable belongs to a different member (docs wording, changelog) is routed to that member by the same WHAT-MUST-CHANGE table. Still inside the cycle; still before merge.
 - If a leftover is not worth a polish round, drop it in the report. Dropping is a legal outcome; filing is not.
 
