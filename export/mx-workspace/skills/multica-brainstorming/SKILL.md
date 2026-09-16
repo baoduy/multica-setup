@@ -39,7 +39,7 @@ Steps 4→5 and 6→7 loop on "no, revise" until the requester approves.
 Ticket is context, not just code:
 
 - `multica issue get <id> --output json` — description, status, assignee, parent, project.
-- `multica issue comment list <id> --output json` — decisions already made. Read this BEFORE asking anything; never ask what thread already answered.
+- `multica issue comment list <id> --compact --output json` — decisions already made. Read this BEFORE asking anything; never ask what thread already answered.
 - `multica issue children <id> --output json` and `multica issue metadata list <id> --output json` when ticket has structure.
 - Then code: `multica repo checkout <url> --ref dev`, CodeGraph before grep (`codegraph explore "<symbols or question>"`), every conclusion citing `file:line`. No evidence → say so; never guess.
 - Pipeline YAML, build scripts and chart values are NOT in code graph — read those files directly.
