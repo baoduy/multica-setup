@@ -4,6 +4,24 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-16 (b) — members never cut or push a branch; no backgrounded commands (live)
+
+drunk-workspace DRK-1353 showed the failure both workspaces were open to: dev-backend finished the fix, ran a
+bare `git push`, and git pushed its runtime worktree branch `agent/dev-backend/1b37847e15ca` to origin under its
+own name. The feature branch never moved, but the member's `git rev-parse origin/<branch>` check still passed — a
+local tracking ref does not notice a push that went elsewhere — so it reported delivered. dev-leader caught the gap
+and fast-forwarded the branch by hand.
+
+Policy 03 v1.1 adds statements 3b (members never create or push a branch; no bare `git push`; a missing feature
+branch is `blocked` + the leader's mention, never a branch the member cuts itself) and 3c (a push is proved with
+`git ls-remote origin <feature-branch>`, and that SHA goes in the report). `sdlc-gitflow` and
+`sdlc-flow-squad-member-protocol` carry the same check.
+
+The same run also stalled on a backgrounded test suite and had to be resumed. A Multica run cannot resume around a
+backgrounded process — the turn ends, the process is orphaned, the next run starts in a fresh checkout — so the
+workspace context now bans it: long tests, builds and packs run synchronously with a longer timeout, split into
+chunks that each finish inside one call.
+
 ## 2026-09-16 — product-owner reads ticket shape: sub-issues stop at implementation (live)
 
 Port of the drunk-workspace change made the same day. product-owner now reads `parent_issue_id` on its first

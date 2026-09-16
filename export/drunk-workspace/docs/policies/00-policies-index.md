@@ -120,6 +120,8 @@ a policy gap — file it upward.
 
 ## Change log
 
+- 2026-09-16 (b) — Policy 03 v1.1 (statements 3b/3c: members never create or push a branch, no bare `git push`, a push is proved with `git ls-remote`). Workspace context also bans backgrounding a long command — a run cannot resume around an orphaned process. Cascaded to `workspace.context.md`, `sdlc-gitflow` and `sdlc-flow-squad-worker-playbook`.
+
 - 2026-09-16 — Policy 05 v1.4 (statement 1b: a ticket assigned to product-owner with a parent is a sub-issue — same gates, no `[P<num>-2]`, terminates at the verified `[P<num>-1]`; the parent's owner releases its children together). Cascaded to `sdlc-flow-po-orchestration`, `sdlc-flow-delivery-pipeline`, `squads/product-team.md` and `agents/product-owner.md`.
 
 - 2026-09-15 (b) — Policy 06 v2.1: plain-English writing rules for every human-facing document. Templates rewritten: `sdlc-spec-template` (Summary, sub-labels, bullets), `blocker-report` (fixed EVIDENCE keys, DEVIATIONS table, 25/40-line caps, root-cause shape), `sdlc-impl-brief` (Mode header, `Proof` column, scenario names instead of copied Gherkin, changelog instead of appended sections, 10 KB cap); marker legend, mode procedures and the standard done-list moved into `test-driven-development`; leader plan comment capped at 2 KB.

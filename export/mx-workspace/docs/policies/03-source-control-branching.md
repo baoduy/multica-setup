@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | MX-POL-03 |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Active |
 | **Owner** | dev-leader / qc-leader (cycle git-flow) · release-manager (`dev`→`main`) |
 | **Applies to** | Every agent or engineer that branches, commits, pushes, or opens a PR |
@@ -49,6 +49,8 @@ All application repos. **Helm chart repos are different** — see statement 8 an
 1. **Topology:** `feature/* ──PR──> dev ──PR──> main`. `dev` = INTEGRATION, `main` = SANDBOX. Every feature branch is cut from freshly fetched `origin/dev`; every squad/feature PR targets `dev`.
 2. **Only two roles touch `main` in app repos.** `release-manager` is the **only** agent that opens/merges the single `dev`→`main` release PR (`[P#-2a]`), authorized by product-owner. A feature PR based on `main` is a defect — fix the base to `dev`.
 3. **Only squad leaders cut branches and open PRs into `dev`** — inline, per [`leader-gitops`](../../skills/leader-gitops/SKILL.md), never as Branch/PR sub-tasks. One PR per squad cycle: head = the feature branch, base = `dev`.
+3b. **Squad members never create a branch, and never push one of their own.** The `agent/...` branch the runtime puts a member on is a scratch worktree, not a delivery target. A member delivers only by refspec onto the leader's feature branch, and **never runs a bare `git push`** — with no refspec git pushes the current branch to origin under its own name, which delivers nothing and leaves a stray `agent/...` branch behind. A member whose sub-task names no branch, or whose named branch is absent from origin (`git ls-remote origin <branch>` empty), stops and asks the leader for it (`blocked` + the leader's mention on its OWN sub-task); it never cuts the branch itself, not even when the code is finished and correct.
+3c. **A push is proved against the remote.** `git rev-parse HEAD` must equal the SHA `git ls-remote origin <feature-branch>` prints, and that SHA goes in the completion report. The local `origin/<feature-branch>` tracking ref is not proof: after a bare push it still points where it did before, so the usual `git rev-parse origin/<branch>` check passes while the remote never moved (drunk-workspace DRK-1353, 2026-09-16 — the fix sat on the member's `agent/...` branch and the leader had to fast-forward the feature branch by hand).
 4. **Never `git checkout` a shared branch** (integration, production, or a feature branch). A checkout locks the branch in one worktree until *after* your task ends, stalling other agents. Stay on your own auto-generated `agent/...` branch and operate on the remote.
 5. **Branch and push by refspec, without checking out:**
    ```bash

@@ -10,6 +10,7 @@ The open source projects of drunkcoding.net (github.com/baoduy): .NET/NuGet libr
 - Member (human) mentions only render a link. To make a human act, reassign the ticket to them at `todo` and post a `## BLOCKER` comment (`blocker-report`).
 - Leader↔member traffic lives on the member's own sub-task; parent comments belong to the parent's owner.
 - A member writes only on its own ticket: comments, status, properties. It never comments on, mentions, or changes another member's ticket. Anything meant for another member (review findings, a fix request, a question) is a comment on the member's OWN ticket ending with the leader's mention; the leader routes it. Only the leader writes on tickets it does not own.
+- **Never run a long command in the background.** A run cannot resume around a backgrounded process: your turn ends, the process is orphaned, and the next run starts in a fresh checkout with nothing to collect. Run tests, builds and packs synchronously with a longer timeout, and split a suite too big for one call into chunks that each finish inside their own call. Never end a turn waiting on something you launched in the background.
 
 ## Tickets
 - Every child lives in the same project as its root. Titles: root tickets plain; `[S<num>]` spec review, `[P<num>-n]` phase tickets (`<num>` = root key number), `[D<num>-n]` dev sub-tasks (`<num>` = phase key number, `n` = stage). Labels on root tickets only.
@@ -23,6 +24,7 @@ The open source projects of drunkcoding.net (github.com/baoduy): .NET/NuGet libr
 - `dev` is integration, `main` is release. Feature branches come from fresh `origin/dev`; every feature PR targets `dev`. Only release-manager targets or merges `main`.
 - PR titles start with the ticket key in `[KEY]` form. Never write `Closes`/`Fixes`/`Resolves` next to an issue key: close intent auto-completes the ticket and kills the remaining phases.
 - `gh pr create` always carries both `--head` and `--base`. Never `git checkout` a shared branch; stay on your `agent/...` branch and push by refspec.
+- **Members never create, cut or push a branch.** The `agent/...` branch the runtime puts you on is a scratch worktree, never a delivery target: never push it, and never run a bare `git push` (with no refspec it pushes that name to origin). You deliver only with `git push origin HEAD:refs/heads/<feature-branch>` and prove it with `git ls-remote origin <feature-branch>`, quoted in your report. If the leader named no branch, or `git ls-remote origin <branch>` comes back empty, the cycle is not ready for you: flip `blocked` and ask the leader for the branch with their mention. Creating it yourself is a defect even when the code is right (DRK-1353: a bare push left the fix on `agent/dev-backend/1b37847e15ca` while the feature branch still sat at `at_sha`, and the leader had to fast-forward it by hand).
 
 ## Reports and reads
 - Comment bodies are written to a file in your working directory and posted with `--content-file`; issue bodies with `--description-file`.

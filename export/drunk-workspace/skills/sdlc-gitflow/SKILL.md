@@ -85,12 +85,16 @@ Commit on your own working branch, then deliver with explicit refspec push:
 git push origin HEAD:refs/heads/<feature-branch>
 ```
 
-Verify it landed:
+Never run a bare `git push`: with no refspec it pushes your `agent/...` worktree branch under its own name to origin, which delivers nothing and leaves debris.
+
+Verify it landed **against the remote**, not against a local tracking ref — a bare push makes `origin/<feature-branch>` look right while the remote never moved:
 
 ```bash
 git rev-parse HEAD                              # matches...
-git rev-parse origin/<feature-branch>           # ...this
+git ls-remote origin <feature-branch>           # ...the SHA this prints
 ```
+
+Report that `ls-remote` SHA in your completion comment. No `ls-remote` line, no delivery.
 
 If push is rejected because branch moved, rebase and push again — never force-push:
 

@@ -135,7 +135,11 @@ report done — your task runs in fresh checkout and unpushed work is
 permanently lost. Branch and push mechanics (worktree rules,
 `git push origin HEAD:refs/heads/<feature-branch>` form, push-landed check,
 never-create-a-branch rule) are in `sdlc-gitflow`. Follow it; do not
-improvise. Missing feature branch on origin → `blocked` + `<@leader>` on your
+improvise. Never run a bare `git push` — with no refspec it pushes your
+`agent/...` worktree branch to origin under its own name, which delivers
+nothing — and prove the push with `git ls-remote origin <feature-branch>`,
+quoting that SHA in your report; the local `origin/<feature-branch>` ref
+still looks correct after a bare push, so it proves nothing. Missing feature branch on origin → `blocked` + `<@leader>` on your
 OWN sub-task, asking leader to create it. Never create it yourself.
 
 ## Defect loop — verifier side
