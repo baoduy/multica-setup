@@ -1,9 +1,9 @@
 {
   "title": "🚀 Monthly Architecture Review — Monxa Backend Services",
   "source_id": "c207e0dc-5636-4f9c-918b-2082dd5cd573",
+  "status": "active",
   "execution_mode": "create_issue",
   "issue_title_template": "Monthly Architecture Review — Monxa Backend Services ({{date}})",
-  "priority": null,
   "project_title": "mx-jobs",
   "assignee_type": "agent",
   "assignee_name": "default",

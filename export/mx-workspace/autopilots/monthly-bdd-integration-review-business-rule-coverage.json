@@ -1,0 +1,24 @@
+{
+  "title": "🧪 Monthly BDD Integration Review — Business Rule Coverage",
+  "source_id": "69ad6eec-1286-4a4f-a38d-c18ce48ac3ce",
+  "status": "active",
+  "execution_mode": "create_issue",
+  "issue_title_template": "Monthly BDD Integration Review — Business Rule Coverage ({{date}})",
+  "project_title": "mx-jobs",
+  "assignee_type": "agent",
+  "assignee_name": "bdd-reviewer",
+  "subscriber_names": [
+    "drunkcoding"
+  ],
+  "had_webhook_trigger": false,
+  "triggers": [
+    {
+      "kind": "schedule",
+      "label": "Monthly, 5th at 02:00 SGT",
+      "enabled": true,
+      "cron_expression": "0 2 5 * *",
+      "timezone": "Asia/Singapore"
+    }
+  ],
+  "description_file": "autopilots/monthly-bdd-integration-review-business-rule-coverage.description.md"
+}

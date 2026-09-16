@@ -1,20 +1,21 @@
 {
-  "id": "e73086e2-da68-41e5-be03-213009001736",
   "title": "🚀 Monthly npm Upgrade — Pulumi repos",
-  "execution_mode": "create_issue",
+  "source_id": "e73086e2-da68-41e5-be03-213009001736",
   "status": "paused",
-  "project_id": "59f7d38d-0588-44b7-95c3-9744f64c6e1e",
+  "execution_mode": "create_issue",
   "issue_title_template": "Monthly npm Upgrade — Pulumi repos ({{date}})",
-  "subscribers": [],
+  "project_title": "drunk-pulumi",
+  "assignee_type": "agent",
   "assignee_name": "dev-leader",
-  "project_name": "drunk-pulumi",
+  "subscriber_names": [],
+  "had_webhook_trigger": false,
   "triggers": [
     {
-      "id": "c1516790-ecfe-434a-bce2-ac1ea7dcf360",
       "kind": "schedule",
+      "label": null,
+      "enabled": true,
       "cron_expression": "0 3 16 * *",
-      "timezone": "Asia/Singapore",
-      "enabled": true
+      "timezone": "Asia/Singapore"
     }
   ],
   "description_file": "autopilots/monthly-npm-upgrade-pulumi-repos.description.md"

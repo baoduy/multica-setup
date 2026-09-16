@@ -17,5 +17,6 @@
       "role": "pr-review-gate"
     }
   ],
-  "instructions_file": "squads/dev-team.md"
+  "instructions_file": "squads/dev-team.md",
+  "description_file": "squads/dev-team.description.md"
 }

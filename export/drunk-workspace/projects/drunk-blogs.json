@@ -15,7 +15,8 @@
       "resource_ref": {
         "url": "https://github.com/baoduy/hbd.astro-paper.git"
       },
-      "label": null
+      "label": null,
+      "position": 0
     }
   ],
   "description_file": "projects/drunk-blogs.description.md"

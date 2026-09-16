@@ -1,10 +1,12 @@
 {
   "name": "pr-reviewer",
-  "model": "claude-opus-5",
+  "model": "claude-sonnet-5",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/ed38be16-b92f-48cc-9611-89bf09102d84/019fb5a7-46d1-71b1-81ff-a4a02cc6774b.png",
   "service_tier": "",
   "permission_mode": "public_to",
+  "conversation_starters": [],
+  "disabled_runtime_skills": [],
   "invocation_targets": [
     {
       "target_id": "ed38be16-b92f-48cc-9611-89bf09102d84",
@@ -16,8 +18,9 @@
   "custom_args": [],
   "thinking_level": "high",
   "source_runtime_provider": "claude",
+  "mcp_servers": [],
   "source_id": "74c810b2-ead5-4198-a141-eb4bc4409939",
-  "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+  "source_runtime_id": "03137416-86b5-4ddf-a049-e581d3848661",
   "skill_names": [
     "blocker-report",
     "codegraph",

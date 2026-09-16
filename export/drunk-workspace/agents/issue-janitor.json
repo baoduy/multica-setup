@@ -5,6 +5,8 @@
   "avatar_url": "emoji:🐼",
   "service_tier": "",
   "permission_mode": "public_to",
+  "conversation_starters": [],
+  "disabled_runtime_skills": [],
   "invocation_targets": [
     {
       "target_id": "4539126d-0687-4993-8852-3554b7c5fb50",
@@ -16,6 +18,7 @@
   "custom_args": [],
   "thinking_level": "",
   "source_runtime_provider": "hermes",
+  "mcp_servers": [],
   "source_id": "30771d34-7ae6-4d84-acb0-5ae1d0f649e9",
   "source_runtime_id": "8c109428-3093-494f-aad9-856cced56b69",
   "skill_names": [

@@ -5,6 +5,8 @@
   "avatar_url": "https://multica.st24.live/uploads/workspaces/ed38be16-b92f-48cc-9611-89bf09102d84/019fb5a7-3bd9-7006-8933-287865ec7d23.png",
   "service_tier": "",
   "permission_mode": "public_to",
+  "conversation_starters": [],
+  "disabled_runtime_skills": [],
   "invocation_targets": [
     {
       "target_id": "ed38be16-b92f-48cc-9611-89bf09102d84",
@@ -16,6 +18,7 @@
   "custom_args": [],
   "thinking_level": "high",
   "source_runtime_provider": "claude",
+  "mcp_servers": [],
   "source_id": "9b9855ae-21bd-4196-a9a9-6d39412bfef8",
   "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
   "skill_names": [

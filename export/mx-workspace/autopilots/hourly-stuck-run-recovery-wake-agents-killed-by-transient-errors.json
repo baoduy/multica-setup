@@ -1,9 +1,9 @@
 {
   "title": "🔁 Hourly stuck-run recovery (wake agents killed by transient errors)",
   "source_id": "ff3ee058-af1d-48f5-937f-e32d684a502c",
+  "status": "paused",
   "execution_mode": "run_only",
   "issue_title_template": null,
-  "priority": null,
   "project_title": "mx-jobs",
   "assignee_type": "agent",
   "assignee_name": "issue-janitor",

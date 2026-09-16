@@ -15,14 +15,16 @@
       "resource_ref": {
         "url": "https://github.com/baoduy/agents-and-skills"
       },
-      "label": null
+      "label": null,
+      "position": 0
     },
     {
       "resource_type": "github_repo",
       "resource_ref": {
         "url": "https://github.com/baoduy/website-hook.git"
       },
-      "label": null
+      "label": null,
+      "position": 1
     }
   ],
   "description_file": "projects/drunk-others.description.md"

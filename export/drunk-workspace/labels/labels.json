@@ -1,0 +1,87 @@
+[
+  {
+    "name": "🧩",
+    "color": "#8b5cf6",
+    "description": "The new feature issues"
+  },
+  {
+    "name": "🪝",
+    "color": "#f97316",
+    "description": "The web-hook issues"
+  },
+  {
+    "name": "🪲",
+    "color": "#ef4444",
+    "description": "The bug issues"
+  },
+  {
+    "name": "☂️",
+    "color": "#eab308",
+    "description": "The code coverage issues"
+  },
+  {
+    "name": "⚛️",
+    "color": "#eab308",
+    "description": "The UI issues"
+  },
+  {
+    "name": "❓",
+    "color": "#ef4444",
+    "description": "The question issues"
+  },
+  {
+    "name": "💝",
+    "color": "#f97316",
+    "description": "The important feature"
+  },
+  {
+    "name": "📚",
+    "color": "#6366f1",
+    "description": "The issues for drunkcoding blog."
+  },
+  {
+    "name": "🔁",
+    "color": "#f59e0b",
+    "description": "CICD issues"
+  },
+  {
+    "name": "🕵",
+    "color": "#14b8a6",
+    "description": "Architecture Review"
+  },
+  {
+    "name": "🗂️",
+    "color": "#3b82f6",
+    "description": "The template issues"
+  },
+  {
+    "name": "dknet",
+    "color": "#14b8a6",
+    "description": ""
+  },
+  {
+    "name": "efcore",
+    "color": "#ec4899",
+    "description": ""
+  },
+  {
+    "name": "events",
+    "color": "#f97316",
+    "description": ""
+  },
+  {
+    "name": "main",
+    "color": "#64748b",
+    "description": ""
+  },
+  {
+    "name": "multica",
+    "color": "#22c55e",
+    "description": ""
+  },
+  {
+    "name": "pulumi",
+    "color": "#ec4899",
+    "description": ""
+  }
+]

@@ -15,35 +15,40 @@
       "resource_ref": {
         "url": "https://github.com/baoduy/drunk-pulumi-azure-components.git"
       },
-      "label": null
+      "label": null,
+      "position": 0
     },
     {
       "resource_type": "github_repo",
       "resource_ref": {
         "url": "https://github.com/baoduy/drunk-pulumi-azure-providers.git"
       },
-      "label": null
+      "label": null,
+      "position": 1
     },
     {
       "resource_type": "github_repo",
       "resource_ref": {
         "url": "https://github.com/baoduy/drunk-pulumi-cloudflare-components.git"
       },
-      "label": null
+      "label": null,
+      "position": 2
     },
     {
       "resource_type": "github_repo",
       "resource_ref": {
         "url": "https://github.com/baoduy/drunk-pulumi-intune-components.git"
       },
-      "label": null
+      "label": null,
+      "position": 3
     },
     {
       "resource_type": "github_repo",
       "resource_ref": {
         "url": "https://github.com/baoduy/drunk-pulumi-azure.git"
       },
-      "label": "drunk-pulumi-azure (legacy monolith lib)"
+      "label": "drunk-pulumi-azure (legacy monolith lib)",
+      "position": 4
     }
   ],
   "description_file": "projects/drunk-pulumi.description.md"

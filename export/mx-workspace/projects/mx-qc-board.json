@@ -15,7 +15,8 @@
       "resource_ref": {
         "url": "https://github.com/the-wixo/monxa.bdd-integration"
       },
-      "label": "The BDD integration test for Monxa Platform on Platform"
+      "label": "The BDD integration test for Monxa Platform on Platform",
+      "position": 0
     }
   ],
   "description_file": "projects/mx-qc-board.description.md"

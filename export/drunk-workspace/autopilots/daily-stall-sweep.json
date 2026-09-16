@@ -1,0 +1,22 @@
+{
+  "title": "🌤️ Daily Stall Sweep",
+  "source_id": "adb0a338-da08-4014-9d19-8005e736dfdb",
+  "status": "active",
+  "execution_mode": "create_issue",
+  "issue_title_template": null,
+  "project_title": "drunk-others",
+  "assignee_type": "agent",
+  "assignee_name": "Mika",
+  "subscriber_names": [],
+  "had_webhook_trigger": false,
+  "triggers": [
+    {
+      "kind": "schedule",
+      "label": null,
+      "enabled": true,
+      "cron_expression": "0 9 * * *",
+      "timezone": "Asia/Singapore"
+    }
+  ],
+  "description_file": "autopilots/daily-stall-sweep.description.md"
+}

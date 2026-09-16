@@ -1,20 +1,21 @@
 {
-  "id": "a240b820-34d2-4d26-b5fb-f73ba653a71b",
   "title": "🧽 Weekly Issues Hygiene Cleanup",
-  "execution_mode": "create_issue",
+  "source_id": "a240b820-34d2-4d26-b5fb-f73ba653a71b",
   "status": "active",
-  "project_id": "4d89c81e-fc43-4b09-91af-20e8846a785b",
+  "execution_mode": "create_issue",
   "issue_title_template": null,
-  "subscribers": [],
+  "project_title": "drunk-others",
+  "assignee_type": "agent",
   "assignee_name": "issue-janitor",
-  "project_name": "drunk-others",
+  "subscriber_names": [],
+  "had_webhook_trigger": false,
   "triggers": [
     {
-      "id": "b407969e-afdc-4ac5-adf9-f731d185c9e4",
       "kind": "schedule",
+      "label": null,
+      "enabled": true,
       "cron_expression": "TZ=Asia/Singapore 0 9 * * 0-1",
-      "timezone": "Asia/Singapore",
-      "enabled": true
+      "timezone": "Asia/Singapore"
     }
   ],
   "description_file": "autopilots/weekly-issues-hygiene-cleanup.description.md"

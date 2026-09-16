@@ -15,14 +15,16 @@
       "resource_ref": {
         "url": "https://github.com/the-wixo/infra-v2.helm-charts.git"
       },
-      "label": null
+      "label": null,
+      "position": 0
     },
     {
       "resource_type": "github_repo",
       "resource_ref": {
         "url": "https://github.com/the-wixo/monxa.helm-charts.git"
       },
-      "label": null
+      "label": null,
+      "position": 1
     }
   ],
   "description_file": "projects/mx-prd-releases.description.md"

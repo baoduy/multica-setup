@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Owner",
+    "type": "multi_actor",
+    "description": "The issue owner of the ticket",
+    "icon": "",
+    "archived": false,
+    "options": []
+  },
+  {
+    "name": "Retrigger on done",
+    "type": "text",
+    "description": "Set by the squad leader on a sub-task it re-triggers for fix work (re-armed Build/Scenarios, or a Fix sub-task filed at or above a blocked gate). Value: the key of the blocked issue to flip in_progress and re-trigger once this one is done. Leader clears it after re-arming.",
+    "icon": "flag",
+    "archived": false,
+    "options": []
+  }
+]

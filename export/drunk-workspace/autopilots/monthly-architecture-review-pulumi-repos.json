@@ -1,26 +1,23 @@
 {
-  "id": "48810406-d743-415c-babd-42fe8740e797",
   "title": "🚀 Monthly Architecture Review — Pulumi repos",
-  "execution_mode": "create_issue",
+  "source_id": "48810406-d743-415c-babd-42fe8740e797",
   "status": "active",
-  "project_id": "59f7d38d-0588-44b7-95c3-9744f64c6e1e",
+  "execution_mode": "create_issue",
   "issue_title_template": "Monthly Architecture Review — Pulumi repos ({{date}})",
-  "subscribers": [
-    {
-      "created_at": "2026-08-28T06:03:09Z",
-      "user_id": "04aadf2b-6674-4791-97e6-f8360575f317",
-      "user_type": "member"
-    }
-  ],
+  "project_title": "drunk-pulumi",
+  "assignee_type": "agent",
   "assignee_name": "arch-reviewer",
-  "project_name": "drunk-pulumi",
+  "subscriber_names": [
+    "drunkcoding"
+  ],
+  "had_webhook_trigger": false,
   "triggers": [
     {
-      "id": "c5b41dc2-bd17-4c4f-ba46-2fe2d63af02f",
       "kind": "schedule",
+      "label": "Monthly, 4th at 03:00 SGT",
+      "enabled": true,
       "cron_expression": "0 3 4 * *",
-      "timezone": "Asia/Singapore",
-      "enabled": true
+      "timezone": "Asia/Singapore"
     }
   ],
   "description_file": "autopilots/monthly-architecture-review-pulumi-repos.description.md"

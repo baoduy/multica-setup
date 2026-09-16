@@ -1,6 +1,7 @@
 {
   "version": "1",
-  "scope": "all",
+  "scope": "workspace",
+  "level": "workspace",
   "source_workspace_id": "4539126d-0687-4993-8852-3554b7c5fb50",
   "skills": [
     {
@@ -185,7 +186,8 @@
         "pulumi-azure-iac-standards",
         "python-mcp-standards",
         "sdlc-flow-squad-worker-playbook",
-        "sdlc-gitflow"
+        "sdlc-gitflow",
+        "test-driven-development"
       ],
       "had_secrets": false
     },
@@ -388,7 +390,7 @@
     {
       "name": "dev-team",
       "file": "squads/dev-team.json",
-      "avatar_url": null,
+      "avatar_url": "emoji:🐺",
       "leader_name": "dev-leader",
       "members": [
         {
@@ -406,9 +408,14 @@
         {
           "agent_name": "docs-writer",
           "role": "developer"
+        },
+        {
+          "agent_name": "release-manager",
+          "role": "release"
         }
       ],
-      "instructions_file": "squads/dev-team.md"
+      "instructions_file": "squads/dev-team.md",
+      "description_file": "squads/dev-team.description.md"
     },
     {
       "name": "product-team",
@@ -443,7 +450,7 @@
     {
       "name": "blog-team",
       "file": "squads/blog-team.json",
-      "avatar_url": null,
+      "avatar_url": "emoji:🦉",
       "leader_name": "dev-leader",
       "members": [
         {
@@ -502,40 +509,65 @@
   ],
   "autopilots": [
     {
-      "title": "🌤️ Daily Workspace Progress Digest",
-      "dir": "autopilots",
-      "file": "autopilots/daily-workspace-progress-digest.json",
-      "source_id": "adb0a338-da08-4014-9d19-8005e736dfdb"
-    },
-    {
-      "title": "🚀 Monthly Architecture Review — DKNet + DKNet.Templates",
-      "dir": "autopilots",
-      "file": "autopilots/monthly-architecture-review-dknet-dknet-templates.json",
-      "source_id": "846ed794-1ab2-4b30-8f0c-538e39ddcc5f"
+      "title": "🧽 Weekly Issues Hygiene Cleanup",
+      "file": "autopilots/weekly-issues-hygiene-cleanup.json",
+      "source_id": "a240b820-34d2-4d26-b5fb-f73ba653a71b",
+      "assignee_type": "agent",
+      "assignee_name": "issue-janitor",
+      "project_title": "drunk-others",
+      "had_webhook_trigger": false
     },
     {
       "title": "🚀 Monthly Architecture Review — Pulumi repos",
-      "dir": "autopilots",
       "file": "autopilots/monthly-architecture-review-pulumi-repos.json",
-      "source_id": "48810406-d743-415c-babd-42fe8740e797"
+      "source_id": "48810406-d743-415c-babd-42fe8740e797",
+      "assignee_type": "agent",
+      "assignee_name": "arch-reviewer",
+      "project_title": "drunk-pulumi",
+      "had_webhook_trigger": false
+    },
+    {
+      "title": "🌤️ Daily Stall Sweep",
+      "file": "autopilots/daily-stall-sweep.json",
+      "source_id": "adb0a338-da08-4014-9d19-8005e736dfdb",
+      "assignee_type": "agent",
+      "assignee_name": "Mika",
+      "project_title": "drunk-others",
+      "had_webhook_trigger": false
     },
     {
       "title": "🚀 Monthly npm Upgrade — Pulumi repos",
-      "dir": "autopilots",
       "file": "autopilots/monthly-npm-upgrade-pulumi-repos.json",
-      "source_id": "e73086e2-da68-41e5-be03-213009001736"
+      "source_id": "e73086e2-da68-41e5-be03-213009001736",
+      "assignee_type": "agent",
+      "assignee_name": "dev-leader",
+      "project_title": "drunk-pulumi",
+      "had_webhook_trigger": false
     },
     {
       "title": "🚀 Monthly NuGet Upgrade — DKNet",
-      "dir": "autopilots",
       "file": "autopilots/monthly-nuget-upgrade-dknet.json",
-      "source_id": "ec905ae5-4f57-4298-8529-407f65b47fe6"
+      "source_id": "ec905ae5-4f57-4298-8529-407f65b47fe6",
+      "assignee_type": "agent",
+      "assignee_name": "dev-leader",
+      "project_title": "drunk-net",
+      "had_webhook_trigger": false
     },
     {
-      "title": "🧽 Weekly Issues Hygiene Cleanup",
-      "dir": "autopilots",
-      "file": "autopilots/weekly-issues-hygiene-cleanup.json",
-      "source_id": "a240b820-34d2-4d26-b5fb-f73ba653a71b"
+      "title": "🚀 Monthly Architecture Review — DKNet + DKNet.Templates",
+      "file": "autopilots/monthly-architecture-review-dknet-dknet-templates.json",
+      "source_id": "846ed794-1ab2-4b30-8f0c-538e39ddcc5f",
+      "assignee_type": "agent",
+      "assignee_name": "arch-reviewer",
+      "project_title": "drunk-net",
+      "had_webhook_trigger": false
     }
-  ]
+  ],
+  "labels_file": "labels/labels.json",
+  "labels_count": 17,
+  "properties_file": "properties/properties.json",
+  "properties_count": 9,
+  "mcp_servers_file": null,
+  "mcp_servers_count": 0,
+  "workspace_file": "workspace/workspace.json"
 }

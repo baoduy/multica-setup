@@ -1,20 +1,21 @@
 {
-  "id": "ec905ae5-4f57-4298-8529-407f65b47fe6",
   "title": "🚀 Monthly NuGet Upgrade — DKNet",
-  "execution_mode": "create_issue",
+  "source_id": "ec905ae5-4f57-4298-8529-407f65b47fe6",
   "status": "active",
-  "project_id": "acdcbdaa-cf5e-41db-a9c8-87c15649576f",
+  "execution_mode": "create_issue",
   "issue_title_template": "Monthly NuGet Upgrade — DKNet ({{date}})",
-  "subscribers": [],
+  "project_title": "drunk-net",
+  "assignee_type": "agent",
   "assignee_name": "dev-leader",
-  "project_name": "drunk-net",
+  "subscriber_names": [],
+  "had_webhook_trigger": false,
   "triggers": [
     {
-      "id": "b9632577-0f78-4d2d-997f-439d819c7e0f",
       "kind": "schedule",
+      "label": null,
+      "enabled": true,
       "cron_expression": "0 3 15 * *",
-      "timezone": "Asia/Singapore",
-      "enabled": true
+      "timezone": "Asia/Singapore"
     }
   ],
   "description_file": "autopilots/monthly-nuget-upgrade-dknet.description.md"
