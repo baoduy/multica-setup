@@ -22,7 +22,7 @@ Read the issue you were woken on and its last comment. You act ONLY when one of 
 
 ## Phase 0 — Locate PR and code
 
-**Pipeline mode:** read your sub-task, its parent (cycle ticket), and siblings: `multica issue get <id> --output json`, `multica issue children <parent-id> --output json`, `multica issue comment list <id> --output json`. PR URL is posted by squad leader as a comment on parent (cycle ticket); repo and feature branch are in cycle ticket. Fallback: `gh pr list -R baoduy/<repo> --head <feature-branch> --json number,url,isDraft`.
+**Pipeline mode:** read your sub-task, its parent (cycle ticket), and siblings: `multica issue get <id> --output json`, `multica issue children <parent-id> --output json`, `multica issue comment list <id> --compact --output json`, `multica issue comment list <parent-id> --compact --output json`. PR URL is posted by squad leader as a comment on parent (cycle ticket) — read it there, not on your own sub-task; repo and feature branch are in cycle ticket. Fallback: `gh pr list -R baoduy/<repo> --head <feature-branch> --json number,url,isDraft`.
 
 **On-demand mode:** PR URL/number is in comment that mentioned you.
 
