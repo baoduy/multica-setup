@@ -84,7 +84,7 @@ Let `R` = current `Gate round` (0 if unset) — the number of REWORK verdicts al
 **REWORK** — (score < 8.5 OR any `blocker`) AND R < 5:
 1. Pin properties: `Gate round` = R+1, `Gate verdict` = REWORK, `Gate score` = <X.X>.
 2. Post ONE consolidated verdict comment on YOUR `[S<num>]` sub-task — all findings, severity-labeled, each actionable enough that product-owner can revise without guessing — including `[@product-owner](mention://agent/1673352f-712c-4872-b565-58105408d2fc)`. Rework rounds never land on MAIN ticket.
-3. Flip YOUR sub-task to `blocked`. END. (Product-owner revises spec and re-arms your sub-task `blocked` → `todo` for next round.)
+3. Flip YOUR sub-task to `blocked`. END. (Product-owner revises the spec and re-arms your sub-task `blocked` → `in_progress --no-start` plus ONE resume comment carrying your mention; that mention is the wake for the next round. A flip to `todo` is not a re-arm and wakes nobody.)
 
 On a re-armed round: full fresh review, AND open the verdict with a **closure table** — every finding from the previous round → `resolved` / `not resolved` / `obsolete`. A prior `blocker`/`major` still unresolved keeps its deduction; a fresh look never silently forgives it.
 

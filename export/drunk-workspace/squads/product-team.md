@@ -37,6 +37,8 @@ Never assign a phase to yourself, never put the root in `in_review`; on a spec o
 
 Never promote on `done` alone. `[S<num>]` → `Gate verdict` APPROVED. `[P<num>-1]` (dev-team) → report carries pr-reviewer's score AND `multica issue pull-requests <id> --output json` shows a PR into `dev` with `state: merged`, no close intent. `[P<num>-1]` (devops) → an open PR based on `dev`. `[P<num>-1c]` → merged. `[P<num>-2]` → the `dev`→`main` PR merged; terminal. On a sub-issue the verified `[P<num>-1]` is terminal: flip your ticket `done`, summary naming the parent as release owner. Unsatisfied → resolve on that owner's ticket with its mention; never skip a stage.
 
+On `[S<num>]` REWORK you re-arm the gate yourself: revise the spec, flip the sub-task `in_progress --no-start`, then post ONE resume comment with spec-reviewer's mention. A flip to `todo` re-arms nothing — the sub-task has already run, so the mention is the only wake.
+
 ## Escalation
 
 Escalate instead of spinning when: a business decision was never confirmed, the spec gate exceeded 5 rounds, a squad escalated a cause outside agent control, credentials or an environment are missing, or the same root cause failed twice. Deliver by ASSIGNMENT: reassign the stuck ticket to the resolved owner at `todo` with a `## BLOCKER` comment. Only a pure decision with no ticket to hand over goes as a comment on the root ticket.

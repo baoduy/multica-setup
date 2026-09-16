@@ -4,6 +4,19 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-16 (c) — a re-arm into `todo` wakes nobody, on the spec gate too (live)
+
+drunk-workspace DRK-1364: product-owner answered two spec-review REWORK rounds by flipping the `[S1311]`
+sub-task `blocked`→`todo` with no mention. Neither flip enqueued a run — a ticket that has already run is
+never re-woken by its status — so the gate sat idle for over an hour until the owner typed "pls check again".
+Same shape as the dev-team fix of 2026-09-15, one layer up: product-owner ↔ spec-reviewer.
+
+mx-workspace already carried the rule (`sdlc-flow-po-orchestration` two-part re-arm, MXW-1426, the end-of-turn
+actuation check), so only the wake contract in `workspace.context.md` changed here: it now names the
+`blocked`/`done`→`todo` flip as enqueuing nothing, alongside the `in_progress --no-start` re-arm and the plain
+comment. drunk-workspace took the full cascade — Policy 04 v1.4, Policy 06 v2.2, `sdlc-flow-po-orchestration`,
+`spec-review-gate`, the `product-team` briefing and its workspace context.
+
 ## 2026-09-16 (b) — members never cut or push a branch; no backgrounded commands (live)
 
 drunk-workspace DRK-1353 showed the failure both workspaces were open to: dev-backend finished the fix, ran a

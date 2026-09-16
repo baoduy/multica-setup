@@ -120,6 +120,8 @@ a policy gap — file it upward.
 
 ## Change log
 
+- 2026-09-16 (c) — Policy 04 v1.4 (statement 3: a gate's own review sub-task is pipeline mode however it was woken, including a re-arm mention in any status; statement 10: a spec REWORK is re-armed by product-owner in two mandatory parts, `in_progress --no-start` + spec-reviewer's mention, never by a flip to `todo`), Policy 06 v2.2 (statement 11 carries the same re-arm mechanics and drops the retired `spec_review_round` metadata key for the `Gate round` property). DRK-1364 stalled twice on a `blocked`→`todo` re-arm that woke nobody — the second time until the owner asked for the round by hand. Cascaded to `sdlc-flow-po-orchestration` (two-part re-arm plus an end-of-turn actuation check), `spec-review-gate`, `product-team` briefing and `workspace.context.md`, which now says plainly that a ticket which has already run is never re-woken by its status.
+
 - 2026-09-16 (b) — Policy 03 v1.1 (statements 3b/3c: members never create or push a branch, no bare `git push`, a push is proved with `git ls-remote`). Workspace context also bans backgrounding a long command — a run cannot resume around an orphaned process. Cascaded to `workspace.context.md`, `sdlc-gitflow` and `sdlc-flow-squad-worker-playbook`.
 
 - 2026-09-16 — Policy 05 v1.4 (statement 1b: a ticket assigned to product-owner with a parent is a sub-issue — same gates, no `[P<num>-2]`, terminates at the verified `[P<num>-1]`; the parent's owner releases its children together). Cascaded to `sdlc-flow-po-orchestration`, `sdlc-flow-delivery-pipeline`, `squads/product-team.md` and `agents/product-owner.md`.
