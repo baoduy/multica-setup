@@ -2,7 +2,7 @@
   "name": "medium-publisher",
   "model": "",
   "visibility": "private",
-  "avatar_url": "emoji:🦁",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a931-a891-7672-9f23-0a7fced083b1.png",
   "service_tier": "",
   "permission_mode": "private",
   "conversation_starters": [],
@@ -27,5 +27,6 @@
   },
   "had_secrets": true,
   "instructions_file": "agents/medium-publisher.md",
-  "description_file": "agents/medium-publisher.description.md"
+  "description_file": "agents/medium-publisher.description.md",
+  "avatar_file": "agents/medium-publisher.avatar.png"
 }

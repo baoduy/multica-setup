@@ -2,7 +2,7 @@
   "name": "Mika",
   "model": "",
   "visibility": "workspace",
-  "avatar_url": "emoji:🦄",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a931-ae69-739a-b701-e6cbed200387.png",
   "service_tier": "",
   "permission_mode": "public_to",
   "conversation_starters": [],
@@ -28,5 +28,6 @@
   "custom_env": null,
   "had_secrets": false,
   "instructions_file": "agents/mika.md",
-  "description_file": "agents/mika.description.md"
+  "description_file": "agents/mika.description.md",
+  "avatar_file": "agents/mika.avatar.png"
 }
