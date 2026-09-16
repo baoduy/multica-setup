@@ -3,5 +3,6 @@
   "issue_prefix": "MXW",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/ed38be16-b92f-48cc-9611-89bf09102d84/01a08a6e-c4e9-77b6-a475-f527119c147e.webp",
   "avatar_file": "workspace/workspace.avatar.webp",
-  "context_file": "workspace/workspace.context.md"
+  "context_file": "workspace/workspace.context.md",
+  "description_file": "workspace/workspace.description.md"
 }
