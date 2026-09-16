@@ -1,0 +1,26 @@
+"""Build an offline preview of the generated origami avatars."""
+from pathlib import Path
+import html
+import json
+
+root = Path(__file__).resolve().parent
+plan = json.loads((root / 'generation-plan.json').read_text())
+cards = []
+for item in plan['assignments']:
+    label = html.escape(item['name'])
+    workspace = html.escape(item['workspace'])
+    kind = html.escape(item['kind'])
+    animal = html.escape(item['animal'].replace('-', ' '))
+    path = html.escape(item['file'], quote=True)
+    exists = (root / item['file']).is_file()
+    media = f'<img src="{path}" alt="Origami {animal}" loading="lazy">' if exists else '<div class="pending">Awaiting generation</div>'
+    action = f'<a href="{path}" download>Download PNG <span aria-hidden="true">↗</span></a>' if exists else '<span>Pending</span>'
+    cards.append(f'<article data-workspace="{workspace}" data-kind="{kind}"><div class="art">{media}</div><div class="info"><div class="meta">{workspace.replace("-workspace", "")} / {kind}</div><h2>{label}</h2><div class="footer"><span>{animal}</span>{action}</div></div></article>')
+count = sum((root / item['file']).is_file() for item in plan['assignments'])
+page = '''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Origami · Multica avatar collection</title><style>
+:root{color-scheme:light;--bg:#f4f1e9;--ink:#282720;--muted:#78766d;--line:#dbd8ce;--card:#fffefa}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:56px 32px}header{max-width:760px;margin-bottom:36px}.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}h1{font:500 clamp(38px,6vw,72px)/1.06 Georgia,serif;letter-spacing:-.04em;margin:18px 0}header p{max-width:570px;color:var(--muted);font-size:17px}.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;border-block:1px solid var(--line);padding:18px 0;margin-bottom:26px}select,button{font:inherit;color:inherit;border:1px solid var(--line);border-radius:8px;background:var(--card);padding:9px 12px}button{cursor:pointer}button[aria-pressed=true]{background:var(--ink);color:var(--card)}#count{margin-left:auto;color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:22px}article{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}article[hidden]{display:none}.art{aspect-ratio:1;background:#f9f6ef;display:grid;place-items:center}.art img{width:100%;height:100%;object-fit:contain;display:block}.circles .art img{border-radius:50%;width:84%;height:84%;box-shadow:0 0 0 1px var(--line)}.info{padding:17px 19px}.meta{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}h2{font-size:16px;font-weight:600;margin:7px 0 14px}.footer{font-size:12px;display:flex;justify-content:space-between;gap:10px;color:var(--muted)}a{color:var(--ink);text-decoration:none}a:hover{text-decoration:underline}.pending{color:var(--muted);font-size:13px}body>footer{border-top:1px solid var(--line);padding:22px 32px;color:var(--muted);font-size:12px;text-align:center}@media(max-width:550px){main{padding:30px 18px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.info{padding:12px}h2{font-size:13px}.footer{display:block}.footer a{display:block;margin-top:7px}#count{width:100%;margin:0}}
+</style><main><header><div class="eyebrow">Multica / Avatar collection</div><h1>A little paper.<br>A lot of character.</h1><p>Origami animals for every agent, squad, and workspace. Folded forms, tactile paper, and a consistent warm ivory backdrop.</p></header><div class="toolbar"><select id="workspace" aria-label="Filter by workspace"><option value="all">Both workspaces</option><option>drunk-workspace</option><option>mx-workspace</option></select><select id="kind" aria-label="Filter by type"><option value="all">All avatars</option><option value="agent">Agents</option><option value="squad">Squads</option><option value="workspace">Workspaces</option></select><button id="crop" aria-pressed="false">Circular preview</button><span id="count"></span></div><div class="grid">CARDS</div></main><footer>Generated with the built-in image_gen tool · READY / TOTAL files ready · Full prompts and mappings in generation-plan.json · Local preview</footer><script>
+const ws=document.querySelector('#workspace'),kind=document.querySelector('#kind'),cards=[...document.querySelectorAll('article')];function filter(){let n=0;for(const card of cards){card.hidden=!((ws.value==='all'||card.dataset.workspace===ws.value)&&(kind.value==='all'||card.dataset.kind===kind.value));if(!card.hidden)n++}document.querySelector('#count').textContent=n+' avatars'}ws.addEventListener('change',filter);kind.addEventListener('change',filter);document.querySelector('#crop').addEventListener('click',e=>{const active=document.body.classList.toggle('circles');e.currentTarget.setAttribute('aria-pressed',String(active))});filter();
+</script></html>'''.replace('CARDS', ''.join(cards)).replace('READY', str(count)).replace('TOTAL', str(len(cards)))
+(root / 'index.html').write_text(page)
+print(f'Gallery built: {count}/{len(cards)} avatars ready')
