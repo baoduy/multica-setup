@@ -120,6 +120,8 @@ a policy gap — file it upward.
 
 ## Change log
 
+- 2026-09-16 — Policy 05 v1.4 (statement 1b: a ticket assigned to product-owner with a parent is a sub-issue — same gates, no `[P<num>-2]`, terminates at the verified `[P<num>-1]`; the parent's owner releases its children together). Cascaded to `sdlc-flow-po-orchestration`, `sdlc-flow-delivery-pipeline`, `squads/product-team.md` and `agents/product-owner.md`.
+
 - 2026-09-15 (b) — Policy 06 v2.1: plain-English writing rules for every human-facing document. Templates rewritten: `sdlc-spec-template` (Summary, sub-labels, bullets), `blocker-report` (fixed EVIDENCE keys, DEVIATIONS table, 25/40-line caps, root-cause shape), `sdlc-impl-brief` (Mode header, `Proof` column, scenario names instead of copied Gherkin, changelog instead of appended sections, 10 KB cap); marker legend, mode procedures and the standard done-list moved into `test-driven-development`; leader plan comment capped at 2 KB.
 
 - 2026-09-15 — Policy 05 v1.3 (bugs and docs handed to dev-team as the root ticket, phases for specs only, spec frozen at delegation, gate never parks, daily stall sweep), Policy 04 v1.3 (re-review always ends in a verdict, Workflow D CI exception, CI-first verification), Policy 07 v1.2, Policy 09 v1.4 (release-manager in dev-team for root cycles; Mika runs the stall sweep). Cascaded to `pr-review-gate`, `sdlc-flow-*`, `sdlc-gitflow`, `leader-gitops`, both squads, agents, and the `Daily Stall Sweep` autopilot.

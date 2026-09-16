@@ -145,7 +145,7 @@ No `[P#-2a]` release, no `[P#-2b]` argoCD ticket, no `[P#-3]` BDD phase in this 
 | `[P#-1]` implementation | mx-main | dev-team → dev-leader | product-owner | created `todo` |
 | `[P#-1b]` CI/CD change (delegated) | mx-main | devops | product-owner — only when feature needs one | created `todo` |
 | `[P#-1c]` review CI/CD PR | mx-main | pr-reviewer | product-owner — only alongside a `[P#-1b]` standalone PR | promoted once PR URL is posted |
-| `[P#-2a]` release dev→main | mx-main | release-manager | product-owner — **only when `ship_required` ≠ `false`** | promoted after P#-1 verified |
+| `[P#-2a]` release dev→main | mx-main | release-manager | product-owner — **only when `ship_required` ≠ `false`, and only on a ticket with no parent** | promoted after P#-1 verified |
 | `[P#-2b]` SANDBOX deploy (argoCD) | mx-main | 👤 requester | product-owner — **only when `bdd_required` ≠ `false`** | promoted after P#-2a done |
 | `[P#-3]` integration tests | mx-main | qc-team → qc-leader | product-owner — **only when `bdd_required` ≠ `false`** | promoted after P#-2b done |
 | `[D#-n]` dev sub-tasks (Branch → Build → PR → Review) | mx-code | dev-team members | dev-leader | stage promotion |
@@ -157,6 +157,7 @@ No `[P#-2a]` release, no `[P#-2b]` argoCD ticket, no `[P#-3]` BDD phase in this 
 
 - `bdd_required=false` drops SANDBOX-verification tail: **`[P#-2b]` and `[P#-3]` are never created**, and `[P#-2a] done` becomes terminal. Nothing to serve a deploy that no suite will test; requester deploys `main` to SANDBOX on their own schedule.
 - `ship_required=false` also drops release: **`[P#-2a]` is never created either**, and `[P#-1] done` (merged into `dev`) becomes terminal. Change rides next `dev`→`main` release. Used for work a running service never observes — test-only, docs, pure refactor.
+- **A ticket with a parent drops the whole tail regardless of both keys**: a sub-issue product-owner runs is terminal at `[P#-1]`, because the parent's owner ships every child in ONE `dev`→`main` release, one SANDBOX deploy and one BDD pass. A per-child release would ship siblings still mid-cycle. The parent's own cycle creates `[P#-2a]`/`[P#-2b]`/`[P#-3]` over the finished children.
 
 Neither key drops anything else. `[P#-1]`, its in-repo BDD/unit coverage, acceptance criteria, and pr-reviewer merge gate always run at full strength. A narrowed scope reduces coverage of deployed environment, never coverage of fix.
 

@@ -4,7 +4,7 @@ The one-page contract every pipeline agent shares: actors, flows, stage ownershi
 
 ## Actors
 
-- **product-owner** — leader of product-team. Research, spec, orchestration of the root ticket. Read-only on code.
+- **product-owner** — leader of product-team. Research, spec, orchestration of the ticket it is assigned. Read-only on code. A root ticket (no parent) it owns through release; a sub-issue (has a parent) it owns through development only — the parent's owner releases all its children together.
 - **spec-reviewer** — automated spec gate (Workflow B). Approve bar 8.5, max 5 rework rounds.
 - **dev-team** — squad led by **dev-leader**; members dev-backend (tests and code, acceptance-test-first), docs-writer (documentation only), pr-reviewer (PR gate, merges into `dev`), release-manager (a `Release` stage on root cycles). The leader cuts the one feature branch and opens the one PR itself (`leader-gitops`).
 - **pr-reviewer** — automated PR gate for every `dev`-bound PR (dev-team's cycle PR and devops' standalone PR). Approve bar 8.5, max 2 rework rounds plus one polish round.
@@ -18,7 +18,7 @@ The one-page contract every pipeline agent shares: actors, flows, stage ownershi
 |---|---|---|
 | question or defect to root-cause | **A** | research → root-cause report + confidence → ≥90% (or requester confirmed): the ROOT is reassigned to dev-team, which runs the cycle plus a `Release` stage and finalizes it `in_review`; <90% requester confirms first; pure question ends at the report |
 | feature or enhancement to a library repo | **B → C** | clarify to zero open questions → business spec in the root description → `[S<num>]` gate → C |
-| delivery of an approved spec | **C** | `[P<num>-1] Implementation` (dev-team, `todo`, stage 1; description pins `Spec revision: <n>`, frozen for the cycle) → `[P<num>-2] Release` (release-manager, `backlog`, stage 2) → root `done` |
+| delivery of an approved spec | **C** | `[P<num>-1] Implementation` (dev-team, `todo`, stage 1; description pins `Spec revision: <n>`, frozen for the cycle) → `[P<num>-2] Release` (release-manager, `backlog`, stage 2; root tickets only) → ticket `done`. On a sub-issue the cycle ends at the verified `[P<num>-1]` — no release phase |
 | CI/CD or build/publish automation | **D** | D1 analysis-only ends at the report; D2 `[P<num>-1] CI/CD change` (devops, stage 1) → `[P<num>-1c] Review CI/CD PR` (pr-reviewer, stage 2) → root `done`. No spec gate, no release phase |
 | docs-only change to a library repo | **E** | the ROOT is reassigned to dev-team with a `## Brief` (Route B) → dev-leader finalizes `in_review`. No spec gate, no release. A docs ticket may also be assigned to dev-team directly, bypassing product-owner |
 
@@ -41,7 +41,7 @@ All traffic inside a squad is routed by its leader: members write only on their 
 
 ## Branch and release strategy
 
-`feature/<key>-<slug>` from fresh `origin/dev` → PR to `dev` (pr-reviewer merges) → `dev`→`main` release PR (release-manager merges) → CI publishes NuGet/npm from `main`. One repo per phase ticket; a phase naming two repos is rejected `blocked` to product-owner for a split. One feature branch and one PR per cycle; members commit to the leader's branch and never open PRs. devops uses `chore/<key>` branches to `dev`. No `[P<num>-2]` for a change a package consumer cannot observe (comments, tests, tooling).
+`feature/<key>-<slug>` from fresh `origin/dev` → PR to `dev` (pr-reviewer merges) → `dev`→`main` release PR (release-manager merges) → CI publishes NuGet/npm from `main`. One repo per phase ticket; a phase naming two repos is rejected `blocked` to product-owner for a split. One feature branch and one PR per cycle; members commit to the leader's branch and never open PRs. devops uses `chore/<key>` branches to `dev`. No `[P<num>-2]` for a change a package consumer cannot observe (comments, tests, tooling), and none at all on a ticket that has a parent — its parent's owner releases the children together, woken by the child's `done`.
 
 ## Stage barriers
 

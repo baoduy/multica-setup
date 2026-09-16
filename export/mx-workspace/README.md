@@ -211,7 +211,8 @@ on code, always.** SANDBOX is the last environment it reaches (production is `pr
   ├── ⑤  PROMOTE   one stage at a time — each only after the previous deliverable VERIFIES
   │                (never on `done` alone: e.g. [P#-1] needs a MERGED dev PR + reviewer score)
   │                ├─ ship_required=false → [P#-1] is TERMINAL (rides next release) → close at ⑥
-  │                └─ bdd_required=false  → [P#-2a] is TERMINAL → close at ⑥
+  │                ├─ bdd_required=false  → [P#-2a] is TERMINAL → close at ⑥
+  │                └─ ticket has a parent → [P#-1] is TERMINAL (parent releases all children) → close at ⑥
   │
   └── ⑥  CLOSE     main ticket → done + plain final summary · no mentions
 ```
@@ -363,7 +364,7 @@ big picture.*
   │   │   ├── [P#-2a] Release to SANDBOX       ─▶ release-manager  backlog · dev→main PR + merge   ── ship_required ≠ false
   │   │   ├── [P#-2b] SANDBOX deploy (DevOps)  ─▶ 👤 requester     backlog · main→SANDBOX ┐ bdd_required
   │   │   └── [P#-3] BDD integration           ─▶ qc-team          backlog               ┘ ≠ false
-  │   └── note      idempotent — existing children checked first · ship_required=false ⇒ [P#-1] only
+  │   └── note      idempotent — existing children checked first · ship_required=false ⇒ [P#-1] only · sub-issue (has parent) ⇒ [P#-1] only
   │
   ├── ④  DEV CYCLE — 🐺 dev-leader
   │   ├── start     [P#-1] todo · sub-tasks in mx-code · questions ─▶ MAIN + @🦊

@@ -6,6 +6,7 @@ Your procedure lives in `sdlc-flow-po-orchestration` (Workflows A–D) and the s
 
 - **Home project**: `mx-main` (main tickets and every `[S<num>]` / `[P<num>-n]` phase ticket).
 - **Boundary**: SANDBOX is the last environment this squad reaches. Production releases belong to `prd-release`, outside this flow.
+- **Shape decides the tail**: a ticket assigned to you with no parent runs the full chain. A ticket with a parent is a sub-issue — terminal at `[P<num>-1]`, no `[P<num>-2a]`/`[P<num>-2b]`/`[P<num>-3]`; its parent's owner ships all children in one release. A parent whose children already carry the work is never re-spec'd: run the release tail over them once every child is `done` with its PR merged.
 - **You are read-only on code, always.**
 
 ## Flow
@@ -40,7 +41,7 @@ EXIT ⚠   >5 spec rework rounds, a product call never confirmed, a squad blocke
 EXIT ⛔  requester cancels → main ticket cancelled (their call, never yours)
 ```
 
-The common feature is `[P<num>-1] → [P<num>-2a] → [P<num>-2b] → [P<num>-3]` and nothing else. Every branch above is conditional: never create a stage to keep the shape symmetric — an empty stage is a wake-up that wastes a run and a barrier nobody can fire.
+The common feature is `[P<num>-1] → [P<num>-2a] → [P<num>-2b] → [P<num>-3]` and nothing else — on a sub-issue it is `[P<num>-1]` alone. Every branch above is conditional: never create a stage to keep the shape symmetric — an empty stage is a wake-up that wastes a run and a barrier nobody can fire.
 
 ## Members
 

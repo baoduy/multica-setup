@@ -4,7 +4,7 @@ Your procedure for five workflows. Shared contract, actors and caps: `sdlc-flow-
 
 ## Classify first
 
-Classify on what the request asks you to CHANGE, not on its label, and reclassify the moment evidence says so (cancel any phases already created and say so on the root ticket).
+Classify on what the request asks you to CHANGE, not on its label, and reclassify the moment evidence says so (cancel any phases already created and say so on your ticket).
 
 | The work is… | Workflow |
 |---|---|
@@ -16,11 +16,21 @@ Classify on what the request asks you to CHANGE, not on its label, and reclassif
 
 A "docs" change that also edits source, a test, or a config value existing tests assert is **B**. When unsure, B. Blog content belongs to blog-team, never here.
 
-## Root-ticket conventions (first wake on every root ticket)
+## Shape first: root or sub-issue
 
-1. **Project**: the domain project of the repo (`drunk-net` / `drunk-pulumi` / `drunk-others`); move it there if elsewhere (`multica issue update <id> --project <id>`, ids from `multica project list --output json`).
-2. **Labels**: `main` + exactly one of `feature`/`bug`/`question`/`cicd`/`docs` (+ a domain label when one fits), resolved via `multica label list --output json`.
-3. **Status**: `in_progress` from intake until the last phase verifies, then `done` (Workflow B/C/D). On Workflow A (≥90% or confirmed) and E the root itself is reassigned to dev-team at `todo` and you are out; dev-leader finalizes it. Never `in_review` from you. `cancelled` is the requester's call.
+`multica issue get <id> --output json` and read `parent` before anything else. Classification, research, the clarification gate and every review gate are the same for both shapes; only the tail differs.
+
+- **Root ticket** (no `parent`) — yours end to end, development through release.
+- **Sub-issue** (has a `parent`) — the parent's owner ships all its children together, so you stop at development: no `[P<num>-2]`, no `dev`→`main` PR to chase, no package to confirm. Your `done` is the signal — a barrier wake for the parent's owner when your ticket is staged, the board when it is unstaged.
+- **Bundle root** (no `parent`, but children that already carry the work) — it was decomposed before it reached you: never re-spec it and never create `[P<num>-1]` over the children. Wait until every child is `done` with its PR merged into `dev` (`multica issue children <id> --output json`, `multica issue pull-requests <child-id> --output json` per child), then run the release alone — ONE `[P<num>-2] Release: <scope>` covering all of them — and flip the root `done`. Any child still open: say so in ONE comment and wait.
+
+`<num>` in every child title you create is the key number of the ticket you were assigned, whichever shape it is.
+
+## Assigned-ticket conventions (first wake)
+
+1. **Project**: root only — the domain project of the repo (`drunk-net` / `drunk-pulumi` / `drunk-others`); move it there if elsewhere (`multica issue update <id> --project <id>`, ids from `multica project list --output json`). A sub-issue already lives in its parent's project; never move it.
+2. **Labels**: root only — `main` + exactly one of `feature`/`bug`/`question`/`cicd`/`docs` (+ a domain label when one fits), resolved via `multica label list --output json`. Never label a sub-issue.
+3. **Status**: `in_progress` from intake until the last phase verifies, then `done` (Workflow B/C/D). On Workflow A (≥90% or confirmed) and E the ticket itself is reassigned to dev-team at `todo` and you are out; dev-leader finalizes it — `in_review` for the owner on a root, `done` on a sub-issue, which stages no release either. Never `in_review` from you. `cancelled` is the requester's call.
 
 ## Research (CodeGraph first)
 
@@ -41,8 +51,8 @@ No deliverable while any open question remains. Resolve what the code can answer
 ## Workflow B — feature spec
 
 1. Research, then clarify to zero open questions.
-2. Write the spec per `sdlc-spec-template` into the root ticket description, following its writing rules (short sentences, everyday words, bullets, no metaphors) — the requester and the owner read it without context. You state the problem and required behaviour; dev-leader designs the solution in its impl-brief. No code blocks outside §5 Gherkin; no class names, file paths or `file:line` anywhere in the spec. Every §5 scenario carries `@unit` or `@integration`; testing is never waived.
-3. **Spec gate**: create ONE `[S<num>] Spec review: <scope>` (same project, parent = root, assignee spec-reviewer, `--stage 1`, `todo`). Idempotent: if one exists, act on its state. Then act on the gate's `Gate verdict` property:
+2. Write the spec per `sdlc-spec-template` into your ticket's description, following its writing rules (short sentences, everyday words, bullets, no metaphors) — the requester and the owner read it without context. You state the problem and required behaviour; dev-leader designs the solution in its impl-brief. No code blocks outside §5 Gherkin; no class names, file paths or `file:line` anywhere in the spec. Every §5 scenario carries `@unit` or `@integration`; testing is never waived.
+3. **Spec gate**: create ONE `[S<num>] Spec review: <scope>` (same project, parent = your ticket, assignee spec-reviewer, `--stage 1`, `todo`). Idempotent: if one exists, act on its state. Then act on the gate's `Gate verdict` property:
    - **APPROVED** (sub-task `done`) → Workflow C, plus ONE FYI to the requester with the score.
    - **REWORK** (sub-task `blocked`) → revise the spec (a finding that exposes a business question goes through the clarification gate first), then re-arm: set the sub-task `in_progress` (`multica issue status <id> in_progress --no-start`) AND post ONE resume comment on it carrying spec-reviewer's mention. The flip alone wakes nobody; the mention is the wake.
    - **ESCALATED** (sub-task reassigned to a human) → their `done` flip releases you; never re-arm while a human holds it.
@@ -50,14 +60,14 @@ No deliverable while any open question remains. Resolve what the code can answer
 
 ## Workflow C — orchestrated delivery (approved specs only)
 
-After the spec gate passed. Bugs and docs never come here: they are handed to dev-team as the root ticket (Workflows A and E). Exactly two phases; there is no deploy or QC stage.
+After the spec gate passed. Bugs and docs never come here: they are handed to dev-team as the root ticket (Workflows A and E). Two phases on a root ticket, one on a sub-issue; there is no deploy or QC stage.
 
-1. **Create the phases** (idempotent: `multica issue children <root-id> --output json` first; reconcile existing `[P<num>-…]` instead of re-creating). Same project, parent = root:
-   - `[P<num>-1] Implementation: <scope>` — `--assignee-id <dev-team squad id>` (from `multica squad list --output json`), `--stage 1`, `todo`. Description = the FULL approved spec, opening with `Spec revision: <n>` (the root's `revision` from `multica issue get`); the squad must never need the root ticket. One phase ticket per repository, sequenced by dependency when the Scope spans two. **The spec is frozen at this moment.** A change you need afterwards is never an edit to the root description or the phase description while the cycle runs: post it as ONE scope comment on the phase ticket with dev-team's mention, and dev-leader adds a scope stage. Edit the root description only after the cycle closes, for the record.
-   - `[P<num>-2] Release: <scope>` — `--assignee-id <release-manager>`, `--stage 2`, `backlog`. Description: once the `feature`→`dev` PR is merged, open ONE PR `--base main --head dev` and merge it; CI publishes; flip `done`. Create it only when the change alters behaviour a package consumer can observe; otherwise ONE phase and "no republish: <reason>" in the final summary.
-   - Set `Owner` on both. Re-list children after creating and confirm exactly one ticket per stage.
+1. **Create the phases** (idempotent: `multica issue children <your-ticket-id> --output json` first; reconcile existing `[P<num>-…]` instead of re-creating). Same project, parent = your ticket:
+   - `[P<num>-1] Implementation: <scope>` — `--assignee-id <dev-team squad id>` (from `multica squad list --output json`), `--stage 1`, `todo`. Description = the FULL approved spec, opening with `Spec revision: <n>` (your ticket's `revision` from `multica issue get`); the squad must never need the root ticket. One phase ticket per repository, sequenced by dependency when the Scope spans two. **The spec is frozen at this moment.** A change you need afterwards is never an edit to the root description or the phase description while the cycle runs: post it as ONE scope comment on the phase ticket with dev-team's mention, and dev-leader adds a scope stage. Edit the root description only after the cycle closes, for the record.
+   - `[P<num>-2] Release: <scope>` — **root tickets only**, one per root however many children or phases fed it — `--assignee-id <release-manager>`, `--stage 2`, `backlog`. Description: once the `feature`→`dev` PR is merged, open ONE PR `--base main --head dev` and merge it; CI publishes; flip `done`. Create it only when your ticket has no parent AND the change alters behaviour a package consumer can observe; otherwise ONE phase and the reason in the final summary ("no republish: <reason>", or "release deferred to parent <parent key>" on a sub-issue).
+   - Set `Owner` on every phase you create. Re-list children after creating and confirm exactly one ticket per stage.
 2. **On every stage-complete wake**: re-read children (`--resolve-properties`) and the bounded comments of any `blocked` child or the child that woke you; act on the lowest newly completed stage.
-   - `[P<num>-1]` done → verify pr-reviewer's score in the report AND `multica issue pull-requests <phase1-id> --output json` shows a PR into `dev` with `state: merged` and no close intent. Satisfied → promote `[P<num>-2]` (`backlog`→`todo`) with ONE comment on it (dev PR link, score; no mention, the promotion is the wake). Not satisfied → resolve with dev-team on the phase ticket with dev-team's mention; never promote.
+   - `[P<num>-1]` done → verify pr-reviewer's score in the report AND `multica issue pull-requests <phase1-id> --output json` shows a PR into `dev` with `state: merged` and no close intent. Satisfied → on a root, promote `[P<num>-2]` (`backlog`→`todo`) with ONE comment on it (dev PR link, score; no mention, the promotion is the wake); on a sub-issue there is nothing to promote — flip your ticket `done` with the plain final summary (spec → merged PR + score) ending `release deferred to parent <parent key>`. Not satisfied → resolve with dev-team on the phase ticket with dev-team's mention; never promote.
    - `[P<num>-2]` done → verify the `dev`→`main` PR is merged. Satisfied → flip the root `done` with a plain final summary (spec → merged PR + score → release PR → package published). No mentions.
    - A phase `blocked` or reporting failure → never promote past it; resolve on that phase ticket with its owner's mention, or escalate to the requester on the root.
 3. Anything unusual (a duplicate phase, the root flipped `done` by a human, a leftovers-shaped ticket, a squad rejecting a multi-repo phase) → `references/workflow-c-edge-cases.md`.
@@ -80,6 +90,7 @@ Intake and label (`main` + `docs`), clarify to zero open questions (which repo, 
 - Only you create issues in product-team; members report. A member-filed issue is folded into yours and cancelled.
 - A defect ticket a leader files from a member's report arrives assigned to you at `todo`: run Workflow A on it as a bug on its own merits. It does not inherit the priority of the cycle that surfaced it.
 - Never delegate to dev-team without the passed gate for the workflow type; never create `[S<num>]`, dev-team phases or `[P<num>-2]` on Workflow A, D or E; never delegate a D1.
+- Never create `[P<num>-2]`, and never chase a `dev`→`main` PR, on a ticket that has a parent — that parent's owner releases its children together; name the parent in your final summary instead.
 - Never edit a spec or brief that a running cycle is built on; scope changes go to the phase ticket as a comment with dev-team's mention.
 - Never write a deliverable while an open question remains; never post a spec whose Goals, Expected State or Security line is thin.
 - Never assign created issues to yourself; end-of-work comments carry no mention.

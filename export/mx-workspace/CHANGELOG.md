@@ -4,6 +4,20 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-16 — product-owner reads ticket shape: sub-issues stop at implementation (live)
+
+Port of the drunk-workspace change made the same day. product-owner now reads `parent_issue_id` on its first
+wake and runs one of three shapes. A **root** main ticket is unchanged: full chain to `[P#-3]` per the scope keys.
+A **sub-issue** (it has a parent) keeps every gate and both scope keys but is terminal at `[P#-1]` — no `[P#-2a]`,
+no `[P#-2b]`, no `[P#-3]`, no project move and no labels — because the parent's owner ships all of its children in
+ONE `dev`→`main` release; a per-child release would ship siblings still mid-cycle. A **bundle root** (no parent,
+but children that already carry the work) is never re-spec'd: it waits for every child to reach `done` with its PR
+merged into `dev`, then runs the release tail alone over all of them.
+
+Cascaded to `sdlc-flow-po-orchestration` (new “Shape first” section, Workflow C creation + wake handling, hard rules),
+`sdlc-flow-delivery-pipeline` (scope-key list, stage-ownership table), `squads/product-team.md`,
+`agents/product-owner.md`, and Policy 05 v1.1 (statement 1b).
+
 ## 2026-09-15 — mx-workspace: mention hygiene, re-trigger flips in_progress, leader-routed rework, `Retrigger on done` (dev-team + qc-team; live)
 
 Port of the three drunk-workspace changes made earlier today (see the entries below), applied to

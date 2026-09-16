@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | MX-POL-05 |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Active |
 | **Owner** | product-owner (product-team) |
 | **Applies to** | Every ticket that flows through the mx software factory |
@@ -64,6 +64,7 @@ workspace owner (escalation valve).
 ## Policy statements
 
 1. **Feature flow (B):** intake → clarify with the requester until **zero** open questions → 11-section business spec on the main ticket → `[S#]` spec-review gate → on approval, `[P#-1]` implementation (always incl. in-repo BDD/unit coverage) + the conditional SANDBOX tail → dev cycle (Branch → Build → Verify → PR → review gate merges to `dev`) → `[P#-2a]` release `dev`→`main` → `[P#-2b]` SANDBOX deploy → `[P#-3]` BDD integration → main ticket done.
+1b. **A sub-issue stops at implementation.** The shape of the ticket assigned to product-owner decides where its cycle ends: a **root** main ticket (no parent) runs the full chain above; a **sub-issue** (it has a parent) gets the same classification, spec, gates and scope keys but **no `[P#-2a]`, `[P#-2b]` or `[P#-3]`** — it is terminal at the verified `[P#-1]` (merged into `dev`, pr-reviewer scored) and flips `done`. The parent's owner ships every child in ONE `dev`→`main` release, one SANDBOX deploy and one BDD pass, so no release ever carries a sibling that is still mid-cycle. A parent whose children already carry the work is never re-spec'd: its own cycle creates only the release tail, once every child is `done` with its PR merged.
 2. **Bug flow (A):** intake → research → root-cause report with a calibrated **confidence 0–100%**. Confidence **≥ 90%** auto-delegates Workflow C immediately (FYI to requester, "reply to halt"); **< 90%** waits for the requester to confirm; a pure question with no change wanted ends with the report as the deliverable. See [Policy 07](07-bug-and-defect-management.md).
 3. **CI/CD flow (D):** pipelines and helm are `devops` work — never enter dev/qc cycles, never open a spec gate. Two doors: **direct** (requester assigns devops; product-team stays out) or **delegated** `[P#-1b]`/`[P#-1c]` phases of a feature. A standalone devops PR to `dev` gets a PR gate; a helm PR to `main` is scored but **never merged by the gate**. See [Policy 08](08-release-management.md).
 4. **Gates front-load quality** — spec gate before implementation, PR gate before merge (see [Policy 04](04-code-and-spec-review.md)).

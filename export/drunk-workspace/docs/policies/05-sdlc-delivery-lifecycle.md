@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-05 |
-| **Version** | 1.3 |
+| **Version** | 1.4 |
 | **Status** | Active |
 | **Owner** | product-owner |
 | **Applies to** | Every ticket that flows through the drunk software factory |
@@ -72,6 +72,8 @@ dev-team's cycle PR and devops' standalone PR). **release-manager** — owns the
 1. **Feature flow (B):** intake → clarify with the requester until **zero** open questions → 11-section business spec on the main ticket → `[S#]` spec-review gate → on APPROVED, Workflow C: `[P<num>-1]` implementation (dev-team, always including in-repo unit/integration verification — there is no separate QC phase) → dev cycle (Branch → Build → PR → `pr-review-gate` merges into `dev`) → `[P<num>-2]` release `dev`→`main` (release-manager opens + merges; CI publishes the package/image) → main ticket `done`. **Two phases only** — no deploy phase and no QC phase exist because there is no deployed environment.
 2. **Bug flow (A):** intake → research → root-cause report with a calibrated **confidence 0–100%** that this is a genuine platform defect with the identified root cause, targeting the layer all callers route through — never the symptom path the ticket names. Confidence **≥ 90%** (or the requester's confirmation below that) hands the ROOT ticket to `dev-team` by reassignment — no `[P<num>-n]` phases: dev-leader runs the cycle, stages `[D<num>-n] Release` (release-manager, a dev-team member for that stage) when a package consumer can observe the change, and finalizes the root `in_review` for the owner. product-owner posts one FYI to the requester ("fix delegated, reply to halt") and is out of the ticket. A pure question with no change wanted ends with the report as the deliverable. A root cause found in a pipeline or build script is reclassified to Workflow D and handed to devops, whatever the confidence. See [Policy 07](07-bug-and-defect-management.md).
 3a. **Docs flow (E):** a docs-only change to a library repo (README, `docs/`, comments, changelog; no source, no test surface) is a dev-team Route B root cycle with no spec gate and no release. Two doors, like Workflow D: **direct** (the requester or Mika assigns `dev-team` straight away; product-owner stays out) or **delegated** (product-owner clarifies, appends a `## Brief` to the root, and reassigns the ROOT to `dev-team`). No phases. The moment the change touches source or tests it is Workflow B.
+1b. **A sub-issue stops at development.** The shape of the ticket assigned to product-owner decides where its ownership ends: a **root** ticket (no parent) runs to release as above; a **sub-issue** (it has a parent) gets the same classification, spec and gates but **no `[P<num>-2]`** — it terminates at the verified `[P<num>-1]` and flips `done`, which fires the parent's stage barrier. The parent's owner releases all of its children together in one `dev`→`main` PR, so partial releases of a decomposed feature never happen. The same shape rule already governs dev-team: it stages a `Release` only on a cycle whose ticket has no parent. A sub-issue also keeps its parent's project and carries no labels.
+
 3b. **Phases exist for approved specs only.** `[P<num>-1]` / `[P<num>-2]` are Workflow C, downstream of a spec gate. `[P<num>-1]` pins `Spec revision: <n>` and the spec is **frozen** for the cycle: a later change is a scope comment on the phase ticket with dev-team's mention, which dev-leader turns into ONE scope stage; a finished Acceptance-tests stage is never re-armed for spec drift, and neither the root nor the phase description is edited while the cycle runs.
 3. **CI/CD flow (D):** pipelines and build/publish automation are `devops` work — never enter the dev-team cycle, never open a spec gate, and never trigger a `[P<num>-2]` release phase on their own. Two doors: **direct** (requester assigns devops; product-owner stays out) or **delegated**, classified into **D1** analysis-only (report + STOP, requester decides) or **D2** change-requested (`[P<num>-1]` to devops → `[P<num>-1c]` PR review to pr-reviewer). Unlike a sibling factory's Helm/GitOps carve-out, a **standalone devops PR to `dev` gets the same `pr-review-gate` merge, not a human-only merge** — there is no deploy act to reserve for a human here.
 4. **Gates front-load quality** — the spec gate before implementation, the PR gate before every merge into `dev` (see [Policy 04](04-code-and-spec-review.md)).
@@ -98,6 +100,7 @@ dev-team's cycle PR and devops' standalone PR). **release-manager** — owns the
 ## Definition of Done / compliance
 
 - Feature: spec approved → PR merged into `dev` with a pr-reviewer score → `dev`→`main` release PR merged → package/image published by CI → main ticket `done` with a final summary. No SANDBOX/BDD stage is ever inserted.
+- Feature delivered as a sub-issue: spec approved → PR merged into `dev` with a pr-reviewer score → sub-issue `done` with a final summary naming the parent as release owner. No release PR, no publish — both belong to the parent.
 - Bug: root-cause report posted with a calibrated confidence; delegation (or requester confirmation) recorded before any Workflow C work starts.
 - CI/CD: devops' PR merged into `dev`; main ticket `done` with a plain summary; no `[S#]` and no `[P<num>-2]` ever created for this flow.
 - Every stage transition leaves exactly one promotion comment in the completion shape; no stranded children (every `blocked` child has a dispatched `## BLOCKER` comment).
@@ -116,6 +119,8 @@ playbook; squad members follow the worker playbook. Branch authority is enforced
   verification at ≥80% per-touched-class coverage is never optional and never waived.
 - Docs/config-only requests still take the light dev route (Branch → Update → PR → gate)
   — the Build/Update sub-task carries no coverage requirement when there is nothing to test.
+- A sub-issue never gets a `[P<num>-2]` release phase, whatever a package consumer can
+  observe — the parent releases its children together.
 - Workflow D never gets a `[P<num>-2]` release phase — a CI/CD change to build/publish
   workflows never triggers a package release on its own; if one is warranted, the
   requester files it separately.
