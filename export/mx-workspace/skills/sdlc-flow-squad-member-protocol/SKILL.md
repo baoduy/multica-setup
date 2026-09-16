@@ -65,12 +65,16 @@ only on its own ticket and mentions only its leader; anything for another
 member goes on YOUR ticket with `<@leader>`, and the leader routes it. Your
 sub-task may carry the `Retrigger on done` property: that is the leader's
 bookkeeping for which gate to re-arm — never set, change or clear it. The same
-applies to a NEW sub-task the leader files at or above a
-`blocked` gate (a fix round or scope change at stage 4 while Review sits
-`blocked` at stage 3): the server closes a stage barrier only when every
-sub-task at that stage and below is terminal, so your `done` there fires
-nothing — flip `done` as usual AND end your report with the leader's mention;
-the leader's brief says so when it applies.
+applies whenever your `done` closes no barrier: the server closes a stage
+barrier only when every sub-task at that stage and below is terminal, so a NEW
+sub-task the leader files at or above a `blocked` gate (a fix round at stage 4
+while Review sits `blocked` at stage 3) fires nothing — and neither does a
+plain `done` while ANY sibling at your stage or below sits `blocked`. So after
+every `done` flip, check `multica issue children <parent-id>`: a `blocked`
+sibling there means your `done` woke nobody, and a parked sibling never flips
+itself, so nothing else will fire that barrier either. Flip `done` as usual AND
+end your report with the leader's mention. You check this yourself — a brief
+that does not mention it is not a brief saying there is no barrier to close.
 
 Native status semantics (what each status does server-side, PR close-intent
 auto-completion, metadata keys) are documented in platform's built-in
