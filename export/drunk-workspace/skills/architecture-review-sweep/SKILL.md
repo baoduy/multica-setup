@@ -19,7 +19,7 @@ Read repo's own `CLAUDE.md` / `AGENTS.md` first — solution-local conventions *
 
 ### Build CodeGraph index first
 
-Per `codegraph` skill: fresh checkout never has usable index — run `codegraph init .` once per run per repo, confirm nodes/edges > 0 via `codegraph status .`, then prefer `codegraph explore`/`callers`/`node` over grep/Read for anything structural. `explore`'s per-symbol "no covering tests found" weights severity: untested symbol with real defect ranks above tested one. If `codegraph init` fails, say so in report and fall back to Grep/Read — never silently degrade; layering and dead-code findings are much weaker without call-graph data.
+Per `codegraph` skill: fresh checkout never has usable index — run `codegraph init --yes .` once per run per repo, in the foreground, confirm nodes/edges > 0 via `codegraph status .`, then prefer `codegraph explore`/`callers`/`node` over grep/Read for anything structural. `explore`'s per-symbol "no covering tests found" weights severity: untested symbol with real defect ranks above tested one. If `codegraph init` fails, say so in report and fall back to Grep/Read — never silently degrade; layering and dead-code findings are much weaker without call-graph data.
 
 ## 1. Scope file set
 

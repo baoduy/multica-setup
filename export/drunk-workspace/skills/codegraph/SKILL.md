@@ -21,11 +21,11 @@
 **Verify with `codegraph status`, never with directory existence:**
 
 ```bash
-codegraph status . 2>/dev/null | grep -q "Nodes:" || codegraph init .
+codegraph status . 2>/dev/null | grep -q "Nodes:" || codegraph init --yes .
 codegraph status .      # confirm Nodes / Edges non-zero
 ```
 
-Never commit index or include it in PR. Incremental update: `codegraph sync`.
+Run `init` in the **foreground**, never `&`: a backgrounded init dies with the run and leaves a half-resolved index (`codegraph status` then warns "references … awaiting resolution"; `codegraph sync .` repairs it). Never commit index or include it in PR. Incremental update: `codegraph sync`.
 
 ## MCP Tool: `codegraph_explore`
 
@@ -59,4 +59,5 @@ Pass `projectPath` to query any indexed project in monorepo or second repo.
 2. **Grep/read loops after CodeGraph answered.** Trust results — one call returned source; treat it as already read, no `Read` needed.
 3. **Querying by filename instead of concept.** `explore` works best with conceptual queries ("how does auth work").
 4. **Ignoring staleness banner.** After edit, `Read` pending files directly for live content.
-5. **Silently degrading to grep when index missing.** Say index is missing, then fall back — layering/dead-code/blast-radius conclusions are materially weaker without call graph.
+5. **Backgrounding `codegraph init` with `&`.** Run ends, init dies, index half-built; next `explore` misses callers.
+6. **Silently degrading to grep when index missing.** Say index is missing, then fall back — layering/dead-code/blast-radius conclusions are materially weaker without call graph.

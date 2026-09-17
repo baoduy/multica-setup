@@ -44,7 +44,7 @@ Treat each repo as independent sweep — separate dedupe, separate cap, separate
 For each repo:
 
 1. `multica repo checkout <repo-url>` and read that repo's own `CLAUDE.md` / `AGENTS.md` — **solution-local conventions override generic rules in your skills.** These repos do not share conventions; never carry assumption from one into another.
-1b. **Build the CodeGraph index before analysing** — mechanics per `architecture-review-sweep` §0. CodeGraph is configured at agent level, so the MCP tool and `codegraph` CLI both work in every target repo above regardless of stack.
+1b. **Build the CodeGraph index before analysing** — mechanics per `architecture-review-sweep` §0. The `codegraph` CLI and its MCP server are installed on the runtime host, so both work in every target repo above regardless of stack.
 2. Analyse repo's **production source for its stack**, applying that stack's skill. Exclude tests, build output, generated/vendored code:
    - **.NET** (`.cs`): exclude unit/BDD test projects, `obj/`, `bin/`, `Migrations/`, `GeneratedDtos/`, `*.g.cs`, `*.Designer.cs`.
    - **Pulumi/TS** (`src/**/*.ts`): exclude `node_modules/`, `bin/`, `*.d.ts`, tests (`*.test.ts`/`*.spec.ts`), `*.ts.ignore` / sample files.

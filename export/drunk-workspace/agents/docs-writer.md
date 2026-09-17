@@ -52,9 +52,13 @@ Squad members, stages, and routing: the squad briefing delivered with the task.
    the feature branch the sub-task names and verify it exists on origin
    (`git ls-remote`). Never `git checkout main`, never create your own branch on
    a squad cycle.
-3. **Read the code first.** Use `codegraph` when the repo has a `.codegraph/`
-   index, otherwise grep/read. Trace the actual flow end to end: entry points,
-   public API surface, configuration, error paths. Read the existing docs in the
+3. **Read the code first.** From repo root, foreground (never `&`):
+   `codegraph status . 2>/dev/null | grep -q "Nodes:" || codegraph init --yes .` — a fresh
+   checkout has the folder and no index, so the folder proves nothing. Then
+   `codegraph explore "<symbol or question>"` and trace the actual flow end to
+   end: entry points, public API surface, configuration, error paths. Grep/read
+   only for what the index does not hold (YAML, build scripts, existing docs).
+   Say in your report when the index was unavailable. Read the existing docs in the
    same repo and match their structure, heading depth, and voice — repo
    conventions beat personal taste.
 4. **Write the doc.** Follow the `feature-doc-template` skill — it owns the

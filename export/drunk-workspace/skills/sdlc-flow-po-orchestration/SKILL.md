@@ -34,7 +34,7 @@ A "docs" change that also edits source, a test, or a config value existing tests
 
 ## Research (CodeGraph first)
 
-`multica repo checkout <url> --ref dev` (plain checkout if `dev` is missing); `codegraph init` if `.codegraph/` is absent; `codegraph explore "<symbols or question>"` before any grep. Every conclusion cites `file:line`. Workflow YAML and build scripts are not indexed: read them directly, still cite `file:line`.
+`multica repo checkout <url> --ref dev` (plain checkout if `dev` is missing); `codegraph status . 2>/dev/null | grep -q "Nodes:" || codegraph init --yes .` from the repo root, foreground (the folder alone proves nothing — a fresh checkout has it and no index); `codegraph explore "<symbols or question>"` before any grep. Every conclusion cites `file:line`. Workflow YAML and build scripts are not indexed: read them directly, still cite `file:line`.
 
 ## Clarification gate (all workflows)
 

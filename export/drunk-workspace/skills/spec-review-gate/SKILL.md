@@ -13,7 +13,7 @@ Comprehensive review of product-owner Workflow B spec with weighted 1–10 score
 
 1. Read your review sub-task, then PARENT main ticket (`multica issue get <parent-id> --output json`): spec is main ticket's **description**. Read its recent comments for requester's clarification answers (context for §4 Scope decisions).
 2. Round bookkeeping: read the `Gate round` property on YOUR review sub-task (`multica issue property list <subtask-id> --output json`). Unset = no rework rounds yet (round 0).
-3. Check out every repo spec's Scope section names: `multica repo checkout <url> --ref dev` (fall back to no `--ref` if `dev` does not exist). Confirm `.codegraph/` exists at each repo root; run `codegraph init` there if missing.
+3. Check out every repo spec's Scope section names: `multica repo checkout <url> --ref dev` (fall back to no `--ref` if `dev` does not exist). At each repo root, foreground (never `&`): `codegraph status . 2>/dev/null | grep -q "Nodes:" || codegraph init --yes .` — the folder alone proves nothing, only `Nodes:` from `codegraph status` does.
 
 ## Analyze — verify claims against real code
 

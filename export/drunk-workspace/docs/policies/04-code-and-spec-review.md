@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-04 |
-| **Version** | 1.4 |
+| **Version** | 1.5 |
 | **Status** | Active |
 | **Owner** | pr-reviewer (code) · spec-reviewer (spec) · arch-reviewer (architecture sweeps) |
 | **Applies to** | Every Workflow B spec before implementation, every squad/devops PR into `dev`, every scheduled architecture sweep |
@@ -51,7 +51,7 @@ images, Helm charts, Python MCP services.
 ## Policy statements
 
 1. **Evidence before opinion.** Every finding cites `file:line` from the actual diff (PR) or the spec section (spec review) or the sweep's own read (architecture). A reviewer with no `file:line` for a claim has no opinion to state.
-2. **CodeGraph-first, always before judging.** Before ruling on correctness, security, or duplication, run `codegraph explore` (or `codegraph init` first if `.codegraph/` is missing/empty) to walk callers/callees beyond the diff and verify every "reuse X / mirror Y" claim — grep/manual reading is the fallback for what CodeGraph cannot answer, never the default.
+2. **CodeGraph-first, always before judging.** Before ruling on correctness, security, or duplication, run `codegraph explore` (index verified with `codegraph status` — never by the `.codegraph/` folder's existence, which a fresh checkout has without an index; `codegraph init` in the foreground when status shows no nodes) to walk callers/callees beyond the diff and verify every "reuse X / mirror Y" claim — grep/manual reading is the fallback for what CodeGraph cannot answer, never the default.
 3. **Two operating modes, decided first, every wake.** A gate's OWN review sub-task (`[D<num>-n] Review:` for PR review, `[S<num>] Spec review:` for spec review) is **pipeline mode** — fully autonomous, ending in a gate action — whether it was assigned, promoted to `todo`, or re-armed by a mention on it, in whatever status it then holds (`todo`, `in_progress` or `blocked`). A mention on any OTHER ticket is **on-demand mode** — report-only: post the findings as a comment, take no GitHub write, no status flip, no ticket, unless the mentioning comment explicitly instructs otherwise.
 4. **Score, then gate — never inflate.** Both gates score 1–10 per weighted category, then apply hard caps that override the arithmetic (a great average never outranks a blocking finding). Never inflate a score to reach a gate; when torn between two values, report the lower one and say why.
 5. **PR gate weights and caps** (`references/scoring-rubric.md`): Correctness & logic 25% · Security 20% · Testing & coverage 20% · Maintainability & design 15% · Spec conformance 10% · Style & conventions 5% · AI-slop gate 5%. Hard caps: any `blocking` finding → 6.9 max · any `blocking (critical)` security finding (exploitable/secret/authz bypass) → 3.0 max · ≥ 2 open `important` findings anywhere → 8.4 max · spec-conformance ≤ 5 or no traceable spec link → 6.9 max · no tests for new/changed behavior → 6.5 max · CI failing → 6.9 max · coverage on changed lines below threshold (default 80%) → 7.9 max · docs/comment-only PR with green CI → 9.0 floor (caps beat the floor). **APPROVED** at ≥ 8.5 with every auto-merge precondition passing; **APPROVAL DEFERRED** at ≥ 8.5 with a failed precondition; **REWORK** below 8.5 or on any blocking finding (max 2 rounds, then escalate).

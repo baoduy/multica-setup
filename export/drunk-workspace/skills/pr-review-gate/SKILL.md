@@ -28,7 +28,7 @@ Read the issue you were woken on and its last comment. You act ONLY when one of 
 
 **State guard — run before collection (pipeline mode):** `gh pr view $PR -R $R --json state -q .state`. `MERGED` → gate is already satisfied (a previous gate run or workspace owner merged it): post a plain comment on your own sub-task (PR link + "already merged — no review performed"), pin `Gate verdict` = ALREADY_MERGED, flip sub-task `done`, and END run — no collection, no analysis, no GitHub writes, no fix tickets. `CLOSED` (not merged) → take blocked path in `references/multica-flow.md` (a dead PR cannot be gated). Only `OPEN` proceeds to Phase 1. In on-demand mode skip short-circuit — review whatever human pointed you at, noting its state in report.
 
-Check out code at PR head: `multica repo checkout <repo-url> --ref <head-branch>`, then work from that checkout. Never commit or push from it. Confirm a `.codegraph/` directory exists at repo root; if it is missing, run `codegraph init` from repo root so CodeGraph queries reflect PR head.
+Check out code at PR head: `multica repo checkout <repo-url> --ref <head-branch>`, then work from that checkout. Never commit or push from it. Then, from repo root and in the foreground (never `&`): `codegraph status . 2>/dev/null | grep -q "Nodes:" || codegraph init --yes .`. A `.codegraph/` folder proves nothing — a fresh checkout has the folder and no index; only `Nodes:` from `codegraph status` does. If status reports references awaiting resolution, run `codegraph sync .` so queries reflect PR head.
 
 ## Phase 1 — Collect (no judging yet)
 
