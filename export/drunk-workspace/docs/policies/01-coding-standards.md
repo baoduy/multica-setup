@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-01 |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Active |
 | **Owner** | dev-leader |
 | **Applies to** | Every engineer and agent writing or modifying code in any drunk stack: .NET/DDD NuGet libraries, Pulumi/TypeScript npm packages, Python MCP/FastAPI services, Docker images, Helm charts |
@@ -89,9 +89,12 @@ generic rule here where they differ (see Exceptions).
     `pnpm-lock.yaml` only, never `package-lock.json`/`yarn.lock` (`TS-PKG-001`); bulk upgrades
     go through `pnpm run update`, not scattered manual bumps (`TS-PKG-004`).
 12. **Public API compatibility for published packages.** A renamed/removed export, changed
-    signature, or dropped `.d.ts`/public C# member is a breaking change flagged for a SemVer
-    major on the affected package (`TS-PUB-002`, `PULUMI-TEST-003`). Additive-only changes are
-    minor.
+    signature, or dropped `.d.ts`/public C# member is a breaking change: it ships with a
+    `Breaking` changelog entry naming the replacement and bumps the **MINOR** version only
+    (`TS-PUB-002`, `PULUMI-TEST-003`). The major number is frozen and owner-only — no agent
+    bumps it for a break, see [Policy 08](08-container-build-and-release.md) statement 12
+    (`VER-REL-001`). Additive-only changes carry no version marker at all; the pipeline
+    numbers them as a patch.
 13. **Helm: shared logic lives in the library chart.** Reusable template partials belong in
     `drunk-lib/templates/` (`type: library`); an app chart copy-pasting a `_helpers`-style
     block instead of consuming the library chart is a violation (`HELM-STR-001`). Every

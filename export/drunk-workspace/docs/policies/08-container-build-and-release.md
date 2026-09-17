@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-08 |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Active |
 | **Owner** | devops (build/publish automation) · release-manager (the `dev`→`main` release) |
 | **Applies to** | Every drunk repo that publishes a NuGet/npm package, a container image, or a Helm chart |
@@ -115,7 +115,22 @@ covers everything CI does to produce a published artifact.
 11. **Long-running service images declare a `HEALTHCHECK` and OCI labels.** Source and version
     provenance (`org.opencontainers.image.source`, `.version`) so orchestration and
     provenance tooling can identify the running artifact (`DOCKER-DEL-002`).
-12. **Image build/publish always goes through CI, never a manual local push.** Builds run via
+12. **The pipeline owns the release number, and the MAJOR number is frozen.** For every
+    published drunk artifact — NuGet package, npm package, container image tag, Helm chart —
+    the release number is computed by the publish pipeline from the last `v`-prefixed tag
+    (DKNet: `paulhatch/semantic-version` in `.github/workflows/dotnet-publish.yml`, with
+    `major_pattern: "(MAJOR)"`, `minor_pattern: "(MINOR)"`), never typed by an agent. A
+    normal release is a **patch** bump and needs no marker at all: `v1.2.3` → `v1.2.4`. A
+    **breaking change bumps the MINOR only**: `v1.2.3` → `v1.3.0`, signalled by putting
+    `(MINOR)` in the commit title that lands the break on `main` (`VER-REL-001`). No agent
+    ever writes `(MAJOR)` in a commit title, PR title, or merge-commit subject, and no agent
+    hand-edits a version literal (`Directory.Build.props`, `package.json`, `Chart.yaml`
+    `version`, a release tag) or creates a tag or GitHub Release by hand (`VER-REL-002`).
+    **A major bump is the owner's decision alone**, taken deliberately outside a delivery
+    cycle — a breaking change is never reason enough for one. If a publish run emits a major
+    bump nobody asked for, that is a release defect: report it on the ticket under Policy 07
+    and stop; never publish again to "correct" a number (`VER-REL-003`).
+13. **Image build/publish always goes through CI, never a manual local push.** Builds run via
     the repo's own GitHub Actions workflow (`.github/workflows/docker.yml` or its publish
     equivalent) — this is the same workflow statement 10's multi-arch requirement applies to
     (`DOCKER-DEL-001`).
@@ -140,20 +155,29 @@ covers everything CI does to produce a published artifact.
   workflow started (one non-blocking snapshot); no deploy step exists or is expected.
 - **Image release:** CI build/publish workflow is wired multi-arch (`linux/amd64` +
   `linux/arm64`) from its first build; the published manifest covers both platforms.
-- **Chart release:** `helm lint`/`helm template` clean, chart version bumped, published via
-  the repo's own OCI/npm workflow — never a manual `helm push`.
+- **Chart release:** `helm lint`/`helm template` clean, chart version bumped (patch, or minor
+  for a breaking template/values change — never major), published via the repo's own OCI/npm
+  workflow — never a manual `helm push`.
+- **Release numbering:** no `(MAJOR)` marker anywhere in the release's commit titles; a
+  breaking change carries `(MINOR)` plus a `Breaking` changelog entry naming the replacement;
+  the published tag's major equals the previous release's major; no version literal or tag
+  edited by hand.
 - No secret literal in any Dockerfile layer, chart value, or CI workflow file.
 
 ## Enforcement
 
 `pr-review-gate` flags any `Dockerfile`/build-workflow diff missing the multi-arch platform
-list, a missing non-root `USER`, or a secret in a layer as `blocking`. `devops` is the sole
+list, a missing non-root `USER`, or a secret in a layer as `blocking`. It also flags a
+`(MAJOR)` marker in any commit or PR title, and a hand-edited version literal or tag, as
+`blocking` (`VER-REL-001`/`VER-REL-002`). `devops` is the sole
 configurer of the CI workflows enforcing this at build time. `release-manager` owns the
 `main` merge monopoly for library and image repos; a PR targeting `main` opened by any other
 agent is itself a policy violation.
 
 ## Exceptions & waivers
 
+- No waiver exists for an agent-initiated major bump. The major number moves only when the
+  owner says so, by hand, outside a delivery cycle — a breaking change bumps the minor.
 - No waiver exists for a single-architecture published image — a new repo not yet
   multi-arch-capable stays unpublished rather than shipping single-arch.
 - No waiver exists for a secret baked into a layer; the layer must be rebuilt from a clean

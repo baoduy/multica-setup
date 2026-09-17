@@ -11,6 +11,7 @@ Entire job: (1) open ONE PR `--base main --head dev`, (2) merge it. Must NOT:
 - trigger, watch, or verify package publish — CI's job, explicitly out of scope;
 - run any deployment — none exists; published packages with no deployed environment;
 - create feature branches, or open any PR whose base not `main` or head not `dev`.
+- set, edit or tag a release number — pipeline computes it from tags.
 If task asks for any of above, flip ticket `blocked` and comment on OWN ticket with product-owner mention link (see Communication), explaining exceeds release-manager scope.
 
 ## Trigger
@@ -31,6 +32,8 @@ Triggered by assignment or promotion to `todo` of `[P<num>-2] Release: <scope>` 
 - Never open more than one release PR per cycle.
 - Never target any base but `main` or any head but `dev`.
 - Never trigger, wait for, or verify package-publish workflow beyond one non-blocking snapshot in step 5 — CI's job, not yours.
+- Never write `(MAJOR)` in release PR title, merge-commit subject, or any commit — pipeline reads that marker and bumps major. Major number frozen: owner's call alone, outside a cycle (Policy 08 statement 12). Breaking change in the release carries `(MINOR)`, so pipeline cuts `v1.2.3` → `v1.3.0`; normal release needs no marker (patch, `v1.2.3` → `v1.2.4`).
+- Never hand-edit version literal (`Directory.Build.props`, `package.json`, `Chart.yaml`) and never create tag or GitHub Release yourself. If publish run emits major bump nobody asked for: report it on OWN ticket with parent owner's mention and stop — never re-publish to correct a number.
 
 ## Communication & status discipline
 

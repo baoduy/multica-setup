@@ -51,14 +51,14 @@ providers. Every rule carries a stable `rule-id` for use as a finding fingerprin
 
 - `PULUMI-TEST-001` **No unit test for builder logic.** Builders/naming/type composition are unit-testable with Pulumi mocks (`pulumi.runtime.setMocks`) under repo's mocha config; new builder behaviour ships with tests.
 - `PULUMI-TEST-002` **Publish shape broken.** These are npm libraries — a change must keep a clean `npm pack` / build (`.tasks/npm-package.ts`) and not leak internal `.ts.ignore`/sample files into package.
-- `PULUMI-TEST-003` **Breaking public API without a major bump.** Renamed/removed exported builders, interfaces, or `*Info` fields are breaking changes for downstream stacks — call them out for SemVer.
+- `PULUMI-TEST-003` **Breaking public API without a minor bump.** Renamed/removed exported builders, interfaces, or `*Info` fields are breaking changes for downstream stacks — they ship with a `Breaking` changelog entry naming the replacement and a `(MINOR)` marker in the commit title (`v1.2.3` → `v1.3.0`). **Never a major bump**: the major number is frozen and owner-only (Policy 08 statement 12, `VER-REL-001`).
 ---
 
 # Review dimensions (monthly architecture review)
 
 The four rule families below are the review dimensions of the **Monthly Architecture Review — Pulumi repos** autopilot. They are additive to the convention rules above; a finding always cites one stable rule-id.
 
-**Stance: recommend, never bump, never delete.** This catalogue produces backlog findings and test-only enforcement. Dependency version bumps belong to the npm-upgrade autopilot; removing a public export requires human approval and a major release (see `PULUMI-DEP-003`).
+**Stance: recommend, never bump, never delete.** This catalogue produces backlog findings and test-only enforcement. Dependency version bumps belong to the npm-upgrade autopilot; removing a public export requires human approval and ships in a minor release, never a major one (see `PULUMI-DEP-003`).
 
 ## Dimension 1 — Security by default
 
@@ -90,9 +90,9 @@ Recommend-only. Read the current pins from `package.json` and compare against th
 - `PULUMI-DEP-002` **API version past its support window.** A dated API version (see `PULUMI-UP-003`) whose window has closed per `azure-retirements.md`, or an SKU/tier the list records as retired (Basic load balancer, Basic public IP, classic ACR SKU, unmanaged disks).
 - `PULUMI-DEP-003` **Removal without a deprecation path.** These packages are published npm libraries — deleting an exported builder, component, or `*Info` field breaks every downstream stack at install time. The removal path is two-step and spans two releases:
   1. **This release** — mark the export `@deprecated` with a JSDoc tag naming the replacement and the reason, add a migration note to the repo's changelog/README, keep the code working. Non-breaking, ships in a minor.
-  2. **Next major** — delete it, per `PULUMI-TEST-003` SemVer discipline.
+  2. **A later release** — delete it, per `PULUMI-TEST-003`: the removal carries `(MINOR)` and cuts a minor release, never a major one.
 
-  A review run **never** deletes a public export and never opens a PR that does. Step 1 is filed as a finding for human approval; step 2 is a separate, human-scheduled major-release ticket.
+  A review run **never** deletes a public export and never opens a PR that does. Step 1 is filed as a finding for human approval; step 2 is a separate, human-scheduled removal ticket.
 - **Proposed list updates.** When a run finds a retirement that `azure-retirements.md` does not record, or an entry whose date it cannot confirm, file **one** issue per run titled `[<RULE-PREFIX>] azure-retirements.md needs updating` listing the proposed rows and their sources. The list is human-verified; the review run may propose, never silently amend.
 
 ## Dimension 4 — Azure best practice (Well-Architected)

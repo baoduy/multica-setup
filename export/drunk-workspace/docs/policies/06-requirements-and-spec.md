@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-06 |
-| **Version** | 2.2 |
+| **Version** | 2.3 |
 | **Status** | Active |
 | **Owner** | product-owner (spec author) · spec-reviewer (gate) |
 | **Applies to** | Every Workflow B feature/enhancement spec and every dev-team implementation brief |
@@ -58,7 +58,7 @@ same gate.
 3. **The five sections, in order:** 1 Goals · 2 Current State · 3 Expected State (ending in one Security line) · 4 Scope · 5 Acceptance Criteria (Gherkin, each scenario tagged `@integration` or `@unit`). No word budgets — length scales with the requirement; a section is too long the moment it answers another section's question or explains mechanism.
 3a. **Specs are written for a reader with intermediate English and no context.** One idea per sentence, under 20 words, everyday words, no metaphors or idioms, bullets over paragraphs, numbers as digits, a two-sentence Summary before §1, fixed sub-labels in §1 (Problem · Affected · Why now · Done means) and §4 (Repos/packages · Not in this change · Decisions · Open questions). The spec gate scores readability inside Business clarity (`sdlc-spec-template` writing rules). The same rules bind the root-cause report, the blocker report and the final summary — everything a human reads.
 4. **Goals (§1) is the section the spec exists for** — name who is hurt, what it costs, why now, the affected role, and the observable signal the change worked, in language a non-engineer could act on. A thin or missing §1 is a spec-gate **blocker**.
-5. **Invariants live in Expected State (§3)**, stated as the property that must hold ("an existing consumer's dependency-injection registration must never break across a minor version bump"), never as the code that holds it. §3 ends with one **Security line**: the trust boundary the change introduces, or "No new attack surface" with one clause of reasoning. This is where a design mandate becomes a legitimate requirement.
+5. **Invariants live in Expected State (§3)**, stated as the property that must hold ("an existing consumer's dependency-injection registration keeps working after the upgrade"), never as the code that holds it. §3 ends with one **Security line**: the trust boundary the change introduces, or "No new attack surface" with one clause of reasoning. This is where a design mandate becomes a legitimate requirement.
 6. **Zero code blocks anywhere except the §5 Gherkin.** No C#, JSON, YAML, or mock-ups. No class names, method signatures, or file paths in any section; naming a repo or package is fine, naming a class or file is not.
 7. **No `file:line` anywhere in the spec.** The spec is business-level. CodeGraph-verified code-level detail — paths, symbols, current implementation, reuse-vs-new — is the dev-leader's and lives in the impl-brief, never in the spec.
 8. **Research with CodeGraph before writing the business claims.** §2 Current State and every §3 invariant claiming a property of the code today must be grounded by `codegraph explore` before the spec is posted — a §2/§3 claim the code plainly contradicts, or a §4 Scope naming a repo/package that does not exist, is a spec-gate blocker.
