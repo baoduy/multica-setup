@@ -1,0 +1,573 @@
+{
+  "version": "1",
+  "scope": "workspace",
+  "level": "workspace",
+  "source_workspace_id": "4539126d-0687-4993-8852-3554b7c5fb50",
+  "skills": [
+    {
+      "name": "archify",
+      "dir": "skills/archify",
+      "source_id": "b1159a20-f4a6-489a-aed0-f682ed5db3ab"
+    },
+    {
+      "name": "architecture-review-sweep",
+      "dir": "skills/architecture-review-sweep",
+      "source_id": "074ce13c-5b30-40e5-bf38-1ecbd4fbc3ac"
+    },
+    {
+      "name": "astro-paper-blog-conventions",
+      "dir": "skills/astro-paper-blog-conventions",
+      "source_id": "bb5bdbfa-0f8a-440d-9b7f-a91f929bdf48"
+    },
+    {
+      "name": "blocker-report",
+      "dir": "skills/blocker-report",
+      "source_id": "27000815-a21f-4add-b838-ee484685605c"
+    },
+    {
+      "name": "bug-report",
+      "dir": "skills/bug-report",
+      "source_id": "ab76533c-c2b1-4efe-b705-a657c3a30800"
+    },
+    {
+      "name": "codegraph",
+      "dir": "skills/codegraph",
+      "source_id": "b26a3e4d-e7af-4e91-8402-68227b89c546"
+    },
+    {
+      "name": "compose-delivery",
+      "dir": "skills/compose-delivery",
+      "source_id": "395c0f73-2edb-4482-be29-5ab264247b02"
+    },
+    {
+      "name": "dknet-ddd-conventions",
+      "dir": "skills/dknet-ddd-conventions",
+      "source_id": "c5b99385-b70e-4817-a44c-18a9091b3330"
+    },
+    {
+      "name": "docker-image-standards",
+      "dir": "skills/docker-image-standards",
+      "source_id": "08b3d685-8108-42b2-ab21-fae351d88bd6"
+    },
+    {
+      "name": "dotnet10-efcore10-standards",
+      "dir": "skills/dotnet10-efcore10-standards",
+      "source_id": "d51f0785-df57-483c-8aba-af3555f99f2f"
+    },
+    {
+      "name": "feature-doc-template",
+      "dir": "skills/feature-doc-template",
+      "source_id": "88ae7e11-7fcb-4432-9819-8e6c36c9832d"
+    },
+    {
+      "name": "helm-k8s-conventions",
+      "dir": "skills/helm-k8s-conventions",
+      "source_id": "5598ea2d-815f-44f3-b7da-08e8f7bdbd4c"
+    },
+    {
+      "name": "interview-me",
+      "dir": "skills/interview-me",
+      "source_id": "eda2e588-b644-4f09-8c71-e7a476b87f2d"
+    },
+    {
+      "name": "leader-gitops",
+      "dir": "skills/leader-gitops",
+      "source_id": "47aaa59f-26a6-4c0e-9209-24d20c378179"
+    },
+    {
+      "name": "medium-publishing",
+      "dir": "skills/medium-publishing",
+      "source_id": "707c5c06-0c46-4f4f-a7cd-0f14d48a0fcf"
+    },
+    {
+      "name": "multica-brainstorming",
+      "dir": "skills/multica-brainstorming",
+      "source_id": "93405984-c94c-444f-9cf9-dc78846de0b5"
+    },
+    {
+      "name": "nodejs-typescript-standards",
+      "dir": "skills/nodejs-typescript-standards",
+      "source_id": "e6269ca6-232c-461e-ba76-718209ec56f8"
+    },
+    {
+      "name": "pr-review-gate",
+      "dir": "skills/pr-review-gate",
+      "source_id": "569fec0e-088a-41e2-af06-5bfee72a7bcb"
+    },
+    {
+      "name": "pulumi-azure-iac-standards",
+      "dir": "skills/pulumi-azure-iac-standards",
+      "source_id": "3766a437-88fe-4b18-841d-dbff6b092fbb"
+    },
+    {
+      "name": "python-mcp-standards",
+      "dir": "skills/python-mcp-standards",
+      "source_id": "e513398a-3fe0-4835-aeb1-a63a0f68befe"
+    },
+    {
+      "name": "sdlc-flow-delivery-pipeline",
+      "dir": "skills/sdlc-flow-delivery-pipeline",
+      "source_id": "87544058-ca27-4a91-b8ef-2d2a0217ddd4"
+    },
+    {
+      "name": "sdlc-flow-po-orchestration",
+      "dir": "skills/sdlc-flow-po-orchestration",
+      "source_id": "e586981c-3c41-4229-91ef-c923d3883f59"
+    },
+    {
+      "name": "sdlc-flow-squad-leader-playbook",
+      "dir": "skills/sdlc-flow-squad-leader-playbook",
+      "source_id": "345167df-d85e-48de-88ab-c55e7de852fa"
+    },
+    {
+      "name": "sdlc-flow-squad-worker-playbook",
+      "dir": "skills/sdlc-flow-squad-worker-playbook",
+      "source_id": "e7405124-5e2c-426e-ab7f-f10dfbc469b9"
+    },
+    {
+      "name": "sdlc-gitflow",
+      "dir": "skills/sdlc-gitflow",
+      "source_id": "404e6c01-178e-44fa-9912-a819d5e24962"
+    },
+    {
+      "name": "sdlc-impl-brief",
+      "dir": "skills/sdlc-impl-brief",
+      "source_id": "f1653da8-7372-4f83-a57d-27b460768b90"
+    },
+    {
+      "name": "sdlc-spec-template",
+      "dir": "skills/sdlc-spec-template",
+      "source_id": "eeb27a95-84fc-46dd-93f5-7442f4849a7d"
+    },
+    {
+      "name": "spec-review-gate",
+      "dir": "skills/spec-review-gate",
+      "source_id": "f11d1e45-8dd2-42ae-8f43-f76674fbf78b"
+    },
+    {
+      "name": "test-driven-development",
+      "dir": "skills/test-driven-development",
+      "source_id": "2790f954-56c6-4961-b68d-674263aaf181"
+    }
+  ],
+  "agents": [
+    {
+      "name": "dev-leader",
+      "file": "agents/dev-leader.json",
+      "source_id": "f11845ad-5f5a-4c0c-850e-d8900c719096",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "codegraph",
+        "leader-gitops",
+        "multica-brainstorming",
+        "sdlc-flow-delivery-pipeline",
+        "sdlc-flow-squad-leader-playbook",
+        "sdlc-gitflow",
+        "sdlc-impl-brief"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "dev-backend",
+      "file": "agents/dev-backend.json",
+      "source_id": "05b99d40-990b-4a78-9aa5-db60dd59f2f1",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "codegraph",
+        "dknet-ddd-conventions",
+        "docker-image-standards",
+        "dotnet10-efcore10-standards",
+        "helm-k8s-conventions",
+        "nodejs-typescript-standards",
+        "pulumi-azure-iac-standards",
+        "python-mcp-standards",
+        "sdlc-flow-squad-worker-playbook",
+        "sdlc-gitflow",
+        "test-driven-development"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "default",
+      "file": "agents/default.json",
+      "source_id": "5bb59f89-c18e-4094-9b90-0de909d537d8",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "interview-me",
+        "multica-brainstorming"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "claude_ultra",
+      "file": "agents/claude-ultra.json",
+      "source_id": "4e429902-8ce5-44b1-85a2-09c3e5c88ee7",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "architecture-review-sweep",
+        "blocker-report",
+        "codegraph",
+        "interview-me",
+        "multica-brainstorming"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "product-owner",
+      "file": "agents/product-owner.json",
+      "source_id": "1673352f-712c-4872-b565-58105408d2fc",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "bug-report",
+        "codegraph",
+        "interview-me",
+        "multica-brainstorming",
+        "sdlc-flow-delivery-pipeline",
+        "sdlc-flow-po-orchestration",
+        "sdlc-spec-template"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "devops",
+      "file": "agents/devops.json",
+      "source_id": "97ed0f87-978d-4da6-bc73-270f7a6c09db",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "codegraph",
+        "compose-delivery",
+        "multica-brainstorming",
+        "sdlc-flow-delivery-pipeline",
+        "sdlc-flow-squad-worker-playbook",
+        "sdlc-gitflow"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "arch-reviewer",
+      "file": "agents/arch-reviewer.json",
+      "source_id": "b8b037b4-e542-4bd3-b3e7-3b3bba920b61",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "architecture-review-sweep",
+        "blocker-report",
+        "bug-report",
+        "codegraph",
+        "dknet-ddd-conventions",
+        "docker-image-standards",
+        "dotnet10-efcore10-standards",
+        "helm-k8s-conventions",
+        "nodejs-typescript-standards",
+        "pulumi-azure-iac-standards",
+        "python-mcp-standards",
+        "sdlc-gitflow"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "issue-janitor",
+      "file": "agents/issue-janitor.json",
+      "source_id": "30771d34-7ae6-4d84-acb0-5ae1d0f649e9",
+      "source_runtime_id": "8c109428-3093-494f-aad9-856cced56b69",
+      "source_runtime_provider": "hermes",
+      "skill_names": [
+        "blocker-report"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "pr-reviewer",
+      "file": "agents/pr-reviewer.json",
+      "source_id": "74368823-001f-4642-b1e5-d66d02a65da9",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "codegraph",
+        "pr-review-gate",
+        "sdlc-flow-delivery-pipeline",
+        "sdlc-flow-squad-worker-playbook"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "release-manager",
+      "file": "agents/release-manager.json",
+      "source_id": "917f3050-786b-4b9e-8309-5d8415d9835d",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "sdlc-flow-squad-worker-playbook",
+        "sdlc-gitflow"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "spec-reviewer",
+      "file": "agents/spec-reviewer.json",
+      "source_id": "0cb32640-00a7-4308-972f-2f459f52383a",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "blocker-report",
+        "codegraph",
+        "sdlc-flow-delivery-pipeline",
+        "sdlc-spec-template",
+        "spec-review-gate"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "Mika",
+      "file": "agents/mika.json",
+      "source_id": "ed486cd5-9d44-4058-89f3-0c92f3d8512f",
+      "source_runtime_id": "8c109428-3093-494f-aad9-856cced56b69",
+      "source_runtime_provider": "hermes",
+      "skill_names": [
+        "codegraph"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "blog-writer",
+      "file": "agents/blog-writer.json",
+      "source_id": "8fd8e2cb-863c-400c-88c1-29a9652da8b3",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "astro-paper-blog-conventions",
+        "blocker-report",
+        "interview-me",
+        "sdlc-flow-squad-worker-playbook",
+        "sdlc-gitflow"
+      ],
+      "had_secrets": false
+    },
+    {
+      "name": "medium-publisher",
+      "file": "agents/medium-publisher.json",
+      "source_id": "aada2a10-d43e-4adb-94a9-a6fc8639c1de",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "astro-paper-blog-conventions",
+        "medium-publishing"
+      ],
+      "had_secrets": true
+    },
+    {
+      "name": "docs-writer",
+      "file": "agents/docs-writer.json",
+      "source_id": "f3b4c442-b24c-4155-8bad-4e3b895c4d8b",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "archify",
+        "blocker-report",
+        "codegraph",
+        "feature-doc-template",
+        "interview-me",
+        "sdlc-flow-squad-worker-playbook",
+        "sdlc-gitflow"
+      ],
+      "had_secrets": true
+    }
+  ],
+  "squads": [
+    {
+      "name": "dev-team",
+      "file": "squads/dev-team.json",
+      "avatar_url": "emoji:🐺",
+      "leader_name": "dev-leader",
+      "members": [
+        {
+          "agent_name": "dev-leader",
+          "role": "leader"
+        },
+        {
+          "agent_name": "dev-backend",
+          "role": "developer"
+        },
+        {
+          "agent_name": "pr-reviewer",
+          "role": "reviewer"
+        },
+        {
+          "agent_name": "docs-writer",
+          "role": "developer"
+        },
+        {
+          "agent_name": "release-manager",
+          "role": "release"
+        }
+      ],
+      "instructions_file": "squads/dev-team.md",
+      "description_file": "squads/dev-team.description.md"
+    },
+    {
+      "name": "product-team",
+      "file": "squads/product-team.json",
+      "avatar_url": "emoji:🦊",
+      "leader_name": "product-owner",
+      "members": [
+        {
+          "agent_name": "product-owner",
+          "role": "leader"
+        },
+        {
+          "agent_name": "spec-reviewer",
+          "role": "member"
+        },
+        {
+          "agent_name": "release-manager",
+          "role": "member"
+        },
+        {
+          "agent_name": "devops",
+          "role": "devops"
+        },
+        {
+          "agent_name": "pr-reviewer",
+          "role": "member"
+        }
+      ],
+      "instructions_file": "squads/product-team.md",
+      "description_file": "squads/product-team.description.md"
+    },
+    {
+      "name": "blog-team",
+      "file": "squads/blog-team.json",
+      "avatar_url": "emoji:🦉",
+      "leader_name": "dev-leader",
+      "members": [
+        {
+          "agent_name": "blog-writer",
+          "role": "member"
+        },
+        {
+          "agent_name": "dev-leader",
+          "role": "leader"
+        },
+        {
+          "agent_name": "dev-backend",
+          "role": "member"
+        },
+        {
+          "agent_name": "pr-reviewer",
+          "role": "member"
+        },
+        {
+          "agent_name": "devops",
+          "role": "member"
+        }
+      ],
+      "description_file": "squads/blog-team.description.md"
+    }
+  ],
+  "projects": [
+    {
+      "title": "drunk-blogs",
+      "file": "projects/drunk-blogs.json",
+      "source_id": "de1fe8bc-c0ef-4e03-ac09-b20b1deb9d0f",
+      "lead_name": "blog-writer",
+      "lead_type": "agent"
+    },
+    {
+      "title": "drunk-others",
+      "file": "projects/drunk-others.json",
+      "source_id": "4d89c81e-fc43-4b09-91af-20e8846a785b",
+      "lead_name": "product-owner",
+      "lead_type": "agent"
+    },
+    {
+      "title": "drunk-pulumi",
+      "file": "projects/drunk-pulumi.json",
+      "source_id": "59f7d38d-0588-44b7-95c3-9744f64c6e1e",
+      "lead_name": "product-owner",
+      "lead_type": "agent"
+    },
+    {
+      "title": "drunk-net",
+      "file": "projects/drunk-net.json",
+      "source_id": "acdcbdaa-cf5e-41db-a9c8-87c15649576f",
+      "lead_name": "product-owner",
+      "lead_type": "agent"
+    }
+  ],
+  "autopilots": [
+    {
+      "title": "🧽 Weekly Issues Hygiene Cleanup",
+      "file": "autopilots/weekly-issues-hygiene-cleanup.json",
+      "source_id": "a240b820-34d2-4d26-b5fb-f73ba653a71b",
+      "assignee_type": "agent",
+      "assignee_name": "issue-janitor",
+      "project_title": "drunk-others",
+      "had_webhook_trigger": false
+    },
+    {
+      "title": "🚀 Monthly Architecture Review — Pulumi repos",
+      "file": "autopilots/monthly-architecture-review-pulumi-repos.json",
+      "source_id": "48810406-d743-415c-babd-42fe8740e797",
+      "assignee_type": "agent",
+      "assignee_name": "arch-reviewer",
+      "project_title": "drunk-pulumi",
+      "had_webhook_trigger": false
+    },
+    {
+      "title": "🌤️ Daily Stall Sweep",
+      "file": "autopilots/daily-stall-sweep.json",
+      "source_id": "adb0a338-da08-4014-9d19-8005e736dfdb",
+      "assignee_type": "agent",
+      "assignee_name": "Mika",
+      "project_title": "drunk-others",
+      "had_webhook_trigger": false
+    },
+    {
+      "title": "🚀 Monthly npm Upgrade — Pulumi repos",
+      "file": "autopilots/monthly-npm-upgrade-pulumi-repos.json",
+      "source_id": "e73086e2-da68-41e5-be03-213009001736",
+      "assignee_type": "agent",
+      "assignee_name": "dev-leader",
+      "project_title": "drunk-pulumi",
+      "had_webhook_trigger": false
+    },
+    {
+      "title": "🚀 Monthly NuGet Upgrade — DKNet",
+      "file": "autopilots/monthly-nuget-upgrade-dknet.json",
+      "source_id": "ec905ae5-4f57-4298-8529-407f65b47fe6",
+      "assignee_type": "agent",
+      "assignee_name": "dev-leader",
+      "project_title": "drunk-net",
+      "had_webhook_trigger": false
+    },
+    {
+      "title": "🚀 Monthly Architecture Review — DKNet + DKNet.Templates",
+      "file": "autopilots/monthly-architecture-review-dknet-dknet-templates.json",
+      "source_id": "846ed794-1ab2-4b30-8f0c-538e39ddcc5f",
+      "assignee_type": "agent",
+      "assignee_name": "arch-reviewer",
+      "project_title": "drunk-net",
+      "had_webhook_trigger": false
+    }
+  ],
+  "labels_file": "labels/labels.json",
+  "labels_count": 17,
+  "properties_file": "properties/properties.json",
+  "properties_count": 9,
+  "mcp_servers_file": null,
+  "mcp_servers_count": 0,
+  "workspace_file": "workspace/workspace.json"
+}

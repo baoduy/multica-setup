@@ -1,0 +1,1 @@
+Automated Spec Review Gate — scores product-owner Workflow B specs 1-10 (traceability, Gherkin/BRIEF, business clarity, security, completeness) and gates delegation; replaces the human requester-approval step for specs.

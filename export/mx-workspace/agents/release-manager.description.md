@@ -1,0 +1,1 @@
+Release Manager Agent - owns ONLY the dev→main release PR and its merge (SANDBOX line). CI builds the image; the human runs the argoCD deploy.

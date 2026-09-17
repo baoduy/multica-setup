@@ -1,0 +1,44 @@
+{
+  "name": "dev-backend",
+  "model": "claude-sonnet-5",
+  "visibility": "workspace",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a931-8ca9-7798-8e2b-3e191f4d5a05.png",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "conversation_starters": [],
+  "disabled_runtime_skills": [],
+  "invocation_targets": [
+    {
+      "target_id": "4539126d-0687-4993-8852-3554b7c5fb50",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 6,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "high",
+  "source_runtime_provider": "claude",
+  "mcp_servers": [],
+  "source_id": "05b99d40-990b-4a78-9aa5-db60dd59f2f1",
+  "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+  "skill_names": [
+    "blocker-report",
+    "codegraph",
+    "dknet-ddd-conventions",
+    "docker-image-standards",
+    "dotnet10-efcore10-standards",
+    "helm-k8s-conventions",
+    "nodejs-typescript-standards",
+    "pulumi-azure-iac-standards",
+    "python-mcp-standards",
+    "sdlc-flow-squad-worker-playbook",
+    "sdlc-gitflow",
+    "test-driven-development"
+  ],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "avatar_file": "agents/dev-backend.avatar.png",
+  "instructions_file": "agents/dev-backend.md",
+  "description_file": "agents/dev-backend.description.md"
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Mika",
+  "model": "claude-sonnet-5",
+  "visibility": "workspace",
+  "avatar_url": "emoji:🦄",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "conversation_starters": [],
+  "disabled_runtime_skills": [],
+  "invocation_targets": [
+    {
+      "target_id": "ed38be16-b92f-48cc-9611-89bf09102d84",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 3,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "high",
+  "source_runtime_provider": "claude",
+  "mcp_servers": [],
+  "source_id": "fcef49f6-c684-4b4e-a6f4-3ccb5563618e",
+  "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+  "skill_names": [],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "description_file": "agents/mika.description.md"
+}

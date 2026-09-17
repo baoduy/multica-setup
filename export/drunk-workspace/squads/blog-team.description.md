@@ -1,0 +1,1 @@
+Manages the drunkcoding.net blog repo (hbd.astro-paper): blog-writer authors and edits posts, dev-backend maintains the Astro/TypeScript site, devops keeps CI green, pr-reviewer gates merges into develop, and dev-leader routes each ticket and cuts the develop→main release that deploys the site.

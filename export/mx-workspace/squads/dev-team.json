@@ -1,0 +1,22 @@
+{
+  "name": "dev-team",
+  "file": "squads/dev-team.json",
+  "avatar_url": "emoji:🦍",
+  "leader_name": "dev-leader",
+  "members": [
+    {
+      "agent_name": "dev-leader",
+      "role": "leader"
+    },
+    {
+      "agent_name": "dev-backend",
+      "role": "developer"
+    },
+    {
+      "agent_name": "pr-reviewer",
+      "role": "pr-review-gate"
+    }
+  ],
+  "instructions_file": "squads/dev-team.md",
+  "description_file": "squads/dev-team.description.md"
+}

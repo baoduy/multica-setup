@@ -1,0 +1,23 @@
+{
+  "title": "drunk-blogs",
+  "icon": null,
+  "priority": "medium",
+  "status": "planned",
+  "due_date": null,
+  "start_date": null,
+  "source_id": "de1fe8bc-c0ef-4e03-ac09-b20b1deb9d0f",
+  "lead_type": "agent",
+  "lead_name": "blog-writer",
+  "lead_source_id": "8fd8e2cb-863c-400c-88c1-29a9652da8b3",
+  "resources": [
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/baoduy/hbd.astro-paper.git"
+      },
+      "label": null,
+      "position": 0
+    }
+  ],
+  "description_file": "projects/drunk-blogs.description.md"
+}

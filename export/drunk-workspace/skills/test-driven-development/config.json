@@ -1,0 +1,10 @@
+{
+  "origin": {
+    "owner": "addyosmani",
+    "path": "skills/test-driven-development",
+    "ref": "main",
+    "repo": "agent-skills",
+    "source_url": "https://github.com/addyosmani/agent-skills/tree/main/skills/test-driven-development",
+    "type": "github"
+  }
+}

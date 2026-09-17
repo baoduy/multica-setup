@@ -1,0 +1,24 @@
+{
+  "title": "☢️ Weekly issue hygiene (cancelled cleanup)",
+  "source_id": "c10dcb5c-8f6b-4763-9f7f-55502b3e5d31",
+  "status": "active",
+  "execution_mode": "create_issue",
+  "issue_title_template": "Issue hygiene sweep {{date}}",
+  "project_title": "mx-jobs",
+  "assignee_type": "agent",
+  "assignee_name": "issue-janitor",
+  "subscriber_names": [
+    "drunkcoding"
+  ],
+  "had_webhook_trigger": false,
+  "triggers": [
+    {
+      "kind": "schedule",
+      "label": null,
+      "enabled": true,
+      "cron_expression": "TZ=Asia/Singapore 0 0 * * 0-1",
+      "timezone": "Asia/Singapore"
+    }
+  ],
+  "description_file": "autopilots/weekly-issue-hygiene-cancelled-cleanup.description.md"
+}

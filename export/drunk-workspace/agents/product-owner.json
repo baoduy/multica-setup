@@ -1,0 +1,40 @@
+{
+  "name": "product-owner",
+  "model": "claude-opus-5",
+  "visibility": "workspace",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a931-b2c9-7ba7-a0b2-a41dfacea645.png",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "conversation_starters": [],
+  "disabled_runtime_skills": [],
+  "invocation_targets": [
+    {
+      "target_id": "4539126d-0687-4993-8852-3554b7c5fb50",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 5,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "high",
+  "source_runtime_provider": "claude",
+  "mcp_servers": [],
+  "source_id": "1673352f-712c-4872-b565-58105408d2fc",
+  "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+  "skill_names": [
+    "blocker-report",
+    "bug-report",
+    "codegraph",
+    "interview-me",
+    "multica-brainstorming",
+    "sdlc-flow-delivery-pipeline",
+    "sdlc-flow-po-orchestration",
+    "sdlc-spec-template"
+  ],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "avatar_file": "agents/product-owner.avatar.png",
+  "instructions_file": "agents/product-owner.md",
+  "description_file": "agents/product-owner.description.md"
+}

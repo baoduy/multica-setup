@@ -1,0 +1,38 @@
+{
+  "name": "pr-reviewer",
+  "model": "claude-sonnet-5",
+  "visibility": "workspace",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/ed38be16-b92f-48cc-9611-89bf09102d84/019fb5a7-46d1-71b1-81ff-a4a02cc6774b.png",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "conversation_starters": [],
+  "disabled_runtime_skills": [],
+  "invocation_targets": [
+    {
+      "target_id": "ed38be16-b92f-48cc-9611-89bf09102d84",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 6,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "high",
+  "source_runtime_provider": "claude",
+  "mcp_servers": [],
+  "source_id": "74c810b2-ead5-4198-a141-eb4bc4409939",
+  "source_runtime_id": "03137416-86b5-4ddf-a049-e581d3848661",
+  "skill_names": [
+    "blocker-report",
+    "codegraph",
+    "dknet-ddd-conventions",
+    "pr-review-gate",
+    "sdlc-flow-delivery-pipeline",
+    "sdlc-flow-squad-member-protocol"
+  ],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "avatar_file": "agents/pr-reviewer.avatar.png",
+  "instructions_file": "agents/pr-reviewer.md",
+  "description_file": "agents/pr-reviewer.description.md"
+}

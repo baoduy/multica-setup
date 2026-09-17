@@ -1,0 +1,1 @@
+Monthly architecture reviewer across all drunk stacks (.NET/DDD, Pulumi/TS IaC, Docker, Helm, Python MCP): applies each repo's stack skill, files ranked findings into its domain backlog, and enforces checkable rules via native tests/lint.

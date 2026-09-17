@@ -1,0 +1,30 @@
+{
+  "name": "dev-team",
+  "file": "squads/dev-team.json",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a935-d8ae-79de-9f70-16a4d597f754.png",
+  "leader_name": "dev-leader",
+  "members": [
+    {
+      "agent_name": "dev-leader",
+      "role": "leader"
+    },
+    {
+      "agent_name": "dev-backend",
+      "role": "developer"
+    },
+    {
+      "agent_name": "pr-reviewer",
+      "role": "reviewer"
+    },
+    {
+      "agent_name": "docs-writer",
+      "role": "developer"
+    },
+    {
+      "agent_name": "release-manager",
+      "role": "release"
+    }
+  ],
+  "instructions_file": "squads/dev-team.md",
+  "description_file": "squads/dev-team.description.md"
+}

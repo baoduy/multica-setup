@@ -1,0 +1,1 @@
+QC scenario review & execution gate — reviews BDD scenarios against the OpenAPI endpoint matrix and runs the full suite against SANDBOX.

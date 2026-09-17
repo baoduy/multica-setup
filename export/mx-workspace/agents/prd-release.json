@@ -1,0 +1,34 @@
+{
+  "name": "prd-release",
+  "model": "claude-sonnet-5",
+  "visibility": "workspace",
+  "avatar_url": "emoji:🌙",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "conversation_starters": [],
+  "disabled_runtime_skills": [],
+  "invocation_targets": [
+    {
+      "target_id": "ed38be16-b92f-48cc-9611-89bf09102d84",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 1,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "high",
+  "source_runtime_provider": "claude",
+  "mcp_servers": [],
+  "source_id": "9366b7eb-b852-4d21-b6d4-6702916014c5",
+  "source_runtime_id": "8316c20a-d61b-4eba-86f1-ce65469b26df",
+  "skill_names": [
+    "blocker-report",
+    "prd-release-runbook",
+    "sdlc-gitflow"
+  ],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "instructions_file": "agents/prd-release.md",
+  "description_file": "agents/prd-release.description.md"
+}

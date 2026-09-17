@@ -1,0 +1,42 @@
+{
+  "name": "docs-writer",
+  "model": "claude-opus-5",
+  "visibility": "workspace",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a931-9d6c-7379-91ab-e55378b0a294.png",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "conversation_starters": [],
+  "disabled_runtime_skills": [],
+  "invocation_targets": [
+    {
+      "target_id": "4539126d-0687-4993-8852-3554b7c5fb50",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 3,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "high",
+  "source_runtime_provider": "claude",
+  "mcp_servers": [],
+  "source_id": "f3b4c442-b24c-4155-8bad-4e3b895c4d8b",
+  "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+  "skill_names": [
+    "archify",
+    "blocker-report",
+    "codegraph",
+    "feature-doc-template",
+    "interview-me",
+    "sdlc-flow-squad-worker-playbook",
+    "sdlc-gitflow"
+  ],
+  "mcp_config": null,
+  "custom_env": {
+    "ARCHIFY_CHROME": "/home/steven/.cache/ms-playwright/chromium-1228/chrome-linux/chrome",
+    "ARCHIFY_CHROME_NO_SANDBOX": "1"
+  },
+  "had_secrets": true,
+  "instructions_file": "agents/docs-writer.md",
+  "description_file": "agents/docs-writer.description.md",
+  "avatar_file": "agents/docs-writer.avatar.png"
+}

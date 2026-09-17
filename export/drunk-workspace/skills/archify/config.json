@@ -1,0 +1,10 @@
+{
+  "origin": {
+    "owner": "tt-a1i",
+    "path": "archify",
+    "ref": "main",
+    "repo": "archify",
+    "source_url": "https://github.com/tt-a1i/archify/tree/main/archify",
+    "type": "github"
+  }
+}

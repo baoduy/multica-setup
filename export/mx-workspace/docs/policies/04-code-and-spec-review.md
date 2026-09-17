@@ -1,0 +1,146 @@
+# Policy 04 — Code & Spec Review
+
+| | |
+|---|---|
+| **Policy ID** | MX-POL-04 |
+| **Version** | 1.0 |
+| **Status** | Active |
+| **Owner** | pr-reviewer (code) · spec-reviewer (spec) · arch-reviewer (sweeps) |
+| **Applies to** | Every spec before implementation and every PR before merge |
+| **Related skills** | [`pr-review-gate`](../../skills/pr-review-gate/SKILL.md) · [`spec-review-gate`](../../skills/spec-review-gate/SKILL.md) · [`architecture-review-sweep`](../../skills/architecture-review-sweep/SKILL.md) |
+| **Enforced at** | the gates themselves (automated) |
+
+> **Authority.** This policy is the source of truth for the two review gates.
+> `spec-review-gate`, `pr-review-gate` and `architecture-review-sweep` **implement** it —
+> their scores, thresholds and gate actions derive from it. Amend this policy first, then
+> cascade — see [change control](00-policies-index.md#change-control).
+
+## Review gates at a glance
+
+```
+   SPEC gate (spec-reviewer)                     PR gate (pr-reviewer)
+   ┌───────────────────────────┐                ┌────────────────────────────┐
+   │ score ≥ 9.0, 0 blockers    │──APPROVED──▶   │ score ≥ 8.5, 0 blocking,    │──APPROVED──▶ gate
+   │  → implementation          │  [P#-1]        │  all merge preconds pass    │   MERGES into dev
+   │ 8.0–8.9 / trigger          │                │ ≥ 8.5 but precond fails     │
+   │  → requester holds [S#]    │                │  → APPROVAL DEFERRED (human)│
+   │ < 8.0 / blocker → REWORK   │                │ < 8.5 / blocking → REWORK   │
+   │  (max 5 rounds)            │                │  (max 2 rounds)             │
+   └───────────────────────────┘                └────────────────────────────┘
+        weights: coverage 30 · gherkin 25            phases: scope → security → correctness
+        · clarity 20 · completeness 15 · sec 10      → testing → maintainability → slop → style
+
+   Rule: hard caps override arithmetic · every finding cites file:line · merge only what you gated.
+```
+
+## Purpose
+
+Front-load quality at two gates — spec approval and PR merge — so defects are caught
+before a dev cycle is wasted or before broken code reaches `dev`. Reviews are
+evidence-based and scored, so approval is objective and the human is a bottleneck only
+when a review genuinely needs them.
+
+## Scope
+
+Every Workflow B spec (spec gate) and every squad/devops PR into `dev` (PR gate). Plus
+scheduled architecture sweeps that file backlog issues.
+
+## Policy statements
+
+1. **Evidence before opinion.** Every finding cites `file:line` from the actual diff (PR) or the spec section (spec). If you have not read the code, you may not have an opinion on it. Use CodeGraph to walk callers/callees beyond the diff before judging.
+2. **Score, then gate.** Both gates produce a 1–10 weighted score plus a verdict. **Hard caps override arithmetic** — a blocking finding never loses to a good average. **Every report renders the full scorecard table (below) — for a PASS and a BLOCKED verdict alike** (see statement 11 and the Scoring section).
+3. **Spec gate (`spec-reviewer`):** weighted rubric — Requirement coverage & traceability 30% · Gherkin quality 25% · Business clarity 20% · Completeness & unambiguity 15% · Security 10%. **APPROVED** at score **≥ 9.0** with zero blockers and no reviewer trigger → straight to implementation; **8.0–8.9** or a trigger → the requester holds the `[S#]` sub-task; **< 8.0** or a blocker → REWORK (max 5 rounds, then manual review). The gate confirms §4 Scope names real repos/services and that §2 Current State and §3 invariants hold against real code — a Scope naming something that does not exist, or a §2/§3 claim the code contradicts, is a **blocker**.
+4. **PR gate (`pr-reviewer`):** four-phase .NET 10 analysis — Scope (built right *and* the right thing; base MUST be `dev`; walk the impl-brief's Change set row-by-row) → Security first → Correctness → Testing → Maintainability → AI-slop → Style. **APPROVED** at score **≥ 8.5 AND** every auto-merge precondition passes → the gate merges into `dev` itself; **≥ 8.5 but a precondition fails** → APPROVAL DEFERRED, manual handoff; **< 8.5 or any blocking finding** → REWORK (max 2 rounds, then escalate).
+5. **Merge only what you just gated.** The only permitted merge is `gh pr merge` on the PR scored APPROVED in this run. Never `--admin`/force, never enable auto-merge, never push commits, never merge a helm PR (merging a chart *is* the deploy).
+6. **Findings become Multica sub-issues, never GitHub issues — and only a squad LEADER files them.** A gate is a squad member: it reports its findings on its own gate sub-issue with the leader's mention, in filable shape, and creates nothing. The leader reviews, **consolidates** (findings from several members, or several rounds sharing a root cause, become ONE issue) and files ONE fix sub-issue, cited under the same `DKNET-*` / `NET10-*` rule-ids the developer fixes under. **A leader-filed issue raised from a report is created UNASSIGNED**: `Suggested owner:` names the intended author-role (dev-backend / qc-tester / devops), its `Owner` property is set, and it is handed to the resolved human owner by member mention — the owner reviews it and assigns it, and that assignment starts the work.
+7. **Scope decides where a finding goes; impact decides its severity.** A finding is **in-scope** when its `file:line` is in a file the cycle's diff touched, in a path the diff newly reaches, or a missing test for behaviour the diff changed — *who introduced it is irrelevant*. In-scope findings never leave the cycle and never become tickets: `blocking`/`important` take a rework round, `nit`-only leftovers take one polish round (same mechanics, does not spend the rework budget, at most one per cycle), and the PR is not merged until they are closed. Out-of-scope findings (a file the diff never touched) are recorded with `file:line`, never move the score, and are **dropped** unless they clear the worth-fixing bar — a defect (wrong behaviour, emitted source that does not compile, data exposure, crash, published-API break) or a security finding, with the observable failure AND its reproduction named — in which case the squad leader files ONE ordinary defect ticket (never `Review follow-ups:`), unassigned, `Owner` set, folded into any open ticket sharing the root cause. Severity never softens because a defect is pre-existing: "not introduced by this PR" decides whose cycle fixes it, not whether it is a defect. Remaining debt is the monthly sweep's, not filed ad hoc.
+8. **Include at least one `praise` finding when deserved** — review is calibration, not attrition.
+9. **Reviewers do not design.** The spec gate scores *what* is reused/modified/new, never *how* to build it (dev-leader's call). The PR gate does not re-open settled spec decisions.
+10. **Architecture sweeps** run on a schedule: analyse → rank → **dedupe against already-filed issues** (the one step that makes it useful, never skipped) → file ≤10 survivors → convert mechanically-checkable rules into permanent architecture tests → report coverage (what was and wasn't scanned).
+11. **Every report displays the scorecard — always.** The category × weight × score table (see Scoring) appears in every review report and every posted verdict comment, in **both** the PASS state (APPROVED / APPROVAL DEFERRED / REVIEW REQUESTED) and the BLOCKED state (REWORK / escalated / manual handoff). A verdict posted without the full scorecard is non-compliant, regardless of outcome — the score is the audit record and must be legible whether the change advanced or was sent back.
+
+## Scoring
+
+Both gates score **each category 1–10**, compute the weighted average, then apply hard caps
+(a blocking finding can never be averaged away). Report the final score to one decimal;
+when torn between two scores, take the lower and say why. The scorecard is rendered in every
+report per statement 11.
+
+### PR review scorecard (`pr-reviewer`)
+
+| Category | Weight | Score |
+|---|---|---|
+| Correctness & logic | 25% | _n.n_ |
+| Security | 20% | _n.n_ |
+| Testing & coverage | 20% | _n.n_ |
+| Maintainability & design | 15% | _n.n_ |
+| Spec conformance | 10% | _n.n_ |
+| Style & conventions | 5% | _n.n_ |
+| AI-slop gate | 5% | _n.n_ |
+| **Weighted total** | **100%** | **_X.X / 10_** |
+
+**Worked example** — exactly how a report renders a BLOCKED verdict (the table shows on a fail, too):
+
+| Category | Weight | Score |
+|---|---|---|
+| Correctness | 25% | 9.5 |
+| Security | 20% | 10.0 |
+| Testing | 20% | 4.5 |
+| Maintainability | 15% | 9.0 |
+| Spec conformance | 10% | 8.0 |
+| Style | 5% | 9.5 |
+| AI-slop | 5% | 8.5 |
+| **Weighted total** | **100%** | **8.3** |
+
+Weighted average is 8.3, but the testing/coverage gap trips the **coverage-below-threshold hard cap (7.9 max)** → final **7.9 → BLOCKED (REWORK)**. The scorecard is posted with the REWORK comment regardless.
+
+**Category scoring:** start each at 10 and deduct — `blocking` −4, `important` −2, `nit` −0.5 (max −1.5), `suggestion`/`praise` 0; floor at 1.
+
+**Hard caps (applied after the weighted average):** any `blocking` finding → 6.9 max · any critical security finding (exploitable / secret / authz bypass) → 3.0 max · no tests for new/changed behaviour → 6.5 max · CI failing → 6.9 max · coverage on changed lines below threshold (default 80%) → 7.9 max · docs/comment/typo-only PR with green CI → 9.0 floor (fast path).
+
+**Gate:** **≥ 8.5 → APPROVED** (or APPROVAL DEFERRED if a merge precondition fails); **< 8.5 → REWORK**. No human-review middle band.
+
+### Spec review scorecard (`spec-reviewer`)
+
+| Category | Weight | Score |
+|---|---|---|
+| Requirement coverage & traceability | 30% | _n.n_ |
+| Gherkin quality | 25% | _n.n_ |
+| Business clarity & problem framing | 20% | _n.n_ |
+| Completeness & unambiguity | 15% | _n.n_ |
+| Security considerations | 10% | _n.n_ |
+| **Weighted total** | **100%** | **_X.X / 10_** |
+
+**Gate:** **≥ 9.0** with zero blockers → APPROVED; **8.0–8.9** or a reviewer trigger → REVIEW REQUESTED (requester holds `[S#]`); **< 8.0** or any blocker → REWORK (max 5 rounds). A well-formed BDD waiver is never a finding and costs zero points.
+
+## Best practices for .NET developers (receiving a review)
+
+- Read the rule-id, fix under the same id; if you disagree, reply on the finding with evidence — don't silently ignore it.
+- REWORK re-enters at Build and **always re-runs Verify** before the gate is re-armed. Every hop is routed by the squad leader (gate → leader → implementer → leader → gate); a re-trigger flips the sub-task `in_progress --no-start` before the mention, and the Fix carries `Retrigger on done` naming the gate to re-arm.
+- A `DKNET-REPO-006` (redundant `UpdateAsync`) is delete-on-sight, not a discussion — check the read for `AsNoTracking()` and remove the call.
+- Keep PRs under ~3,000 changed lines; larger PRs are never auto-approved and get reviewed file-by-file with security-sensitive files first.
+
+## Definition of Done / compliance
+
+- **Spec:** score ≥ 9.0, zero blockers, all five sections present and well-formed, §4 Scope grounded against code.
+- **PR:** score ≥ 8.5, zero blocking findings, all auto-merge preconditions pass, merged into `dev` by the gate.
+
+## Enforcement
+
+The gates are the enforcement — fully autonomous in pipeline mode. Manual handoff goes
+to the ROOT ticket creator (owner as fallback) via **reassignment at `todo`**, never a
+bare mention. On-demand mode (a human mention) is report-only: no GitHub writes, no
+tickets, unless explicitly instructed.
+
+## Exceptions & waivers
+
+- A well-formed **BDD integration waiver** is never a spec-gate finding and costs zero points (see [Policy 02](02-testing-and-quality.md)) — only the requester decides it; the reviewer may add one non-scoring risk note on a money/identity path.
+- Self-authored PRs: GitHub rejects the vote; the gate falls back to plain comments and notes the skipped vote — the Multica report is the audit record and the merge still proceeds.
+- Round caps: spec 5, PR 2 — then the human takes over via a reassigned review sub-task.
+
+## References
+
+- [`spec-review-gate`](../../skills/spec-review-gate/SKILL.md) — weights, severities, calibration, gate mechanics.
+- [`pr-review-gate`](../../skills/pr-review-gate/SKILL.md) — four-phase analysis, scoring rubric, gate actions, merge preconditions.
+- [`architecture-review-sweep`](../../skills/architecture-review-sweep/SKILL.md) — shard/rank/dedupe/file/enforce sweep.
+- Rule catalogs: [Policy 01](01-coding-standards-dotnet.md). Spec contract: [Policy 06](06-requirements-and-spec.md).

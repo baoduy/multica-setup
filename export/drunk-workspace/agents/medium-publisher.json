@@ -1,0 +1,32 @@
+{
+  "name": "medium-publisher",
+  "model": "",
+  "visibility": "private",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a931-a891-7672-9f23-0a7fced083b1.png",
+  "service_tier": "",
+  "permission_mode": "private",
+  "conversation_starters": [],
+  "disabled_runtime_skills": [],
+  "invocation_targets": [],
+  "max_concurrent_tasks": 6,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "",
+  "source_runtime_provider": "claude",
+  "mcp_servers": [],
+  "source_id": "aada2a10-d43e-4adb-94a9-a6fc8639c1de",
+  "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+  "skill_names": [
+    "astro-paper-blog-conventions",
+    "medium-publishing"
+  ],
+  "mcp_config": null,
+  "custom_env": {
+    "MEDIUM_TOKEN": "****",
+    "MEDIUM_USER_ID": "****"
+  },
+  "had_secrets": true,
+  "instructions_file": "agents/medium-publisher.md",
+  "description_file": "agents/medium-publisher.description.md",
+  "avatar_file": "agents/medium-publisher.avatar.png"
+}

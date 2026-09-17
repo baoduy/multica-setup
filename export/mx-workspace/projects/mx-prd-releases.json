@@ -1,0 +1,31 @@
+{
+  "title": "mx-prd-releases",
+  "icon": "♻️",
+  "priority": "none",
+  "status": "planned",
+  "due_date": null,
+  "start_date": null,
+  "source_id": "e2ffb49d-9d34-4d8a-9147-0ead4171de8c",
+  "lead_type": "agent",
+  "lead_name": "prd-release",
+  "lead_source_id": "9366b7eb-b852-4d21-b6d4-6702916014c5",
+  "resources": [
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/the-wixo/infra-v2.helm-charts.git"
+      },
+      "label": null,
+      "position": 0
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/the-wixo/monxa.helm-charts.git"
+      },
+      "label": null,
+      "position": 1
+    }
+  ],
+  "description_file": "projects/mx-prd-releases.description.md"
+}

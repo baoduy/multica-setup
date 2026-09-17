@@ -1,0 +1,30 @@
+{
+  "name": "product-team",
+  "file": "squads/product-team.json",
+  "avatar_url": "emoji:🦊",
+  "leader_name": "product-owner",
+  "members": [
+    {
+      "agent_name": "product-owner",
+      "role": "leader"
+    },
+    {
+      "agent_name": "spec-reviewer",
+      "role": "spec-review-gate"
+    },
+    {
+      "agent_name": "release-manager",
+      "role": "release-custodian"
+    },
+    {
+      "agent_name": "devops",
+      "role": "cicd-and-helm-specialist"
+    },
+    {
+      "agent_name": "pr-reviewer",
+      "role": "pr-review-gate"
+    }
+  ],
+  "instructions_file": "squads/product-team.md",
+  "description_file": "squads/product-team.description.md"
+}

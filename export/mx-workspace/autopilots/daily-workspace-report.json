@@ -1,0 +1,22 @@
+{
+  "title": "🌤️ Daily Workspace report",
+  "source_id": "75554a83-3912-4ae5-a6d3-c49bb4c6e055",
+  "status": "paused",
+  "execution_mode": "create_issue",
+  "issue_title_template": null,
+  "project_title": "mx-jobs",
+  "assignee_type": "agent",
+  "assignee_name": "issue-janitor",
+  "subscriber_names": [],
+  "had_webhook_trigger": false,
+  "triggers": [
+    {
+      "kind": "schedule",
+      "label": null,
+      "enabled": true,
+      "cron_expression": "TZ=Asia/Singapore 30 8 * * *",
+      "timezone": "Asia/Singapore"
+    }
+  ],
+  "description_file": "autopilots/daily-workspace-report.description.md"
+}

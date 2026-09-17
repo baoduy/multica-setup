@@ -1,0 +1,112 @@
+[
+  {
+    "name": "Owner",
+    "type": "actor",
+    "description": "The owner of the issue",
+    "icon": "",
+    "archived": false,
+    "options": []
+  },
+  {
+    "name": "zz-tmp-probe",
+    "type": "select",
+    "description": "",
+    "icon": "",
+    "archived": true,
+    "options": [
+      {
+        "name": "A",
+        "color": "#ef4444"
+      },
+      {
+        "name": "B",
+        "color": "#6b7280"
+      }
+    ]
+  },
+  {
+    "name": "Gate verdict",
+    "type": "select",
+    "description": "Review gate outcome pinned by spec-reviewer / pr-reviewer on their own review sub-task",
+    "icon": "",
+    "archived": false,
+    "options": [
+      {
+        "name": "APPROVED",
+        "color": "#2f7d5b"
+      },
+      {
+        "name": "REWORK",
+        "color": "#a86a12"
+      },
+      {
+        "name": "POLISH",
+        "color": "#8a7a3a"
+      },
+      {
+        "name": "DEFERRED",
+        "color": "#6b7280"
+      },
+      {
+        "name": "ESCALATED",
+        "color": "#a8402f"
+      },
+      {
+        "name": "MERGE_FAILED",
+        "color": "#a8402f"
+      },
+      {
+        "name": "ALREADY_MERGED",
+        "color": "#6b7280"
+      }
+    ]
+  },
+  {
+    "name": "Gate round",
+    "type": "number",
+    "description": "REWORK rounds spent on this review sub-task (POLISH does not count)",
+    "icon": "",
+    "archived": false,
+    "options": []
+  },
+  {
+    "name": "Gate score",
+    "type": "number",
+    "description": "Latest gate score 1-10, one decimal",
+    "icon": "",
+    "archived": false,
+    "options": []
+  },
+  {
+    "name": "Arch fingerprint",
+    "type": "text",
+    "description": "Sweep dedupe key: repo:rule:path:symbol",
+    "icon": "",
+    "archived": false,
+    "options": []
+  },
+  {
+    "name": "Arch severity",
+    "type": "text",
+    "description": "Severity of the architecture finding",
+    "icon": "",
+    "archived": false,
+    "options": []
+  },
+  {
+    "name": "Arch repo",
+    "type": "text",
+    "description": "Repo short name the finding belongs to",
+    "icon": "",
+    "archived": false,
+    "options": []
+  },
+  {
+    "name": "Retrigger on done",
+    "type": "text",
+    "description": "Set by the squad leader on a sub-task it re-triggers for fix work (re-armed Build, or a Fix sub-task filed above a blocked gate). Value: the key of the blocked issue to flip in_progress and re-trigger once this one is done. Leader clears it after re-arming.",
+    "icon": "flag",
+    "archived": false,
+    "options": []
+  }
+]

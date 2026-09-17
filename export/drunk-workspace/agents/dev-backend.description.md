@@ -1,0 +1,1 @@
+DEV Team developer: two runs per cycle - writes the spec's acceptance criteria as RED public-API tests; after the leader freezes them (at_sha) implements to green with >=80% coverage, mutation report per touched class, clean pack. Owns code and tests.

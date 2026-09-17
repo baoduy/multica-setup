@@ -1,0 +1,548 @@
+{
+  "status": "complete",
+  "mode": "built-in image_gen",
+  "style": "Origami animals on warm ivory; consistent paper, lighting, and circular-safe composition.",
+  "assignments": [
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "arch-reviewer",
+      "name": "arch-reviewer",
+      "animal": "owl-gold",
+      "source_definition": "export/drunk-workspace/agents/arch-reviewer.json",
+      "file": "drunk-workspace/agents/arch-reviewer.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "blog-writer",
+      "name": "blog-writer",
+      "animal": "tiger",
+      "source_definition": "export/drunk-workspace/agents/blog-writer.json",
+      "file": "drunk-workspace/agents/blog-writer.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "claude-ultra",
+      "name": "claude_ultra",
+      "animal": "dragon",
+      "source_definition": "export/drunk-workspace/agents/claude-ultra.json",
+      "file": "drunk-workspace/agents/claude-ultra.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "default",
+      "name": "default",
+      "animal": "panda",
+      "source_definition": "export/drunk-workspace/agents/default.json",
+      "file": "drunk-workspace/agents/default.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "dev-backend",
+      "name": "dev-backend",
+      "animal": "wolf",
+      "source_definition": "export/drunk-workspace/agents/dev-backend.json",
+      "file": "drunk-workspace/agents/dev-backend.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "dev-leader",
+      "name": "dev-leader",
+      "animal": "lion",
+      "source_definition": "export/drunk-workspace/agents/dev-leader.json",
+      "file": "drunk-workspace/agents/dev-leader.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "devops",
+      "name": "devops",
+      "animal": "octopus",
+      "source_definition": "export/drunk-workspace/agents/devops.json",
+      "file": "drunk-workspace/agents/devops.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "docs-writer",
+      "name": "docs-writer",
+      "animal": "monkey",
+      "source_definition": "export/drunk-workspace/agents/docs-writer.json",
+      "file": "drunk-workspace/agents/docs-writer.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "issue-janitor",
+      "name": "issue-janitor",
+      "animal": "panda",
+      "source_definition": "export/drunk-workspace/agents/issue-janitor.json",
+      "file": "drunk-workspace/agents/issue-janitor.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "medium-publisher",
+      "name": "medium-publisher",
+      "animal": "lion",
+      "source_definition": "export/drunk-workspace/agents/medium-publisher.json",
+      "file": "drunk-workspace/agents/medium-publisher.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "mika",
+      "name": "Mika",
+      "animal": "unicorn",
+      "source_definition": "export/drunk-workspace/agents/mika.json",
+      "file": "drunk-workspace/agents/mika.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "pr-reviewer",
+      "name": "pr-reviewer",
+      "animal": "fox",
+      "source_definition": "export/drunk-workspace/agents/pr-reviewer.json",
+      "file": "drunk-workspace/agents/pr-reviewer.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "product-owner",
+      "name": "product-owner",
+      "animal": "owl-chestnut",
+      "source_definition": "export/drunk-workspace/agents/product-owner.json",
+      "file": "drunk-workspace/agents/product-owner.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "release-manager",
+      "name": "release-manager",
+      "animal": "whale",
+      "source_definition": "export/drunk-workspace/agents/release-manager.json",
+      "file": "drunk-workspace/agents/release-manager.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "agent",
+      "slug": "spec-reviewer",
+      "name": "spec-reviewer",
+      "animal": "owl-silver",
+      "source_definition": "export/drunk-workspace/agents/spec-reviewer.json",
+      "file": "drunk-workspace/agents/spec-reviewer.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "squad",
+      "slug": "blog-team",
+      "name": "blog-team",
+      "animal": "owl-chestnut",
+      "source_definition": "export/drunk-workspace/squads/blog-team.json",
+      "file": "drunk-workspace/squads/blog-team.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "squad",
+      "slug": "dev-team",
+      "name": "dev-team",
+      "animal": "wolf",
+      "source_definition": "export/drunk-workspace/squads/dev-team.json",
+      "file": "drunk-workspace/squads/dev-team.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "squad",
+      "slug": "product-team",
+      "name": "product-team",
+      "animal": "fox",
+      "source_definition": "export/drunk-workspace/squads/product-team.json",
+      "file": "drunk-workspace/squads/product-team.avatar.png"
+    },
+    {
+      "workspace": "drunk-workspace",
+      "kind": "workspace",
+      "slug": "drunk-workspace",
+      "name": "drunk-workspace",
+      "animal": "crane",
+      "source_definition": "export/drunk-workspace/workspace/workspace.json",
+      "file": "drunk-workspace/workspace.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "arch-reviewer",
+      "name": "arch-reviewer",
+      "animal": "owl-gold",
+      "source_definition": "export/mx-workspace/agents/arch-reviewer.json",
+      "file": "mx-workspace/agents/arch-reviewer.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "bdd-reviewer",
+      "name": "bdd-reviewer",
+      "animal": "starfish",
+      "source_definition": "export/mx-workspace/agents/bdd-reviewer.json",
+      "file": "mx-workspace/agents/bdd-reviewer.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "claude-ultra",
+      "name": "claude_ultra",
+      "animal": "dragon",
+      "source_definition": "export/mx-workspace/agents/claude-ultra.json",
+      "file": "mx-workspace/agents/claude-ultra.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "default",
+      "name": "default",
+      "animal": "panda",
+      "source_definition": "export/mx-workspace/agents/default.json",
+      "file": "mx-workspace/agents/default.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "dev-backend",
+      "name": "dev-backend",
+      "animal": "wolf",
+      "source_definition": "export/mx-workspace/agents/dev-backend.json",
+      "file": "mx-workspace/agents/dev-backend.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "dev-leader",
+      "name": "dev-leader",
+      "animal": "lion",
+      "source_definition": "export/mx-workspace/agents/dev-leader.json",
+      "file": "mx-workspace/agents/dev-leader.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "devops",
+      "name": "devops",
+      "animal": "octopus",
+      "source_definition": "export/mx-workspace/agents/devops.json",
+      "file": "mx-workspace/agents/devops.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "issue-janitor",
+      "name": "issue-janitor",
+      "animal": "bee",
+      "source_definition": "export/mx-workspace/agents/issue-janitor.json",
+      "file": "mx-workspace/agents/issue-janitor.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "mika",
+      "name": "Mika",
+      "animal": "unicorn",
+      "source_definition": "export/mx-workspace/agents/mika.json",
+      "file": "mx-workspace/agents/mika.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "pr-reviewer",
+      "name": "pr-reviewer",
+      "animal": "fox",
+      "source_definition": "export/mx-workspace/agents/pr-reviewer.json",
+      "file": "mx-workspace/agents/pr-reviewer.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "prd-release",
+      "name": "prd-release",
+      "animal": "moth",
+      "source_definition": "export/mx-workspace/agents/prd-release.json",
+      "file": "mx-workspace/agents/prd-release.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "product-owner",
+      "name": "product-owner",
+      "animal": "owl-chestnut",
+      "source_definition": "export/mx-workspace/agents/product-owner.json",
+      "file": "mx-workspace/agents/product-owner.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "qc-leader",
+      "name": "qc-leader",
+      "animal": "tiger",
+      "source_definition": "export/mx-workspace/agents/qc-leader.json",
+      "file": "mx-workspace/agents/qc-leader.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "qc-runner",
+      "name": "qc-runner",
+      "animal": "rabbit",
+      "source_definition": "export/mx-workspace/agents/qc-runner.json",
+      "file": "mx-workspace/agents/qc-runner.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "qc-tester",
+      "name": "qc-tester",
+      "animal": "mouse",
+      "source_definition": "export/mx-workspace/agents/qc-tester.json",
+      "file": "mx-workspace/agents/qc-tester.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "release-manager",
+      "name": "release-manager",
+      "animal": "whale",
+      "source_definition": "export/mx-workspace/agents/release-manager.json",
+      "file": "mx-workspace/agents/release-manager.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "agent",
+      "slug": "spec-reviewer",
+      "name": "spec-reviewer",
+      "animal": "owl-silver",
+      "source_definition": "export/mx-workspace/agents/spec-reviewer.json",
+      "file": "mx-workspace/agents/spec-reviewer.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "squad",
+      "slug": "dev-team",
+      "name": "dev-team",
+      "animal": "gorilla",
+      "source_definition": "export/mx-workspace/squads/dev-team.json",
+      "file": "mx-workspace/squads/dev-team.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "squad",
+      "slug": "product-team",
+      "name": "product-team",
+      "animal": "fox",
+      "source_definition": "export/mx-workspace/squads/product-team.json",
+      "file": "mx-workspace/squads/product-team.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "squad",
+      "slug": "qc-team",
+      "name": "qc-team",
+      "animal": "frog",
+      "source_definition": "export/mx-workspace/squads/qc-team.json",
+      "file": "mx-workspace/squads/qc-team.avatar.png"
+    },
+    {
+      "workspace": "mx-workspace",
+      "kind": "workspace",
+      "slug": "mx-workspace",
+      "name": "mx-workspace",
+      "animal": "manta",
+      "source_definition": "export/mx-workspace/workspace/workspace.json",
+      "file": "mx-workspace/workspace.avatar.png"
+    }
+  ],
+  "prompts": {
+    "fox": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: an orange fox with pointed ears, white folded-paper chest, dark angular nose, and a full folded tail. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "owl-gold": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a golden amber horned owl with a cream facial disc and upright symmetrical folded wings. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "owl-silver": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a silver-gray horned owl with a warm ochre face and a composed alert expression. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "owl-chestnut": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a chestnut brown owl with cream eye discs and an amber triangular beak. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "wolf": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a slate-gray wolf with tall pointed ears, a white muzzle and chest, and a proud calm pose. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "lion": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a golden lion with a deep chestnut angular folded-paper mane and a cream muzzle. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "octopus": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a violet octopus with eight elegant broad folded-paper arms and a rounded faceted head. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "panda": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a black and ivory giant panda with recognizable dark eye patches and folded round ears. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "dragon": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: an emerald green mythical dragon with small folded wings, angular horns and a gently curving tail. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "tiger": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a golden orange tiger with black paper stripes, white muzzle and small folded ears. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "monkey": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a warm brown monkey with an ivory face, rounded folded ears and a curled angular tail. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "unicorn": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: an ivory unicorn with a lavender folded mane, delicate golden paper horn and a graceful neck. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "bee": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a golden yellow and charcoal bumblebee with pale translucent-looking folded paper wings and short folded antennae. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "starfish": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a coral-gold five-armed starfish with broad sculptural paper folds and an elegant radial silhouette. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "moth": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a pale periwinkle lunar moth with symmetrical broad folded wings and subtle crescent-shaped folds. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "mouse": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a soft gray mouse with large rounded folded ears, pale rose inner ears and a delicate long paper tail. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "rabbit": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a cool gray rabbit with tall folded ears, pale rose inner ears and a compact poised body. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "whale": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a vivid ocean blue whale with a pale ivory belly, folded side flippers and an elegantly raised folded tail. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "gorilla": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a charcoal gray gorilla with a silver face, broad folded shoulders and a gentle confident expression. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "frog": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a fresh green frog with compact folded legs, a cream belly and broad geometric eyes. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "crane": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a navy blue and ivory origami crane with elegant long wings, folded neck and a compact balanced silhouette. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image.",
+    "manta": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a mint teal manta ray with broad elegant folded wings and a subtle ivory underside. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image."
+  },
+  "generated_at": "2026-09-16",
+  "artwork": {
+    "fox": {
+      "file": "animals/fox.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1794606,
+      "sha256": "b052db77fd29291ad6e4fce2e45dedb4d453e0c30bf515f784da0971417930b0"
+    },
+    "owl-gold": {
+      "file": "animals/owl-gold.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1966758,
+      "sha256": "cbaa5e980e48abefe52c5e8a7f6e2a5efd6d183f662cec40b1e9225016a2b6a6"
+    },
+    "owl-silver": {
+      "file": "animals/owl-silver.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1996671,
+      "sha256": "a36e733cc91e57c0ca115b7ab1c5ea062b5433bc204b3f8648ebe83cbd16484c"
+    },
+    "owl-chestnut": {
+      "file": "animals/owl-chestnut.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2032426,
+      "sha256": "4b2b0afdda49c6abfcdc77d8c6c6f2ee80606ae6281b3fa04c815c9202a5d29c"
+    },
+    "wolf": {
+      "file": "animals/wolf.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1810707,
+      "sha256": "201a297c6ee5d926d51bb4961e9a1abfa81c9b1137c6df505be57104d3a66e1e"
+    },
+    "lion": {
+      "file": "animals/lion.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1914660,
+      "sha256": "de08df1e8d095ab2b02bf7c13b412fae24871d211870e0e5cf456c24abfc91f0"
+    },
+    "octopus": {
+      "file": "animals/octopus.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1956974,
+      "sha256": "1683148288f6041e44c009eb0b94be0014e9af5305117cc5117d288f77724416"
+    },
+    "panda": {
+      "file": "animals/panda.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1791637,
+      "sha256": "5f3138f733ce626fa2a9db98dd7741e33862ffeaac533e78dcf829e3bc52a3a3"
+    },
+    "dragon": {
+      "file": "animals/dragon.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1802967,
+      "sha256": "ec070e7954416a48b64303675c11446cdbb71a8f6dd7b8168bbad94f40ad36c4"
+    },
+    "tiger": {
+      "file": "animals/tiger.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1830007,
+      "sha256": "6b2676ee881471905913bd24226593f34b7392da5f94f26765b915ccdf3b6ce1"
+    },
+    "monkey": {
+      "file": "animals/monkey.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1854463,
+      "sha256": "a67a708ade5cae20a93985cb999841fb9cda3a124e10af3bfa3eb52318a0bee6"
+    },
+    "unicorn": {
+      "file": "animals/unicorn.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1588983,
+      "sha256": "6f5ad2c5c6aa1c6ee9d392c45cf03ca722f0144663a75b0528e97fcbdb5d1978"
+    },
+    "bee": {
+      "file": "animals/bee.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1603340,
+      "sha256": "090db39c61268ebd7ac6da41e5bd69748cda2f6d5cc1eb57ecb9db82646db693"
+    },
+    "starfish": {
+      "file": "animals/starfish.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1593037,
+      "sha256": "c12f7ef1e1afcdd8eaf5021b68f1a0b3103fd7c35eedac641d0e20eaa0ee4567"
+    },
+    "moth": {
+      "file": "animals/moth.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1887131,
+      "sha256": "3633432cf09df4f4686acd093705250b9cd765b4960d8142b52afbef2e2e6a9b"
+    },
+    "mouse": {
+      "file": "animals/mouse.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1898735,
+      "sha256": "2a068dce6d4f4f17004e9a474387e5f7680c38d11269f427cb14ef4c27e0207d"
+    },
+    "rabbit": {
+      "file": "animals/rabbit.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1508869,
+      "sha256": "bc05b2bc7a890652dad6e7945771df2f38ff1e12d512ef87768f618580fbb84b"
+    },
+    "whale": {
+      "file": "animals/whale.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1617157,
+      "sha256": "217997ae3c1babd7f26c0afcf6dd1a00043b3c77687bc74dbf5a053ce78439fa"
+    },
+    "gorilla": {
+      "file": "animals/gorilla.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2005955,
+      "sha256": "3bfe0302eb5b51058c9dd3cb4f45ace0d030b7cb2e1c521babb27d884da57344"
+    },
+    "frog": {
+      "file": "animals/frog.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1797624,
+      "sha256": "2809612c0a51433d798fc4b4ab0d4102d4ac88e637d211453cd09e952699bcef"
+    },
+    "crane": {
+      "file": "animals/crane.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1617142,
+      "sha256": "a40b09443aca723dcd23e51543e0a933a5fdff6eb2b610db9163371eb206525b"
+    },
+    "manta": {
+      "file": "animals/manta.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1651875,
+      "sha256": "542d4f36e76daced8b7fd7c48abe3b5f876835e110068557b75e6211460c1b0a"
+    }
+  }
+}

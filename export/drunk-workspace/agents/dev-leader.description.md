@@ -1,0 +1,1 @@
+DEV Team squad leader: decomposes each approved phase ticket into staged Build→Review sub-tasks, routes every review rework hop (members never write on each other's tickets), cuts the feature branch, opens the cycle's single PR to dev. Coordinates only.

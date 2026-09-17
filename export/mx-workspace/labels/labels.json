@@ -1,0 +1,142 @@
+[
+  {
+    "name": "arch.review",
+    "color": "#14b8a6",
+    "description": ""
+  },
+  {
+    "name": "bdd.review",
+    "color": "#8b5cf6",
+    "description": ""
+  },
+  {
+    "name": "bdd.test",
+    "color": "#ec4899",
+    "description": ""
+  },
+  {
+    "name": "bug",
+    "color": "#ff2600",
+    "description": ""
+  },
+  {
+    "name": "channel",
+    "color": "#22c55e",
+    "description": ""
+  },
+  {
+    "name": "charge",
+    "color": "#77bb41",
+    "description": ""
+  },
+  {
+    "name": "cicd",
+    "color": "#6366f1",
+    "description": ""
+  },
+  {
+    "name": "customer",
+    "color": "#ec4899",
+    "description": ""
+  },
+  {
+    "name": "docs",
+    "color": "#3b82f6",
+    "description": ""
+  },
+  {
+    "name": "efcore",
+    "color": "#3a88fe",
+    "description": ""
+  },
+  {
+    "name": "endpoints",
+    "color": "#ec4899",
+    "description": ""
+  },
+  {
+    "name": "feature",
+    "color": "#3b82f6",
+    "description": ""
+  },
+  {
+    "name": "fee.schedule",
+    "color": "#e4ef65",
+    "description": ""
+  },
+  {
+    "name": "job",
+    "color": "#3b82f6",
+    "description": ""
+  },
+  {
+    "name": "main",
+    "color": "#8b5cf6",
+    "description": ""
+  },
+  {
+    "name": "merchant",
+    "color": "#6366f1",
+    "description": ""
+  },
+  {
+    "name": "monxa.auth-api",
+    "color": "#0ea5e9",
+    "description": ""
+  },
+  {
+    "name": "monxa.email-service",
+    "color": "#f59e0b",
+    "description": ""
+  },
+  {
+    "name": "monxa.payment-gateway",
+    "color": "#0ea5e9",
+    "description": ""
+  },
+  {
+    "name": "monxa.web-hook-deliverer",
+    "color": "#0ea5e9",
+    "description": ""
+  },
+  {
+    "name": "nostro",
+    "color": "#a855f7",
+    "description": ""
+  },
+  {
+    "name": "notifications",
+    "color": "#14b8a6",
+    "description": ""
+  },
+  {
+    "name": "payout",
+    "color": "#4f7a28",
+    "description": ""
+  },
+  {
+    "name": "prd.release",
+    "color": "#f97316",
+    "description": ""
+  },
+  {
+    "name": "processor",
+    "color": "#ec4899",
+    "description": ""
+  },
+  {
+    "name": "question",
+    "color": "#f59e0b",
+    "description": ""
+  },
+  {
+    "name": "report",
+    "color": "#ec4899",
+    "description": ""
+  },
+  {
+    "name": "webhook",
+    "color": "#f97316",
+    "description": ""
+  }
+]

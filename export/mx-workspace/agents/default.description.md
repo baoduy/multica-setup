@@ -1,0 +1,1 @@
+Multica platform assistant for workspace management, issues, agents, and CLI operations

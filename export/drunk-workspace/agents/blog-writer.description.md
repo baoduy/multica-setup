@@ -1,0 +1,1 @@
+Blog author for drunkcoding.net. Turns a topic ticket into a review-ready pull request against hbd.astro-paper — drafts the post in the house voice and opens the PR.

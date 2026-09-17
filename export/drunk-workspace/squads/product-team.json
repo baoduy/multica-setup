@@ -1,0 +1,30 @@
+{
+  "name": "product-team",
+  "file": "squads/product-team.json",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a935-e378-7803-a0d6-6fea95ed5ca2.png",
+  "leader_name": "product-owner",
+  "members": [
+    {
+      "agent_name": "product-owner",
+      "role": "leader"
+    },
+    {
+      "agent_name": "spec-reviewer",
+      "role": "member"
+    },
+    {
+      "agent_name": "release-manager",
+      "role": "member"
+    },
+    {
+      "agent_name": "devops",
+      "role": "devops"
+    },
+    {
+      "agent_name": "pr-reviewer",
+      "role": "member"
+    }
+  ],
+  "instructions_file": "squads/product-team.md",
+  "description_file": "squads/product-team.description.md"
+}

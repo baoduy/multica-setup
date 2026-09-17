@@ -1,0 +1,39 @@
+{
+  "title": "drunk-net",
+  "icon": null,
+  "priority": "medium",
+  "status": "planned",
+  "due_date": null,
+  "start_date": null,
+  "source_id": "acdcbdaa-cf5e-41db-a9c8-87c15649576f",
+  "lead_type": "agent",
+  "lead_name": "product-owner",
+  "lead_source_id": "1673352f-712c-4872-b565-58105408d2fc",
+  "resources": [
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/baoduy/DKNet.git"
+      },
+      "label": null,
+      "position": 0
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/baoduy/DKNet.Templates.git"
+      },
+      "label": null,
+      "position": 1
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/baoduy/hbd.healthz.ui.git"
+      },
+      "label": null,
+      "position": 2
+    }
+  ],
+  "description_file": "projects/drunk-net.description.md"
+}
