@@ -1,6 +1,6 @@
 {
   "name": "blog-writer",
-  "model": "claude-opus-5",
+  "model": "claude-sonnet-5",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a931-7bf1-7e8e-9523-4d9f8dd4675e.png",
   "service_tier": "",

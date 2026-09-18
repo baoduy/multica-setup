@@ -1,6 +1,6 @@
 {
   "name": "pr-reviewer",
-  "model": "claude-opus-5",
+  "model": "claude-opus-5[1m]",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a931-b7b0-7612-95de-7ef6a5e4e0b3.png",
   "service_tier": "",
@@ -16,7 +16,7 @@
   "max_concurrent_tasks": 6,
   "runtime_config": {},
   "custom_args": [],
-  "thinking_level": "high",
+  "thinking_level": "xhigh",
   "source_runtime_provider": "claude",
   "mcp_servers": [],
   "source_id": "74368823-001f-4642-b1e5-d66d02a65da9",
