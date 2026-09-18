@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-06 |
-| **Version** | 2.3 |
+| **Version** | 2.4 |
 | **Status** | Active |
 | **Owner** | product-owner (spec author) · spec-reviewer (gate) |
 | **Applies to** | Every Workflow B feature/enhancement spec and every dev-team implementation brief |
@@ -53,7 +53,7 @@ same gate.
 
 ## Policy statements
 
-1. **The clarification gate comes before any spec work.** No deliverable while any open question remains. Resolve what the code can answer via CodeGraph-first research; ask the requester ONLY what it cannot (business rules, scope, priorities). Post remaining questions as ONE numbered comment, then STOP and wait — repeat until zero open questions. §4 Scope must carry zero open questions.
+1. **The clarification gate comes before any spec work.** No deliverable while any open question remains. Resolve what the code can answer via CodeGraph-first research; ask the requester ONLY what it cannot (business rules, scope, priorities). Post remaining questions as ONE numbered comment, then STOP and wait — repeat until zero open questions. §4 Scope must carry zero open questions. Run the gate with the `interview-me` and `multica-brainstorming` skills — the requester is interviewed, never guessed at; the role skill's procedure still owns the deliverable's shape and location.
 2. **Role boundary.** product-owner states the problem, the required behaviour, and the constraints. **dev-leader designs the implementation and decomposes it** into an impl-brief. Judging whether a change is minimal, reuses the right helper, or mirrors the right pattern in code is dev-leader's call at decomposition and pr-reviewer's at the merge gate — never spec content, never spec-review content.
 3. **The five sections, in order:** 1 Goals · 2 Current State · 3 Expected State (ending in one Security line) · 4 Scope · 5 Acceptance Criteria (Gherkin, each scenario tagged `@integration` or `@unit`). No word budgets — length scales with the requirement; a section is too long the moment it answers another section's question or explains mechanism.
 3a. **Specs are written for a reader with intermediate English and no context.** One idea per sentence, under 20 words, everyday words, no metaphors or idioms, bullets over paragraphs, numbers as digits, a two-sentence Summary before §1, fixed sub-labels in §1 (Problem · Affected · Why now · Done means) and §4 (Repos/packages · Not in this change · Decisions · Open questions). The spec gate scores readability inside Business clarity (`sdlc-spec-template` writing rules). The same rules bind the root-cause report, the blocker report and the final summary — everything a human reads.
