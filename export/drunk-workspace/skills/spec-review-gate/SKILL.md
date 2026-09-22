@@ -2,7 +2,7 @@
 
 Comprehensive review of product-owner Workflow B spec with weighted 1–10 score and automated gate actions for drunk-workspace delivery pipeline. This gate REPLACES human requester-approval step for specs, so its bar is quality bar: a spec approved here goes straight to implementation. Pipeline: **collect → analyze → score → gate**.
 
-**Spec contract — five sections, completeness tests, format rules and the BRIEF Gherkin standard — lives in `sdlc-spec-template` skill. Load it on every review; it is what you score conformance against, and it wins over this file wherever they differ. This file owns only weights, severities, calibration and gate mechanics.**
+**Spec contract — six sections (§3a Contract changes included), completeness tests, format rules and the BRIEF Gherkin standard — lives in `sdlc-spec-template` skill. Load it on every review; it is what you score conformance against, and it wins over this file wherever they differ. This file owns only weights, severities, calibration and gate mechanics.**
 
 ## Modes
 
@@ -19,7 +19,8 @@ Comprehensive review of product-owner Workflow B spec with weighted 1–10 score
 
 The spec is business-level and carries no `file:line` — there are no code citations to spot-check here (that verification is the dev-leader's at impl-brief and pr-reviewer's at merge). What you still verify against real code:
 
-- **Scope names are real.** Every repo and package §4 Scope names exists and is reachable (`codegraph explore` / checkout). A Scope naming a repo or package that does not exist is a **blocker**.
+- **Scope names are real, and complete.** Every repo and package §4 Scope names exists and is reachable (`codegraph explore` / checkout). A Scope naming a repo or package that does not exist is a **blocker**. A repo the §3a contract or a §3 requirement plainly implies but §4 never names is a **major** — the squad sizes the work off this list.
+- **The §3a contract is reviewable, not designed.** You check that every new or changed field carries a type, a length where the type needs one, and the attributes a developer must know, and that every new, changed or removed endpoint carries a verb and a path. You do NOT rule on whether a field should be a `decimal(18,2)` or whether the route should be `/v1/x` — that is design, and design is dev-leader's. A contract that is missing, or too thin to build from, is the finding; a contract you would have drawn differently is not.
 - **Current State and invariants are plausible.** §2 Current State and any §3 invariant claims a property of the system today — where a claim is clearly contradicted by the code (a behaviour that does not exist, an invariant the system does not hold), that is a **blocker**. You are confirming the spec is grounded, not auditing a design.
 - **Do not review design.** The spec proposes none. Whether a change is minimal, reuses the right helper, or mirrors the right pattern is dev-leader's call at decomposition and pr-reviewer's at merge gate. Re-inventing an existing helper is no longer a spec finding — there is nothing in the spec that could re-invent it.
 - Every finding carries a severity — `blocker`, `major`, `minor`, `nit` — and cites the spec section it concerns. Include at least one `praise` finding when deserved.
@@ -32,15 +33,25 @@ The spec is business-level and carries no `file:line` — there are no code cita
 | Gherkin quality | 25% | Score against **BRIEF standard defined in `sdlc-spec-template`** — do not restate or reinterpret it here. Its primary test governs: *would this wording need to change if implementation changed?* Remember two carve-outs it sets: **no hard step count** (never a finding on its own), and imperative phrasing where mechanism IS requirement is at most `minor`. |
 | Business clarity & problem framing | 20% | **Do NOT score whether the spec names concrete files, classes or patterns to mirror — that is dev-leader's and pr-reviewer's job.** Score instead: is §1 Goals substantial enough that a non-engineer could act on it · is the affected user or role named · does §1 give a real success signal · is §2 Current State a clear before-picture in business terms · is §3 Expected State observable from outside, with any invariant stated as a property design must preserve ("an existing consumer's dependency-injection registration keeps working after the upgrade") rather than as a mechanism. A thin or missing §1 Goals is a `blocker`: it is the section the whole spec exists to convey. **Readability** is scored here too, against the writing rules in `sdlc-spec-template`: a paragraph over 3 sentences, a sentence over about 25 words, or a metaphor/idiom in §1–§4 is a `minor` (quote it); a §1 a non-engineer cannot follow is a `major`. |
 | Security | 10% | The §3 Security line is present and concrete: input validation, authn/authz, secret handling, sensitive-data exposure in logs/responses, idempotency/replay safety where relevant — or an explicit "no new attack surface" statement with reasoning. A missing or vague Security line is a `blocker`. |
-| Completeness & unambiguity | 15% | **All five sections present and in the order `sdlc-spec-template` defines** (a `**Summary.**` line before §1 and the fixed sub-labels in §1 and §4 are part of that template) — that skill is the list; do not maintain a copy here. Zero TBD/TODO/placeholders. No contradictions between sections. §4 Scope carries ZERO open questions. Any violation is at least `major`. **Plus format gates below.** |
+| Completeness & unambiguity | 15% | **All six sections present and in the order `sdlc-spec-template` defines** (a `**Summary.**` line before §1 and the fixed sub-labels in §1 and §4 are part of that template) — that skill is the list; do not maintain a copy here. Zero TBD/TODO/placeholders. No contradictions between sections. §4 Scope carries ZERO open questions and names every repo touched. §3a carries the data and API contract. Any violation is at least `major`. **Plus the contract gates and format gates below.** |
 
 **Format gates** (part of Completeness) — rules live in `sdlc-spec-template`; these are severities for breaking them. Each is a `blocker`:
 
 - **A code block anywhere except Acceptance Criteria Gherkin.** A spec that carries code can contradict its own prose.
-- **An implementation mandate anywhere** — a class name, method signature, or file path in any section; or an invariant written as the code that satisfies it instead of the property that must hold. Code-level detail belongs in the dev-leader's impl-brief, never in the spec.
+- **An implementation mandate anywhere** — a class name, method signature, or file path in any section, §3a included; or an invariant written as the code that satisfies it instead of the property that must hold. Code-level detail belongs in the dev-leader's impl-brief, never in the spec. Entity, field and endpoint names inside §3a are the contract, not a mandate — never a finding.
 - **Any `file:line` citation anywhere in the spec.** The spec is business-level; grounding research lives in the impl-brief, not here.
 - **Redundancy and mechanism, not length:** there is no word budget — spec length scales with requirement. A finding is a sentence, quoted: one that restates another section or specifies mechanism in §1–§4 is a `minor`; a run of them that makes §1–§4 read as a design is a `major`. If §1 Goals is thin, say so plainly — thinness is judged by whether a non-engineer could act on it, never by a word count.
 - **It is no longer a finding that a spec leaves design open** — per role boundary in `sdlc-spec-template`, that is now correct behaviour.
+
+**Contract gates** (part of Completeness) — the §3a rules live in `sdlc-spec-template`; these are the severities for breaking them:
+
+- **The change adds or alters a domain entity and §3a has no field rows** — `blocker`. The team cannot review a data contract it cannot see, and the squad would guess types and lengths.
+- **The change adds, alters or removes an endpoint and §3a has no endpoint row for it** — `blocker`. One row per endpoint, carrying the HTTP verb and the path.
+- **Field rows are incomplete** — a missing type, a missing length on a text or decimal type, or a missing required/unique/default attribute: one `major` covering all such rows, quoting the worst.
+- **An endpoint row is missing its verb, path or auth** — `major`.
+- **A repo the contract implies is absent from §4 Scope** — `major`.
+- **Neither table applies and the spec says nothing** — `minor`. §3a reads `None — no data contract change.` / `None — no API change.`, so a reader knows it was considered.
+- **§3a rows contradict §3 or §5** — a field §3a never declares appearing in a scenario, an endpoint §3 never requires: `major` consistency defect.
 
 **Test-tag check** (part of Completeness) — **there is no separate Test Scope section anymore; the suite split lives in the §5 scenario tags.** Testing is never optional in drunk-workspace: dev-team self-verifies every change at ≥80% per-touched-class coverage (tests authored test-first by dev-backend) as part of Implementation, whatever the spec says.
 
@@ -67,7 +78,7 @@ Final score = weighted sum, then caps, one decimal.
 - **9.5** — Implementable without ever opening main ticket's comment thread; zero findings above `nit`.
 - **8.5–9.4** — Implementable; exactly one `major` (two would trigger the 8.4 cap), no blockers.
 - **8.0** — Sound framing but 1–2 majors in coverage or clarity → below the bar, REWORK with a short fix list.
-- **6.0** — A blocker (format gate, thin §1 Goals, missing Security line) or a coverage gap wide enough that dev-team would have to guess.
+- **6.0** — A blocker (format gate, contract gate, thin §1 Goals, missing Security line) or a coverage gap wide enough that dev-team would have to guess.
 - **3.0** — Spec describes a different problem than the requester asked for, or contradicts the real system throughout.
 
 Never inflate. When uncertain whether a finding is a `blocker`, it is a `blocker`: cost of a bad approved spec is a wasted dev cycle. When torn between two scores, pick the lower one and say why.

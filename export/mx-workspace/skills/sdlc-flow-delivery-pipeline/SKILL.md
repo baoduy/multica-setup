@@ -164,7 +164,7 @@ Neither key drops anything else. `[P#-1]`, its in-repo BDD/unit coverage, accept
 ## Conventions
 
 - **Projects**: main + phase tickets in `mx-main`; dev sub-tasks in `mx-code`; qc sub-issues in `mx-qc-board`.
-- **Titles**: main tickets plain, no prefix. Children carry `[S<num>]` / `[P<num>-n]` / `[D<num>-n]` / `[T<num>-n]` where `<num>` is ROOT main ticket's key number and `n` stage.
+- **Titles**: ROOT main tickets carry one type prefix — `[Feature]` · `[Enhance]` · `[Bug]` · `[Question]` · `[CICD]` — matching the type label, set by product-owner at intake (Policy 05 §7a). Children carry `[S<num>]` / `[P<num>-n]` / `[D<num>-n]` / `[T<num>-n]` where `<num>` is ROOT main ticket's key NUMBER and `n` stage — never a type prefix, and the rename never touches that keying.
 - **Labels**: main tickets ONLY (`main` + `feature`/`bug`/`question`/`cicd` + one `monxa.<service>` domain label per service change touches — best-effort, so label count shows how many services ticket involves). Never on children. product-owner seeds domain labels on intake; a squad leader adds any service it missed to ROOT main ticket (not to its sub-tasks) once implementation reveals it.
 - **One PR per squad cycle**, head = feature branch, base = `dev`. PR titles/bodies must NEVER contain `Closes`/`Fixes`/`Resolves` next to an issue key — close intent auto-completes issue and kills remaining phases.
 - Every sub-task is parented to its cycle parent directly — never nested under another sub-task.

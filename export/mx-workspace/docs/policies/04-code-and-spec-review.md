@@ -122,7 +122,7 @@ Weighted average is 8.3, but the testing/coverage gap trips the **coverage-below
 
 ## Definition of Done / compliance
 
-- **Spec:** score ≥ 9.0, zero blockers, all five sections present and well-formed, §4 Scope grounded against code.
+- **Spec:** score ≥ 9.0, zero blockers, all six sections present and well-formed (§3a carries the field and endpoint contract), §4 Scope complete and grounded against code.
 - **PR:** score ≥ 8.5, zero blocking findings, all auto-merge preconditions pass, merged into `dev` by the gate.
 
 ## Enforcement

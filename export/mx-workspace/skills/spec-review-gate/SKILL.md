@@ -2,7 +2,7 @@
 
 Comprehensive review of product-owner Workflow B spec with weighted 1–10 score and automated gate actions for Monxa delivery pipeline. This gate front-loads spec approval so requester is not bottleneck on every spec — but it does not replace them. Spec scoring 9.0+ with no blockers goes straight to implementation; marginal pass, or anything reviewer judges requester should see, goes to requester first. Pipeline: **collect → analyze → score → gate**.
 
-**Spec contract — five sections, their completeness tests, format rules, BRIEF Gherkin standard and the §5 QC-Scope preamble — lives in `sdlc-spec-template` skill. Load it on every review; it is what you score conformance against, and it wins over this file wherever they differ. This file owns only weights, severities, calibration and gate mechanics.**
+**Spec contract — six sections (§3a Contract changes included), their completeness tests, format rules, BRIEF Gherkin standard and the §5 QC-Scope preamble — lives in `sdlc-spec-template` skill. Load it on every review; it is what you score conformance against, and it wins over this file wherever they differ. This file owns only weights, severities, calibration and gate mechanics.**
 
 ## Modes
 
@@ -19,7 +19,8 @@ Comprehensive review of product-owner Workflow B spec with weighted 1–10 score
 
 The spec is business-level and carries no `file:line` and no Change Map — the class-level reuse/modify/add decision now lives in the dev-leader's impl-brief, reviewed at the merge gate, not here. What you still verify against real code:
 
-- **Scope names are real.** Every repo and service §4 Scope names exists and is reachable (`codegraph explore` / checkout). A Scope naming a repo or service that does not exist is a **blocker**.
+- **Scope names are real, and complete.** Every repo and service §4 Scope names exists and is reachable (`codegraph explore` / checkout). A Scope naming a repo or service that does not exist is a **blocker**. A repo the §3a contract or a §3 requirement plainly implies but §4 never names is a **major** — Monxa is one platform across many repos and the squads are sized off this list.
+- **The §3a contract is reviewable, not designed.** Check that every new or changed field carries a type, a length where the type needs one, and the attributes a developer must know, and that every new, changed or removed endpoint carries a verb and a path. Do NOT rule on whether the field should be `decimal(18,2)` or the route `/v1/x` — that is design, and design is dev-leader's. A contract missing, or too thin to build from, is the finding; a contract you would have drawn differently is not.
 - **Current State and invariants are plausible.** §2 Current State and any §3 invariant claims a property of the system today — where a claim is clearly contradicted by the code (a behaviour that does not exist, an invariant the system does not hold), that is a **blocker**. You are confirming the spec is grounded, not auditing a design.
 - **Do not review design.** The spec proposes none. Whether a change is minimal, reuses the right service, or mirrors the right pattern is dev-leader's call at decomposition and pr-reviewer's at merge gate — the schema-cost of a new entity or table surfaces in the impl-brief's Change set, not in the spec.
 - Every finding carries severity — `blocker`, `major`, `minor`, `nit` — and cites the spec section it concerns. Include at least one `praise` finding when deserved.
@@ -32,15 +33,25 @@ The spec is business-level and carries no `file:line` and no Change Map — the 
 | Gherkin quality | 25% | Score against **BRIEF standard defined in `sdlc-spec-template`** — do not restate or reinterpret it here. Its primary test governs: *would this wording need to change if implementation changed?* Remember two carve-outs it sets: **no hard step count** (never finding on its own), and imperative phrasing where mechanism IS requirement is at most `minor`. |
 | Business clarity & problem framing | 20% | **Do NOT reward the spec for naming classes or patterns to mirror — that is dev-leader's job in the impl-brief, and rewarding it here is what produced 867-word Technical Design sections.** Score instead: is §1 Goals substantial enough that a non-engineer could act on it · is the affected role named · does §1 give a real success signal · is §2 Current State a clear before-picture in business terms · is §3 Expected State observable from outside, with any invariant stated as a property design must preserve ("a payout must never fail because of a notification") rather than as a mechanism. Thin or missing §1 Goals is `blocker`: it is the section the whole spec exists to convey. |
 | Security | 10% | The §3 Security line is present and concrete: input validation, authn/authz, secret handling, sensitive-data exposure in logs/responses, payment idempotency/replay where relevant — or an explicit "no new attack surface" statement with reasoning. Missing or vague Security line is `blocker`. |
-| Completeness & unambiguity | 15% | **All five sections present and in the order `sdlc-spec-template` defines** — that skill is the list; do not maintain a copy here. Zero TBD/TODO/placeholders. No contradictions between sections. §4 Scope carries ZERO open questions. Any violation is at least `major`. **Plus format gates below.** |
+| Completeness & unambiguity | 15% | **All six sections present and in the order `sdlc-spec-template` defines** — that skill is the list; do not maintain a copy here. Zero TBD/TODO/placeholders. No contradictions between sections. §4 Scope carries ZERO open questions and names every repo and service touched. §3a carries the data and API contract. Any violation is at least `major`. **Plus the contract gates and format gates below.** |
 
 **Format gates** (part of Completeness) — rules live in `sdlc-spec-template`; these are severities for breaking them. Each is `blocker`:
 
 - **Code block anywhere except the §5 Acceptance Criteria Gherkin.** Spec that carries code can contradict its own prose — "never drop notification" beside a snippet that drops it — and the squad implements the snippet.
-- **Class name, method signature or symbol in any section.** Code-level detail belongs in the dev-leader's impl-brief, never in the spec. Also `blocker`: an invariant written as the code that satisfies it instead of the property that must hold.
+- **Class name, method signature or symbol in any section, §3a included.** Code-level detail belongs in the dev-leader's impl-brief, never in the spec. Also `blocker`: an invariant written as the code that satisfies it instead of the property that must hold. Entity, field and endpoint names inside §3a are the contract, not a mandate — never a finding.
 - **Any line number, file path, or `file:line` citation, anywhere in the spec.** The spec is business-level.
 - **Redundancy and mechanism, not length:** there is no word budget — spec length scales with requirement. A finding is a sentence, quoted: one that restates another section or specifies mechanism in §1–§4 is `minor`; a run of them that makes §1–§4 read as a design is `major`. If §1 Goals is thin, say so plainly — thinness is judged by whether a non-engineer could act on it, never by word count.
 - **Leaving implementation open is correct behaviour, not a finding** — the reuse/modify/add decision is the dev-leader's, made in the impl-brief; the spec owns nothing below the required behaviour.
+
+**Contract gates** (part of Completeness) — the §3a rules live in `sdlc-spec-template`; these are the severities for breaking them:
+
+- **The change adds or alters a domain entity and §3a has no field rows** — `blocker`. The platform cannot review a data contract it cannot see, and the squad would guess types and lengths.
+- **The change adds, alters or removes an endpoint and §3a has no endpoint row for it** — `blocker`. One row per endpoint, carrying the HTTP verb and the path.
+- **Field rows are incomplete** — a missing type, a missing length on a text or decimal type, or a missing required/unique/default attribute: one `major` covering all such rows, quoting the worst.
+- **An endpoint row is missing its verb, path or auth** — `major`.
+- **A repo or service the contract implies is absent from §4 Scope** — `major`.
+- **Neither table applies and the spec says nothing** — `minor`. §3a reads `None — no data contract change.` / `None — no API change.`, so a reader knows it was considered.
+- **§3a rows contradict §3 or §5** — a field §3a never declares appearing in a scenario, an endpoint §3 never requires: `major` consistency defect.
 
 **QC Scope check** (part of Completeness) — **form only, never merit.**
 

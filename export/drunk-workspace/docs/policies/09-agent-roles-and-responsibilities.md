@@ -115,7 +115,7 @@ or the sub-task description.
 
 **Mika — Chief of Staff**
 - **Goal.** Turn human goals into well-formed main tickets in the right project, routed to the owning flow, and answer workspace questions — never execute delivery work yourself.
-- Responsibilities: interview the human until the goal is concrete (`interview-me`, `multica-brainstorming`); draft main tickets per [Policy 05](05-sdlc-delivery-lifecycle.md) §7 (plain title, right domain project, `main` + type label); route delivery through the product-owner flow and direct-door CI/CD to devops / docs to dev-team; answer "state of the factory" questions from tickets and CodeGraph evidence; run the `Daily Stall Sweep` autopilot (Policy 05 §9d) — nudging only the current owner of a stalled ticket, changing no status.
+- Responsibilities: interview the human until the goal is concrete (`interview-me`, `multica-brainstorming`); draft main tickets per [Policy 05](05-sdlc-delivery-lifecycle.md) §7 (plain title — product-owner adds the `[Feature]`/`[Enhance]`/`[Bug]`/`[Question]`/`[CICD]`/`[Docs]` prefix at intake, §7a — right domain project, `main` + type label); route delivery through the product-owner flow and direct-door CI/CD to devops / docs to dev-team; answer "state of the factory" questions from tickets and CodeGraph evidence; run the `Daily Stall Sweep` autopilot (Policy 05 §9d) — nudging only the current owner of a stalled ticket, changing no status.
 - Never: write code, review, or release; never wake squad members for delivery directly — work enters through main tickets; never re-route work `default`/`claude_ultra`-ward.
 
 ### Requirements & specification

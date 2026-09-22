@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-05 |
-| **Version** | 1.4 |
+| **Version** | 1.5 |
 | **Status** | Active |
 | **Owner** | product-owner |
 | **Applies to** | Every ticket that flows through the drunk software factory |
@@ -79,7 +79,24 @@ dev-team's cycle PR and devops' standalone PR). **release-manager** — owns the
 4. **Gates front-load quality** — the spec gate before implementation, the PR gate before every merge into `dev` (see [Policy 04](04-code-and-spec-review.md)).
 5. **Stage barriers fire on `done`.** Completion = `done`. `blocked` + a mention comment = needs help — and that comment lives on the blocked agent's OWN ticket, never on its parent: a mention wakes its target wherever it is posted, so assigner↔assignee communication (questions, blockers, defect reports) stays paired on the assignee's ticket while parent comments remain the parent owner's orchestration space. `in_review` is leader-only, reserved for a ROOT ticket awaiting a human; on a phase or sub-task ticket it deadlocks the pipeline — **never** report `in_review` on a phase/sub ticket, use `done`.
 6. **Mentions are actions.** An agent/squad mention (real UUID, resolved at runtime) enqueues a run; a member (human) mention only renders a link and delivers nothing. To make a human act, **assign them a ticket at `todo`** — never rely on a mention. Never agent-mention in FYI/ack/done comments.
-7. **Titles, projects, labels:** main tickets plain (no prefix); children carry `[S<num>]` (spec review, keyed to the main ticket) / `[P<num>-n]` (product-owner's phase tickets, keyed to the main ticket, `n`: `-1` implementation or CI/CD change, `-2` release) / `[D<num>-n]` (dev-team sub-tasks, keyed to the parent PHASE ticket, `n` = stage). Labels on main tickets **only** (`main` + `feature`/`bug`/`question`/`cicd` + optional domain). Every sub-task parents directly to its cycle parent — never nested deeper. Every child stays in the SAME domain project as the main ticket.
+7. **Titles, projects, labels:** **every ROOT main ticket title carries one type prefix** — `[Feature]` · `[Enhance]` · `[Bug]` · `[Question]` · `[CICD]` · `[Docs]` — followed by the plain title; children carry `[S<num>]` (spec review, keyed to the main ticket) / `[P<num>-n]` (product-owner's phase tickets, keyed to the main ticket, `n`: `-1` implementation or CI/CD change, `-2` release) / `[D<num>-n]` (dev-team sub-tasks, keyed to the parent PHASE ticket, `n` = stage). Labels on main tickets **only** (`main` + `feature`/`bug`/`question`/`cicd`/`docs` + optional domain). Every sub-task parents directly to its cycle parent — never nested deeper. Every child stays in the SAME domain project as the main ticket.
+
+7a. **The root prefix is product-owner's, set at intake.** The requester and Mika create root tickets with a plain title; product-owner adds or corrects the prefix on the root ticket when it labels the ticket and posts the spec (`multica issue update <root-id> --title "<prefix> <plain title>" --no-start` — **always `--no-start`**, a title update on a ticket assigned to you otherwise wakes a second run of yourself). Where product-owner never touches the ticket — a CI/CD ticket taken through the direct door by devops, a docs ticket handed straight to dev-team — the first agent to pick it up sets the prefix the same way. Reclassifying the workflow changes the prefix with it.
+
+7b. **The prefix is root-only.** It never appears on a child, and it changes no child's title, numbering or `<num>` keying: `[S<num>]`, `[P<num>-n]` and `[D<num>-n]` are keyed off the root's key NUMBER, never its title. Emitting a type prefix on a sub-task is a defect.
+
+**Root-title type prefix.** Exactly one prefix, matching the root ticket's type label:
+
+| Prefix | Label | Use for |
+|---|---|---|
+| `[Feature]` | `feature` | a capability that does not exist today |
+| `[Enhance]` | `feature` | a change to behaviour that already exists |
+| `[Bug]` | `bug` | a reported defect |
+| `[Question]` | `question` | a question with no change wanted |
+| `[CICD]` | `cicd` | a pipeline or build-script change |
+| `[Docs]` | `docs` | a docs-only change |
+
+The label stays the source of truth — `[Feature]` and `[Enhance]` both carry the `feature` label, so the prefix is the finer split the labels do not make. A prefix that disagrees with the label is a defect: fix the pair, never argue it.
 8. **Escalation is an action, not a status.** A squad that escalates still owns its cycle: post ONE standalone `## BLOCKER` + `## OPTIONS` comment (per [`blocker-report`](../../skills/blocker-report/SKILL.md)), deliver it (agent mention for an agent hop, ticket reassignment at `todo` for a human hop), park the blocked child. Ending a turn with a stuck child and no dispatched comment is a flow defect.
 9. **Human touch points are capped:** business clarifications (always the requester, irreducible), spec review (5 rework rounds, then manual handoff), bug confidence (< 90% waits for requester confirmation), PR review (2 rework rounds, then manual handoff to the resolved owner), squad fix attempts (2 on the same root cause, then escalate). A defect a member finds outside its cycle is filed by its leader to `product-owner` at `todo` and enters the bug flow — the confidence gate is the only human hop it gets. The escalation human is the resolved owner per [Policy 10](10-ticket-ownership-and-owner-pickup.md).
 9a. **Gate state lives on custom properties.** Review gates pin `Gate verdict`, `Gate round` and `Gate score` on their own sub-task (never on issue metadata), so a parked gate is visible on the board and in `multica issue children --resolve-properties` without reading threads. Leaders and product-owner read those properties on every wake.

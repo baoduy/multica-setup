@@ -86,7 +86,7 @@ images, Helm charts, Python MCP services.
 
 ## Definition of Done / compliance
 
-- **Spec:** score ≥ 8.5, zero blockers, all five `sdlc-spec-template` sections present and grounded against real code.
+- **Spec:** score ≥ 8.5, zero blockers, all six `sdlc-spec-template` sections present (§3a carries the field and endpoint contract), §4 Scope complete, grounded against real code.
 - **PR:** score ≥ 8.5, zero blocking findings, all auto-merge preconditions pass, merged into `dev` by the gate itself.
 - **Sweep:** every in-scope repo's production source reviewed against its own stack skill, dedupe run before filing, ≤10 issues filed per repo, enforcement PR green locally before push, report states what was and wasn't covered.
 
