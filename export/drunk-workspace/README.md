@@ -1,6 +1,6 @@
 # drunk-workspace export
 
-Full-workspace bundle: 29 skills, 15 agents, 3 squads, 4 projects, 6 autopilots (`autopilots/`, prompt in `*.description.md`; push with `multica autopilot update <id> --description "$(cat f)"`), plus `workspace/context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push it with `multica workspace update <id> --context-stdin < workspace/context.md`.
+Full-workspace bundle: 29 skills, 16 agents, 3 squads, 4 projects, 7 autopilots (`autopilots/`, prompt in `*.description.md`; push with `multica autopilot update <id> --description "$(cat f)"`), plus `workspace/context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push it with `multica workspace update <id> --context-stdin < workspace/context.md`.
 
 **Governance / source of truth:** [`docs/policies/`](docs/policies/00-policies-index.md) — the
 authoritative SDLC policies (coding standards, testing, source control, review, delivery,
@@ -37,9 +37,12 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 | docs-writer      | claude  | claude-sonnet-5   | high     |
 | devops           | claude  | claude-sonnet-5   | high     |
 | default          | claude  | claude-sonnet-5   | high     |
+| run-medic        | claude  | claude-haiku-4-5  | low      |
 | issue-janitor    | hermes  | (runtime default) | —        |
 | Mika             | hermes  | (runtime default) | —        |
 | medium-publisher | claude  | (runtime default) | —        |
 
 
-Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5[1m]`) — arch-reviewer, product-owner, pr-reviewer and the `claude_ultra` assistant at `xhigh`, dev-leader and spec-reviewer at `high`; implementation, devops, writing and the `default` assistant ride sonnet. `issue-janitor` and `Mika` are the only agents still off the claude runtime (hermes, runtime default model).
+Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5[1m]`) — arch-reviewer, product-owner, pr-reviewer and the `claude_ultra` assistant at `xhigh`, dev-leader and spec-reviewer at `high`; implementation, devops, writing and the `default` assistant ride sonnet. `run-medic` rides haiku at `low`: hourly run recovery is pattern-matching over task rows, not judgment.
+`run-medic` rides haiku at `low`: hourly run recovery is pattern-matching over agent task rows, not judgment.
+`issue-janitor` and `Mika` are the only agents still off the claude runtime (hermes, runtime default model).

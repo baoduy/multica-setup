@@ -3,10 +3,10 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.6 |
+| **Version** | 1.7 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
-| **Applies to** | The ten chartered factory agents: `product-owner`, `spec-reviewer`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `release-manager`, `arch-reviewer`, `issue-janitor`, `Mika` |
+| **Applies to** | The eleven chartered factory agents: `product-owner`, `spec-reviewer`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika` |
 | **Related skills** | none directly — this policy governs `agents/**` instructions and `squads/**` briefings; each charter names the skills its agent loads |
 | **Enforced at** | agent instructions (must open with the charter Goal) + every gate an agent operates |
 
@@ -27,7 +27,7 @@ themselves.
 
 ## Scope
 
-The ten agents named above — everything they are woken for inside drunk-workspace.
+The eleven agents named above — everything they are woken for inside drunk-workspace.
 
 **Explicitly out of scope: `default` and `claude_ultra`.** They are general Multica
 platform assistants (workspace management, CLI help, ad-hoc questions) sharing one
@@ -57,7 +57,8 @@ or the sub-task description.
    PR gate is the independent second pass; only `pr-reviewer` merges
    into `dev`; only `release-manager` targets or merges `main`; only `devops` edits pipelines and
    compose files; only `arch-reviewer` files new backlog findings from review sweeps;
-   only `issue-janitor` deletes issues; only `Mika` turns human goals into new main
+   only `issue-janitor` deletes issues; only `run-medic` wakes an agent whose run was killed
+   by a transient infrastructure failure; only `Mika` turns human goals into new main
    tickets conversationally (humans file directly at any time).
 **1b. Only squad leaders create issues; members report.** `multica issue create` belongs to
    `product-owner` and `dev-leader` alone. Every other agent — implementer and gate alike
@@ -108,6 +109,7 @@ or the sub-task description.
 | release-manager | — | — | — | — | — | — | ✅ (open + merge; `[P#-2]` or `[D#-n] Release`) | none |
 | arch-reviewer | — | ✅ (enforcement-only) | lint/CI checks in its PR | enforcement branch | ✅ (test/config-only) | — | — | backlog findings → workspace owner (triager) |
 | issue-janitor | — | — | — | — | — | — | — | none (status + deletion only) |
+| run-medic | — | — | — | — | — | — | — | none (one escalation issue when a sweep trips its guard) |
 
 ## Roles & responsibilities — the charters
 
@@ -166,8 +168,14 @@ or the sub-task description.
 - Responsibilities: sweep repo-by-repo in stack order with each stack's standard skill (`architecture-review-sweep`); dedupe by per-repo fingerprint; file ≤10 issues per repo at `backlog` assigned to the workspace owner (triager, resolved at runtime) by `--assignee-id`; convert checkable rules into test-only/config-only enforcement PRs to `dev` (Tier discipline); one consolidated run report, naming every deferred repo and skipped step.
 - Never: modify production code; a Tier-1 check that fails today's code; re-file an open finding; cross-file into the wrong domain project; let a truncated run read as "clean".
 
-**issue-janitor — Nightly Issue Hygiene**
-- **Goal.** Keep the issue graph clean: propagate terminal parent statuses to forgotten children and delete long-cancelled records children-first — nightly, honestly reported, touching nothing live.
+**run-medic — Hourly Run Recovery**
+- **Goal.** Put stopped agent runs back on their feet: every hour, wake the agent whose run was killed by a transient infrastructure failure, or whose run ended its turn leaving the ticket unfinished, without ever joining the work itself.
+- Responsibilities: build the stranded set from `multica agent tasks` across every agent, newest task per issue, leaf issues only (issue status cannot reveal a stopped run, and a parent is legitimately `in_progress` while its children work); wake a killed run only when its error is transient — API rate limit / overload, runtime offline, daemon restart — and an abandoned turn (task `completed`, ticket still open 30+ minutes later) always; at most **3 times per issue**, counted on the `Wake count` property; hand an issue that reaches the cap to its human owner in one comment and never wake it again; report permanent failures without retrying them; stop and escalate once when more than 3 issues look stranded in one hour; stay silent on a quiet hour.
+- **Carve-out from the member write rule.** `run-medic` is infrastructure recovery, not a squad member, so it comments on issues it does not own — always as a reply under an existing root it did not author, never as a new thread root, and it unsubscribes after every comment.
+- Never: change a status, assign, create or cancel a ticket, touch code or branches; retry a permanent failure; wake the issue assignee instead of the agent that crashed; mention an agent in a hand-off or permanent-failure report; wake a fourth time; report a partial sweep as clean.
+
+**issue-janitor — Weekly Issue Hygiene**
+- **Goal.** Keep the issue graph clean: propagate terminal parent statuses to forgotten children and delete long-cancelled records children-first — weekly, honestly reported, touching nothing live.
 - Responsibilities: paginated full sweeps (100-row pages, abort on exactly-100 totals); rewrite only OPEN statuses under terminal parents; delete only `cancelled` + ≥7 days untouched, children before parents, via the authorized DELETE exception; report partial success as partial.
 - Never: touch `done`/`cancelled` records otherwise; delete to unblock another deletion; print the bearer token; accept non-hygiene work — decline to the workspace owner.
 

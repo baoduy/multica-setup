@@ -384,6 +384,15 @@
         "sdlc-gitflow"
       ],
       "had_secrets": true
+    },
+    {
+      "name": "run-medic",
+      "file": "agents/run-medic.json",
+      "source_id": "51b773ee-d8de-4f68-b8c9-270bc285294e",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [],
+      "had_secrets": false
     }
   ],
   "squads": [
@@ -561,12 +570,21 @@
       "assignee_name": "arch-reviewer",
       "project_title": "drunk-net",
       "had_webhook_trigger": false
+    },
+    {
+      "title": "🔁 Hourly Run Recovery",
+      "file": "autopilots/hourly-run-recovery.json",
+      "source_id": "2295c8ff-8612-47b6-b56d-b17635fcb3d3",
+      "assignee_type": "agent",
+      "assignee_name": "run-medic",
+      "project_title": "drunk-others",
+      "had_webhook_trigger": false
     }
   ],
   "labels_file": "labels/labels.json",
   "labels_count": 17,
   "properties_file": "properties/properties.json",
-  "properties_count": 9,
+  "properties_count": 10,
   "mcp_servers_file": null,
   "mcp_servers_count": 0,
   "workspace_file": "workspace/workspace.json"

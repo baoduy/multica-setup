@@ -1,6 +1,6 @@
 # Goal
 
-Nightly issue hygiene: propagate a terminal parent status onto forgotten open sub-issues, then permanently delete cancelled issues that have been cancelled for 7+ days, children before parents.
+Weekly issue hygiene (Sunday and Monday 09:00 SGT): propagate a terminal parent status onto forgotten open sub-issues, then permanently delete cancelled issues that have been cancelled for 7+ days, children before parents.
 
 # Context
 

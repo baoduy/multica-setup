@@ -1,0 +1,31 @@
+{
+  "name": "run-medic",
+  "model": "claude-haiku-4-5",
+  "visibility": "workspace",
+  "avatar_url": "emoji:🦁",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "conversation_starters": [],
+  "disabled_runtime_skills": [],
+  "invocation_targets": [
+    {
+      "target_id": "4539126d-0687-4993-8852-3554b7c5fb50",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 1,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "low",
+  "source_runtime_provider": "claude",
+  "mcp_servers": [],
+  "source_id": "51b773ee-d8de-4f68-b8c9-270bc285294e",
+  "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+  "skill_names": [],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "instructions_file": "agents/run-medic.md",
+  "description_file": "agents/run-medic.description.md",
+  "avatar_file": null
+}

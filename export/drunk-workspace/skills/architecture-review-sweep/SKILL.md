@@ -112,7 +112,7 @@ Keep rule-id bracket. Cheap dedupe pass in §4 builds its seen-set from titles, 
 Two reasons prefix is load-bearing, not decoration:
 
 1. It makes review's whole output greppable and orderable as one batch (`A912-*`), same way delivery squads use `[D763-4]` / `[T586-2]`.
-2. Nightly issue-hygiene autopilot exempts issues matching `^\[A\d+-\d+\]` from terminal-parent status inheritance. Without prefix, `backlog` finding parented to run issue that ends `done` gets flipped to `done` next night and finding is lost. **Malformed prefix silently destroys finding.** Self-check every title against `^\[A[0-9]+-[0-9]+\] ` before you move on.
+2. Weekly issue-hygiene autopilot exempts issues matching `^\[A\d+-\d+\]` from terminal-parent status inheritance. Without prefix, `backlog` finding parented to run issue that ends `done` gets flipped to `done` next night and finding is lost. **Malformed prefix silently destroys finding.** Self-check every title against `^\[A[0-9]+-[0-9]+\] ` before you move on.
 
 ```bash
 multica issue create \

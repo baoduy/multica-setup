@@ -108,5 +108,13 @@
     "icon": "flag",
     "archived": false,
     "options": []
+  },
+  {
+    "name": "Wake count",
+    "type": "number",
+    "description": "Times the hourly run-recovery autopilot has woken this issue after a transient run failure. At 3 the autopilot stops waking it and hands it to the issue's human owner to review.",
+    "icon": "",
+    "archived": false,
+    "options": []
   }
 ]

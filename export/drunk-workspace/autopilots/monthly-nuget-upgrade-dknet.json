@@ -1,7 +1,7 @@
 {
   "title": "🚀 Monthly NuGet Upgrade — DKNet",
   "source_id": "ec905ae5-4f57-4298-8529-407f65b47fe6",
-  "status": "active",
+  "status": "paused",
   "execution_mode": "create_issue",
   "issue_title_template": "Monthly NuGet Upgrade — DKNet ({{date}})",
   "project_title": "drunk-net",

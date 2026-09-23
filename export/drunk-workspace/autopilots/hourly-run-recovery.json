@@ -1,0 +1,22 @@
+{
+  "title": "🔁 Hourly Run Recovery",
+  "source_id": "2295c8ff-8612-47b6-b56d-b17635fcb3d3",
+  "status": "active",
+  "execution_mode": "run_only",
+  "issue_title_template": null,
+  "project_title": "drunk-others",
+  "assignee_type": "agent",
+  "assignee_name": "run-medic",
+  "subscriber_names": [],
+  "had_webhook_trigger": false,
+  "triggers": [
+    {
+      "kind": "schedule",
+      "label": "Hourly at :05 UTC",
+      "enabled": true,
+      "cron_expression": "5 * * * *",
+      "timezone": "UTC"
+    }
+  ],
+  "description_file": "autopilots/hourly-run-recovery.description.md"
+}

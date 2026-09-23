@@ -1,7 +1,7 @@
 {
   "title": "🌤️ Daily Stall Sweep",
   "source_id": "adb0a338-da08-4014-9d19-8005e736dfdb",
-  "status": "active",
+  "status": "paused",
   "execution_mode": "create_issue",
   "issue_title_template": null,
   "project_title": "drunk-others",
