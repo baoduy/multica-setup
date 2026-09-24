@@ -4,6 +4,21 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-24 — opus agents move to Claude Opus 5.5; model table matches the JSON again
+
+Every agent on `claude-opus-5` moves to **`claude-opus-5-5`** (same 1M context, same
+`[1m]` tier marker where it was set, lower per-token price): 🦊 product-owner, 🦉 spec-reviewer
+and 🐙 devops on `claude-opus-5-5[1m]`, 🐲 claude_ultra, 🏛️ arch-reviewer, 🧪 bdd-reviewer and
+🐼 Mika on `claude-opus-5-5`. Thinking levels are unchanged — Opus 5.5 defaults to `medium`
+effort and cannot run with thinking disabled, so every agent keeps an explicit level.
+
+The model table had drifted from `agents/*.json` and is corrected in the same pass:
+🦉 spec-reviewer and 🐺 dev-leader were listed as `claude-opus-4-8` (actual: opus on the 1M
+tier, and Claude Sonnet respectively), 🦊 product-owner was missing its `[1m]` marker, and
+🐼 Mika was listed as opus while its JSON said Sonnet — resolved in favour of the table, so
+Mika is now opus in both, and 🦊 product-owner's thinking column is corrected from `xhigh`
+to `high`, the level its JSON and the live agent already ran at. Live agents updated to match.
+
 ## 2026-09-22 (b) — root ticket titles carry a type prefix (Policy 05 v1.2)
 
 A root ticket's type was readable only from its label, so a board or a notification showed nothing about what kind of

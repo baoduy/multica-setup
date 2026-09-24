@@ -23,26 +23,26 @@ Role charters (goal, responsibilities, boundaries per agent) live in
 Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep in lock-step.
 
 
-| Agent            | Runtime | Model             | Thinking |
-| ---------------- | ------- | ----------------- | -------- |
-| arch-reviewer    | claude  | claude-opus-5[1m] | xhigh    |
-| product-owner    | claude  | claude-opus-5[1m] | xhigh    |
-| spec-reviewer    | claude  | claude-opus-5[1m] | high     |
-| dev-leader       | claude  | claude-opus-5[1m] | high     |
-| pr-reviewer      | claude  | claude-opus-5[1m] | xhigh    |
-| blog-writer      | claude  | claude-sonnet-5   | high     |
-| claude_ultra     | claude  | claude-opus-5[1m] | xhigh    |
-| dev-backend      | claude  | claude-sonnet-5   | high     |
-| release-manager  | claude  | claude-sonnet-5   | high     |
-| docs-writer      | claude  | claude-sonnet-5   | high     |
-| devops           | claude  | claude-sonnet-5   | high     |
-| default          | claude  | claude-sonnet-5   | high     |
-| run-medic        | claude  | claude-haiku-4-5  | low      |
-| issue-janitor    | hermes  | (runtime default) | —        |
-| Mika             | hermes  | (runtime default) | —        |
-| medium-publisher | claude  | (runtime default) | —        |
+| Agent            | Runtime | Model               | Thinking |
+| ---------------- | ------- | ------------------- | -------- |
+| arch-reviewer    | claude  | claude-opus-5-5[1m] | xhigh    |
+| product-owner    | claude  | claude-opus-5-5[1m] | xhigh    |
+| spec-reviewer    | claude  | claude-opus-5-5[1m] | high     |
+| dev-leader       | claude  | claude-opus-5-5[1m] | high     |
+| pr-reviewer      | claude  | claude-opus-5-5[1m] | xhigh    |
+| blog-writer      | claude  | claude-sonnet-5     | high     |
+| claude_ultra     | claude  | claude-opus-5-5[1m] | xhigh    |
+| dev-backend      | claude  | claude-sonnet-5     | high     |
+| release-manager  | claude  | claude-sonnet-5     | high     |
+| docs-writer      | claude  | claude-sonnet-5     | high     |
+| devops           | claude  | claude-sonnet-5     | high     |
+| default          | claude  | claude-sonnet-5     | high     |
+| run-medic        | claude  | claude-haiku-4-5    | low      |
+| issue-janitor    | hermes  | (runtime default)   | —        |
+| Mika             | hermes  | (runtime default)   | —        |
+| medium-publisher | claude  | (runtime default)   | —        |
 
 
-Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5[1m]`) — arch-reviewer, product-owner, pr-reviewer and the `claude_ultra` assistant at `xhigh`, dev-leader and spec-reviewer at `high`; implementation, devops, writing and the `default` assistant ride sonnet. `run-medic` rides haiku at `low`: hourly run recovery is pattern-matching over task rows, not judgment.
+Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5-5[1m]`) — arch-reviewer, product-owner, pr-reviewer and the `claude_ultra` assistant at `xhigh`, dev-leader and spec-reviewer at `high`; implementation, devops, writing and the `default` assistant ride sonnet. `run-medic` rides haiku at `low`: hourly run recovery is pattern-matching over task rows, not judgment.
 `run-medic` rides haiku at `low`: hourly run recovery is pattern-matching over agent task rows, not judgment.
 `issue-janitor` and `Mika` are the only agents still off the claude runtime (hermes, runtime default model).

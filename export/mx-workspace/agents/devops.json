@@ -1,6 +1,6 @@
 {
   "name": "devops",
-  "model": "claude-opus-5[1m]",
+  "model": "claude-opus-5-5[1m]",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/ed38be16-b92f-48cc-9611-89bf09102d84/019fb5a7-3bd9-7006-8933-287865ec7d23.png",
   "service_tier": "",

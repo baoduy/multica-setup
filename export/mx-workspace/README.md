@@ -981,25 +981,25 @@ Runtime is derived from the model name: a model whose name starts with `claude` 
 Model choice follows **subscription coverage** (flat-fee = no per-token cost): every agent
 runs on **Claude Premium**. No agent bills per-token `openrouter/*`.
 
-| Agent              | Model             | Thinking | Covered by     |
-| ------------------ | ----------------- | -------- | -------------- |
-| 🦊 product-owner   | claude-opus-5     | xhigh    | Claude Premium |
-| 🦉 spec-reviewer   | claude-opus-4-8   | high     | Claude Premium |
-| 🐺 dev-leader      | claude-opus-4-8   | high     | Claude Premium |
-| 🔨 dev-backend     | claude-sonnet-5   | high     | Claude Premium |
-| 🐳 release-manager | claude-sonnet-5   | medium   | Claude Premium |
-| 🦅 pr-reviewer     | claude-sonnet-5   | high     | Claude Premium |
-| 🐝 qc-leader       | claude-sonnet-5   | medium   | Claude Premium |
-| 🐜 qc-tester       | claude-sonnet-5   | high     | Claude Premium |
-| 🐞 qc-runner       | claude-sonnet-5   | medium   | Claude Premium |
-| 🐙 devops          | claude-opus-5[1m] | high     | Claude Premium |
-| 🐲 claude_ultra    | claude-opus-5     | xhigh    | Claude Premium |
-| 🐼 default         | claude-sonnet-5   | high     | Claude Premium |
-| 🏛️ arch-reviewer  | claude-opus-5     | max      | Claude Premium |
-| 🧪 bdd-reviewer    | claude-opus-5     | max      | Claude Premium |
-| 🐼 Mika            | claude-opus-5     | -        | Claude Premium |
-| 🧹 issue-janitor   | claude-sonnet-5   | -        | Claude Premium |
-| 🌙 prd-release     | claude-sonnet-5   | high     | Claude Premium |
+| Agent              | Model               | Thinking | Covered by     |
+| ------------------ | ------------------- | -------- | -------------- |
+| 🦊 product-owner   | claude-opus-5-5[1m] | high     | Claude Premium |
+| 🦉 spec-reviewer   | claude-opus-5-5[1m] | high     | Claude Premium |
+| 🐺 dev-leader      | claude-sonnet-5     | high     | Claude Premium |
+| 🔨 dev-backend     | claude-sonnet-5     | high     | Claude Premium |
+| 🐳 release-manager | claude-sonnet-5     | medium   | Claude Premium |
+| 🦅 pr-reviewer     | claude-sonnet-5     | high     | Claude Premium |
+| 🐝 qc-leader       | claude-sonnet-5     | high     | Claude Premium |
+| 🐜 qc-tester       | claude-sonnet-5     | high     | Claude Premium |
+| 🐞 qc-runner       | claude-sonnet-5     | medium   | Claude Premium |
+| 🐙 devops          | claude-opus-5-5[1m] | high     | Claude Premium |
+| 🐲 claude_ultra    | claude-opus-5-5     | xhigh    | Claude Premium |
+| 🐼 default         | claude-sonnet-5     | high     | Claude Premium |
+| 🏛️ arch-reviewer  | claude-opus-5-5     | max      | Claude Premium |
+| 🧪 bdd-reviewer    | claude-opus-5-5     | max      | Claude Premium |
+| 🐼 Mika            | claude-opus-5-5     | high     | Claude Premium |
+| 🧹 issue-janitor   | claude-sonnet-5     | -        | Claude Premium |
+| 🌙 prd-release     | claude-sonnet-5     | high     | Claude Premium |
 
 
 arch-reviewer, issue-janitor, prd-release and devops are **standalone / off-pipeline agents** (§3), not pipeline-flow members.
@@ -1014,9 +1014,10 @@ Tier is assigned by **subscription coverage first, then cheapest tier that fits 
 Claude Premium for the roles where reasoning quality dominates, OpenCode Go for the squad
 workhorses, the $0 free tier for off-pipeline utility runs:
 
-- **Judgment &amp; orchestration** — 🦊 product-owner on Claude Opus (`high`); reasoning-heavy,
-correctness dominates. 🦉 spec-reviewer and 🐺 dev-leader orchestrate on Claude Opus 4.8
-(`high`) — squad triage/decompose/gate over diffs, not prose.
+- **Judgment &amp; orchestration** — 🦊 product-owner on Claude Opus 5.5, 1M-context tier
+(`high`); reasoning-heavy, correctness dominates. 🦉 spec-reviewer gates specs on the same
+tier at `high`; 🐺 dev-leader orchestrates on Claude Sonnet (`high`) — squad
+triage/decompose/gate over diffs, not prose.
 - **Implementation** (🔨 dev-backend, 🐜 qc-tester) — code/test writers. dev-backend on Claude
 Sonnet (`high`), owning tests and code together; qc-tester on Claude Sonnet at `high`.
 - **Mechanical git/ops** (🐳 release-manager, 🐞 qc-runner) — Claude Sonnet at `medium`.

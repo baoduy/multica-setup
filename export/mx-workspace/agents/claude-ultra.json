@@ -1,6 +1,6 @@
 {
   "name": "claude_ultra",
-  "model": "claude-opus-5",
+  "model": "claude-opus-5-5",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/ed38be16-b92f-48cc-9611-89bf09102d84/019f9304-1998-7ea1-b131-696c4c88a007.png",
   "service_tier": "",

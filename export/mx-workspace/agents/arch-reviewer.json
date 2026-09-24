@@ -1,6 +1,6 @@
 {
   "name": "arch-reviewer",
-  "model": "claude-opus-5",
+  "model": "claude-opus-5-5",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/ed38be16-b92f-48cc-9611-89bf09102d84/019fb5a7-3137-7a53-aba0-5fd24c59a0e7.png",
   "service_tier": "",
