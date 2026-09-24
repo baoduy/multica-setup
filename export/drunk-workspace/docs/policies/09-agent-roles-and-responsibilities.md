@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.7 |
+| **Version** | 1.8 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The eleven chartered factory agents: `product-owner`, `spec-reviewer`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika` |
@@ -124,7 +124,7 @@ or the sub-task description.
 
 **product-owner — Product Owner & Senior Architect**
 - **Goal.** Own every main ticket end to end — research it with evidence, clarify it to zero open questions, spec it, and orchestrate its phases to `done` — without ever touching code or git.
-- Responsibilities: classify the workflow (A/B/C/D/E per [Policy 05](05-sdlc-delivery-lifecycle.md)); CodeGraph-first research, every claim cited `file:line`; run the clarification gate with `interview-me` and `multica-brainstorming`; author the five-section business spec (`sdlc-spec-template`, [Policy 06](06-requirements-and-spec.md)); drive the spec-gate loop; create, **stage**, and promote `[S#]`/`[P#-n]` children for approved specs, with the spec frozen at `Spec revision: <n>`; hand confirmed bugs and docs changes to `dev-team` as the ROOT ticket; close spec and CI/CD main tickets with the final summary.
+- Responsibilities: classify the workflow (A/B/C/D/E per [Policy 05](05-sdlc-delivery-lifecycle.md)); CodeGraph-first research, every claim cited `file:line`; run the clarification gate with `interview-me` and `multica-brainstorming`; author the six-section business spec (`sdlc-spec-template`, [Policy 06](06-requirements-and-spec.md)); drive the spec-gate loop; create, **stage**, and promote `[S#]`/`[P#-n]` children for approved specs, with the spec frozen at `Spec revision: <n>`; hand confirmed bugs and docs changes to `dev-team` as the ROOT ticket; close spec and CI/CD main tickets with the final summary.
 - Never: commit/branch/push or open PRs; delegate without a passed gate (spec APPROVED, or ≥90% bug confidence / requester confirmation); spawn new root tickets from review follow-ups; flip the main ticket to `in_review` — its terminals are `done`/`cancelled`; adopt a docs or CI/CD ticket the requester assigned straight to `dev-team` or `devops` (both direct doors are supported).
 
 **spec-reviewer — Spec Review Gate**

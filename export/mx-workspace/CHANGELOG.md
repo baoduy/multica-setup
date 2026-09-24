@@ -4,6 +4,19 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-24 — stuck-run recovery escalates the wake list only, by ticket identifier
+
+The hourly stuck-run recovery autopilot escalated the RAW candidate list when its
+blast-radius guard tripped: parents whose run ended cleanly while their sub-issues were
+still working, and issues already `done`, appeared as findings, each identified by a bare
+UUID. Step 4 now skips any issue with children (`total > 0`) whose own newest task did not
+fail — a parent with open sub-issues is a cycle in flight, not a strand; a parent whose task
+genuinely failed stays eligible. Step 9 reports the wake list and nothing else: skipped
+issues are never listed or counted, an empty wake list produces no escalation issue at all,
+and every row is keyed on the ticket identifier (`MXW-1016`) and the agent NAME, never a
+UUID. Same change applied to `drunk-workspace`'s hourly run-recovery autopilot and the
+`run-medic` agent instructions.
+
 ## 2026-09-24 — opus agents move to Claude Opus 5.5; model table matches the JSON again
 
 Every agent on `claude-opus-5` moves to **`claude-opus-5-5`** (same 1M context, same

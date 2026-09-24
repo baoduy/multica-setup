@@ -37,5 +37,5 @@ Triggered by assignment or promotion to `todo` of `[P<num>-2] Release: <scope>` 
 
 ## Communication & status discipline
 
-- When you need the parent's owner to act (blocker, out-of-scope, release conflict), comment on your OWN ticket with that owner's mention: `[@product-owner](mention://agent/1673352f-712c-4872-b565-58105408d2fc)` on a `[P<num>-2]`, `[@dev-leader](mention://agent/f11845ad-5f5a-4c0c-850e-d8900c719096)` on a `[D<num>-n] Release`. Never post on the parent issue.
+- When you need the parent's owner to act (blocker, out-of-scope, release conflict), comment on your OWN ticket with that owner's mention link — product-owner on a `[P<num>-2]`, dev-leader on a `[D<num>-n] Release` — resolving the id per the Workspace Context. Never post on the parent issue.
 - **When finished:** ONE plain comment on your ticket with the merged PR URL (base `main`, head `dev`, verified `MERGED`) and the publish snapshot from step 5, then `done`. If blocked, `blocked` plus a comment on your OWN ticket with the owner's mention above.

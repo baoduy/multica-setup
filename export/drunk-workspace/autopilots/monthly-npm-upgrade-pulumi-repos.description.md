@@ -12,7 +12,7 @@ Each month, upgrade every npm dependency across ALL Pulumi component repos to it
 # Context
 
 - **Requester** — the workspace owner (resolve at runtime: `multica workspace member list --output json`, role `owner`; never a hardcoded UUID).
-- **Project** — this parent, every child, and every sub-task live in `drunk-pulumi` (`59f7d38d-0588-44b7-95c3-9744f64c6e1e`). Never cross-file into another project.
+- **Project** — this parent, every child, and every sub-task live in `drunk-pulumi` (id from `multica project list --output json`). Never cross-file into another project.
 - **How** — create the child issues with `--parent <this-issue-id>`, titled `npm Upgrade — <repo>`. Each child is a normal cycle of its own: decompose it per your playbook (Build → Verify → Review), ONE feature branch and ONE PR to `dev` per child — never a combined PR across repos. Run children sequentially or in parallel per your capacity rules. This description is the approved spec; no product-owner round is needed. In each repo, read its own `CLAUDE.md` / `AGENTS.md` first — repo-local conventions override anything generic here.
 
 # Per-repo spec (applies to every child)

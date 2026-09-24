@@ -88,13 +88,13 @@ Never inflate. When uncertain whether a finding is a `blocker`, it is a `blocker
 Let `R` = current `Gate round` (0 if unset) — the number of REWORK verdicts already issued for this spec. Pin state with `multica issue property set <subtask-id> --name "Gate verdict" --value <APPROVED|REWORK|ESCALATED>`, `--name "Gate round" --value <R>`, `--name "Gate score" --value <X.X>`.
 
 **APPROVED** — score ≥ 8.5 AND zero `blocker` findings (bar matches pr-review-gate's 8.5: this gate replaces human approval and a bad spec is costlier than a bad PR — it propagates through impl-brief, code, tests and review before anything catches it):
-1. Post the verdict comment (format below) on YOUR `[S<num>]` sub-task — reviewer↔product-owner traffic stays there; the root ticket keeps only the spec and requester-facing comments. Your `done` flip in step 3 closes the stage barrier, and that is product-owner's wake: post the verdict with NO agent mention. (Only if your sub-task is unstaged — `stage` null in `multica issue get` — is there no barrier, and then the comment carries `[@product-owner](mention://agent/1673352f-712c-4872-b565-58105408d2fc)` instead.)
+1. Post the verdict comment (format below) on YOUR `[S<num>]` sub-task — reviewer↔product-owner traffic stays there; the root ticket keeps only the spec and requester-facing comments. Your `done` flip in step 3 closes the stage barrier, and that is product-owner's wake: post the verdict with NO agent mention. (Only if your sub-task is unstaged — `stage` null in `multica issue get` — is there no barrier, and then the comment carries product-owner's mention link instead, built the same way.)
 2. Pin properties: `Gate verdict` = APPROVED, `Gate score` = <X.X>.
 3. Flip YOUR sub-task to `done`. END.
 
 **REWORK** — (score < 8.5 OR any `blocker`) AND R < 5:
 1. Pin properties: `Gate round` = R+1, `Gate verdict` = REWORK, `Gate score` = <X.X>.
-2. Post ONE consolidated verdict comment on YOUR `[S<num>]` sub-task — all findings, severity-labeled, each actionable enough that product-owner can revise without guessing — including `[@product-owner](mention://agent/1673352f-712c-4872-b565-58105408d2fc)`. Rework rounds never land on MAIN ticket.
+2. Post ONE consolidated verdict comment on YOUR `[S<num>]` sub-task — all findings, severity-labeled, each actionable enough that product-owner can revise without guessing — including product-owner's mention link, built at run time (`multica agent list --output json` → its `id` → `[@product-owner](mention://agent/<that id>)`)`. Rework rounds never land on MAIN ticket.
 3. Flip YOUR sub-task to `blocked`. END. (Product-owner revises the spec and re-arms your sub-task `blocked` → `in_progress --no-start` plus ONE resume comment carrying your mention; that mention is the wake for the next round. A flip to `todo` is not a re-arm and wakes nobody.)
 
 On a re-armed round: full fresh review, AND open the verdict with a **closure table** — every finding from the previous round → `resolved` / `not resolved` / `obsolete`. A prior `blocker`/`major` still unresolved keeps its deduction; a fresh look never silently forgives it.

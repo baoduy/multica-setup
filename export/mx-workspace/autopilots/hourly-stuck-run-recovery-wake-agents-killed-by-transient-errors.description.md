@@ -31,7 +31,11 @@ Every hour, find issues sitting in `todo` or `in_progress` whose agent run died 
    - NO other task in the combined list has the same `issue_id` and a later `created_at` — any agent counts, because a different agent picking the issue up means it recovered
    - NO task on that `issue_id` is currently `running` or `pending` (a mention at an agent that already has a pending task on the issue is silently dropped by the backend, so waking one is a wasted no-op)
 
-4. **Keep only actively-open issues.** For each stranded issue: `multica issue get <issue-id> --output json`. An issue is eligible ONLY when its status is `todo` or `in_progress`. Skip every other status and record the reason in the tally:
+4. **Keep only actively-open LEAF issues.** For each stranded issue: `multica issue get <issue-id> --output json`, and `multica issue children <issue-id> --output json`.
+
+   **An issue whose own newest task did NOT fail is never stranded when it has children (`total > 0`) — skip it silently.** A parent, phase or other middle ticket is legitimately `todo`/`in_progress` for as long as its sub-issues work; its run ended without an error on purpose. A parent with open sub-issues is a cycle in flight: no wake, no count toward the blast-radius guard, no line in any report. (A parent whose own task genuinely `failed` is still a crashed run and stays eligible.)
+
+   Of what remains, an issue is eligible ONLY when its status is `todo` or `in_progress`. Skip every other status and record the reason in the tally:
    - `done` / `cancelled` — the work landed or was dropped; the crash no longer matters.
    - `in_review` — the deliverable is awaiting a human; waking an agent would talk over the reviewer.
    - `blocked` — reviving the CRASHED run will not unblock it. But a `blocked` issue whose blocker thread already has a newer reply is waiting on ACTUATION, not on an answer — Pass B below owns that case; this crash sweep still skips it.
@@ -66,7 +70,22 @@ Every hour, find issues sitting in `todo` or `in_progress` whose agent run died 
 
 8. **Report, don't retry, the rest.** For each PERMANENT failure and each issue that hit the wake cap, post ONE comment on that issue mentioning the workspace owner `[@<owner-name>](mention://member/<owner-user_id>)` (resolved at runtime, per Audience — never a hardcoded UUID), naming the failed agent, quoting the error, and stating plainly that it was NOT retried and why. Do NOT mention the agent in these comments — that would wake it straight back into the same crash. Attach these as a reply under an existing root and unsubscribe afterwards, exactly as step 7 requires. Issues skipped at step 4 on status grounds get no comment at all.
 
-9. **Escalate only when a human is actually needed.** If the blast-radius guard tripped, or a CLI step failed in a way that left the sweep partial, create ONE issue: `multica issue create --title "Stuck-run recovery needs attention (<UTC date>)" --description-file ./escalation.md --assignee-id <owner-user_id> --priority high --project e301fbc6-2ee9-48bd-8587-d5626b6176f2` (`<owner-user_id>` = workspace owner resolved at runtime, per Audience — never a hardcoded UUID). The description carries the full stranded list with each issue's status and error, the count that tripped the guard, and exactly which steps you could not complete. This is the ONLY circumstance in which this autopilot creates an issue.
+9. **Escalate only when a human is actually needed.** Escalate only when the blast-radius guard tripped, or when a CLI step failed in a way that left the sweep partial.
+
+   **The escalation reports the wake list and nothing else.** Every issue it names is one that qualified for a wake (or, for Pass B, for a nudge): it survived the step-4 leaf/status filter and the step-5 transient classification. Issues that were skipped — parents with children, `done`/`cancelled`/`in_review`/`blocked`/`backlog` issues, permanent errors, issues with a task already in flight — are expected outcomes, not findings; they are never listed, never counted, never explained. If nothing qualified, there is nothing to escalate: create no issue at all and end the run silently, however many raw candidates the sweep started from.
+
+   Then create ONE issue: `multica issue create --title "Stuck-run recovery needs attention (<UTC date>)" --description-file ./escalation.md --assignee-id <owner-user_id> --priority high --project e301fbc6-2ee9-48bd-8587-d5626b6176f2` (`<owner-user_id>` = workspace owner resolved at runtime, per Audience — never a hardcoded UUID). The description carries exactly three things:
+
+   - one line naming the reason — the guard tripping with its count, or which step left the sweep partial;
+   - one table, one row per qualifying issue. **Identify each issue by its ticket identifier (`MXW-1016`), never by its UUID** — `multica issue get` returns it as `identifier`, and step 4 already fetched every one of them. Name the agent by its `name` from step 1, never its id:
+
+     | Ticket | Title | Agent | Failed at (UTC) | Wakes | Error |
+     |---|---|---|---|---|---|
+     | MXW-1016 | Wire the accounts screen | dev-backend | 2026-09-23 23:09 | 1 | first 120 chars, single line |
+
+   - exactly which steps you could not complete.
+
+   This is the ONLY circumstance in which this autopilot creates an issue.
 
 10. **Stay silent otherwise.** If the sweep found nothing stranded, post nothing, create nothing, and end the run. A quiet hour must leave no trace — never post a "nothing to do" comment anywhere. Report a partial sweep as partial, never as clean.
 

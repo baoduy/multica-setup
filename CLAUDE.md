@@ -39,7 +39,7 @@ the workspace context implement it. Two rules follow from that:
 - **Never leave the setup out of sync with the policy.** Every accepted change
   lands everywhere it is quoted in the same pass: the policy statement, the
   skills, agents, squads and workspace context that restate it, the changelog
-  (drunk: `docs/policies/00-policies-index.md`; mx: `CHANGELOG.md`), and the
+  (drunk: `docs/policies/CHANGELOG.md`; mx: `CHANGELOG.md`), and the
   live workspace. Grep the whole bundle for the old wording or value before
   declaring it done, and after pushing live, read each updated resource back
   and diff it against the local file. Live and bundle drift is a defect, not a

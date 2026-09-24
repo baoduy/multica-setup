@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-02 |
-| **Version** | 1.2 |
+| **Version** | 1.3 |
 | **Status** | Active |
 | **Owner** | dev-backend |
 | **Applies to** | Every code or behaviour change in a drunk repo, across every stack |
@@ -13,7 +13,7 @@
 > **Authority.** This policy is the source of truth for testing and quality across every
 > drunk stack. `test-driven-development` and the per-stack `*-TEST-*` rules **implement** it;
 > `pr-review-gate`'s testing dimension derives its bar from it. Amend this policy first, then
-> cascade — see [change control](../00-policies-index.md#change-control).
+> cascade — see [change control](00-policies-index.md#change-control).
 
 ## Testing at a glance
 
@@ -93,6 +93,7 @@ statements but follows the runner and structure conventions below.
    cycle reaches **≥80%**, measured only over files the feature branch changed
    (`git diff --name-only origin/dev...origin/<feature-branch>`, excluding test files) — never
    a repo-wide figure.
+6a. **Mutation report per touched class — coverage's honesty check.** Coverage says a line ran; only mutation says an assertion would have caught it changing. Every Build reports a mutation run scoped to the classes it touched (`dotnet stryker` on .NET, `npx stryker run` on TypeScript) with **every survivor dispositioned** — `killed — added <test>` / `equivalent` / `accepted — <why>`. Tool genuinely unavailable → the manual equivalent: invert each guard the change added, run, confirm RED, restore, and say in the report that the tool was unavailable. A Build reported `done` without a mutation report and its dispositions is incomplete the same way a missing coverage row is; dev-leader sends it back and never promotes past it.
 7. **Never inflate coverage.** No trivial tests on getters or framework code. If 80% on a
    touched class is genuinely unreachable, flag the untestable paths to dev-leader instead of
    padding; if code is untestable as written, propose the smallest design change rather than
@@ -135,6 +136,7 @@ statements but follows the runner and structure conventions below.
   the fix and passes after.
 - Full suite green — pre-existing tests plus new ones — zero errors, zero warnings.
 - ≥80% combined coverage on every touched class/module, reported per file, never repo-wide.
+- A mutation report per touched class, every survivor dispositioned (statement 6a).
 - No skipped/disabled test introduced to make the suite pass.
 - Clean `dotnet pack` / `npm pack` (or the Python package's equivalent build check).
 

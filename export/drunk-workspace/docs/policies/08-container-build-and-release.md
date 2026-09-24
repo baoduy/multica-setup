@@ -14,7 +14,7 @@
 > releases. `docker-image-standards` and `helm-k8s-conventions` **implement** it; `devops`
 > and `release-manager` act inside the limits it sets. Amend this policy first, then cascade
 > the change into the skills and the CI workflows — see
-> [change control](../00-policies-index.md#change-control).
+> [change control](00-policies-index.md#change-control).
 
 ## Release model at a glance
 

@@ -8,23 +8,6 @@
     "options": []
   },
   {
-    "name": "zz-tmp-probe",
-    "type": "select",
-    "description": "",
-    "icon": "",
-    "archived": true,
-    "options": [
-      {
-        "name": "A",
-        "color": "#ef4444"
-      },
-      {
-        "name": "B",
-        "color": "#6b7280"
-      }
-    ]
-  },
-  {
     "name": "Gate verdict",
     "type": "select",
     "description": "Review gate outcome pinned by spec-reviewer / pr-reviewer on their own review sub-task",

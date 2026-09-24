@@ -2,6 +2,23 @@
 
 The one-page contract every pipeline agent shares: actors, flows, stage ownership, branch strategy, escalation caps. Platform-wide constants (statuses, wakes, titles, `Owner`, git rules) are in the Workspace Context you already carry and are not repeated here. Role procedure lives in role skills — `sdlc-flow-po-orchestration` (product-owner), `sdlc-flow-squad-leader-playbook` (dev-leader), `spec-review-gate`, `pr-review-gate`; if this file and a role skill disagree, the role skill wins for its owner and the mismatch is reported to the workspace owner.
 
+## Constants
+
+The numbers the whole factory quotes. Change one here and it changes everywhere it is written out — grep the bundle before calling it done.
+
+| Constant | Value | Owned by |
+|---|---|---|
+| spec gate approve bar | **8.5** (zero `blocker` findings) | Policy 04 §6 · `spec-review-gate` |
+| PR gate approve bar | **8.5** (zero `blocking` findings, all merge preconditions) | Policy 04 §5 · `pr-review-gate/references/scoring-rubric.md` |
+| deduction math, both gates | start 10 · blocker/blocking −4 · major/important −2 · minor/nit −0.5 (max −1.5) · floor 1 · caps after the weighted sum | `scoring-rubric.md` (the full cap table lives there) |
+| coverage bar | **≥80%** per class/module the cycle touched, on the feature branch only | Policy 02 §6 |
+| rework rounds | spec **5**, PR **2** (+1 non-budgeted polish round) | Policy 04 §6, §11b |
+| bug auto-delegate | confidence **≥90%**, else the requester confirms | Policy 07 §3 |
+| squad fix attempts | **2** on one root cause, then escalate | Policy 05 §9 |
+| sweep findings | **≤10** new issues per repo per run | Policy 04 §19 |
+| run-medic wakes | **3** per issue, then its human owner | Policy 09, `run-medic` charter |
+| brief size | 6–8 KB, split the surface over 10 KB; leader plan comment under 2 KB | `sdlc-impl-brief`, leader playbook |
+
 ## Actors
 
 - **product-owner** — leader of product-team. Research, spec, orchestration of the ticket it is assigned. Read-only on code. A root ticket (no parent) it owns through release; a sub-issue (has a parent) it owns through development only — the parent's owner releases all its children together.

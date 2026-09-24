@@ -60,7 +60,7 @@ Any change to how the factory works starts at the policy layer:
   proposed change
         │
         ▼
-  1. AMEND THE POLICY  ── state the new rule/intent here; bump Version; note it in this index
+  1. AMEND THE POLICY  ── state the new rule/intent here; bump Version; add a CHANGELOG.md entry
         │
         ▼
   2. CASCADE TO SKILL(S)  ── update every skill the policy's "Related skills" row names
@@ -120,29 +120,8 @@ a policy gap — file it upward.
 
 ## Change log
 
-- 2026-09-22 (b) — Policy 05 v1.5: **every root main ticket title carries one type prefix** — `[Feature]` (new capability) · `[Enhance]` (change to behaviour that exists) · `[Bug]` · `[Question]` · `[CICD]` · `[Docs]` — matching its type label, which stays the source of truth (`[Feature]` and `[Enhance]` share the `feature` label; the prefix is the finer split the labels do not make). product-owner sets or corrects it at intake, in the same step it labels the root and posts the spec, with `--no-start` on the rename so the title update does not wake a second run of itself; where product-owner never touches the ticket, the first agent to pick it up sets it. Root-only: no child ever carries a type prefix, and `[S<num>]`/`[P<num>-n]`/`[D<num>-n]` keying is off the root's key NUMBER, so the rename changes no numbering (new statements 7a, 7b). Requesters and Mika still create with a plain title. Owner-approved. Cascaded to Policy 09 (Mika), `workspace.context.md`, `sdlc-flow-po-orchestration` (new step 2a), `sdlc-spec-template` (the spec's H1 stays unprefixed), and agents `mika`, `claude-ultra`, `default`.
-
-- 2026-09-22 — Policy 06 v2.5: the spec gains **§3a Contract changes**. A change that adds or alters a domain entity states every new or changed field with its type, length, required, unique/indexed, default and notes; a change that touches an endpoint states every one of them with HTTP verb, path, purpose and auth; §4 Scope names every repo touched, one per bullet. §3a is the one section where entity, field and endpoint names are allowed — class names, method signatures, file paths and `file:line` stay banned everywhere. Cause: the spec was business-only above the contract, so the data and API surface the whole team must agree on before code reached them only in the dev-leader's impl-brief, one layer too late to review. Owner-approved amendment to statements 2, 3, 6, 7 and 12 (new 5a, 7a). Cascaded to `sdlc-spec-template` (§3a template, section tests, quality bar), `spec-review-gate` (contract gates, Scope completeness, Completeness dimension — weights unchanged), `sdlc-impl-brief` (§3a binding, divergence goes back to product-owner), `sdlc-flow-po-orchestration` and `agents/product-owner.md`.
-
-- 2026-09-18 — Policy 06 v2.4 and Policy 09 v1.6: the clarification gate is run with `interview-me` and `multica-brainstorming` — the requester is interviewed one question at a time and the design is presented back before any spec work. Cause: both skills were attached to `product-owner` but named nowhere in its instructions or `sdlc-flow-po-orchestration`, and an agent follows its inline text, not its attached skill list (same failure mode as CodeGraph, 2026-09-17). Cascaded to `sdlc-flow-po-orchestration` (Clarification gate) and `agents/product-owner.md`.
-
-- 2026-09-17 (b) — Policy 08 v1.1 (new statement 12: the publish pipeline owns the release number; a normal release is a patch, a breaking change bumps the MINOR only with a `(MINOR)` commit-title marker, and the MAJOR number is frozen — no agent writes `(MAJOR)`, hand-edits a version literal, or creates a tag/release; an unasked-for major bump is a release defect to report, never to re-publish over: `VER-REL-001..003`), Policy 01 v1.1 and Policy 06 v2.3 (statement 12 and the invariant example no longer promise a SemVer major on a break). Cause: DKNet went v10.1.29 → v11.0.0 → v12.0.0 in one day across delivery cycles nobody scoped as a major release. Cascaded to `nodejs-typescript-standards` (TS-PUB-002), `pulumi-azure-iac-standards` (PULUMI-TEST-003, PULUMI-DEP-003), `helm-k8s-conventions` (HELM-DEL-002), `pr-review-gate` (dimension 1, blocking), `spec-review-gate`, `workspace.context.md`, and agents release-manager and devops.
-
-- 2026-09-17 — Policy 04 v1.5 (statement 2: the CodeGraph index is verified with `codegraph status`, never by the `.codegraph/` folder, and `init` runs in the foreground), Policy 09 v1.5 (dev-leader grounds every brief row in CodeGraph; dev-backend runs CodeGraph before its first grep or file read, with an EVIDENCE row). Cause, measured over 937 runs: dev-backend used CodeGraph in 1, docs-writer and dev-team in 0, pr-reviewer in 91 of 154 — agent text either checked the folder (a fresh checkout has it without an index) or said nothing. Cascaded to `codegraph`, `pr-review-gate`, `spec-review-gate`, `sdlc-flow-po-orchestration`, `sdlc-flow-squad-worker-playbook`, `sdlc-flow-squad-leader-playbook`, and agents dev-leader, dev-backend, docs-writer, pr-reviewer, spec-reviewer, arch-reviewer.
-
-- 2026-09-23 — Policy 09 v1.7: `run-medic` chartered as the eleventh factory agent — hourly recovery of agent runs killed by a transient infrastructure failure (API rate limit / overload, runtime offline, daemon restart), with an explicit carve-out from the member write rule and a hard cap of 3 wakes per issue counted on the new `Wake count` property, after which the issue is handed to its human owner. Cascaded to `agents/run-medic.*`, the `🔁 Hourly Run Recovery` autopilot, `properties/properties.json`, `workspace/workspace.context.md` and the README model table. Same pass corrected the issue-hygiene cadence from "nightly" to weekly (it runs Sunday and Monday 09:00 SGT) everywhere it was quoted, and realigned the bundle's autopilot `status` fields with the live workspace.
-
-- 2026-09-16 (c) — Policy 04 v1.4 (statement 3: a gate's own review sub-task is pipeline mode however it was woken, including a re-arm mention in any status; statement 10: a spec REWORK is re-armed by product-owner in two mandatory parts, `in_progress --no-start` + spec-reviewer's mention, never by a flip to `todo`), Policy 06 v2.2 (statement 11 carries the same re-arm mechanics and drops the retired `spec_review_round` metadata key for the `Gate round` property). DRK-1364 stalled twice on a `blocked`→`todo` re-arm that woke nobody — the second time until the owner asked for the round by hand. Cascaded to `sdlc-flow-po-orchestration` (two-part re-arm plus an end-of-turn actuation check), `spec-review-gate`, `product-team` briefing and `workspace.context.md`, which now says plainly that a ticket which has already run is never re-woken by its status.
-
-- 2026-09-16 (b) — Policy 03 v1.1 (statements 3b/3c: members never create or push a branch, no bare `git push`, a push is proved with `git ls-remote`). Workspace context also bans backgrounding a long command — a run cannot resume around an orphaned process. Cascaded to `workspace.context.md`, `sdlc-gitflow` and `sdlc-flow-squad-worker-playbook`.
-
-- 2026-09-16 — Policy 05 v1.4 (statement 1b: a ticket assigned to product-owner with a parent is a sub-issue — same gates, no `[P<num>-2]`, terminates at the verified `[P<num>-1]`; the parent's owner releases its children together). Cascaded to `sdlc-flow-po-orchestration`, `sdlc-flow-delivery-pipeline`, `squads/product-team.md` and `agents/product-owner.md`.
-
-- 2026-09-15 (b) — Policy 06 v2.1: plain-English writing rules for every human-facing document. Templates rewritten: `sdlc-spec-template` (Summary, sub-labels, bullets), `blocker-report` (fixed EVIDENCE keys, DEVIATIONS table, 25/40-line caps, root-cause shape), `sdlc-impl-brief` (Mode header, `Proof` column, scenario names instead of copied Gherkin, changelog instead of appended sections, 10 KB cap); marker legend, mode procedures and the standard done-list moved into `test-driven-development`; leader plan comment capped at 2 KB.
-
-- 2026-09-15 — Policy 05 v1.3 (bugs and docs handed to dev-team as the root ticket, phases for specs only, spec frozen at delegation, gate never parks, daily stall sweep), Policy 04 v1.3 (re-review always ends in a verdict, Workflow D CI exception, CI-first verification), Policy 07 v1.2, Policy 09 v1.4 (release-manager in dev-team for root cycles; Mika runs the stall sweep). Cascaded to `pr-review-gate`, `sdlc-flow-*`, `sdlc-gitflow`, `leader-gitops`, both squads, agents, and the `Daily Stall Sweep` autopilot.
-
-- 2026-09-14 — Policy 05 v1.2 (Workflow E direct door, gate properties, Workspace Context layer), Policy 04 v1.2 (gate state on properties, resolved-owner handoff), Policy 07 v1.1 (member-found defects filed to product-owner), Policy 09 v1.3 (statement 1b: leader-filed defects assigned to product-owner; Workspace Context; assistants' routing scope). Cascaded to `workspace/context.md`, the `sdlc-flow-*` skills (leader and product-owner playbooks split into core + `references/`), both gate skills, `bug-report`, both squad briefings and every agent instruction.
+Every amendment, newest first, with its cause and cascade list: [`CHANGELOG.md`](CHANGELOG.md).
+A policy change is not done until its entry is there.
 
 ## How policies relate to skills, agents and squads
 
@@ -152,8 +131,9 @@ a policy gap — file it upward.
 
 ## Reading order for a new drunk developer
 
-01 → 02 → 03 → 04 first (what you do every day), then 05 for the big picture, then 06–08 as
-they become relevant to your role.
+01 → 02 → 03 → 04 first (what you do every day), then 05 for the big picture, then 09 and 10
+(who owns what, and who the human owner of a ticket is), then 06–08 as they become relevant
+to your role.
 
 ## Document structure
 

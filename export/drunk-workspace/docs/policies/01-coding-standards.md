@@ -13,7 +13,7 @@
 > **Authority.** This policy is the source of truth for coding standards across every drunk
 > stack. The six skills above **implement** it, one per language/runtime; the review gates
 > derive their rule catalogue from it. Amend this policy first, then cascade the change into
-> the relevant skill(s) — see [change control](../00-policies-index.md#change-control). Where
+> the relevant skill(s) — see [change control](00-policies-index.md#change-control). Where
 > a skill and this policy diverge, the policy's intent wins and the skill is corrected.
 
 ## Standards at a glance

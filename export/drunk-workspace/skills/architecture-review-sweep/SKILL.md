@@ -23,9 +23,15 @@ Per `codegraph` skill: fresh checkout never has usable index — run `codegraph 
 
 ## 1. Scope file set
 
-Include all production `.cs`. Exclude:
-- every unit/BDD test project (`*.UnitTests`, `*.BDDTests`, `*Tests.csproj`)
-- `obj/`, `bin/`, `Migrations/`, `GeneratedDtos/`, `*.g.cs`, `*.Designer.cs`
+Production source for the repo's stack only. Exclude tests, build output, generated and vendored code:
+
+| Stack | Include | Exclude |
+|---|---|---|
+| .NET | `.cs` under the solution | test projects (`*.UnitTests`, `*.BDDTests`, `*Tests.csproj`), `obj/`, `bin/`, `Migrations/`, `GeneratedDtos/`, `*.g.cs`, `*.Designer.cs` |
+| TypeScript / Pulumi | `src/**/*.ts` | `node_modules/`, `bin/`, `*.d.ts`, `*.test.ts`, `*.spec.ts`, `*.ts.ignore`, sample files |
+| Python | `src/**/*.py` | `tests/`, `.venv/`, generated stubs |
+| Docker | `Dockerfile`(s), `.dockerignore`, compose files | — |
+| Helm | `Chart.yaml`, `values.yaml`, `templates/**` | `tests/` — read for coverage, never scanned for findings |
 
 Record counts in report — reviewers need to know what was and wasn't covered.
 

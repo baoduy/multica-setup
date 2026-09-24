@@ -5,7 +5,7 @@ Weekly issue hygiene (Sunday and Monday 09:00 SGT): propagate a terminal parent 
 # Context
 
 - **Audience** — the workspace owner (resolve at runtime: `multica workspace member list --output json`, entry with role `owner`; never a hardcoded UUID). The issue this run creates IS the audit record; the report comment is the deliverable and the only record of what was destroyed.
-- **Scope** — every issue in workspace `4539126d-0687-4993-8852-3554b7c5fb50`, all projects.
+- **Scope** — every issue in this workspace (the one the run is in), all projects.
 - **Constraints**
    - `multica issue list` CAPS AT 100 ROWS regardless of `--limit`. ALWAYS paginate with `--limit 100 --offset N` until a page returns fewer than 100 rows. The workspace has \~667 issues. Never trust a single unpaginated call. If the snapshot total is exactly 100, abort the whole run and report a pagination failure — do not delete anything from a partial snapshot.
    - Rule A rewrites ONLY open statuses: `todo`, `in_progress`, `in_review`, `blocked`, `backlog`. Never rewrite an issue already `done` or `cancelled`.

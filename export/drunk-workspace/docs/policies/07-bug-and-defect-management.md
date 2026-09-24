@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-07 |
-| **Version** | 1.2 |
+| **Version** | 1.3 |
 | **Status** | Active |
 | **Owner** | product-owner (intake, root-cause, confidence gate, triage) |
 | **Applies to** | Every reported bug, every architecture-sweep finding routed as a defect, every PR-gate REWORK finding, and every blocker escalation |
@@ -104,7 +104,6 @@ fix carries its proving test as part of the merge gate.
 
 - A bug needs a Workflow B spec only if the requester explicitly asks for one; the spec-review gate then applies as normal.
 - A pipeline/build-script root cause is always Workflow D — the ≥ 90% auto-delegate to dev-team never applies to it.
-- A `[P#-3]` phase created for a bug fix is typically a run-only re-verification cycle, not a fresh design phase.
 
 ## References
 

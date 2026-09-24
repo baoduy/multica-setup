@@ -22,6 +22,8 @@ The requester, the workspace owner, the spec gate, the dev-leader, and the imple
 
 Written into the root ticket description, in this order. Length follows the size of the requirement; a small change collapses §2 and §4 to one bullet each. Every section keeps its heading.
 
+Policy 06 and the gate cite three of these sections by their older names — §1 Why is **Goals**, §2 Today is **Current State**, §3 After the change is **Expected State**. Same sections; the headings below are the ones to write.
+
 ```markdown
 # <Plain title: what changes, for whom — no type prefix; the `[Feature]`/`[Enhance]`/… prefix belongs on the TICKET title, not this heading>
 
