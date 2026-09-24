@@ -1,6 +1,6 @@
 {
   "name": "dev-backend",
-  "model": "claude-sonnet-5",
+  "model": "claude-opus-5-5",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/ed38be16-b92f-48cc-9611-89bf09102d84/019fb5a7-352a-76a3-a25a-b7445b8ad6e1.png",
   "service_tier": "",

@@ -4,6 +4,13 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-24 — dev-backend moves to Claude Opus 5.5 (live)
+
+🔨 dev-backend moves from `claude-sonnet-5` to `claude-opus-5-5` (standard context tier,
+thinking stays `high`), on the owner's request. No policy touched. Cascaded to
+`agents/dev-backend.json`, README §6 (table and tier summary) and the `CLAUDE.md` role table.
+Same change in drunk-workspace.
+
 ## 2026-09-24 — `Retrigger on done` holds several issue keys (dev-team, qc-team, product-team; live)
 
 A fix whose `done` must re-trigger more than one blocked sibling had no way to say so: the

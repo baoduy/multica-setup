@@ -119,7 +119,7 @@ the agent JSONs** (it plans the token budget). Assign by role, cheapest tier tha
 | Role class | Model / thinking | Why |
 |---|---|---|
 | Judgment & orchestration (product-owner, spec-reviewer, dev-leader) | `claude` opus, `high`/`xhigh` | reasoning-heavy; correctness dominates cost. |
-| Implementation (dev-backend, qc-tester) | `claude` sonnet, `high`/`xhigh` | writes code/tests. |
+| Implementation (dev-backend, qc-tester) | `claude` opus (dev-backend) / sonnet (qc-tester), `high`/`xhigh` | writes code/tests. |
 | Mechanical git/ops (**release-manager**, qc-runner) | `claude` sonnet, `medium` | deterministic CLI steps, but the end-of-turn status flip is correctness-critical — a lighter model dropped it and stranded the pipeline. Squad git-flow (branch cut, cycle PR) is NOT a separate agent: the leaders run it inline via `leader-gitops`. |
 | Review gates (pr-reviewer, qc-leader) | `claude` sonnet, `high`/`medium` | scoped judgment over a diff. |
 

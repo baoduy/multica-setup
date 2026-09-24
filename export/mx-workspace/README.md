@@ -986,7 +986,7 @@ runs on **Claude Premium**. No agent bills per-token `openrouter/*`.
 | 🦊 product-owner   | claude-opus-5-5[1m] | high     | Claude Premium |
 | 🦉 spec-reviewer   | claude-opus-5-5[1m] | high     | Claude Premium |
 | 🐺 dev-leader      | claude-sonnet-5     | high     | Claude Premium |
-| 🔨 dev-backend     | claude-sonnet-5     | high     | Claude Premium |
+| 🔨 dev-backend     | claude-opus-5-5     | high     | Claude Premium |
 | 🐳 release-manager | claude-sonnet-5     | medium   | Claude Premium |
 | 🦅 pr-reviewer     | claude-sonnet-5     | high     | Claude Premium |
 | 🐝 qc-leader       | claude-sonnet-5     | high     | Claude Premium |
@@ -1019,7 +1019,7 @@ workhorses, the $0 free tier for off-pipeline utility runs:
 tier at `high`; 🐺 dev-leader orchestrates on Claude Sonnet (`high`) — squad
 triage/decompose/gate over diffs, not prose.
 - **Implementation** (🔨 dev-backend, 🐜 qc-tester) — code/test writers. dev-backend on Claude
-Sonnet (`high`), owning tests and code together; qc-tester on Claude Sonnet at `high`.
+Opus 5.5 standard tier (`high`), owning tests and code together; qc-tester on Claude Sonnet at `high`.
 - **Mechanical git/ops** (🐳 release-manager, 🐞 qc-runner) — Claude Sonnet at `medium`.
 Kept on a capable model (not a light one) because a lighter model dropped the
 end-of-turn sub-task status flip (`done`/`blocked`), stranding the pipeline; the flip is a
