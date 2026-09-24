@@ -72,7 +72,7 @@ Instruction discipline (learned conventions, keep them):
   the target is already `queued` or `running`; post ONE mention comment per turn.
 - **Members never flip their own sub-task out of `done`.** A stage barrier re-fires on every
   re-entry into `done`; only the LEADER re-triggers fix work, by flipping the sub-task
-  `in_progress --no-start` (setting `Retrigger on done` to the blocked gate's key) and then
+  `in_progress --no-start` (adding the blocked gate's key to `Retrigger on done`, comma-separated when there are several) and then
   posting the ONE mention. Members write only on their own ticket and mention only their
   leader — no member-to-member traffic.
 - Git boundaries are deliberate: only the squad leaders (`dev-leader`, `qc-leader`) cut

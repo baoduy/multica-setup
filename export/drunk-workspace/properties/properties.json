@@ -87,7 +87,7 @@
   {
     "name": "Retrigger on done",
     "type": "text",
-    "description": "Set by the squad leader on a sub-task it re-triggers for fix work (re-armed Build, or a Fix sub-task filed above a blocked gate). Value: the key of the blocked issue to flip in_progress and re-trigger once this one is done. Leader clears it after re-arming.",
+    "description": "Set by the squad leader on a sub-task it re-triggers for fix work (re-armed Build, or a Fix sub-task filed above a blocked gate). Value: the key of each blocked issue to flip in_progress and re-trigger once this one is done, comma-separated when there are several (DRK-1703,DRK-1704). Leader drops each key once that issue is re-armed and clears the property when none is left.",
     "icon": "flag",
     "archived": false,
     "options": []

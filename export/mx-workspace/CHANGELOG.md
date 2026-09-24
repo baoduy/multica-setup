@@ -4,6 +4,20 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-24 — `Retrigger on done` holds several issue keys (dev-team, qc-team, product-team; live)
+
+A fix whose `done` must re-trigger more than one blocked sibling had no way to say so: the
+property held one issue key (DRK-1696 in drunk-workspace hit it). The value is now one key or
+several, comma-separated (`MXW-1703,MXW-1704`). The leader appends a key to a sub-task that
+already carries one instead of overwriting it, re-arms each named issue once every child naming
+it is `done` (one re-arm per issue however many children name it), and drops each key as it is
+re-armed, unsetting the property when none is left. **MX-POL-04 v1.1**: the Fix carries
+`Retrigger on done` naming every gate to re-arm. Cascaded to `properties/properties.json`,
+`workspace.context.md`, `sdlc-flow-delivery-pipeline`, `sdlc-flow-squad-leader-playbook`
+(checklist item 1, re-trigger rule, review-fix steps 1–2, loop-back and resume),
+`sdlc-flow-squad-member-protocol`, `squads/product-team.md`, `CLAUDE.md` and `README.md`. Same
+change in drunk-workspace.
+
 ## 2026-09-24 — stuck-run recovery escalates the wake list only, by ticket identifier
 
 The hourly stuck-run recovery autopilot escalated the RAW candidate list when its

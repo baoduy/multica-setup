@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | MX-POL-04 |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Active |
 | **Owner** | pr-reviewer (code) · spec-reviewer (spec) · arch-reviewer (sweeps) |
 | **Applies to** | Every spec before implementation and every PR before merge |
@@ -116,7 +116,7 @@ Weighted average is 8.3, but the testing/coverage gap trips the **coverage-below
 ## Best practices for .NET developers (receiving a review)
 
 - Read the rule-id, fix under the same id; if you disagree, reply on the finding with evidence — don't silently ignore it.
-- REWORK re-enters at Build and **always re-runs Verify** before the gate is re-armed. Every hop is routed by the squad leader (gate → leader → implementer → leader → gate); a re-trigger flips the sub-task `in_progress --no-start` before the mention, and the Fix carries `Retrigger on done` naming the gate to re-arm.
+- REWORK re-enters at Build and **always re-runs Verify** before the gate is re-armed. Every hop is routed by the squad leader (gate → leader → implementer → leader → gate); a re-trigger flips the sub-task `in_progress --no-start` before the mention, and the Fix carries `Retrigger on done` naming every gate to re-arm (comma-separated keys when there are several).
 - A `DKNET-REPO-006` (redundant `UpdateAsync`) is delete-on-sight, not a discussion — check the read for `AsNoTracking()` and remove the call.
 - Keep PRs under ~3,000 changed lines; larger PRs are never auto-approved and get reviewed file-by-file with security-sensitive files first.
 
