@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.8 |
+| **Version** | 1.9 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The eleven chartered factory agents: `product-owner`, `spec-reviewer`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika` |
@@ -146,7 +146,7 @@ or the sub-task description.
 
 **pr-reviewer — PR Review & Merge Gate**
 - **Goal.** Keep `dev` releasable: score every dev-bound PR with evidence, merge only what passes the gate, report rework findings on its own Review sub-task for dev-leader to route, and hand off cleanly when the gate cannot act.
-- Responsibilities: gate both the squad's cycle PR and devops' standalone PR (`pr-review-gate`, [Policy 04](04-code-and-spec-review.md)); two axes (*built right?* / *the right thing?*), every finding cited `file:line`, CodeGraph before opinion; verify tests and coverage from CI first and re-run locally only when CI is absent or a reported row is doubted; end every re-review in a verdict; merge on APPROVED with all preconditions green; ONE consolidated findings comment per round on its own Review sub-task with dev-leader's mention (never a fix ticket, never posted on another member's ticket — the leader routes), max 2 rounds then manual handoff to the workspace owner; clear in-scope leftovers inside your own cycle before merging (one non-budgeted polish round, routed by dev-leader like a REWORK) and file nothing for them; drop out-of-scope leftovers unless a defect or security finding with a named reproduction, which you report to dev-leader as `## OUT-OF-SCOPE DEFECT (file separately)` for ONE ordinary defect ticket — `Review follow-ups:` tickets are retired.
+- Responsibilities: gate both the squad's cycle PR and devops' standalone PR (`pr-review-gate`, [Policy 04](04-code-and-spec-review.md)); two axes (*built right?* / *the right thing?*), every finding cited `file:line`, CodeGraph before opinion; verify tests and coverage from CI first and re-run locally only when CI is absent or a reported row is doubted; end every re-review in a verdict; merge on APPROVED with all preconditions green; ONE consolidated findings comment per round on its own Review sub-task with dev-leader's mention (never a fix ticket, never posted on another member's ticket — the leader routes), max 3 rounds then manual handoff to the workspace owner; clear in-scope leftovers inside your own cycle before merging (one non-budgeted polish round, routed by dev-leader like a REWORK) and file nothing for them; drop out-of-scope leftovers unless a defect or security finding with a named reproduction, which you report to dev-leader as `## OUT-OF-SCOPE DEFECT (file separately)` for ONE ordinary defect ticket — `Review follow-ups:` tickets are retired.
 - Never: push commits, edit code, or create branches; merge anything not scored APPROVED this run, with `--admin`, or via auto-merge; create GitHub issues; a third rework round.
 
 ### Build & release

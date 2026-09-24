@@ -60,10 +60,10 @@ Apply `references/scoring-rubric.md`: category scores → weighted average → h
 | --- | --- | --- |
 | **APPROVED** | score ≥ 8.5 AND every auto-merge precondition passes | PR: report comment + best-effort approve vote + `gh pr merge --merge`, verify state MERGED. Multica: score report (stating MERGED) + `done`. If merge command fails: MANUAL HANDOFF. |
 | **APPROVAL DEFERRED** | score ≥ 8.5 but a precondition fails | PR: report comment, NO vote, NO merge. Multica: MANUAL HANDOFF — reassign your review sub-task to the resolved owner (`references/multica-flow.md`, Manual handoff) naming the failed precondition; report on your review sub-task with the leader's mention. |
-| **REWORK** | score < 8.5, or any `blocking` finding, AND `Gate round` < 2 | PR: report comment + `gh pr review --request-changes` (comment-only if self-authored). Multica: NO fix ticket, nothing posted on any other member's ticket — ONE consolidated findings comment on your OWN sub-task, grouped per implementer (dev-backend for code/test/coverage, docs-writer for docs), ending with dev-leader's mention; own sub-task `blocked`, `Gate round` +1. The leader routes to the implementers and re-arms you (`in_progress` + your mention) when they are done → re-review in full, once. |
-| **ESCALATED** | score < 8.5 or any `blocking` finding remains, AND `Gate round` = 2 | No third round. MANUAL HANDOFF to the resolved owner with the per-round history. |
+| **REWORK** | score < 8.5, or any `blocking` finding, AND `Gate round` < 3 | PR: report comment + `gh pr review --request-changes` (comment-only if self-authored). Multica: NO fix ticket, nothing posted on any other member's ticket — ONE consolidated findings comment on your OWN sub-task, grouped per implementer (dev-backend for code/test/coverage, docs-writer for docs), ending with dev-leader's mention; own sub-task `blocked`, `Gate round` +1. The leader routes to the implementers and re-arms you (`in_progress` + your mention) when they are done → re-review in full, once. |
+| **ESCALATED** | score < 8.5 or any `blocking` finding remains, AND `Gate round` = 3 | No fourth round. MANUAL HANDOFF to the resolved owner with the per-round history. |
 
-**Every re-review ends in a verdict from this table.** The round cap limits how many REWORK verdicts you may issue, never whether you may re-review: a fix that comes back after round 2 is scored and ends APPROVED (merge), DEFERRED, or ESCALATED. "Provisional score, gate stays blocked, no verdict" is not an outcome — a run that ends without a row from this table has stalled the cycle. When findings went to two implementers and only one has reported, end the run with no comment and no status change; the other's mention will wake you.
+**Every re-review ends in a verdict from this table.** The round cap limits how many REWORK verdicts you may issue, never whether you may re-review: a fix that comes back after round 3 is scored and ends APPROVED (merge), DEFERRED, or ESCALATED. "Provisional score, gate stays blocked, no verdict" is not an outcome — a run that ends without a row from this table has stalled the cycle. When findings went to two implementers and only one has reported, end the run with no comment and no status change; the other's mention will wake you.
 
 **Leftover findings — in-scope stays in the cycle.** Classify every finding by SCOPE before you decide where it goes, and never by "did this PR introduce it". **In-scope** = its `file:line` sits in a file this cycle's diff touched, or in a code path the diff newly reaches, or is a missing fact for behaviour the diff added or changed. Pre-existing age is irrelevant: the cycle touched it, the cycle owns it.
 
@@ -83,7 +83,7 @@ Apply `references/scoring-rubric.md`: category scores → weighted average → h
 ## Config (`.pr-review.json` at repo root, optional)
 
 ```json
-{ "approveBar": 8.5, "coverageThresholdPct": 80, "maxReworkRounds": 2 }
+{ "approveBar": 8.5, "coverageThresholdPct": 80, "maxReworkRounds": 3 }
 ```
 
 ## Output contract

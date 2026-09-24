@@ -260,7 +260,7 @@ full cycle): leader cuts the branch inline → `D-1 UPDATE 🔨` → leader open
 `D-2 REVIEW 🦅` — no Verify stage, because there is no test surface to verify. The 🦅 gate
 still scores and merges (its coverage precondition is satisfied vacuously on a
 no-coverable-lines diff); REWORK loops a fix to 🔨 via the leader and re-arms the Review stage directly,
-same 2-round cap. The moment a change touches code or a config value that existing tests
+same 3-round cap. The moment a change touches code or a config value that existing tests
 assert, it is the full cycle.
 
 ### 🐸 qc-team — the SANDBOX BDD integration suite
@@ -375,9 +375,9 @@ big picture.*
   │   │   ├── [D#-2] build  🔨   implement against the frozen scenarios ─▶ green · ≥ 80% · mutation report · drift check empty
   │   │   ├── (🐺 opens the ONE PR inline · feature ─▶ dev, never main)
   │   │   └── [D#-3] review 🦅   PR-state guard first, then AT drift + score 1–10
-  │   ├── loops     rework, max 2 rounds
+  │   ├── loops     rework, max 3 rounds
   │   │   ├── ⟲ AT rejected / wrong ─▶ re-arm [D#-1] ─▶ 🔨 (never edited in build)
-  │   │   └── ⟲ [D#-3] rework    ─▶ ONE Fix ─▶ 🔨   ⛔ 2 rounds ─▶ 👤 owner
+  │   │   └── ⟲ [D#-3] rework    ─▶ ONE Fix ─▶ 🔨   ⛔ 3 rounds ─▶ 👤 owner
   │   ├── done      ✅ 🦅 merges into dev · leftovers ─▶ ONE follow-ups ─▶ 🦊
   │   └── ═══ barrier · wakes 🦊 — verifies the merged PR + review score ═══
   │
@@ -400,7 +400,7 @@ big picture.*
   │   │   ├── [T#-1] test   🐜   write + run against SANDBOX
   │   │   ├── [T#-2] verify 🐞   review scenarios + impacted-scope execution
   │   │   ├── (🐝 opens the ONE PR inline · feature ─▶ dev)
-  │   │   └── [T#-3] review 🦅   same gate as dev · ⛔ 2 rounds ─▶ 👤
+  │   │   └── [T#-3] review 🦅   same gate as dev · ⛔ 3 rounds ─▶ 👤
   │   ├── route B   RUN-ONLY — existing suites already cover it
   │   │   └── [T#-1] run    🐞   the suites against SANDBOX · no branch, no PR
   │   ├── defects   🐝 files ONE consolidated, deduped bug ─▶ 🦊 (todo)
@@ -766,7 +766,7 @@ Happy path: a feature touches humans at #1, #2, #5 only; a bug at #1 (and #2 whe
 | --- | ---------------------- | -------- | ------------------------------------------------------------------------------- |
 | 9   | Bug-fix confirmation   | 👤 gate  | &lt;90% confidence — may be by-design / config / user error → 👤 confirms first |
 | 10  | Spec gate escalation   | 👤 valve | &gt;5 rework loops → requester manual review                                    |
-| 11  | PR gate escalation     | 👤 valve | 2 rework rounds / deferred / failed merge → workspace owner                     |
+| 11  | PR gate escalation     | 👤 valve | 3 rework rounds / deferred / failed merge → workspace owner                     |
 | 12  | Squad stuck escalation | 👤 valve | 2 failed fix attempts on same root cause → owner/🦊                             |
 
 
@@ -893,7 +893,7 @@ agent, was retired when the squad leaders took over its git-flow duties (see `CH
 | `bug-report`                      | the standard 3-section body (Scope (Git Repo, Module/Classes) / Root cause / Suggested owner) for every separately-filed bug/defect issue | 🦊 🐝 🏛️               |
 | `sdlc-spec-template`              | the 11-section business-spec contract the `[S#]` gate scores against                                                                     | 🦊 🦉                   |
 | `spec-review-gate`                | spec rubric, verdicts, 5-round cap, handoff                                                                                              | 🦉                      |
-| `pr-review-gate`                  | PR rubric, merge gate, 2-round cap, handoff, follow-ups filing                                                                           | 🦅                      |
+| `pr-review-gate`                  | PR rubric, merge gate, 3-round cap, handoff, follow-ups filing                                                                           | 🦅                      |
 | `bdd-report`                      | BDD test-report format on qc-team sub-issues                                                                                             | 🐝 🐜 🐞 🔍             |
 | `prd-release-runbook`             | 🌙 prd-release's SANDBOX→PRD promotion runbook (drift table, release PR, BDD gate) — see §3.3                                            | 🌙                      |
 

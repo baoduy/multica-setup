@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-05 |
-| **Version** | 1.6 |
+| **Version** | 1.7 |
 | **Status** | Active |
 | **Owner** | product-owner |
 | **Applies to** | Every ticket that flows through the drunk software factory |
@@ -108,7 +108,7 @@ The label stays the source of truth — `[Feature]` and `[Enhance]` both carry t
 
 8. **Escalation is an action, not a status.** A squad that escalates still owns its cycle: post ONE standalone `## BLOCKER` + `## OPTIONS` comment (per [`blocker-report`](../../skills/blocker-report/SKILL.md)), deliver it (agent mention for an agent hop, ticket reassignment at `todo` for a human hop), park the blocked child. Ending a turn with a stuck child and no dispatched comment is a flow defect.
 
-9. **Human touch points are capped:** business clarifications (always the requester, irreducible), spec review (5 rework rounds, then manual handoff), bug confidence (< 90% waits for requester confirmation), PR review (2 rework rounds, then manual handoff to the resolved owner), squad fix attempts (2 on the same root cause, then escalate). A defect a member finds outside its cycle is filed by its leader to `product-owner` at `todo` and enters the bug flow — the confidence gate is the only human hop it gets. The escalation human is the resolved owner per [Policy 10](10-ticket-ownership-and-owner-pickup.md).
+9. **Human touch points are capped:** business clarifications (always the requester, irreducible), spec review (5 rework rounds, then manual handoff), bug confidence (< 90% waits for requester confirmation), PR review (3 rework rounds, then manual handoff to the resolved owner), squad fix attempts (2 on the same root cause, then escalate). A defect a member finds outside its cycle is filed by its leader to `product-owner` at `todo` and enters the bug flow — the confidence gate is the only human hop it gets. The escalation human is the resolved owner per [Policy 10](10-ticket-ownership-and-owner-pickup.md).
 
 9a. **Gate state lives on custom properties.** Review gates pin `Gate verdict`, `Gate round` and `Gate score` on their own sub-task (never on issue metadata), so a parked gate is visible on the board and in `multica issue children --resolve-properties` without reading threads. Leaders and product-owner read those properties on every wake.
 

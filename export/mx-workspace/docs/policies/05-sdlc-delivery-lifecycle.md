@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | MX-POL-05 |
-| **Version** | 1.2 |
+| **Version** | 1.3 |
 | **Status** | Active |
 | **Owner** | product-owner (product-team) |
 | **Applies to** | Every ticket that flows through the mx software factory |
@@ -88,7 +88,7 @@ workspace owner (escalation valve).
 
 The label stays the source of truth — `[Feature]` and `[Enhance]` both carry the `feature` label, so the prefix is the finer split the labels do not make. A prefix that disagrees with the label is a defect: fix the pair, never argue it.
 8. **Escalation is an action, not a status.** A squad that escalates still owns its cycle: post ONE standalone `## BLOCKER` + `## OPTIONS` comment (per [`blocker-report`](../../skills/blocker-report/SKILL.md)), deliver it (agent mention for an agent hop, ticket reassignment at `todo` for a human hop), park the blocked child. Ending a turn with a stuck child and no dispatched comment is a flow defect.
-9. **Human touch points are capped** (see the table in the delivery pipeline): business clarifications (always the requester), spec review (5 rounds), bug confidence (< 90%), PR review (2 rounds), squad fix attempts (2 on the same root cause), SANDBOX deploy, helm merge. The human is the ROOT ticket creator when `creator_type=member`, else the workspace owner.
+9. **Human touch points are capped** (see the table in the delivery pipeline): business clarifications (always the requester), spec review (5 rounds), bug confidence (< 90%), PR review (3 rounds), squad fix attempts (2 on the same root cause), SANDBOX deploy, helm merge. The human is the ROOT ticket creator when `creator_type=member`, else the workspace owner.
 
 ## Definition of Done / compliance
 

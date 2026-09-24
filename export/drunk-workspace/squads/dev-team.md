@@ -29,12 +29,22 @@ There is no QC member: dev-backend writes the tests in their own stage and imple
 | ⚙ | branch cut, inline (`leader-gitops`) | you | `ls-remote` shows the branch; name + base SHA go into every implementing brief |
 | 1 | `[D<num>-1] Acceptance tests: <scope>` | dev-backend | `done` with RED SHA + per-scenario table; description = `sdlc-impl-brief` with `Mode: acceptance-tests` |
 | ⚙ | AT approval, inline | you | read the AT files against the spec (present, not softened, literal expected values); reject → re-arm stage 1 (`in_progress --no-start` + mention) naming the scenario; accept → append `at_sha` + AT paths to the Build description, promote stage 2 |
-| 2 | `[D<num>-2] Build: <scope>` (same brief, `Mode: build`, `at_sha` header row filled; + `[D<num>-2] Docs: <scope>` for docs-writer when the spec needs user-facing docs; disjoint files) | dev-backend (docs-writer) | `done` with green suite, per-touched-class coverage ≥80%, mutation report, clean pack, empty drift check, push verified by `ls-remote` |
+| 2 | `[D<num>-2] Build: <scope>` (same brief, `Mode: build`, `at_sha` header row filled; + `[D<num>-2] Docs: <scope>` for docs-writer only when the Docs test below passes; disjoint files) | dev-backend (docs-writer) | `done` with green suite, per-touched-class coverage ≥80%, mutation report, clean pack, empty drift check, push verified by `ls-remote` |
 | ⚙ | PR open, inline (`leader-gitops`) | you | every stage-2 sub-task `done` or dropped on the parent; head = feature branch, base = `dev`, `MERGEABLE`; URL posted on the parent |
 | 3 | `[D<num>-3] Review: <scope>` | pr-reviewer | created `backlog` at decomposition, promoted after the PR URL is posted; description = pointer table (repo · branch · `at_sha` + AT paths · Build sub-task(s) for rework · root ticket) |
 | 4 | `[D<num>-4] Release: <scope>` — root cycles only, when a consumer can observe the change | release-manager | created `backlog`, promoted after Review `done` and the PR merged; description: ONE PR `--base main --head dev`, merge, report, `done` |
 
 The ⚙ rows are never sub-tasks. Docs always shares Build's stage. Independent surfaces get their own Acceptance-tests + Build pair (all ATs at one stage, all Builds at the next), each Build with its own `at_sha`; Review follows the last Build; Release, when present, follows Review. A scope change from product-owner (a comment on the phase ticket, never a description edit) becomes ONE new Acceptance-tests + Build pair after the current Build; a finished Acceptance-tests stage is never re-armed for spec drift.
+
+## Docs test (decide at decomposition, state it in the plan)
+
+Add the Docs sub-task only when the cycle makes a major change a downstream reader relies on:
+
+- **Flow** — a workflow, lifecycle or sequence the docs walk a user through (setup, startup, request pipeline, release steps a consumer runs) changes shape.
+- **Biz flow** — a business rule or process the docs describe changes (accounts, currencies, permissions, scopes, the refusal contract).
+- **Library enhancement with downstream impact** — a new or changed public API, option, config key, header, endpoint or default a consumer sees, or any breaking change (it needs a `Breaking` changelog entry and a migration note, Policy 08).
+
+Also add it when the diff makes a statement in the repo's existing docs false: grep `README*` and `docs/` for each public symbol the brief changes. Everything else skips Docs — internal refactors, a bug fix that restores documented behaviour, performance, hardening that keeps the public contract, test-only changes, dependency bumps with no API change. In-code API comments ship with Build either way.
 
 ## Rework and gates
 

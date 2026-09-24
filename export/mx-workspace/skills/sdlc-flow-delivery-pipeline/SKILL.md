@@ -212,7 +212,7 @@ Therefore, in either chart repo: never commit to `dev` (inert), and never commit
 | Business clarifications | — | always requester (irreducible) |
 | Spec review (🦉) | 5 rework rounds | review sub-task → resolved owner |
 | Bug confidence (🦊) | < 90% confidence | requester confirms before delegation |
-| PR review (🦅) | per `pr-review-gate` (2 rework rounds / deferred / merge failed) | review sub-task → resolved owner |
+| PR review (🦅) | per `pr-review-gate` (3 rework rounds / deferred / merge failed) | review sub-task → resolved owner |
 | Squad fix attempts | 2 failed attempts on same root cause | phase-ticket cycle → product-owner mentioned on squad's OWN phase ticket; root-ticket cycle → resolved owner |
 | Anything outside squad control | — | same as above — a product decision, missing credentials, or a broken environment is never worth a second loop |
 | SANDBOX deploy (argoCD) | — | requester runs `[P#-2b]`; dev→main release + build is automated (release-manager + CI) |

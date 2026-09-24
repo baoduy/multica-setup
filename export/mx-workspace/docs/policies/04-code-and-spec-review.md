@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | MX-POL-04 |
-| **Version** | 1.1 |
+| **Version** | 1.2 |
 | **Status** | Active |
 | **Owner** | pr-reviewer (code) · spec-reviewer (spec) · arch-reviewer (sweeps) |
 | **Applies to** | Every spec before implementation and every PR before merge |
@@ -25,7 +25,7 @@
    │ 8.0–8.9 / trigger          │                │ ≥ 8.5 but precond fails     │
    │  → requester holds [S#]    │                │  → APPROVAL DEFERRED (human)│
    │ < 8.0 / blocker → REWORK   │                │ < 8.5 / blocking → REWORK   │
-   │  (max 5 rounds)            │                │  (max 2 rounds)             │
+   │  (max 5 rounds)            │                │  (max 3 rounds)             │
    └───────────────────────────┘                └────────────────────────────┘
         weights: coverage 30 · gherkin 25            phases: scope → security → correctness
         · clarity 20 · completeness 15 · sec 10      → testing → maintainability → slop → style
@@ -50,7 +50,7 @@ scheduled architecture sweeps that file backlog issues.
 1. **Evidence before opinion.** Every finding cites `file:line` from the actual diff (PR) or the spec section (spec). If you have not read the code, you may not have an opinion on it. Use CodeGraph to walk callers/callees beyond the diff before judging.
 2. **Score, then gate.** Both gates produce a 1–10 weighted score plus a verdict. **Hard caps override arithmetic** — a blocking finding never loses to a good average. **Every report renders the full scorecard table (below) — for a PASS and a BLOCKED verdict alike** (see statement 11 and the Scoring section).
 3. **Spec gate (`spec-reviewer`):** weighted rubric — Requirement coverage & traceability 30% · Gherkin quality 25% · Business clarity 20% · Completeness & unambiguity 15% · Security 10%. **APPROVED** at score **≥ 9.0** with zero blockers and no reviewer trigger → straight to implementation; **8.0–8.9** or a trigger → the requester holds the `[S#]` sub-task; **< 8.0** or a blocker → REWORK (max 5 rounds, then manual review). The gate confirms §4 Scope names real repos/services and that §2 Current State and §3 invariants hold against real code — a Scope naming something that does not exist, or a §2/§3 claim the code contradicts, is a **blocker**.
-4. **PR gate (`pr-reviewer`):** four-phase .NET 10 analysis — Scope (built right *and* the right thing; base MUST be `dev`; walk the impl-brief's Change set row-by-row) → Security first → Correctness → Testing → Maintainability → AI-slop → Style. **APPROVED** at score **≥ 8.5 AND** every auto-merge precondition passes → the gate merges into `dev` itself; **≥ 8.5 but a precondition fails** → APPROVAL DEFERRED, manual handoff; **< 8.5 or any blocking finding** → REWORK (max 2 rounds, then escalate).
+4. **PR gate (`pr-reviewer`):** four-phase .NET 10 analysis — Scope (built right *and* the right thing; base MUST be `dev`; walk the impl-brief's Change set row-by-row) → Security first → Correctness → Testing → Maintainability → AI-slop → Style. **APPROVED** at score **≥ 8.5 AND** every auto-merge precondition passes → the gate merges into `dev` itself; **≥ 8.5 but a precondition fails** → APPROVAL DEFERRED, manual handoff; **< 8.5 or any blocking finding** → REWORK (max 3 rounds, then escalate).
 5. **Merge only what you just gated.** The only permitted merge is `gh pr merge` on the PR scored APPROVED in this run. Never `--admin`/force, never enable auto-merge, never push commits, never merge a helm PR (merging a chart *is* the deploy).
 6. **Findings become Multica sub-issues, never GitHub issues — and only a squad LEADER files them.** A gate is a squad member: it reports its findings on its own gate sub-issue with the leader's mention, in filable shape, and creates nothing. The leader reviews, **consolidates** (findings from several members, or several rounds sharing a root cause, become ONE issue) and files ONE fix sub-issue, cited under the same `DKNET-*` / `NET10-*` rule-ids the developer fixes under. **A leader-filed issue raised from a report is created UNASSIGNED**: `Suggested owner:` names the intended author-role (dev-backend / qc-tester / devops), its `Owner` property is set, and it is handed to the resolved human owner by member mention — the owner reviews it and assigns it, and that assignment starts the work.
 7. **Scope decides where a finding goes; impact decides its severity.** A finding is **in-scope** when its `file:line` is in a file the cycle's diff touched, in a path the diff newly reaches, or a missing test for behaviour the diff changed — *who introduced it is irrelevant*. In-scope findings never leave the cycle and never become tickets: `blocking`/`important` take a rework round, `nit`-only leftovers take one polish round (same mechanics, does not spend the rework budget, at most one per cycle), and the PR is not merged until they are closed. Out-of-scope findings (a file the diff never touched) are recorded with `file:line`, never move the score, and are **dropped** unless they clear the worth-fixing bar — a defect (wrong behaviour, emitted source that does not compile, data exposure, crash, published-API break) or a security finding, with the observable failure AND its reproduction named — in which case the squad leader files ONE ordinary defect ticket (never `Review follow-ups:`), unassigned, `Owner` set, folded into any open ticket sharing the root cause. Severity never softens because a defect is pre-existing: "not introduced by this PR" decides whose cycle fixes it, not whether it is a defect. Remaining debt is the monthly sweep's, not filed ad hoc.
@@ -136,7 +136,7 @@ tickets, unless explicitly instructed.
 
 - A well-formed **BDD integration waiver** is never a spec-gate finding and costs zero points (see [Policy 02](02-testing-and-quality.md)) — only the requester decides it; the reviewer may add one non-scoring risk note on a money/identity path.
 - Self-authored PRs: GitHub rejects the vote; the gate falls back to plain comments and notes the skipped vote — the Multica report is the audit record and the merge still proceeds.
-- Round caps: spec 5, PR 2 — then the human takes over via a reassigned review sub-task.
+- Round caps: spec 5, PR 3 — then the human takes over via a reassigned review sub-task.
 
 ## References
 

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-07 |
-| **Version** | 1.3 |
+| **Version** | 1.4 |
 | **Status** | Active |
 | **Owner** | product-owner (intake, root-cause, confidence gate, triage) |
 | **Applies to** | Every reported bug, every architecture-sweep finding routed as a defect, every PR-gate REWORK finding, and every blocker escalation |
@@ -32,11 +32,11 @@
                           (no spec needed unless the requester asks for one)
 
    dev-team review loop:  pr-reviewer REWORK ─▶ ONE findings comment on dev-backend's Build sub-task
-                          (never one per finding, no ticket) ─▶ Prove-It test + fix ─▶ mention back ─▶ re-review ─▶ 2 rounds cap
+                          (never one per finding, no ticket) ─▶ Prove-It test + fix ─▶ mention back ─▶ re-review ─▶ 3 rounds cap
                                                                                         │
                                                                                         ▼
                                                                     pr-reviewer escalates to the
-                                                                    workspace owner instead of a 3rd round
+                                                                    workspace owner instead of a 4th round
 
    Escalate as an action: 2 failed attempts on the same root cause ─▶ ## BLOCKER + ## OPTIONS
 ```
@@ -70,7 +70,7 @@ format, not this policy's three-section shape.
 7. **Bug ticket = three sections, in order, per `bug-report`:** **Scope (Git Repo, Module/Classes)** (the most precise VERIFIED location — git repo + module/class/file, package, or endpoint; a guessed location is worse than none, since it routes the ticket to the wrong team), **Root cause** (the mechanism that makes it fail, never the symptom, + blast radius if left unfixed; `HYPOTHESIS:` unless proven), **Suggested owner** (one team + one line of reasoning derived from Scope and Root cause, routed by what must change — never by where the symptom surfaced). Evidence and a proposed fix are the owner's to produce during diagnosis, not the reporter's.
 8. **One issue per distinct root cause; de-duplicate before filing.** A review-round consolidation or an architecture-sweep triage batch files ONE ticket with a summary table (`defect · scope · severity · root cause · suggested owner`) followed by one three-section block per defect — never one ticket per symptom observed.
 9. **Title names the root cause, not the symptom** — "shared-state coupling breaks parallel test isolation", never "tests are flaky".
-10. **In-cycle defects are caught by dev-backend's own tests first, then by the PR gate — no separate QC loop.** dev-backend works test-first ([Policy 02](02-testing-and-quality.md) §1): a red test during Build is fixed in place, never filed as a ticket. A defect the PR gate finds is a `pr-review-gate` REWORK: ONE consolidated findings comment per round on pr-reviewer's own Review sub-task with dev-leader's mention — no fix ticket, never one comment per finding; dev-leader routes it to `dev-backend`'s Build sub-task (`in_progress` + mention); dev-backend reproduces each finding with a failing test before fixing (Prove-It), pushes, reports and flips `done`; dev-leader re-arms the Review sub-task, which sits `blocked` meanwhile. Members never write on each other's tickets. Capped at 2 rounds, then pr-reviewer hands off to the workspace owner instead of starting a third.
+10. **In-cycle defects are caught by dev-backend's own tests first, then by the PR gate — no separate QC loop.** dev-backend works test-first ([Policy 02](02-testing-and-quality.md) §1): a red test during Build is fixed in place, never filed as a ticket. A defect the PR gate finds is a `pr-review-gate` REWORK: ONE consolidated findings comment per round on pr-reviewer's own Review sub-task with dev-leader's mention — no fix ticket, never one comment per finding; dev-leader routes it to `dev-backend`'s Build sub-task (`in_progress` + mention); dev-backend reproduces each finding with a failing test before fixing (Prove-It), pushes, reports and flips `done`; dev-leader re-arms the Review sub-task, which sits `blocked` meanwhile. Members never write on each other's tickets. Capped at 3 rounds, then pr-reviewer hands off to the workspace owner instead of starting a fourth.
 11. **Escalate as an action, not a status.** After 2 failed attempts on the same root cause — or anything outside the acting agent's control (a product decision, missing credentials, a broken environment) — post ONE standalone comment opening with `## BLOCKER` immediately followed by `## OPTIONS`, per `blocker-report`: Blocked / Cause / Tried / Need / Owner, then 2–3 decidable options with exactly one marked `✅ Recommended`. The section is additive to delivery, not a substitute for it — an agent hop still needs `blocked` plus the receiving agent's mention; a human hop still needs the ticket reassigned to the human at `todo` (a member mention alone notifies but delivers nothing).
 12. **Completion is reported in the fixed shape, one comment per event:** `## RESULT` (what changed, one line) / `## EVIDENCE` (a table row per claim — build, tests, coverage, diff shape; a skipped check is a row saying so, never a missing row) / `## LEFT OPEN` (follow-ups, deviations, waivers, or `none`). A completion comment carrying more than one short paragraph of narrative below `LEFT OPEN` belongs in a blocker report or a spec discussion instead.
 13. **Defects re-enter delivery through Policy 05, not through a side channel.** A confirmed bug is handed to `dev-team` as the ROOT ticket (Policy 05 §2): dev-leader runs the cycle and its `Release` stage; there are no `[P<num>-n]` phases for a bug and no separate defect-delivery pipeline to maintain.
@@ -81,7 +81,7 @@ format, not this policy's three-section shape.
 
 - **product-owner** — runs Workflow A end to end: research, root-cause report, confidence gate, delegation decision, and (per Policy 05 Workflow C) ownership of the resulting main ticket through delivery.
 - **dev-backend** — catches its own defects test-first inside Build; fixes pr-reviewer's findings (routed by dev-leader) on its own Build sub-task with a reproduction test per finding, reports and flips `done`.
-- **pr-reviewer** — finds in-cycle defects at the PR gate; owns the consolidated findings comment and the re-review loop, capped at 2 rounds.
+- **pr-reviewer** — finds in-cycle defects at the PR gate; owns the consolidated findings comment and the re-review loop, capped at 3 rounds.
 - **dev-leader** — out of the rework loop; owns the cycle's git-flow and finalizes on Review `done`.
 - **devops** — owns any defect whose root cause lives in a pipeline or build script (Workflow D), regardless of confidence level.
 - **Requester / workspace owner** — confirms delegation below the 90% confidence bar; receives blocker escalations that are outside squad control.
@@ -97,7 +97,7 @@ format, not this policy's three-section shape.
 ## Enforcement
 
 `product-owner` runs Workflow A and applies the confidence gate on every bug/question main
-ticket. `pr-reviewer` enforces the 2-round cap on the review loop before handing off. The PR gate ([Policy 04](04-code-and-spec-review.md)) verifies that a delivered
+ticket. `pr-reviewer` enforces the 3-round cap on the review loop before handing off. The PR gate ([Policy 04](04-code-and-spec-review.md)) verifies that a delivered
 fix carries its proving test as part of the merge gate.
 
 ## Exceptions & waivers

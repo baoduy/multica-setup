@@ -4,6 +4,17 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-24 — PR review round cap raised from 2 to 3 (live)
+
+🦅 pr-reviewer may now issue 3 REWORK verdicts before ESCALATED → MANUAL HANDOFF (was 2), on
+the owner's request. The spec cap (5), the squad fix-attempt cap (2 on the same root cause) and
+the polish round are unchanged. Amended **Policy 04 v1.2** (diagram, statement 4, round-caps
+exception), **Policy 05 v1.3** (statement 9) and **Policy 09 v1.2** (pr-reviewer
+responsibilities). Cascaded to `pr-review-gate` (REWORK row, `maxReworkRounds: 3`,
+`references/multica-flow.md` cap check and `round N of 3`), `sdlc-flow-delivery-pipeline`
+(human touch-point table) and README (§ small-change path, dev/qc squad trees, escalation valve
+table, skill table). Same change in drunk-workspace.
+
 ## 2026-09-24 — dev-backend moves to Claude Opus 5.5 (live)
 
 🔨 dev-backend moves from `claude-sonnet-5` to `claude-opus-5-5` (standard context tier,
