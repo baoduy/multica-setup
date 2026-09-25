@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-07 |
-| **Version** | 1.4 |
+| **Version** | 1.5 |
 | **Status** | Active |
 | **Owner** | product-owner (intake, root-cause, confidence gate, triage) |
 | **Applies to** | Every reported bug, every architecture-sweep finding routed as a defect, every PR-gate REWORK finding, and every blocker escalation |
@@ -35,8 +35,8 @@
                           (never one per finding, no ticket) ─▶ Prove-It test + fix ─▶ mention back ─▶ re-review ─▶ 3 rounds cap
                                                                                         │
                                                                                         ▼
-                                                                    pr-reviewer escalates to the
-                                                                    workspace owner instead of a 4th round
+                                                                    pr-reviewer escalates to the resolved
+                                                                    owner with options instead of a 4th round
 
    Escalate as an action: 2 failed attempts on the same root cause ─▶ ## BLOCKER + ## OPTIONS
 ```

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-05 |
-| **Version** | 1.7 |
+| **Version** | 1.8 |
 | **Status** | Active |
 | **Owner** | product-owner |
 | **Applies to** | Every ticket that flows through the drunk software factory |
@@ -25,7 +25,7 @@
    [P#-1] DEV cycle: Branch▶Build(TDD, ≥80% cov)▶PR▶🦅 PR GATE (merges to dev)
         │
         ▼
-   [P#-2] release dev▶main (release-manager opens+merges) ─▶ CI publishes package/image
+   [P#-2] release dev▶main (release-manager opens+merges; a critical release waits for the owner) ─▶ CI publishes
         │
         ▼
    MAIN TICKET done — TERMINAL. No SANDBOX, no BDD stage, no deploy: publishing IS release.
@@ -108,13 +108,13 @@ The label stays the source of truth — `[Feature]` and `[Enhance]` both carry t
 
 8. **Escalation is an action, not a status.** A squad that escalates still owns its cycle: post ONE standalone `## BLOCKER` + `## OPTIONS` comment (per [`blocker-report`](../../skills/blocker-report/SKILL.md)), deliver it (agent mention for an agent hop, ticket reassignment at `todo` for a human hop), park the blocked child. Ending a turn with a stuck child and no dispatched comment is a flow defect.
 
-9. **Human touch points are capped:** business clarifications (always the requester, irreducible), spec review (5 rework rounds, then manual handoff), bug confidence (< 90% waits for requester confirmation), PR review (3 rework rounds, then manual handoff to the resolved owner), squad fix attempts (2 on the same root cause, then escalate). A defect a member finds outside its cycle is filed by its leader to `product-owner` at `todo` and enters the bug flow — the confidence gate is the only human hop it gets. The escalation human is the resolved owner per [Policy 10](10-ticket-ownership-and-owner-pickup.md).
+9. **Human touch points are capped:** business clarifications (always the requester, irreducible), spec review (5 rework rounds, then manual handoff), bug confidence (< 90% waits for requester confirmation), PR review (3 rework rounds, then the resolved owner picks an option and the pipeline waits — a PR that passes the score is never handed to a human, [Policy 04](04-code-and-spec-review.md) statements 5 and 11), critical release (a `dev`→`main` release carrying a `(MINOR)` commit or a `release-review` PR waits for the owner's reply, [Policy 08](08-container-build-and-release.md) statement 2a), squad fix attempts (2 on the same root cause, then escalate). A defect a member finds outside its cycle is filed by its leader to `product-owner` at `todo` and enters the bug flow — the confidence gate is the only human hop it gets. The escalation human is the resolved owner per [Policy 10](10-ticket-ownership-and-owner-pickup.md).
 
 9a. **Gate state lives on custom properties.** Review gates pin `Gate verdict`, `Gate round` and `Gate score` on their own sub-task (never on issue metadata), so a parked gate is visible on the board and in `multica issue children --resolve-properties` without reading threads. Leaders and product-owner read those properties on every wake.
 
 9b. **Platform-wide constants are stated once, in the Workspace Context.** Statuses and wake rules, ticket conventions, `Owner` resolution, git and PR rules, report shapes and bounded comment reads live in the workspace system prompt (`workspace/context.md`) and are cited, not restated, by skills and instructions. Rare-path procedure lives in a skill's `references/`, opened when the case occurs.
 
-9c. **A review gate never parks.** The rework cap limits REWORK verdicts, not re-reviews: every re-review ends APPROVED, DEFERRED, REWORK (rounds left) or ESCALATED. A run that leaves the gate `blocked` without a verdict is a flow defect. A Workflow D PR that changes the workflow producing a red check is merged on score (CI red by design), never handed to a human for the red alone.
+9c. **A review gate never parks.** The rework cap limits REWORK verdicts, not re-reviews: every re-review ends APPROVED, REWORK (rounds left) or ESCALATED. A run that leaves the gate `blocked` without a verdict is a flow defect. A Workflow D PR that changes the workflow producing a red check is merged on score (CI red by design), never handed to a human for the red alone.
 
 9d. **Stalls are swept by an autopilot, on its own schedule.** The `🌤️ Daily Stall Sweep` autopilot (Mika; daily 09:00 SGT while it is enabled — its live `status` is the source of truth for whether a sweep runs at all) re-wakes the owning agent of a parked gate, an unpromoted stage, a finished-but-open parent or a silent `in_progress`, and digests to the owner what only a human can move. The sweep changes no status and creates no work.
 
@@ -126,7 +126,7 @@ The label stays the source of truth — `[Feature]` and `[Enhance]` both carry t
 - **spec-reviewer** — scores Workflow B specs, gates REWORK/APPROVED/MANUAL HANDOFF.
 - **dev-leader / dev-team** — decomposes `[P<num>-1]` into `[D<num>-n]` sub-tasks, self-verifies, cuts the branch, opens the one PR.
 - **pr-reviewer** — scores and merges every `dev`-bound PR, both dev-team's and devops'.
-- **release-manager** — opens and merges the single `dev`→`main` release PR; nothing else.
+- **release-manager** — opens the single `dev`→`main` release PR, checks whether it is critical, and merges it — a critical one only on the owner's reply; nothing else.
 - **devops** — owns Workflow D end to end under D1/D2; lands its change via a `chore/<issue-key>` PR to `dev`.
 
 ## Definition of Done / compliance
