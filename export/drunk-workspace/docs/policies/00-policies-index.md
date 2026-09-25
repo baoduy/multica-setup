@@ -60,7 +60,7 @@ Any change to how the factory works starts at the policy layer:
   proposed change
         │
         ▼
-  1. AMEND THE POLICY  ── state the new rule/intent here; bump Version; note it in this index
+  1. AMEND THE POLICY  ── state the new rule/intent here; bump Version; add a CHANGELOG.md entry
         │
         ▼
   2. CASCADE TO SKILL(S)  ── update every skill the policy's "Related skills" row names
@@ -120,28 +120,20 @@ a policy gap — file it upward.
 
 ## Change log
 
-- 2026-09-16 (c) — Policy 04 v1.4 (statement 3: a gate's own review sub-task is pipeline mode however it was woken, including a re-arm mention in any status; statement 10: a spec REWORK is re-armed by product-owner in two mandatory parts, `in_progress --no-start` + spec-reviewer's mention, never by a flip to `todo`), Policy 06 v2.2 (statement 11 carries the same re-arm mechanics and drops the retired `spec_review_round` metadata key for the `Gate round` property). DRK-1364 stalled twice on a `blocked`→`todo` re-arm that woke nobody — the second time until the owner asked for the round by hand. Cascaded to `sdlc-flow-po-orchestration` (two-part re-arm plus an end-of-turn actuation check), `spec-review-gate`, `product-team` briefing and `workspace.context.md`, which now says plainly that a ticket which has already run is never re-woken by its status.
-
-- 2026-09-16 (b) — Policy 03 v1.1 (statements 3b/3c: members never create or push a branch, no bare `git push`, a push is proved with `git ls-remote`). Workspace context also bans backgrounding a long command — a run cannot resume around an orphaned process. Cascaded to `workspace.context.md`, `sdlc-gitflow` and `sdlc-flow-squad-worker-playbook`.
-
-- 2026-09-16 — Policy 05 v1.4 (statement 1b: a ticket assigned to product-owner with a parent is a sub-issue — same gates, no `[P<num>-2]`, terminates at the verified `[P<num>-1]`; the parent's owner releases its children together). Cascaded to `sdlc-flow-po-orchestration`, `sdlc-flow-delivery-pipeline`, `squads/product-team.md` and `agents/product-owner.md`.
-
-- 2026-09-15 (b) — Policy 06 v2.1: plain-English writing rules for every human-facing document. Templates rewritten: `sdlc-spec-template` (Summary, sub-labels, bullets), `blocker-report` (fixed EVIDENCE keys, DEVIATIONS table, 25/40-line caps, root-cause shape), `sdlc-impl-brief` (Mode header, `Proof` column, scenario names instead of copied Gherkin, changelog instead of appended sections, 10 KB cap); marker legend, mode procedures and the standard done-list moved into `test-driven-development`; leader plan comment capped at 2 KB.
-
-- 2026-09-15 — Policy 05 v1.3 (bugs and docs handed to dev-team as the root ticket, phases for specs only, spec frozen at delegation, gate never parks, daily stall sweep), Policy 04 v1.3 (re-review always ends in a verdict, Workflow D CI exception, CI-first verification), Policy 07 v1.2, Policy 09 v1.4 (release-manager in dev-team for root cycles; Mika runs the stall sweep). Cascaded to `pr-review-gate`, `sdlc-flow-*`, `sdlc-gitflow`, `leader-gitops`, both squads, agents, and the `Daily Stall Sweep` autopilot.
-
-- 2026-09-14 — Policy 05 v1.2 (Workflow E direct door, gate properties, Workspace Context layer), Policy 04 v1.2 (gate state on properties, resolved-owner handoff), Policy 07 v1.1 (member-found defects filed to product-owner), Policy 09 v1.3 (statement 1b: leader-filed defects assigned to product-owner; Workspace Context; assistants' routing scope). Cascaded to `workspace/context.md`, the `sdlc-flow-*` skills (leader and product-owner playbooks split into core + `references/`), both gate skills, `bug-report`, both squad briefings and every agent instruction.
+Every amendment, newest first, with its cause and cascade list: [`CHANGELOG.md`](CHANGELOG.md).
+A policy change is not done until its entry is there.
 
 ## How policies relate to skills, agents and squads
 
 - **Skills** are the executable contracts agents load at runtime — they *implement* these policies.
 - **Policies** (this folder) are the governance and the source of truth — intent, scope, responsibilities, compliance bar, waiver rules.
-- **Agents / squads** (`agents/`, `squads/`) are the actors these policies assign responsibility to: `product-owner`, `spec-reviewer`, `arch-reviewer`, `dev-leader`/`dev-team`, `dev-backend`, `pr-reviewer`, `devops`, `release-manager`, `issue-janitor`, `Mika` — each chartered (goal, responsibilities, boundaries) in [Policy 09](09-agent-roles-and-responsibilities.md); `default` and `claude_ultra` are platform assistants outside the factory.
+- **Agents / squads** (`agents/`, `squads/`) are the actors these policies assign responsibility to: `product-owner`, `spec-reviewer`, `arch-reviewer`, `dev-leader`/`dev-team`, `dev-backend`, `pr-reviewer`, `devops`, `release-manager`, `issue-janitor`, `run-medic`, `Mika` — each chartered (goal, responsibilities, boundaries) in [Policy 09](09-agent-roles-and-responsibilities.md); `default` and `claude_ultra` are platform assistants outside the factory.
 
 ## Reading order for a new drunk developer
 
-01 → 02 → 03 → 04 first (what you do every day), then 05 for the big picture, then 06–08 as
-they become relevant to your role.
+01 → 02 → 03 → 04 first (what you do every day), then 05 for the big picture, then 09 and 10
+(who owns what, and who the human owner of a ticket is), then 06–08 as they become relevant
+to your role.
 
 ## Document structure
 

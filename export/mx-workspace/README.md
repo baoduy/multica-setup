@@ -99,7 +99,7 @@ without jargon. 🦊 the "foreman" always knows which step you're on.*
 
 **Legend** — 👤 human · 🦊 product-owner · 🦉 spec-reviewer · 🐺 dev-leader · 🔨 dev-backend · 🐳 release-manager · 🦅 pr-reviewer · 🐝 qc-leader · 🐜 qc-tester · 🐞 qc-runner
 
-**Trigger mechanics** — assignment at `todo` starts the assignee · `backlog→todo` promotion starts the assignee · child `done` fires the stage barrier that wakes the parent's owner · agent mention triggers a run (NOT deduped — one mention, one run, even when the target is already running) · member (human) mention notifies only. A stage barrier re-fires on every re-entry into `done`, so members never flip their own sub-task out of `done`; the LEADER re-triggers fix work by flipping the sub-task `in_progress --no-start` (with `Retrigger on done` = the blocked gate's key) and then posting the ONE mention — the re-fired barrier is the expected "fix is back" signal. Every mention link in a posted comment is a wake, quoted or not. Members write only on their own ticket and mention only their leader.
+**Trigger mechanics** — assignment at `todo` starts the assignee · `backlog→todo` promotion starts the assignee · child `done` fires the stage barrier that wakes the parent's owner · agent mention triggers a run (NOT deduped — one mention, one run, even when the target is already running) · member (human) mention notifies only. A stage barrier re-fires on every re-entry into `done`, so members never flip their own sub-task out of `done`; the LEADER re-triggers fix work by flipping the sub-task `in_progress --no-start` (adding the blocked gate's key to `Retrigger on done`, comma-separated when there are several) and then posting the ONE mention — the re-fired barrier is the expected "fix is back" signal. Every mention link in a posted comment is a wake, quoted or not. Members write only on their own ticket and mention only their leader.
 
 ---
 
@@ -260,7 +260,7 @@ full cycle): leader cuts the branch inline → `D-1 UPDATE 🔨` → leader open
 `D-2 REVIEW 🦅` — no Verify stage, because there is no test surface to verify. The 🦅 gate
 still scores and merges (its coverage precondition is satisfied vacuously on a
 no-coverable-lines diff); REWORK loops a fix to 🔨 via the leader and re-arms the Review stage directly,
-same 2-round cap. The moment a change touches code or a config value that existing tests
+same 3-round cap. The moment a change touches code or a config value that existing tests
 assert, it is the full cycle.
 
 ### 🐸 qc-team — the SANDBOX BDD integration suite
@@ -375,9 +375,9 @@ big picture.*
   │   │   ├── [D#-2] build  🔨   implement against the frozen scenarios ─▶ green · ≥ 80% · mutation report · drift check empty
   │   │   ├── (🐺 opens the ONE PR inline · feature ─▶ dev, never main)
   │   │   └── [D#-3] review 🦅   PR-state guard first, then AT drift + score 1–10
-  │   ├── loops     rework, max 2 rounds
+  │   ├── loops     rework, max 3 rounds
   │   │   ├── ⟲ AT rejected / wrong ─▶ re-arm [D#-1] ─▶ 🔨 (never edited in build)
-  │   │   └── ⟲ [D#-3] rework    ─▶ ONE Fix ─▶ 🔨   ⛔ 2 rounds ─▶ 👤 owner
+  │   │   └── ⟲ [D#-3] rework    ─▶ ONE Fix ─▶ 🔨   ⛔ 3 rounds ─▶ 👤 owner
   │   ├── done      ✅ 🦅 merges into dev · leftovers ─▶ ONE follow-ups ─▶ 🦊
   │   └── ═══ barrier · wakes 🦊 — verifies the merged PR + review score ═══
   │
@@ -400,7 +400,7 @@ big picture.*
   │   │   ├── [T#-1] test   🐜   write + run against SANDBOX
   │   │   ├── [T#-2] verify 🐞   review scenarios + impacted-scope execution
   │   │   ├── (🐝 opens the ONE PR inline · feature ─▶ dev)
-  │   │   └── [T#-3] review 🦅   same gate as dev · ⛔ 2 rounds ─▶ 👤
+  │   │   └── [T#-3] review 🦅   same gate as dev · ⛔ 3 rounds ─▶ 👤
   │   ├── route B   RUN-ONLY — existing suites already cover it
   │   │   └── [T#-1] run    🐞   the suites against SANDBOX · no branch, no PR
   │   ├── defects   🐝 files ONE consolidated, deduped bug ─▶ 🦊 (todo)
@@ -766,7 +766,7 @@ Happy path: a feature touches humans at #1, #2, #5 only; a bug at #1 (and #2 whe
 | --- | ---------------------- | -------- | ------------------------------------------------------------------------------- |
 | 9   | Bug-fix confirmation   | 👤 gate  | &lt;90% confidence — may be by-design / config / user error → 👤 confirms first |
 | 10  | Spec gate escalation   | 👤 valve | &gt;5 rework loops → requester manual review                                    |
-| 11  | PR gate escalation     | 👤 valve | 2 rework rounds / deferred / failed merge → workspace owner                     |
+| 11  | PR gate escalation     | 👤 valve | 3 rework rounds / deferred / failed merge → workspace owner                     |
 | 12  | Squad stuck escalation | 👤 valve | 2 failed fix attempts on same root cause → owner/🦊                             |
 
 
@@ -893,7 +893,7 @@ agent, was retired when the squad leaders took over its git-flow duties (see `CH
 | `bug-report`                      | the standard 3-section body (Scope (Git Repo, Module/Classes) / Root cause / Suggested owner) for every separately-filed bug/defect issue | 🦊 🐝 🏛️               |
 | `sdlc-spec-template`              | the 11-section business-spec contract the `[S#]` gate scores against                                                                     | 🦊 🦉                   |
 | `spec-review-gate`                | spec rubric, verdicts, 5-round cap, handoff                                                                                              | 🦉                      |
-| `pr-review-gate`                  | PR rubric, merge gate, 2-round cap, handoff, follow-ups filing                                                                           | 🦅                      |
+| `pr-review-gate`                  | PR rubric, merge gate, 3-round cap, handoff, follow-ups filing                                                                           | 🦅                      |
 | `bdd-report`                      | BDD test-report format on qc-team sub-issues                                                                                             | 🐝 🐜 🐞 🔍             |
 | `prd-release-runbook`             | 🌙 prd-release's SANDBOX→PRD promotion runbook (drift table, release PR, BDD gate) — see §3.3                                            | 🌙                      |
 
@@ -981,25 +981,25 @@ Runtime is derived from the model name: a model whose name starts with `claude` 
 Model choice follows **subscription coverage** (flat-fee = no per-token cost): every agent
 runs on **Claude Premium**. No agent bills per-token `openrouter/*`.
 
-| Agent              | Model             | Thinking | Covered by     |
-| ------------------ | ----------------- | -------- | -------------- |
-| 🦊 product-owner   | claude-opus-5     | xhigh    | Claude Premium |
-| 🦉 spec-reviewer   | claude-opus-4-8   | high     | Claude Premium |
-| 🐺 dev-leader      | claude-opus-4-8   | high     | Claude Premium |
-| 🔨 dev-backend     | claude-sonnet-5   | high     | Claude Premium |
-| 🐳 release-manager | claude-sonnet-5   | medium   | Claude Premium |
-| 🦅 pr-reviewer     | claude-sonnet-5   | high     | Claude Premium |
-| 🐝 qc-leader       | claude-sonnet-5   | medium   | Claude Premium |
-| 🐜 qc-tester       | claude-sonnet-5   | high     | Claude Premium |
-| 🐞 qc-runner       | claude-sonnet-5   | medium   | Claude Premium |
-| 🐙 devops          | claude-opus-5[1m] | high     | Claude Premium |
-| 🐲 claude_ultra    | claude-opus-5     | xhigh    | Claude Premium |
-| 🐼 default         | claude-sonnet-5   | high     | Claude Premium |
-| 🏛️ arch-reviewer  | claude-opus-5     | max      | Claude Premium |
-| 🧪 bdd-reviewer    | claude-opus-5     | max      | Claude Premium |
-| 🐼 Mika            | claude-opus-5     | -        | Claude Premium |
-| 🧹 issue-janitor   | claude-sonnet-5   | -        | Claude Premium |
-| 🌙 prd-release     | claude-sonnet-5   | high     | Claude Premium |
+| Agent              | Model               | Thinking | Covered by     |
+| ------------------ | ------------------- | -------- | -------------- |
+| 🦊 product-owner   | claude-opus-5-5[1m] | high     | Claude Premium |
+| 🦉 spec-reviewer   | claude-opus-5-5[1m] | high     | Claude Premium |
+| 🐺 dev-leader      | claude-sonnet-5     | high     | Claude Premium |
+| 🔨 dev-backend     | claude-opus-5-5     | high     | Claude Premium |
+| 🐳 release-manager | claude-sonnet-5     | medium   | Claude Premium |
+| 🦅 pr-reviewer     | claude-sonnet-5     | high     | Claude Premium |
+| 🐝 qc-leader       | claude-sonnet-5     | high     | Claude Premium |
+| 🐜 qc-tester       | claude-sonnet-5     | high     | Claude Premium |
+| 🐞 qc-runner       | claude-sonnet-5     | medium   | Claude Premium |
+| 🐙 devops          | claude-opus-5-5[1m] | high     | Claude Premium |
+| 🐲 claude_ultra    | claude-opus-5-5     | xhigh    | Claude Premium |
+| 🐼 default         | claude-sonnet-5     | high     | Claude Premium |
+| 🏛️ arch-reviewer  | claude-opus-5-5     | max      | Claude Premium |
+| 🧪 bdd-reviewer    | claude-opus-5-5     | max      | Claude Premium |
+| 🐼 Mika            | claude-opus-5-5     | high     | Claude Premium |
+| 🧹 issue-janitor   | claude-sonnet-5     | -        | Claude Premium |
+| 🌙 prd-release     | claude-sonnet-5     | high     | Claude Premium |
 
 
 arch-reviewer, issue-janitor, prd-release and devops are **standalone / off-pipeline agents** (§3), not pipeline-flow members.
@@ -1014,11 +1014,12 @@ Tier is assigned by **subscription coverage first, then cheapest tier that fits 
 Claude Premium for the roles where reasoning quality dominates, OpenCode Go for the squad
 workhorses, the $0 free tier for off-pipeline utility runs:
 
-- **Judgment &amp; orchestration** — 🦊 product-owner on Claude Opus (`high`); reasoning-heavy,
-correctness dominates. 🦉 spec-reviewer and 🐺 dev-leader orchestrate on Claude Opus 4.8
-(`high`) — squad triage/decompose/gate over diffs, not prose.
+- **Judgment &amp; orchestration** — 🦊 product-owner on Claude Opus 5.5, 1M-context tier
+(`high`); reasoning-heavy, correctness dominates. 🦉 spec-reviewer gates specs on the same
+tier at `high`; 🐺 dev-leader orchestrates on Claude Sonnet (`high`) — squad
+triage/decompose/gate over diffs, not prose.
 - **Implementation** (🔨 dev-backend, 🐜 qc-tester) — code/test writers. dev-backend on Claude
-Sonnet (`high`), owning tests and code together; qc-tester on Claude Sonnet at `high`.
+Opus 5.5 standard tier (`high`), owning tests and code together; qc-tester on Claude Sonnet at `high`.
 - **Mechanical git/ops** (🐳 release-manager, 🐞 qc-runner) — Claude Sonnet at `medium`.
 Kept on a capable model (not a light one) because a lighter model dropped the
 end-of-turn sub-task status flip (`done`/`blocked`), stranding the pipeline; the flip is a

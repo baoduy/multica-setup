@@ -54,7 +54,7 @@ NO vote, NO merge. Post the report comment on the PR, opening with `APPROVAL DEF
 
 ### REWORK (score < bar, or any blocking finding)
 
-If `review_round` ≥ `maxReworkRounds` (default 2): take the ESCALATE path below instead — do not dispatch a third fix ticket.
+If `review_round` ≥ `maxReworkRounds` (default 3): take the ESCALATE path below instead — do not dispatch a fourth fix ticket.
 
 1. GitHub: report comment + request-changes vote (comment-only when self-authored).
 2. Create ONE consolidated fix sub-issue — all findings of this round in one ticket, never one per finding.
@@ -84,7 +84,7 @@ Use the CURRENT squad's project and title prefix:
 The leader files ONE consolidated fix sub-task from that report — staged to match your stage, unassigned, `Owner` set, handed to the workspace owner by member mention (`sdlc-flow-squad-leader-playbook`, Fix-loop pattern). The cycle waits on that assignment by design: never file the ticket yourself to hurry it along, and never treat the pause as a defect.
 
 3. Flip your OWN review sub-task to `blocked` (never `done`).
-4. Post the defect report on YOUR review sub-task: score announcement, findings in the filable shape above, `round N of 2`, ending with the squad leader's mention link. The leader files the consolidated fix sub-task, the owner assigns it, and once the fix lands the leader verifies the commit and re-arms your sub-task (`blocked` → `in_progress --no-start` + your mention). A re-arm with no new commit on the feature branch since your last verdict (`gh pr view --json headRefOid` unchanged) is not a new round: say so in one plain comment with the leader's mention and END.
+4. Post the defect report on YOUR review sub-task: score announcement, findings in the filable shape above, `round N of 3`, ending with the squad leader's mention link. The leader files the consolidated fix sub-task, the owner assigns it, and once the fix lands the leader verifies the commit and re-arms your sub-task (`blocked` → `in_progress --no-start` + your mention). A re-arm with no new commit on the feature branch since your last verdict (`gh pr view --json headRefOid` unchanged) is not a new round: say so in one plain comment with the leader's mention and END.
 
 ### ESCALATE (rework rounds exhausted, or repeated same-root-cause failure)
 

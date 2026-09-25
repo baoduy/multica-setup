@@ -4,6 +4,8 @@
 
 **Role boundary.** product-owner states the problem and the required behaviour. dev-leader designs the solution and decomposes it (`sdlc-impl-brief`). A spec that reads like a recipe is defective even when the recipe is right: it hides the problem, blocks better designs, and a code snippet can contradict the prose. Whether a change is minimal or reuses the right helper is judged in code, at decomposition and at the PR gate, never in the spec.
 
+**The contract is the exception.** The data and API surface a change adds is what the whole team must agree on before code starts, so it belongs in the spec: §3a carries the new fields with their types and attributes, and the endpoints with their verbs and paths. Everything below that surface stays dev-leader's: which class holds the field, which handler serves the route, what gets reused. dev-leader may add rows to the contract in its impl-brief and must say so there; it may never contradict a §3a row.
+
 ## Who reads a spec
 
 The requester, the workspace owner, the spec gate, the dev-leader, and the implementer. The humans may have intermediate English and no context. Write for them:
@@ -13,15 +15,17 @@ The requester, the workspace owner, the spec gate, the dev-leader, and the imple
 3. Bullets over paragraphs. A paragraph is at most 3 sentences.
 4. Numbers as digits (16 routes, 80%). Dates as `2026-09-15`.
 5. Name a thing the same way every time. Define an acronym once, in brackets.
-6. No code words: no class names, file paths, flags or `file:line`. Product and package names and error codes in backticks are fine.
+6. No code words: no class names, method signatures, file paths, flags or `file:line` — in any section, §3a included. Product and package names and error codes in backticks are fine. §3a is the only place entity, field and endpoint names appear.
 7. Lead with the answer. Reasoning comes after, short.
 
 ## Template
 
 Written into the root ticket description, in this order. Length follows the size of the requirement; a small change collapses §2 and §4 to one bullet each. Every section keeps its heading.
 
+Policy 06 and the gate cite three of these sections by their older names — §1 Why is **Goals**, §2 Today is **Current State**, §3 After the change is **Expected State**. Same sections; the headings below are the ones to write.
+
 ```markdown
-# <Plain title: what changes, for whom>
+# <Plain title: what changes, for whom — no type prefix; the `[Feature]`/`[Enhance]`/… prefix belongs on the TICKET title, not this heading>
 
 **Summary.** <Two sentences. What changes. Who benefits.>
 
@@ -42,8 +46,28 @@ Written into the root ticket description, in this order. Length follows the size
 
 **Security:** <one sentence: the new trust boundary, or "No new attack surface, because …">
 
+## 3a. Contract changes
+
+Fill only the tables the change touches. For the other, write one line: `None — no data contract change.` or `None — no API change.` These are markdown tables, not code blocks.
+
+**New or changed data fields**
+
+| Entity | Field | Type | Length / precision | Required | Unique / indexed | Default | Notes |
+|---|---|---|---|---|---|---|---|
+| `<entity or table>` | `<field>` | `<string, decimal, uuid, timestamp, bool, enum name>` | `<20 · 18,2 · n/a>` | yes / no | unique / indexed / no | `<value or none>` | `<allowed values, unit, currency, personal data>` |
+
+One row per field. Length is required for text and decimal types. Say `n/a` where the type carries no length. Note anything a developer must know to create the field: allowed enum values, unit, currency, whether it holds personal data, and whether existing rows need a value.
+
+**Endpoints**
+
+| Change | Verb | Path | Purpose | Auth |
+|---|---|---|---|---|
+| new / changed / removed | `GET` | `/v1/<path>` | `<one clause>` | `<role, scope, or anonymous>` |
+
+One row per endpoint. A changed endpoint says what changes in Purpose. A removed endpoint names what replaces it.
+
 ## 4. Scope
-- **Repos / packages:** <names only>
+- **Repos / packages:** <every repo the change touches — one per bullet, each with what changes in one clause. Include consumers that must be updated and repos that only need a version bump. Names only, never a file or class.>
 - **Not in this change:** <one per bullet>
 - **Decisions:** `2026-09-15 · <who> · <decision in one sentence>`
 - **Open questions:** none
@@ -60,7 +84,7 @@ Feature: <name>
 ```
 ```
 
-Section tests: §1 is done when a non-engineer could act on it. §2 is done when it describes today's behaviour without saying how it is built. §3 is done when every requirement can be checked from outside and every invariant is a property. §4 is done when it holds zero open questions. §5 is done when every requirement in §3 has at least one scenario and every scenario traces to §1.
+Section tests: §1 is done when a non-engineer could act on it. §2 is done when it describes today's behaviour without saying how it is built. §3 is done when every requirement can be checked from outside and every invariant is a property. §3a is done when a developer can create every field and call every endpoint without asking a question. §4 is done when it names every repo the change touches and holds zero open questions. §5 is done when every requirement in §3 has at least one scenario and every scenario traces to §1.
 
 ## Gherkin — BRIEF
 
@@ -71,7 +95,8 @@ Business language · Real data ("treasury-ops", 100.00 SGD, never "a user") · I
 - Third-person named actors, never "I". No UI mechanics, config keys, or member names.
 - Tag every scenario `@integration` (crosses a real boundary: database, HTTP, package) or `@unit`. The tags are the test-scope statement; there is no separate section.
 - When the deliverable is a sample or demo, at least one scenario is observable from the running artefact, not only from its tests.
-- The Gherkin block is the only code block in the spec.
+- The Gherkin block is the only code block in the spec. The §3a tables are tables, not code blocks.
+- §5 still carries no field or endpoint names — scenarios stay in business language. The contract lives in §3a.
 
 ## Verification
 
@@ -83,5 +108,6 @@ Testing is never optional and never negotiated at spec time. dev-team writes the
 2. **Correct** — every scenario traces to §1.
 3. **Complete** — every requirement in §3 has a scenario.
 4. **Secure** — the Security line is concrete.
+5. **Contract-complete** — every field and endpoint the change needs is in §3a with its type, length and attributes, and §4 names every repo touched.
 
 If the requester asks for an over-built or insecure outcome, push back with evidence at the clarification gate instead of writing it down.

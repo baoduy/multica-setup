@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-05 |
-| **Version** | 1.4 |
+| **Version** | 1.7 |
 | **Status** | Active |
 | **Owner** | product-owner |
 | **Applies to** | Every ticket that flows through the drunk software factory |
@@ -19,7 +19,7 @@
 
 ```
    FEATURE (Workflow B)
-   👤 ticket ─▶ 🦊 intake/clarify (0 open Qs) ─▶ 11-section SPEC ─▶ [S#] SPEC GATE
+   👤 ticket ─▶ 🦊 intake/clarify (0 open Qs) ─▶ 6-section SPEC ─▶ [S#] SPEC GATE
         │                                                              │ APPROVED
         ▼                                                              ▼
    [P#-1] DEV cycle: Branch▶Build(TDD, ≥80% cov)▶PR▶🦅 PR GATE (merges to dev)
@@ -69,23 +69,55 @@ dev-team's cycle PR and devops' standalone PR). **release-manager** — owns the
 
 ## Policy statements
 
-1. **Feature flow (B):** intake → clarify with the requester until **zero** open questions → 11-section business spec on the main ticket → `[S#]` spec-review gate → on APPROVED, Workflow C: `[P<num>-1]` implementation (dev-team, always including in-repo unit/integration verification — there is no separate QC phase) → dev cycle (Branch → Build → PR → `pr-review-gate` merges into `dev`) → `[P<num>-2]` release `dev`→`main` (release-manager opens + merges; CI publishes the package/image) → main ticket `done`. **Two phases only** — no deploy phase and no QC phase exist because there is no deployed environment.
-2. **Bug flow (A):** intake → research → root-cause report with a calibrated **confidence 0–100%** that this is a genuine platform defect with the identified root cause, targeting the layer all callers route through — never the symptom path the ticket names. Confidence **≥ 90%** (or the requester's confirmation below that) hands the ROOT ticket to `dev-team` by reassignment — no `[P<num>-n]` phases: dev-leader runs the cycle, stages `[D<num>-n] Release` (release-manager, a dev-team member for that stage) when a package consumer can observe the change, and finalizes the root `in_review` for the owner. product-owner posts one FYI to the requester ("fix delegated, reply to halt") and is out of the ticket. A pure question with no change wanted ends with the report as the deliverable. A root cause found in a pipeline or build script is reclassified to Workflow D and handed to devops, whatever the confidence. See [Policy 07](07-bug-and-defect-management.md).
-3a. **Docs flow (E):** a docs-only change to a library repo (README, `docs/`, comments, changelog; no source, no test surface) is a dev-team Route B root cycle with no spec gate and no release. Two doors, like Workflow D: **direct** (the requester or Mika assigns `dev-team` straight away; product-owner stays out) or **delegated** (product-owner clarifies, appends a `## Brief` to the root, and reassigns the ROOT to `dev-team`). No phases. The moment the change touches source or tests it is Workflow B.
+1. **Feature flow (B):** intake → clarify with the requester until **zero** open questions → six-section business spec on the main ticket ([Policy 06](06-requirements-and-spec.md) statement 3) → `[S#]` spec-review gate → on APPROVED, Workflow C: `[P<num>-1]` implementation (dev-team, always including in-repo unit/integration verification — there is no separate QC phase) → dev cycle (Branch → Build → PR → `pr-review-gate` merges into `dev`) → `[P<num>-2]` release `dev`→`main` (release-manager opens + merges; CI publishes the package/image) → main ticket `done`. **Two phases only** — no deploy phase and no QC phase exist because there is no deployed environment.
+
 1b. **A sub-issue stops at development.** The shape of the ticket assigned to product-owner decides where its ownership ends: a **root** ticket (no parent) runs to release as above; a **sub-issue** (it has a parent) gets the same classification, spec and gates but **no `[P<num>-2]`** — it terminates at the verified `[P<num>-1]` and flips `done`, which fires the parent's stage barrier. The parent's owner releases all of its children together in one `dev`→`main` PR, so partial releases of a decomposed feature never happen. The same shape rule already governs dev-team: it stages a `Release` only on a cycle whose ticket has no parent. A sub-issue also keeps its parent's project and carries no labels.
 
-3b. **Phases exist for approved specs only.** `[P<num>-1]` / `[P<num>-2]` are Workflow C, downstream of a spec gate. `[P<num>-1]` pins `Spec revision: <n>` and the spec is **frozen** for the cycle: a later change is a scope comment on the phase ticket with dev-team's mention, which dev-leader turns into ONE scope stage; a finished Acceptance-tests stage is never re-armed for spec drift, and neither the root nor the phase description is edited while the cycle runs.
+2. **Bug flow (A):** intake → research → root-cause report with a calibrated **confidence 0–100%** that this is a genuine platform defect with the identified root cause, targeting the layer all callers route through — never the symptom path the ticket names. Confidence **≥ 90%** (or the requester's confirmation below that) hands the ROOT ticket to `dev-team` by reassignment — no `[P<num>-n]` phases: dev-leader runs the cycle, stages `[D<num>-n] Release` (release-manager, a dev-team member for that stage) when a package consumer can observe the change, and finalizes the root `in_review` for the owner. product-owner posts one FYI to the requester ("fix delegated, reply to halt") and is out of the ticket. A pure question with no change wanted ends with the report as the deliverable. A root cause found in a pipeline or build script is reclassified to Workflow D and handed to devops, whatever the confidence. See [Policy 07](07-bug-and-defect-management.md).
+
 3. **CI/CD flow (D):** pipelines and build/publish automation are `devops` work — never enter the dev-team cycle, never open a spec gate, and never trigger a `[P<num>-2]` release phase on their own. Two doors: **direct** (requester assigns devops; product-owner stays out) or **delegated**, classified into **D1** analysis-only (report + STOP, requester decides) or **D2** change-requested (`[P<num>-1]` to devops → `[P<num>-1c]` PR review to pr-reviewer). Unlike a sibling factory's Helm/GitOps carve-out, a **standalone devops PR to `dev` gets the same `pr-review-gate` merge, not a human-only merge** — there is no deploy act to reserve for a human here.
+
+3a. **Docs flow (E):** a docs-only change to a library repo (README, `docs/`, comments, changelog; no source, no test surface) is a dev-team Route B root cycle with no spec gate and no release. Two doors, like Workflow D: **direct** (the requester or Mika assigns `dev-team` straight away; product-owner stays out) or **delegated** (product-owner clarifies, appends a `## Brief` to the root, and reassigns the ROOT to `dev-team`). No phases. The moment the change touches source or tests it is Workflow B.
+
+3b. **Phases exist for approved specs only.** `[P<num>-1]` / `[P<num>-2]` are Workflow C, downstream of a spec gate. `[P<num>-1]` pins `Spec revision: <n>` and the spec is **frozen** for the cycle: a later change is a scope comment on the phase ticket with dev-team's mention, which dev-leader turns into ONE scope stage; a finished Acceptance-tests stage is never re-armed for spec drift, and neither the root nor the phase description is edited while the cycle runs.
+
 4. **Gates front-load quality** — the spec gate before implementation, the PR gate before every merge into `dev` (see [Policy 04](04-code-and-spec-review.md)).
+
 5. **Stage barriers fire on `done`.** Completion = `done`. `blocked` + a mention comment = needs help — and that comment lives on the blocked agent's OWN ticket, never on its parent: a mention wakes its target wherever it is posted, so assigner↔assignee communication (questions, blockers, defect reports) stays paired on the assignee's ticket while parent comments remain the parent owner's orchestration space. `in_review` is leader-only, reserved for a ROOT ticket awaiting a human; on a phase or sub-task ticket it deadlocks the pipeline — **never** report `in_review` on a phase/sub ticket, use `done`.
+
 6. **Mentions are actions.** An agent/squad mention (real UUID, resolved at runtime) enqueues a run; a member (human) mention only renders a link and delivers nothing. To make a human act, **assign them a ticket at `todo`** — never rely on a mention. Never agent-mention in FYI/ack/done comments.
-7. **Titles, projects, labels:** main tickets plain (no prefix); children carry `[S<num>]` (spec review, keyed to the main ticket) / `[P<num>-n]` (product-owner's phase tickets, keyed to the main ticket, `n`: `-1` implementation or CI/CD change, `-2` release) / `[D<num>-n]` (dev-team sub-tasks, keyed to the parent PHASE ticket, `n` = stage). Labels on main tickets **only** (`main` + `feature`/`bug`/`question`/`cicd` + optional domain). Every sub-task parents directly to its cycle parent — never nested deeper. Every child stays in the SAME domain project as the main ticket.
+
+7. **Titles, projects, labels:** **every ROOT main ticket title carries one type prefix** — `[Feature]` · `[Enhance]` · `[Bug]` · `[Question]` · `[CICD]` · `[Docs]` — followed by the plain title; children carry `[S<num>]` (spec review, keyed to the main ticket) / `[P<num>-n]` (product-owner's phase tickets, keyed to the main ticket, `n`: `-1` implementation or CI/CD change, `-2` release) / `[D<num>-n]` (dev-team sub-tasks, keyed to the parent PHASE ticket, `n` = stage). Labels on main tickets **only** (`main` + `feature`/`bug`/`question`/`cicd`/`docs` + optional domain). Every sub-task parents directly to its cycle parent — never nested deeper. Every child stays in the SAME domain project as the main ticket.
+
+7a. **The root prefix is product-owner's, set at intake.** The requester and Mika create root tickets with a plain title; product-owner adds or corrects the prefix on the root ticket when it labels the ticket and posts the spec (`multica issue update <root-id> --title "<prefix> <plain title>" --no-start` — **always `--no-start`**, a title update on a ticket assigned to you otherwise wakes a second run of yourself). Where product-owner never touches the ticket — a CI/CD ticket taken through the direct door by devops, a docs ticket handed straight to dev-team — the first agent to pick it up sets the prefix the same way. Reclassifying the workflow changes the prefix with it.
+
+7b. **The prefix is root-only.** It never appears on a child, and it changes no child's title, numbering or `<num>` keying: `[S<num>]`, `[P<num>-n]` and `[D<num>-n]` are keyed off the root's key NUMBER, never its title. Emitting a type prefix on a sub-task is a defect.
+
+**Root-title type prefix.** Exactly one prefix, matching the root ticket's type label:
+
+| Prefix | Label | Use for |
+|---|---|---|
+| `[Feature]` | `feature` | a capability that does not exist today |
+| `[Enhance]` | `feature` | a change to behaviour that already exists |
+| `[Bug]` | `bug` | a reported defect |
+| `[Question]` | `question` | a question with no change wanted |
+| `[CICD]` | `cicd` | a pipeline or build-script change |
+| `[Docs]` | `docs` | a docs-only change |
+
+The label stays the source of truth — `[Feature]` and `[Enhance]` both carry the `feature` label, so the prefix is the finer split the labels do not make. A prefix that disagrees with the label is a defect: fix the pair, never argue it.
+
 8. **Escalation is an action, not a status.** A squad that escalates still owns its cycle: post ONE standalone `## BLOCKER` + `## OPTIONS` comment (per [`blocker-report`](../../skills/blocker-report/SKILL.md)), deliver it (agent mention for an agent hop, ticket reassignment at `todo` for a human hop), park the blocked child. Ending a turn with a stuck child and no dispatched comment is a flow defect.
-9. **Human touch points are capped:** business clarifications (always the requester, irreducible), spec review (5 rework rounds, then manual handoff), bug confidence (< 90% waits for requester confirmation), PR review (2 rework rounds, then manual handoff to the resolved owner), squad fix attempts (2 on the same root cause, then escalate). A defect a member finds outside its cycle is filed by its leader to `product-owner` at `todo` and enters the bug flow — the confidence gate is the only human hop it gets. The escalation human is the resolved owner per [Policy 10](10-ticket-ownership-and-owner-pickup.md).
+
+9. **Human touch points are capped:** business clarifications (always the requester, irreducible), spec review (5 rework rounds, then manual handoff), bug confidence (< 90% waits for requester confirmation), PR review (3 rework rounds, then manual handoff to the resolved owner), squad fix attempts (2 on the same root cause, then escalate). A defect a member finds outside its cycle is filed by its leader to `product-owner` at `todo` and enters the bug flow — the confidence gate is the only human hop it gets. The escalation human is the resolved owner per [Policy 10](10-ticket-ownership-and-owner-pickup.md).
+
 9a. **Gate state lives on custom properties.** Review gates pin `Gate verdict`, `Gate round` and `Gate score` on their own sub-task (never on issue metadata), so a parked gate is visible on the board and in `multica issue children --resolve-properties` without reading threads. Leaders and product-owner read those properties on every wake.
-9c. **A review gate never parks.** The rework cap limits REWORK verdicts, not re-reviews: every re-review ends APPROVED, DEFERRED, REWORK (rounds left) or ESCALATED. A run that leaves the gate `blocked` without a verdict is a flow defect. A Workflow D PR that changes the workflow producing a red check is merged on score (CI red by design), never handed to a human for the red alone.
-9d. **Stalls are swept daily.** The `Daily Stall Sweep` autopilot (Mika) re-wakes the owning agent of a parked gate, an unpromoted stage, a finished-but-open parent or a silent `in_progress`, and digests to the owner what only a human can move. The sweep changes no status and creates no work.
+
 9b. **Platform-wide constants are stated once, in the Workspace Context.** Statuses and wake rules, ticket conventions, `Owner` resolution, git and PR rules, report shapes and bounded comment reads live in the workspace system prompt (`workspace/context.md`) and are cited, not restated, by skills and instructions. Rare-path procedure lives in a skill's `references/`, opened when the case occurs.
+
+9c. **A review gate never parks.** The rework cap limits REWORK verdicts, not re-reviews: every re-review ends APPROVED, DEFERRED, REWORK (rounds left) or ESCALATED. A run that leaves the gate `blocked` without a verdict is a flow defect. A Workflow D PR that changes the workflow producing a red check is merged on score (CI red by design), never handed to a human for the red alone.
+
+9d. **Stalls are swept by an autopilot, on its own schedule.** The `🌤️ Daily Stall Sweep` autopilot (Mika; daily 09:00 SGT while it is enabled — its live `status` is the source of truth for whether a sweep runs at all) re-wakes the owning agent of a parked gate, an unpromoted stage, a finished-but-open parent or a silent `in_progress`, and digests to the owner what only a human can move. The sweep changes no status and creates no work.
+
 10. **A review's leftovers never become a delivery cycle.** In-scope leftovers — anything in a file the cycle's diff touched, regardless of who introduced it — are cleared inside that cycle by pr-reviewer before it merges (a polish round routed by dev-leader to the implementer's own Build sub-task), and produce no ticket. Out-of-scope leftovers are dropped unless they clear the worth-fixing bar — a defect or security finding with a named observable failure and reproduction — in which case dev-leader files ONE ordinary defect ticket, folded into any open ticket sharing its root cause. `Review follow-ups:` tickets are retired. Decomposing a leftovers ticket into `[P-1]`/`[P-2]` phases is a flow defect, and so is filing new backlog work from nits: the monthly `arch-reviewer` sweep owns that. The 2026-09-11 cascade (eight roots in six hours, two NuGet patches for code comments) is what this rule exists to prevent.
 
 ## Roles & responsibilities

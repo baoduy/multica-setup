@@ -1,16 +1,14 @@
-# Policy 10 — Ticket Ownership &amp; Owner Pickup
+# Policy 10 — Ticket Ownership & Owner Pickup
 
-
-|                    |                                                                                                                                                                                                                                                                                                                                                                                              |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Policy ID**      | DRK-POL-10                                                                                                                                                                                                                                                                                                                                                                                   |
-| **Version**        | 1.0                                                                                                                                                                                                                                                                                                                                                                                          |
-| **Status**         | Draft — for review                                                                                                                                                                                                                                                                                                                                                                           |
-| **Owner**          | product-owner (sets Owner on the tickets it creates; every agent shares the resolution duty)                                                                                                                                                                                                                                                                                                 |
-| **Applies to**     | Every ticket in the workspace — main tickets, spec-review sub-tasks, phase tickets, dev sub-tasks, gate handoffs, arch/BDD findings, and autopilot-filed issues                                                                                                                                                                                                                              |
+| | |
+|---|---|
+| **Policy ID** | DRK-POL-10 |
+| **Version** | 1.2 |
+| **Status** | Active |
+| **Owner** | product-owner (sets Owner on the tickets it creates; every agent shares the resolution duty) |
+| **Applies to** | Every ticket in the workspace — main tickets, spec-review sub-tasks, phase tickets, dev sub-tasks, gate handoffs, arch/BDD findings, and autopilot-filed issues |
 | **Related skills** | [`sdlc-flow-delivery-pipeline`](../../skills/sdlc-flow-delivery-pipeline/SKILL.md) · [`sdlc-flow-po-orchestration`](../../skills/sdlc-flow-po-orchestration/SKILL.md) · [`sdlc-flow-squad-leader-playbook`](../../skills/sdlc-flow-squad-leader-playbook/SKILL.md) · [`spec-review-gate`](../../skills/spec-review-gate/SKILL.md) · [`pr-review-gate`](../../skills/pr-review-gate/SKILL.md) |
-| **Enforced at**    | product-owner, squad leaders, spec/PR gates, arch-reviewer, autopilots                                                                                                                                                                                                                                                                                                                       |
-
+| **Enforced at** | product-owner, squad leaders, spec/PR gates, arch-reviewer, autopilots |
 
 > **Authority.** This policy is the source of truth for *who the human owner of a ticket is*
 > and *how an agent finds them*. The related skills **implement** the resolution order and
@@ -52,7 +50,7 @@ fallback.
 - **In scope**: resolving the human owner of any ticket; stamping ownership at create time;
 every human handoff (gate manual-handoff, squad escalation, clarification, FYI).
 - **Out of scope**: *agent* assignment and wake mechanics (Policy 05 / `sdlc-flow-delivery-pipeline`
-"Triggers &amp; status discipline"); which human makes which *decision* (Policy 05 escalation
+"Triggers & status discipline"); which human makes which *decision* (Policy 05 escalation
 map). This policy answers only **which human**, not what they are asked to do.
 
 ## The `Owner` custom property
@@ -87,6 +85,7 @@ ticket's human owner.
  time, via statement 2. A pinned name/UUID in a skill, agent instruction, squad briefing,
  or autopilot is a policy violation — it silently breaks when ownership changes and it
  reintroduces the "one person owns everything" failure.
+ The same rule holds for every other id an instruction could pin — agent, squad and project — resolved with `multica agent|squad|project list --output json` at run time. An agent mention link is the sharpest case: it is a wake wherever it appears, so an instruction states the recipe and never the link (Workspace Context, Status and wakes). A platform-generated squad roster is not a pin.
 7. **The workspace owner is the last resort, never the default.** Reaching step 4 means
  steps 1–3 all failed; if that happens often it signals missing `Owner` stamps upstream
  (statement 4/5), not correct routing.
@@ -102,7 +101,7 @@ ticket's human owner.
   no member-created parent, that resolves to the workspace owner via step 4, but it is
   resolved, never hardcoded.
 
-## Roles &amp; responsibilities
+## Roles & responsibilities
 
 - **product-owner** — stamps `Owner` on every child it creates (`[S#]`, `[P<num>-*]`), and
 on any root it files itself; resolves the human for clarifications/escalations via the order.
@@ -131,7 +130,7 @@ agent's run.
 - **Monthly architecture-review sweep** and code review catch hardcoded UUIDs reintroduced
 into skills/agents.
 
-## Exceptions &amp; waivers
+## Exceptions & waivers
 
 - The Policy 09 workspace-identity header (`Owner | <workspace owner>`) legitimately names
 the human — it is the single source of who the current owner *is*, not a routing hardcode.
@@ -144,7 +143,7 @@ assignee is a policy amendment, not a local exception.
 ## References
 
 - [Policy 05 — SDLC Delivery Lifecycle](05-sdlc-delivery-lifecycle.md) — escalation map, wake/status discipline.
-- [Policy 09 — Agent Roles &amp; Responsibilities](09-agent-roles-and-responsibilities.md) — workspace-identity header, triager routing.
+- [Policy 09 — Agent Roles & Responsibilities](09-agent-roles-and-responsibilities.md) — workspace-identity header, triager routing.
 - `sdlc-flow-delivery-pipeline` "Who the human owner is" / "Set `Owner` on every issue you create" — the implementing contract.
 - Incident: MXW-2066 (`[D2058-3] Review`) — gate resolved to workspace owner because the 2-step order skipped the `Owner` property; the fix that motivated this policy.
 

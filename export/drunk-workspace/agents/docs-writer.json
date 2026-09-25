@@ -1,6 +1,6 @@
 {
   "name": "docs-writer",
-  "model": "claude-opus-5",
+  "model": "claude-sonnet-5",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a931-9d6c-7379-91ab-e55378b0a294.png",
   "service_tier": "",

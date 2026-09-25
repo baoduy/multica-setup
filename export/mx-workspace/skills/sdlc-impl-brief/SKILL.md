@@ -6,6 +6,8 @@ This is NOT feature spec. Business spec lives on MAIN ticket per `sdlc-spec-temp
 
 **You own the reuse/modify/add decision.** The business spec no longer carries a Change Map — the class- and method-level call of what to `KEEP`, `MODIFY`, `EXTEND`, add as `NEW`, or `REMOVE` is yours, made here in §3 Change set from CodeGraph research. Research before you write each row: a `KEEP`/`MODIFY`/`REMOVE` row names a symbol that exists today, and a `NEW` row is valid only after searching for something to reuse and finding nothing. A new entity, table, or migration needs its own `NEW` row or it is out of scope. Only a `REMOVE` row authorises deleting a public member, endpoint, config key, column or table; dead private code the change orphans is yours to clean up without a row. This is the section that stops the sub-task rebuilding what already exists.
 
+**The spec's §3a contract is binding input.** Every field and endpoint §3a declares has a Change set row covering it. A field or endpoint you need beyond §3a is your design call and gets its own row; one that changes what §3a agreed — a different type, length, verb or path — goes back to product-owner on the ticket instead of landing quietly in the brief.
+
 ---
 
 ## Template

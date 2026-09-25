@@ -80,7 +80,7 @@ Apply `references/scoring-rubric.md`: category scores → weighted average → h
 | **APPROVED** | score ≥ 8.5 AND every auto-merge precondition passes | PR: report comment + best-effort approve vote + `gh pr merge --merge`, verify state MERGED. Multica: score report (stating MERGED) + `done`. If merge command fails: MANUAL HANDOFF. |
 | **APPROVAL DEFERRED** | score ≥ 8.5 but precondition fails | PR: report comment, NO vote, NO merge. Multica: MANUAL HANDOFF — reassign your review sub-task to human (below) naming failed precondition; report on your review sub-task with leader's mention. |
 
-| **REWORK** | score < 8.5, or any `blocking` finding | PR: report comment + `gh pr review --request-changes` (comment-only if self-authored). Multica: **create nothing.** Own sub-task `blocked`, and ONE consolidated report on your own sub-task with the squad leader's mention, written filable (findings + `file:line` + recommendation + acceptance criteria + `Suggested owner:` + the stage number the fix must carry). The LEADER files the fix sub-task, unassigned, and the workspace owner assigns it. Max 2 rework rounds, then ESCALATED → MANUAL HANDOFF. |
+| **REWORK** | score < 8.5, or any `blocking` finding | PR: report comment + `gh pr review --request-changes` (comment-only if self-authored). Multica: **create nothing.** Own sub-task `blocked`, and ONE consolidated report on your own sub-task with the squad leader's mention, written filable (findings + `file:line` + recommendation + acceptance criteria + `Suggested owner:` + the stage number the fix must carry). The LEADER files the fix sub-task, unassigned, and the workspace owner assigns it. Max 3 rework rounds, then ESCALATED → MANUAL HANDOFF. |
 
 **Who MANUAL HANDOFF goes to:** the resolved owner per `references/multica-flow.md` "Who the human is" (`Owner`-property-first) — never a hardcoded name/UUID. Reassign via `--assignee-id`.
 
@@ -114,7 +114,7 @@ Apply `references/scoring-rubric.md`: category scores → weighted average → h
 ## Config (`.pr-review.json` at repo root, optional)
 
 ```json
-{ "approveBar": 8.5, "coverageThresholdPct": 80, "maxReworkRounds": 2 }
+{ "approveBar": 8.5, "coverageThresholdPct": 80, "maxReworkRounds": 3 }
 ```
 
 ## Output contract

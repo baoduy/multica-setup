@@ -47,6 +47,6 @@ for Pulumi builders (naming, RBAC, Builder pattern, `*Info`/`*Args`) live in
 ## Library publish shape
 
 - `TS-PUB-001` **Broken package output.** These are npm libraries: `main: index.js`, `types: index.d.ts`, emitted to `bin/` by `copy-pkg` (`.tasks/npm-package.ts`). A change must keep `pnpm run build` clean and not leak `src`, tests, or `.tasks` into published package.
-- `TS-PUB-002` **Breaking public API without a major bump.** Renamed/removed exports, changed exported signatures, or dropped `.d.ts` symbols are breaking for downstream stacks — flag for SemVer (major). Additive-only changes are minor.
+- `TS-PUB-002` **Breaking public API without a minor bump.** Renamed/removed exports, changed exported signatures, or dropped `.d.ts` symbols are breaking for downstream stacks — they ship with a `Breaking` changelog entry naming the replacement and a `(MINOR)` marker in the commit title, so the pipeline cuts `v1.2.3` → `v1.3.0`. **Never a major bump**: the major number is frozen and owner-only (Policy 08 statement 12, `VER-REL-001`). Additive-only changes carry no marker — the pipeline numbers them as a patch.
 - `TS-PUB-003` **Undocumented public surface.** Public exports are the API; docs are generated (`pnpm run docs`, `.tasks/generate-docs.ts`). Keep JSDoc on exported symbols so generated docs stay meaningful.
 

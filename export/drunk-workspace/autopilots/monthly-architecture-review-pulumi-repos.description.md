@@ -4,8 +4,8 @@ Each month, run an architecture review of the drunk Pulumi IaC libraries across 
 
 # Context
 
-- **Audience** — drunkcoding (`<triager user_id resolved at runtime>`). The findings you file are the deliverable for triage; the report on this issue is the index.
-- **Project** — this run issue and every filed finding live in `drunk-pulumi` (`59f7d38d-0588-44b7-95c3-9744f64c6e1e`). Never cross-file into another project.
+- **Audience** — the workspace owner (resolve at runtime: `multica workspace member list --output json`, role `owner`; never a hardcoded UUID). The findings you file are the deliverable for triage; the report on this issue is the index.
+- **Project** — this run issue and every filed finding live in `drunk-pulumi` (id from `multica project list --output json`). Never cross-file into another project.
 - **How** — your agent instructions already define the procedure: invoke `architecture-review-sweep` and follow it end to end PER REPO (checkout, CodeGraph index, scope/exclusions, shard, rank, dedupe, enforcement PR against that repo's `dev`, report), applying `pulumi-azure-iac-standards` as the rule catalogue. Read each repo's own `CLAUDE.md` / `AGENTS.md` FIRST — repo-local conventions override anything generic.
 - **Inputs** — none; monthly schedule.
 

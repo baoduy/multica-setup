@@ -33,6 +33,6 @@ carries a stable `rule-id`.
 ## Test & publish
 
 - `HELM-DEL-001` **Template change without a helm-unittest test.** Chart logic is covered by `helm-unittest` under chart's `tests/`; new conditional rendering ships with an assertion. Run `helm lint` + `helm template` clean.
-- `HELM-DEL-002` **Chart version not bumped.** Any template/values change bumps `Chart.yaml` `version` (chart SemVer); `appVersion` tracks shipped app image separately.
+- `HELM-DEL-002` **Chart version not bumped.** Any template/values change bumps `Chart.yaml` `version` (chart SemVer) — patch normally, minor for a breaking template/values change, **never major** (major is frozen and owner-only, Policy 08 statement 12); `appVersion` tracks shipped app image separately.
 - `HELM-DEL-003` **Manual publish.** Charts publish via repo workflows (OCI registry and npm) — `.github/workflows/publish-oci.yml` / `npm-publish.yaml` — not a manual `helm push`.
 

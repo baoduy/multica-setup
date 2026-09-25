@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-06 |
-| **Version** | 2.2 |
+| **Version** | 2.6 |
 | **Status** | Active |
 | **Owner** | product-owner (spec author) · spec-reviewer (gate) |
 | **Applies to** | Every Workflow B feature/enhancement spec and every dev-team implementation brief |
@@ -11,7 +11,7 @@
 | **Enforced at** | spec review gate ([`spec-review-gate`](../../skills/spec-review-gate/SKILL.md)) |
 
 > **Authority.** This policy is the source of truth for what a spec/brief contains.
-> `sdlc-spec-template` and `sdlc-impl-brief` **implement** it — the five sections,
+> `sdlc-spec-template` and `sdlc-impl-brief` **implement** it — the six sections,
 > the format rules, and the tagged Gherkin derive from it. Amend this policy first, then
 > cascade — see [change control](00-policies-index.md#change-control).
 
@@ -20,16 +20,18 @@
 ```
    product-owner (WHAT & WHY)                              dev-leader (HOW)
    ┌──────────────────────────────┐                       ┌──────────────────────────┐
-   │ SPEC (main ticket) — 5 §§     │                       │ IMPL BRIEF (dev sub-task)│
+   │ SPEC (main ticket) — 6 §§     │                       │ IMPL BRIEF (dev sub-task)│
    │ §1 Goals   §2 Current State   │   business-level,      │ Goal · Current state ·   │
    │ §3 Expected State (+Security) │   NO file:line ──────▶ │ Change set (KEEP/MODIFY/ │
-   │ §4 Scope   §5 Gherkin (@unit/ │   code detail is the   │ EXTEND/NEW/REMOVE)       │
-   │   @integration, only code)    │   dev-leader's job     └────────────┬─────────────┘
+   │ §3a Contract (fields, routes) │   code detail is the   │ EXTEND/NEW/REMOVE) —     │
+   │ §4 Scope   §5 Gherkin (@unit/ │   dev-leader's job     │ covers every §3a row     │
+   │   @integration, only code)    │                       └────────────┬─────────────┘
    └──────────────────────────────┘                                     ▼
                                                                  IMPLEMENTATION (code)
                                                        verified at the PR gate (Policy 04)
 
-   §1–§4 = business prose, NO code/class/paths/line-numbers.  §5 Gherkin is the only fenced block.
+   §1–§4 = business prose, NO class names/paths/line-numbers.  §5 Gherkin is the only fenced block.
+   §3a is the one place entity, field and endpoint names appear — the contract the team agrees before code.
 ```
 
 ## Purpose
@@ -53,19 +55,23 @@ same gate.
 
 ## Policy statements
 
-1. **The clarification gate comes before any spec work.** No deliverable while any open question remains. Resolve what the code can answer via CodeGraph-first research; ask the requester ONLY what it cannot (business rules, scope, priorities). Post remaining questions as ONE numbered comment, then STOP and wait — repeat until zero open questions. §4 Scope must carry zero open questions.
-2. **Role boundary.** product-owner states the problem, the required behaviour, and the constraints. **dev-leader designs the implementation and decomposes it** into an impl-brief. Judging whether a change is minimal, reuses the right helper, or mirrors the right pattern in code is dev-leader's call at decomposition and pr-reviewer's at the merge gate — never spec content, never spec-review content.
-3. **The five sections, in order:** 1 Goals · 2 Current State · 3 Expected State (ending in one Security line) · 4 Scope · 5 Acceptance Criteria (Gherkin, each scenario tagged `@integration` or `@unit`). No word budgets — length scales with the requirement; a section is too long the moment it answers another section's question or explains mechanism.
+1. **The clarification gate comes before any spec work.** No deliverable while any open question remains. Resolve what the code can answer via CodeGraph-first research; ask the requester ONLY what it cannot (business rules, scope, priorities). Post remaining questions as ONE numbered comment, then STOP and wait — repeat until zero open questions. §4 Scope must carry zero open questions. Run the gate with the `interview-me` and `multica-brainstorming` skills — the requester is interviewed, never guessed at; the role skill's procedure still owns the deliverable's shape and location.
+2. **Role boundary.** product-owner states the problem, the required behaviour, the constraints, and **the data and API contract the change adds (§3a)**. **dev-leader designs the implementation and decomposes it** into an impl-brief. Judging whether a change is minimal, reuses the right helper, or mirrors the right pattern in code is dev-leader's call at decomposition and pr-reviewer's at the merge gate — never spec content, never spec-review content. The contract surface is the exception the boundary draws on purpose: what the team must agree before code starts is a requirement, not a design. What sits below that surface — which class holds a field, which handler serves a route, what is reused — stays dev-leader's.
+3. **The six sections, in order,** with the headings `sdlc-spec-template` prints and the names this policy and the gate cite them by: 1 Why (Goals) · 2 Today (Current State) · 3 After the change (Expected State, ending in one Security line) · 3a Contract changes · 4 Scope · 5 Acceptance criteria (Gherkin, each scenario tagged `@integration` or `@unit`). The template owns the heading text; a spec that uses the cited name as its heading is not a finding. No word budgets — length scales with the requirement; a section is too long the moment it answers another section's question or explains mechanism.
 3a. **Specs are written for a reader with intermediate English and no context.** One idea per sentence, under 20 words, everyday words, no metaphors or idioms, bullets over paragraphs, numbers as digits, a two-sentence Summary before §1, fixed sub-labels in §1 (Problem · Affected · Why now · Done means) and §4 (Repos/packages · Not in this change · Decisions · Open questions). The spec gate scores readability inside Business clarity (`sdlc-spec-template` writing rules). The same rules bind the root-cause report, the blocker report and the final summary — everything a human reads.
 4. **Goals (§1) is the section the spec exists for** — name who is hurt, what it costs, why now, the affected role, and the observable signal the change worked, in language a non-engineer could act on. A thin or missing §1 is a spec-gate **blocker**.
-5. **Invariants live in Expected State (§3)**, stated as the property that must hold ("an existing consumer's dependency-injection registration must never break across a minor version bump"), never as the code that holds it. §3 ends with one **Security line**: the trust boundary the change introduces, or "No new attack surface" with one clause of reasoning. This is where a design mandate becomes a legitimate requirement.
-6. **Zero code blocks anywhere except the §5 Gherkin.** No C#, JSON, YAML, or mock-ups. No class names, method signatures, or file paths in any section; naming a repo or package is fine, naming a class or file is not.
-7. **No `file:line` anywhere in the spec.** The spec is business-level. CodeGraph-verified code-level detail — paths, symbols, current implementation, reuse-vs-new — is the dev-leader's and lives in the impl-brief, never in the spec.
+5. **Invariants live in Expected State (§3)**, stated as the property that must hold ("an existing consumer's dependency-injection registration keeps working after the upgrade"), never as the code that holds it. §3 ends with one **Security line**: the trust boundary the change introduces, or "No new attack surface" with one clause of reasoning. This is where a design mandate becomes a legitimate requirement.
+
+5a. **The contract lives in Contract changes (§3a).** Any change that adds or alters a domain entity states every new or changed field in a table: entity, field, type, length or precision, required, unique or indexed, default, and the notes a developer needs (allowed enum values, unit, currency, personal data, what existing rows get). Any change that adds, alters or removes an endpoint states every one of them in a table: change kind, HTTP verb, path, purpose, auth. A change touching neither says so in one line. §3a is the ONE section where entity, field and endpoint names are allowed; class names, method signatures, file paths and `file:line` stay banned there as everywhere else. A missing §3a where the change needs one is a spec-gate **blocker** — the team cannot review a contract it cannot see.
+6. **Zero code blocks anywhere except the §5 Gherkin.** No C#, JSON, YAML, or mock-ups; the §3a contract is markdown tables, not fenced code. No class names, method signatures, or file paths in any section; naming a repo, package, entity, field or endpoint path is fine, naming a class or file is not.
+7. **No `file:line` anywhere in the spec.** The spec is business-level above the contract. CodeGraph-verified code-level detail — paths, symbols, current implementation, reuse-vs-new — is the dev-leader's and lives in the impl-brief, never in the spec.
+
+7a. **§4 Scope names every repo the change touches**, one per bullet, each with what changes in one clause — services, libraries, consumers that must be updated, and repos that need only a version bump. Multi-repo work is the normal case here; a repo the §3a contract or a §3 requirement plainly implies but §4 never names is a spec-gate **major**, because the squad sizes and schedules the work off this list.
 8. **Research with CodeGraph before writing the business claims.** §2 Current State and every §3 invariant claiming a property of the code today must be grounded by `codegraph explore` before the spec is posted — a §2/§3 claim the code plainly contradicts, or a §4 Scope naming a repo/package that does not exist, is a spec-gate blocker.
 9. **§5 Acceptance Criteria follows the BRIEF Gherkin standard** (Business language, Real data, Intention-revealing, Essential, Focused, Brief) and must be automatable as tests in the repo — drunk has no deployed system to run BDD scenarios against, so every scenario targets the test suite, never an environment.
 10. **§5 scenario tags are the test scope, never a waiver.** Every scenario carries `@integration` or `@unit`; that tagging tells dev-team which suite each criterion belongs to and replaces the old separate Test Scope section. Testing is never optional: dev-team self-verifies every change at ≥80% per-touched-class coverage (tests authored by dev-backend, test-first) as part of Implementation regardless of what the spec says, so there is no `required`/`waived` toggle here (contrast a deployed-service factory's BDD-integration waiver, which does not exist in drunk). Any statement proposing to waive, defer, or skip testing is itself a blocker.
 11. **The spec-review gate loop:** score 1–10 on a weighted rubric (coverage & traceability 30%, Gherkin quality 25%, business clarity & problem framing 20%, security 10%, completeness & unambiguity 15%). **APPROVED** requires score ≥ 8.5 AND zero blocker findings. **REWORK** (score < 8.5 or any blocker) loops back to product-owner, capped at **5 rounds** (tracked on the `Gate round` property, [Policy 04](04-code-and-spec-review.md) statement 11a); round 6 triggers **MANUAL HANDOFF** to the requester (or workspace-owner fallback) instead of a sixth rework. Each round is re-armed by product-owner in two mandatory parts — the sub-task flipped `in_progress --no-start`, then ONE resume comment carrying spec-reviewer's mention. A flip to `todo` re-arms nothing; the mention is the wake.
-12. **Implementation brief (`sdlc-impl-brief`) is the layer below the spec** — dev-leader's translation into a task list against real code (Goal · Current state · Change set · delta markers KEEP/MODIFY/EXTEND/NEW/REMOVE). It carries the code-level detail the spec deliberately omits, never restates the business spec, and never contradicts the spirit of §3's invariants; anything the brief needs beyond the spec (a new entity, table, or migration) is dev-leader's design call, made explicit in the brief's Change set rather than assumed from the spec.
+12. **Implementation brief (`sdlc-impl-brief`) is the layer below the spec** — dev-leader's translation into a task list against real code (Goal · Current state · Change set · delta markers KEEP/MODIFY/EXTEND/NEW/REMOVE). It carries the code-level detail the spec deliberately omits, never restates the business spec, and never contradicts the spirit of §3's invariants or a §3a contract row. The brief's Change set covers every §3a row. A field, endpoint, table or migration the brief needs **beyond** §3a is dev-leader's design call, made explicit as its own Change set row rather than assumed from the spec — and if it changes the agreed contract rather than sitting below it, dev-leader says so on the ticket instead of shipping the divergence quietly.
 13. **Bugs (Workflow A) are NOT spec-gated.** Root-cause reports carry their own calibrated confidence gate (see [Policy 05](05-sdlc-delivery-lifecycle.md) and [Policy 07](07-bug-and-defect-management.md)) and only enter this policy's scope if the requester explicitly asks for a spec.
 
 ## Roles & responsibilities
@@ -76,9 +82,11 @@ same gate.
 
 ## Definition of Done / compliance
 
-- All five sections present, in order, zero TBD/TODO/placeholders, no contradictions.
+- All six sections present, in order, zero TBD/TODO/placeholders, no contradictions.
+- §3a states every new or changed field with type, length and attributes, and every new, changed or removed endpoint with verb and path — or one line saying the change touches neither.
+- §4 names every repo the change touches.
 - Every §5 acceptance criterion traces to a §1 Goal and vice versa; every scenario tagged `@integration` or `@unit`.
-- Zero code/class-names/paths/line-numbers anywhere outside §5's Gherkin.
+- Zero code blocks outside §5's Gherkin; zero class names, method signatures, paths or line numbers anywhere, §3a included.
 - §5 tags agree with §4 Scope; no waiver language present.
 - Spec-gate score ≥ 8.5, zero blockers, before any Workflow C delegation.
 
@@ -87,9 +95,10 @@ same gate.
 `spec-reviewer` scores conformance to this policy's contract (see
 [Policy 04](04-code-and-spec-review.md)), confirming §4 Scope names real repos and that
 §2/§3 claims hold against real code with CodeGraph before scoring. Format violations — a
-code block outside §5, a symbol or path in any section, any `file:line` citation, a
-missing/thin §1, an untagged §5 scenario, a testing waiver — are each a blocker regardless
-of the overall score.
+code block outside §5, a class name, method signature or path in any section, any
+`file:line` citation, a missing/thin §1, a missing §3a where the change adds an entity or
+an endpoint, an untagged §5 scenario, a testing waiver — are each a blocker regardless of
+the overall score.
 
 ## Exceptions & waivers
 
@@ -103,6 +112,6 @@ of the overall score.
 
 ## References
 
-- [`sdlc-spec-template`](../../skills/sdlc-spec-template/SKILL.md) — the five sections, format rules, BRIEF Gherkin standard, tagged Gherkin (source of truth).
+- [`sdlc-spec-template`](../../skills/sdlc-spec-template/SKILL.md) — the six sections, the §3a contract tables, format rules, BRIEF Gherkin standard, tagged Gherkin (source of truth).
 - [`sdlc-impl-brief`](../../skills/sdlc-impl-brief/SKILL.md) — the dev sub-task brief template and the Change set / delta-marker model.
 - [`agents/product-owner.md`](../../agents/product-owner.md), [`agents/spec-reviewer.md`](../../agents/spec-reviewer.md).

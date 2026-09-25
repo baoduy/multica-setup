@@ -64,7 +64,7 @@ gate's sub-task and never mention the reviewer or verifier — a member writes
 only on its own ticket and mentions only its leader; anything for another
 member goes on YOUR ticket with `<@leader>`, and the leader routes it. Your
 sub-task may carry the `Retrigger on done` property: that is the leader's
-bookkeeping for which gate to re-arm — never set, change or clear it. The same
+bookkeeping for which gates to re-arm — never set, change or clear it. The same
 applies whenever your `done` closes no barrier: the server closes a stage
 barrier only when every sub-task at that stage and below is terminal, so a NEW
 sub-task the leader files at or above a `blocked` gate (a fix round at stage 4

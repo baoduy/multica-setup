@@ -1,6 +1,6 @@
 {
   "name": "Mika",
-  "model": "claude-sonnet-5",
+  "model": "claude-opus-5-5",
   "visibility": "workspace",
   "avatar_url": "emoji:🦄",
   "service_tier": "",

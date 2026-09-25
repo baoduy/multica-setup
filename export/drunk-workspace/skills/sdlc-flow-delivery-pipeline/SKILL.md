@@ -2,12 +2,29 @@
 
 The one-page contract every pipeline agent shares: actors, flows, stage ownership, branch strategy, escalation caps. Platform-wide constants (statuses, wakes, titles, `Owner`, git rules) are in the Workspace Context you already carry and are not repeated here. Role procedure lives in role skills — `sdlc-flow-po-orchestration` (product-owner), `sdlc-flow-squad-leader-playbook` (dev-leader), `spec-review-gate`, `pr-review-gate`; if this file and a role skill disagree, the role skill wins for its owner and the mismatch is reported to the workspace owner.
 
+## Constants
+
+The numbers the whole factory quotes. Change one here and it changes everywhere it is written out — grep the bundle before calling it done.
+
+| Constant | Value | Owned by |
+|---|---|---|
+| spec gate approve bar | **8.5** (zero `blocker` findings) | Policy 04 §6 · `spec-review-gate` |
+| PR gate approve bar | **8.5** (zero `blocking` findings, all merge preconditions) | Policy 04 §5 · `pr-review-gate/references/scoring-rubric.md` |
+| deduction math, both gates | start 10 · blocker/blocking −4 · major/important −2 · minor/nit −0.5 (max −1.5) · floor 1 · caps after the weighted sum | `scoring-rubric.md` (the full cap table lives there) |
+| coverage bar | **≥80%** per class/module the cycle touched, on the feature branch only | Policy 02 §6 |
+| rework rounds | spec **5**, PR **3** (+1 non-budgeted polish round) | Policy 04 §6, §11b |
+| bug auto-delegate | confidence **≥90%**, else the requester confirms | Policy 07 §3 |
+| squad fix attempts | **2** on one root cause, then escalate | Policy 05 §9 |
+| sweep findings | **≤10** new issues per repo per run | Policy 04 §19 |
+| run-medic wakes | **3** per issue, then its human owner | Policy 09, `run-medic` charter |
+| brief size | 6–8 KB, split the surface over 10 KB; leader plan comment under 2 KB | `sdlc-impl-brief`, leader playbook |
+
 ## Actors
 
 - **product-owner** — leader of product-team. Research, spec, orchestration of the ticket it is assigned. Read-only on code. A root ticket (no parent) it owns through release; a sub-issue (has a parent) it owns through development only — the parent's owner releases all its children together.
 - **spec-reviewer** — automated spec gate (Workflow B). Approve bar 8.5, max 5 rework rounds.
 - **dev-team** — squad led by **dev-leader**; members dev-backend (tests and code, acceptance-test-first), docs-writer (documentation only), pr-reviewer (PR gate, merges into `dev`), release-manager (a `Release` stage on root cycles). The leader cuts the one feature branch and opens the one PR itself (`leader-gitops`).
-- **pr-reviewer** — automated PR gate for every `dev`-bound PR (dev-team's cycle PR and devops' standalone PR). Approve bar 8.5, max 2 rework rounds plus one polish round.
+- **pr-reviewer** — automated PR gate for every `dev`-bound PR (dev-team's cycle PR and devops' standalone PR). Approve bar 8.5, max 3 rework rounds plus one polish round.
 - **release-manager** — opens and merges the single `dev`→`main` release PR, as `[P<num>-2]` on a spec cycle or `[D<num>-n] Release` on a root cycle. CI publishes the package on merge.
 - **devops** — CI/CD pipelines, package-publish automation, docker-compose files. Lands as `chore/<issue-key>` PR to `dev`, gated by pr-reviewer. Never enters the squad flow, never gets a spec gate.
 - **Humans** — the requester (root creator) and the resolved owner (`Owner` property). Business clarifications and escalations only.
@@ -45,7 +62,7 @@ All traffic inside a squad is routed by its leader: members write only on their 
 
 ## Stage barriers
 
-Stage N's barrier fires only when every sub-task at stage ≤ N is terminal (`done`/`cancelled`). A `blocked` gate at stage 3 keeps every higher stage's `done` silent, so a sub-task filed above a non-terminal stage must end its completion report with the leader's mention. A re-entry into `done` re-fires the barrier. Nobody flips their own sub-task out of `done`. The leader does, only to `in_progress` (`multica issue status <id> in_progress --no-start`) and only as the first step of re-triggering fix work on a `done` or `blocked` sub-task, mention posted after; the barrier that re-fires when it returns to `done` is expected, and the leader treats it as a report to verify, not as a new stage. Every re-triggered sub-task carries `Retrigger on done` = the blocked gate's key (workspace context), so a fix landing above the gate's stage — where `done` fires no barrier — still tells the leader exactly which issue to re-arm.
+Stage N's barrier fires only when every sub-task at stage ≤ N is terminal (`done`/`cancelled`). A `blocked` gate at stage 3 keeps every higher stage's `done` silent, so a sub-task filed above a non-terminal stage must end its completion report with the leader's mention. A re-entry into `done` re-fires the barrier. Nobody flips their own sub-task out of `done`. The leader does, only to `in_progress` (`multica issue status <id> in_progress --no-start`) and only as the first step of re-triggering fix work on a `done` or `blocked` sub-task, mention posted after; the barrier that re-fires when it returns to `done` is expected, and the leader treats it as a report to verify, not as a new stage. Every re-triggered sub-task carries `Retrigger on done` = the blocked issue's key, comma-separated when its `done` must re-arm several (workspace context), so a fix landing above the gate's stage — where `done` fires no barrier — still tells the leader exactly which issues to re-arm.
 
 ## Human touch points
 
@@ -54,7 +71,7 @@ Stage N's barrier fires only when every sub-task at stage ≤ N is terminal (`do
 | business clarification | — | requester, always |
 | spec review | 5 rework rounds | `[S<num>]` reassigned to the resolved owner at `todo` |
 | bug confidence | < 90% | requester confirms before delegation |
-| PR review | 2 rework rounds, failed precondition, failed merge | Review sub-task reassigned to the resolved owner at `todo` |
+| PR review | 3 rework rounds, failed precondition, failed merge | Review sub-task reassigned to the resolved owner at `todo` |
 | squad fix attempts | 2 on one root cause | phase cycle → product-owner mentioned on the phase ticket; root cycle → resolved owner by reassignment |
 | defect found by a member | — | leader files ONE `bug-report` ticket assigned to product-owner at `todo`, `Owner` set; Workflow A's confidence gate decides whether a human confirms |
 | review leftovers | — | in-scope: cleared by pr-reviewer in-cycle; out-of-scope: dropped unless a defect or security finding with a named reproduction |

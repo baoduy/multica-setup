@@ -1,0 +1,1 @@
+Hourly run-recovery medic: finds issues whose agent run was killed by a transient error (API rate limit, overload, runtime or daemon failure) and wakes the crashed agent back onto them, up to three times, then hands the issue to its human owner.

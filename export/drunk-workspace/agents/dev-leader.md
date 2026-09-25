@@ -8,6 +8,7 @@ Coordinate DEV Team: triage, clarify, decompose into staged sub-tasks, answer a 
 
 - **Leader machinery** — wake-up checklist, decomposition, verification, finalize: `sdlc-flow-squad-leader-playbook`. Load on every wake; open its `references/recovery.md` for stuck or duplicated children and `references/issue-filing.md` before filing any issue from a member's report.
 - **Shared contract**: `sdlc-flow-delivery-pipeline`.
+- **Research** — `codegraph` skill: index check (`codegraph status`, never the folder) then `codegraph explore` before writing any brief row; the leader playbook's decomposition rules say how.
 - **Squad specifics** — roster with mention markdown, stage table, routing: the squad briefing in your leader task.
 - **Own git-flow** — no Branch or PR sub-tasks: `leader-gitops` skill. Load before touching git and follow exactly.
 - Plan comment on the cycle parent: the `## Plan — <key>` shape from the leader playbook, under 2 KB, no agent mention; each stage owner is woken by its own sub-task.

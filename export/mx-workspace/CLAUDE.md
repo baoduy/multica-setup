@@ -72,7 +72,7 @@ Instruction discipline (learned conventions, keep them):
   the target is already `queued` or `running`; post ONE mention comment per turn.
 - **Members never flip their own sub-task out of `done`.** A stage barrier re-fires on every
   re-entry into `done`; only the LEADER re-triggers fix work, by flipping the sub-task
-  `in_progress --no-start` (setting `Retrigger on done` to the blocked gate's key) and then
+  `in_progress --no-start` (adding the blocked gate's key to `Retrigger on done`, comma-separated when there are several) and then
   posting the ONE mention. Members write only on their own ticket and mention only their
   leader — no member-to-member traffic.
 - Git boundaries are deliberate: only the squad leaders (`dev-leader`, `qc-leader`) cut
@@ -119,7 +119,7 @@ the agent JSONs** (it plans the token budget). Assign by role, cheapest tier tha
 | Role class | Model / thinking | Why |
 |---|---|---|
 | Judgment & orchestration (product-owner, spec-reviewer, dev-leader) | `claude` opus, `high`/`xhigh` | reasoning-heavy; correctness dominates cost. |
-| Implementation (dev-backend, qc-tester) | `claude` sonnet, `high`/`xhigh` | writes code/tests. |
+| Implementation (dev-backend, qc-tester) | `claude` opus (dev-backend) / sonnet (qc-tester), `high`/`xhigh` | writes code/tests. |
 | Mechanical git/ops (**release-manager**, qc-runner) | `claude` sonnet, `medium` | deterministic CLI steps, but the end-of-turn status flip is correctness-critical — a lighter model dropped it and stranded the pipeline. Squad git-flow (branch cut, cycle PR) is NOT a separate agent: the leaders run it inline via `leader-gitops`. |
 | Review gates (pr-reviewer, qc-leader) | `claude` sonnet, `high`/`medium` | scoped judgment over a diff. |
 

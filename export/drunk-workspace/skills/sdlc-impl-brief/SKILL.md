@@ -6,6 +6,8 @@ This is not the spec. The business spec lives on the root or phase ticket (`sdlc
 
 **You own the reuse/modify/add decision.** A `KEEP` / `MODIFY` / `EXTEND` / `REMOVE` row names a symbol that exists today; a `NEW` row is valid only after you searched for something to reuse and found nothing. A new entity, table or migration needs its own `NEW` row. Only a `REMOVE` row authorises deleting a public member, endpoint, config key, column or table.
 
+**The spec's §3a contract is binding input.** Every field and endpoint §3a declares has a Change set row covering it. A field or endpoint you need beyond §3a is your design call and gets its own row; one that changes what §3a agreed — a different type, length, verb or path — goes back to product-owner on the ticket instead of landing quietly in the brief.
+
 ## Writing rules (agent reader)
 
 1. Tables over prose. One row per unit of work. One line per cell.

@@ -1,6 +1,6 @@
 {
   "name": "product-owner",
-  "model": "claude-opus-5[1m]",
+  "model": "claude-opus-5-5[1m]",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/ed38be16-b92f-48cc-9611-89bf09102d84/019fb5a7-427e-7603-a712-9f8c2d50e3d2.png",
   "service_tier": "",

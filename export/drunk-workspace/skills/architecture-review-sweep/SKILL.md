@@ -19,13 +19,19 @@ Read repo's own `CLAUDE.md` / `AGENTS.md` first — solution-local conventions *
 
 ### Build CodeGraph index first
 
-Per `codegraph` skill: fresh checkout never has usable index — run `codegraph init .` once per run per repo, confirm nodes/edges > 0 via `codegraph status .`, then prefer `codegraph explore`/`callers`/`node` over grep/Read for anything structural. `explore`'s per-symbol "no covering tests found" weights severity: untested symbol with real defect ranks above tested one. If `codegraph init` fails, say so in report and fall back to Grep/Read — never silently degrade; layering and dead-code findings are much weaker without call-graph data.
+Per `codegraph` skill: fresh checkout never has usable index — run `codegraph init --yes .` once per run per repo, in the foreground, confirm nodes/edges > 0 via `codegraph status .`, then prefer `codegraph explore`/`callers`/`node` over grep/Read for anything structural. `explore`'s per-symbol "no covering tests found" weights severity: untested symbol with real defect ranks above tested one. If `codegraph init` fails, say so in report and fall back to Grep/Read — never silently degrade; layering and dead-code findings are much weaker without call-graph data.
 
 ## 1. Scope file set
 
-Include all production `.cs`. Exclude:
-- every unit/BDD test project (`*.UnitTests`, `*.BDDTests`, `*Tests.csproj`)
-- `obj/`, `bin/`, `Migrations/`, `GeneratedDtos/`, `*.g.cs`, `*.Designer.cs`
+Production source for the repo's stack only. Exclude tests, build output, generated and vendored code:
+
+| Stack | Include | Exclude |
+|---|---|---|
+| .NET | `.cs` under the solution | test projects (`*.UnitTests`, `*.BDDTests`, `*Tests.csproj`), `obj/`, `bin/`, `Migrations/`, `GeneratedDtos/`, `*.g.cs`, `*.Designer.cs` |
+| TypeScript / Pulumi | `src/**/*.ts` | `node_modules/`, `bin/`, `*.d.ts`, `*.test.ts`, `*.spec.ts`, `*.ts.ignore`, sample files |
+| Python | `src/**/*.py` | `tests/`, `.venv/`, generated stubs |
+| Docker | `Dockerfile`(s), `.dockerignore`, compose files | — |
+| Helm | `Chart.yaml`, `values.yaml`, `templates/**` | `tests/` — read for coverage, never scanned for findings |
 
 Record counts in report — reviewers need to know what was and wasn't covered.
 
@@ -112,7 +118,7 @@ Keep rule-id bracket. Cheap dedupe pass in §4 builds its seen-set from titles, 
 Two reasons prefix is load-bearing, not decoration:
 
 1. It makes review's whole output greppable and orderable as one batch (`A912-*`), same way delivery squads use `[D763-4]` / `[T586-2]`.
-2. Nightly issue-hygiene autopilot exempts issues matching `^\[A\d+-\d+\]` from terminal-parent status inheritance. Without prefix, `backlog` finding parented to run issue that ends `done` gets flipped to `done` next night and finding is lost. **Malformed prefix silently destroys finding.** Self-check every title against `^\[A[0-9]+-[0-9]+\] ` before you move on.
+2. Weekly issue-hygiene autopilot exempts issues matching `^\[A\d+-\d+\]` from terminal-parent status inheritance. Without prefix, `backlog` finding parented to run issue that ends `done` gets flipped to `done` next night and finding is lost. **Malformed prefix silently destroys finding.** Self-check every title against `^\[A[0-9]+-[0-9]+\] ` before you move on.
 
 ```bash
 multica issue create \

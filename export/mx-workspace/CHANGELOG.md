@@ -4,6 +4,96 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-24 — PR review round cap raised from 2 to 3 (live)
+
+🦅 pr-reviewer may now issue 3 REWORK verdicts before ESCALATED → MANUAL HANDOFF (was 2), on
+the owner's request. The spec cap (5), the squad fix-attempt cap (2 on the same root cause) and
+the polish round are unchanged. Amended **Policy 04 v1.2** (diagram, statement 4, round-caps
+exception), **Policy 05 v1.3** (statement 9) and **Policy 09 v1.2** (pr-reviewer
+responsibilities). Cascaded to `pr-review-gate` (REWORK row, `maxReworkRounds: 3`,
+`references/multica-flow.md` cap check and `round N of 3`), `sdlc-flow-delivery-pipeline`
+(human touch-point table) and README (§ small-change path, dev/qc squad trees, escalation valve
+table, skill table). Same change in drunk-workspace.
+
+## 2026-09-24 — dev-backend moves to Claude Opus 5.5 (live)
+
+🔨 dev-backend moves from `claude-sonnet-5` to `claude-opus-5-5` (standard context tier,
+thinking stays `high`), on the owner's request. No policy touched. Cascaded to
+`agents/dev-backend.json`, README §6 (table and tier summary) and the `CLAUDE.md` role table.
+Same change in drunk-workspace.
+
+## 2026-09-24 — `Retrigger on done` holds several issue keys (dev-team, qc-team, product-team; live)
+
+A fix whose `done` must re-trigger more than one blocked sibling had no way to say so: the
+property held one issue key (DRK-1696 in drunk-workspace hit it). The value is now one key or
+several, comma-separated (`MXW-1703,MXW-1704`). The leader appends a key to a sub-task that
+already carries one instead of overwriting it, re-arms each named issue once every child naming
+it is `done` (one re-arm per issue however many children name it), and drops each key as it is
+re-armed, unsetting the property when none is left. **MX-POL-04 v1.1**: the Fix carries
+`Retrigger on done` naming every gate to re-arm. Cascaded to `properties/properties.json`,
+`workspace.context.md`, `sdlc-flow-delivery-pipeline`, `sdlc-flow-squad-leader-playbook`
+(checklist item 1, re-trigger rule, review-fix steps 1–2, loop-back and resume),
+`sdlc-flow-squad-member-protocol`, `squads/product-team.md`, `CLAUDE.md` and `README.md`. Same
+change in drunk-workspace.
+
+## 2026-09-24 — stuck-run recovery escalates the wake list only, by ticket identifier
+
+The hourly stuck-run recovery autopilot escalated the RAW candidate list when its
+blast-radius guard tripped: parents whose run ended cleanly while their sub-issues were
+still working, and issues already `done`, appeared as findings, each identified by a bare
+UUID. Step 4 now skips any issue with children (`total > 0`) whose own newest task did not
+fail — a parent with open sub-issues is a cycle in flight, not a strand; a parent whose task
+genuinely failed stays eligible. Step 9 reports the wake list and nothing else: skipped
+issues are never listed or counted, an empty wake list produces no escalation issue at all,
+and every row is keyed on the ticket identifier (`MXW-1016`) and the agent NAME, never a
+UUID. Same change applied to `drunk-workspace`'s hourly run-recovery autopilot and the
+`run-medic` agent instructions.
+
+## 2026-09-24 — opus agents move to Claude Opus 5.5; model table matches the JSON again
+
+Every agent on `claude-opus-5` moves to **`claude-opus-5-5`** (same 1M context, same
+`[1m]` tier marker where it was set, lower per-token price): 🦊 product-owner, 🦉 spec-reviewer
+and 🐙 devops on `claude-opus-5-5[1m]`, 🐲 claude_ultra, 🏛️ arch-reviewer, 🧪 bdd-reviewer and
+🐼 Mika on `claude-opus-5-5`. Thinking levels are unchanged — Opus 5.5 defaults to `medium`
+effort and cannot run with thinking disabled, so every agent keeps an explicit level.
+
+The model table had drifted from `agents/*.json` and is corrected in the same pass:
+🦉 spec-reviewer and 🐺 dev-leader were listed as `claude-opus-4-8` (actual: opus on the 1M
+tier, and Claude Sonnet respectively), 🦊 product-owner was missing its `[1m]` marker, and
+🐼 Mika was listed as opus while its JSON said Sonnet — resolved in favour of the table, so
+Mika is now opus in both, and 🦊 product-owner's thinking column is corrected from `xhigh`
+to `high`, the level its JSON and the live agent already ran at. Live agents updated to match.
+
+## 2026-09-22 (b) — root ticket titles carry a type prefix (Policy 05 v1.2)
+
+A root ticket's type was readable only from its label, so a board or a notification showed nothing about what kind of
+work a ticket was. Owner-approved amendment to MX-POL-05 §7 (new 7a, 7b): **every ROOT main ticket title carries one
+type prefix** — `[Feature]` (new capability) · `[Enhance]` (change to behaviour that exists) · `[Bug]` · `[Question]` ·
+`[CICD]` — matching its type label.
+- The **label stays the source of truth**; `[Feature]` and `[Enhance]` both carry `feature`, so the prefix is the finer split the labels do not make. A prefix disagreeing with the label is a defect to fix, not to argue.
+- **product-owner sets or corrects it at intake**, in the same step it labels the root and posts the spec: `multica issue update <root-id> --title "<prefix> <plain title>" --no-start`. `--no-start` is mandatory — the root is assigned to the squad and a title update without it wakes a second run.
+- **Root-only.** No child carries a type prefix, and `[S#]`/`[P#-n]`/`[D#-n]`/`[T#-n]` keying is off the root's key NUMBER, so the rename changes no numbering.
+- Requesters still create with a plain title; reclassifying the workflow re-prefixes.
+
+Cascaded to `sdlc-flow-delivery-pipeline`, `sdlc-flow-po-orchestration` (new step 2a), `workspace/workspace.context.md`,
+and agents `claude-ultra` and `default`.
+
+## 2026-09-22 — the spec carries the contract: §3a fields and endpoints (Policy 06 v2.1)
+
+The spec was business-only above the contract, so the data and API surface the whole platform must agree on
+before code started reached the team only in the dev-leader's impl-brief — one layer too late to review, and
+invisible to the other repos it binds. Owner-approved amendment to MX-POL-06 statements 1, 2, 3, 6 and 10
+(new 3a, 3b): the spec now has **six sections**, with **§3a Contract changes** between Expected State and Scope.
+- **Fields:** one row per new or changed field — entity, field, type, length/precision, required, unique/indexed, default, notes (allowed enum values, unit, currency, personal data, what existing rows get).
+- **Endpoints:** one row per endpoint — new/changed/removed, HTTP verb, path, purpose, auth.
+- **§4 Scope** names every repo and service touched, one per bullet with what changes; a repo the contract implies but Scope omits is a `major`.
+- §3a is the ONE section where entity, field and endpoint names are allowed; class names, method signatures, paths and `file:line` stay blockers everywhere, §3a included. The tables are markdown, so §5 Gherkin is still the only fenced block.
+- Gate: missing §3a where the change adds an entity or endpoint is a `blocker`; incomplete field or endpoint rows are `major`. Folded into the existing Completeness & unambiguity dimension — **weights and the 9.0 bar are unchanged**.
+- Impl-brief: every §3a row is covered by a Change set row; a divergence from the agreed contract goes back to product-owner, not into the brief.
+
+Cascaded to `sdlc-spec-template`, `spec-review-gate`, `sdlc-impl-brief`, `sdlc-flow-po-orchestration`,
+`agents/product-owner.md` and Policy 04's Definition of Done.
+
 ## 2026-09-16 (c) — a re-arm into `todo` wakes nobody, on the spec gate too (live)
 
 drunk-workspace DRK-1364: product-owner answered two spec-review REWORK rounds by flipping the `[S1311]`

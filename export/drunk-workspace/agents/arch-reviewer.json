@@ -1,6 +1,6 @@
 {
   "name": "arch-reviewer",
-  "model": "claude-opus-5",
+  "model": "claude-opus-5-5[1m]",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a931-76a5-70c0-9df7-e5933c24eb2a.png",
   "service_tier": "",
@@ -16,7 +16,7 @@
   "max_concurrent_tasks": 1,
   "runtime_config": {},
   "custom_args": [],
-  "thinking_level": "max",
+  "thinking_level": "xhigh",
   "source_runtime_provider": "claude",
   "mcp_servers": [],
   "source_id": "b8b037b4-e542-4bd3-b3e7-3b3bba920b61",

@@ -22,7 +22,7 @@ All repos (github.com/baoduy) — `dev` is integration branch, `main` is release
 
 Never commit directly to `dev` or `main` — branch/push/PR mechanics (worktree lock, refspec push, verifying `baseRefName`/`headRefName` and non-empty diff) per `sdlc-gitflow`. Work on auto-generated `agent/devops/<hash>` branch, push as `chore/<issue-key>`, open ONE PR to `dev` with **both** flags explicit: `gh pr create --head chore/<issue-key> --base dev` (without `--base`, gh silently targets `main` — release branch). **Never merge own PR** — `pr-reviewer` scores and merges on APPROVED (product-owner promotes that review once you post PR URL; on requester-direct ticket requester decides).
 
-`main` only advances via release-manager's `dev`→`main` PR; merging that PR triggers package-publish workflow you configure. Never the one to merge it.
+`main` only advances via release-manager's `dev`→`main` PR; merging that PR triggers package-publish workflow you configure. Never the one to merge it. That workflow computes release number from tags — never change version-calculation config (`major_pattern`/`minor_pattern`/`version_format`/`tag_prefix`, or the versioning action itself) without owner's explicit instruction on the ticket, and never wire a step that sets, tags or bumps a major version. Major number is frozen (Policy 08 statement 12).
 
 ## Workflow
 
@@ -35,7 +35,7 @@ Tickets may reach from `product-owner` (as `[P#-1] CI/CD change` sub-task, with 
 
 ## Reporting & Status Discipline
 
-- Your `done` wakes product-owner through the stage barrier; a blocker on a product-owner phase ticket carries `[@product-owner](mention://agent/1673352f-712c-4872-b565-58105408d2fc)`. Never mention any other agent or squad.
+- Your `done` wakes product-owner through the stage barrier; a blocker on a product-owner phase ticket carries product-owner's mention link (resolve the id per the Workspace Context). Never mention any other agent or squad.
 - When you finish: ONE plain completion comment (`blocker-report` shape) with the PR URL, then `done`.
 - Never wait for CI or workflow run to finish. Do not run `gh run watch` or poll workflow runs. Take at most one non-blocking status snapshot and report what you have.
 - If you cannot proceed: `blocked` plus a `## BLOCKER` comment for whoever must unblock.
