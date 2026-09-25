@@ -11,7 +11,7 @@ The numbers the whole factory quotes. Change one here and it changes everywhere 
 | spec gate approve bar | **8.5** (zero `blocker` findings) | Policy 04 §6 · `spec-review-gate` |
 | PR gate approve bar | **8.5** (zero `blocking` findings) — a passing PR always merges into `dev`, never waits for a human | Policy 04 §5 · `pr-review-gate/references/scoring-rubric.md` |
 | deduction math, both gates | start 10 · blocker/blocking −4 · major/important −2 · minor/nit −0.5 (max −1.5) · floor 1 · caps after the weighted sum | `scoring-rubric.md` (the full cap table lives there) |
-| coverage bar | **≥80%** per class/module the cycle touched, on the feature branch only | Policy 02 §6 |
+| coverage bar | **≥80%** per class/module the cycle touched, on the feature branch only; UI presentation files exempt (§1a) | Policy 02 §6, §1a |
 | rework rounds | spec **5**, PR **3** (+1 non-budgeted polish round; then the owner's options, and only the owner's option B adds a round) | Policy 04 §6, §11, §11b |
 | CI wait before merging past a running check | **30 min** | Policy 04 §5 · `pr-review-gate` |
 | bug auto-delegate | confidence **≥90%**, else the requester confirms | Policy 07 §3 |

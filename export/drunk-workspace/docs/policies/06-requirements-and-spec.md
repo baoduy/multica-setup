@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-06 |
-| **Version** | 2.6 |
+| **Version** | 2.7 |
 | **Status** | Active |
 | **Owner** | product-owner (spec author) · spec-reviewer (gate) |
 | **Applies to** | Every Workflow B feature/enhancement spec and every dev-team implementation brief |
@@ -69,7 +69,7 @@ same gate.
 7a. **§4 Scope names every repo the change touches**, one per bullet, each with what changes in one clause — services, libraries, consumers that must be updated, and repos that need only a version bump. Multi-repo work is the normal case here; a repo the §3a contract or a §3 requirement plainly implies but §4 never names is a spec-gate **major**, because the squad sizes and schedules the work off this list.
 8. **Research with CodeGraph before writing the business claims.** §2 Current State and every §3 invariant claiming a property of the code today must be grounded by `codegraph explore` before the spec is posted — a §2/§3 claim the code plainly contradicts, or a §4 Scope naming a repo/package that does not exist, is a spec-gate blocker.
 9. **§5 Acceptance Criteria follows the BRIEF Gherkin standard** (Business language, Real data, Intention-revealing, Essential, Focused, Brief) and must be automatable as tests in the repo — drunk has no deployed system to run BDD scenarios against, so every scenario targets the test suite, never an environment.
-10. **§5 scenario tags are the test scope, never a waiver.** Every scenario carries `@integration` or `@unit`; that tagging tells dev-team which suite each criterion belongs to and replaces the old separate Test Scope section. Testing is never optional: dev-team self-verifies every change at ≥80% per-touched-class coverage (tests authored by dev-backend, test-first) as part of Implementation regardless of what the spec says, so there is no `required`/`waived` toggle here (contrast a deployed-service factory's BDD-integration waiver, which does not exist in drunk). Any statement proposing to waive, defer, or skip testing is itself a blocker.
+10. **§5 scenario tags are the test scope, never a waiver.** Every scenario carries `@integration` or `@unit`; that tagging tells dev-team which suite each criterion belongs to and replaces the old separate Test Scope section. Testing is never optional: dev-team self-verifies every change at ≥80% per-touched-class coverage (tests authored by dev-backend, test-first) as part of Implementation regardless of what the spec says, so there is no `required`/`waived` toggle here (contrast a deployed-service factory's BDD-integration waiver, which does not exist in drunk). Any statement proposing to waive, defer, or skip testing is itself a blocker. The one exception is set by policy, not by the spec: a UI presentation change ([Policy 02](02-testing-and-quality.md) statement 1a) is built without tests; its §5 scenarios are still written and tagged, and they scope the later UI test pass.
 11. **The spec-review gate loop:** score 1–10 on a weighted rubric (coverage & traceability 30%, Gherkin quality 25%, business clarity & problem framing 20%, security 10%, completeness & unambiguity 15%). **APPROVED** requires score ≥ 8.5 AND zero blocker findings. **REWORK** (score < 8.5 or any blocker) loops back to product-owner, capped at **5 rounds** (tracked on the `Gate round` property, [Policy 04](04-code-and-spec-review.md) statement 11a); round 6 triggers **MANUAL HANDOFF** to the requester (or workspace-owner fallback) instead of a sixth rework. Each round is re-armed by product-owner in two mandatory parts — the sub-task flipped `in_progress --no-start`, then ONE resume comment carrying spec-reviewer's mention. A flip to `todo` re-arms nothing; the mention is the wake.
 12. **Implementation brief (`sdlc-impl-brief`) is the layer below the spec** — dev-leader's translation into a task list against real code (Goal · Current state · Change set · delta markers KEEP/MODIFY/EXTEND/NEW/REMOVE). It carries the code-level detail the spec deliberately omits, never restates the business spec, and never contradicts the spirit of §3's invariants or a §3a contract row. The brief's Change set covers every §3a row. A field, endpoint, table or migration the brief needs **beyond** §3a is dev-leader's design call, made explicit as its own Change set row rather than assumed from the spec — and if it changes the agreed contract rather than sitting below it, dev-leader says so on the ticket instead of shipping the divergence quietly.
 13. **Bugs (Workflow A) are NOT spec-gated.** Root-cause reports carry their own calibrated confidence gate (see [Policy 05](05-sdlc-delivery-lifecycle.md) and [Policy 07](07-bug-and-defect-management.md)) and only enter this policy's scope if the requester explicitly asks for a spec.
@@ -104,7 +104,8 @@ the overall score.
 
 - There is no BDD-integration waiver in drunk — unlike a deployed-service factory, there is
   no SANDBOX stage to waive; dev-team's in-repo verification is never optional and costs no
-  points either way.
+  points either way. UI presentation files are built without tests by policy
+  ([Policy 02](02-testing-and-quality.md) statement 1a), not by the spec.
 - A finding that exposes a genuine business question during REWORK reopens the
   clarification gate (statement 1) before the spec is revised again.
 - Bugs skip this policy's gate unless the requester requests a spec, at which point every

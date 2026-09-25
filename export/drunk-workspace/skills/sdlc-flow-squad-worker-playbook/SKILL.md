@@ -24,7 +24,7 @@ Once the code is pushed and the suite is green, read `git diff origin/<base-bran
 6. **Scope.** `git diff --stat` shows nothing outside §3 and nothing in §4.
 7. **Acceptance-test drift** (Build and rework): `git diff <at_sha>..HEAD -- <AT paths>` shows no modified or deleted approved scenario; every test you added is listed by file. A frozen AT you had to change is a `blocked` with the leader's mention, before any of this.
 
-EVIDENCE carries one row per check with its measured result. Anything a check found that you could not fix inside §3 goes in LEFT OPEN with `file:line`; a self-review finding declared there is never held against the cycle. Docs and config sub-tasks run checks 4–6; Acceptance-tests sub-tasks run 2 and 4–6.
+EVIDENCE carries one row per check with its measured result. Anything a check found that you could not fix inside §3 goes in LEFT OPEN with `file:line`; a self-review finding declared there is never held against the cycle. Docs and config sub-tasks, and `build-ui` Builds, run checks 4–6; Acceptance-tests sub-tasks run 2 and 4–6.
 
 ## Finishing a task
 

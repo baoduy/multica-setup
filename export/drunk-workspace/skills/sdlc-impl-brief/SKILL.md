@@ -20,14 +20,14 @@ This is not the spec. The business spec lives on the root or phase ticket (`sdlc
 
 ## Template
 
-Copy from `# <KEY>` down and write it with `--description-file`. The same brief is the description of both the `Acceptance tests:` and the `Build:` sub-task for a surface; only the `Mode` row differs.
+Copy from `# <KEY>` down and write it with `--description-file`. The same brief is the description of both the `Acceptance tests:` and the `Build:` sub-task for a surface; only the `Mode` row differs. A UI presentation surface has only the Build sub-task: `Mode: build-ui`, `at_sha` row `n/a — UI presentation`, and §7 still names the spec's scenarios for the later UI test pass.
 
 ```markdown
 # <KEY> — <imperative title>
 
 | | |
 |---|---|
-| **Mode** | `acceptance-tests` \| `build` |
+| **Mode** | `acceptance-tests` \| `build` \| `build-ui` (UI presentation, Policy 02 §1a: no tests) |
 | **Repo · branch · base** | `<url.git>` → `feature/<key>-<slug>` @ `<base sha>` |
 | **Spec** | <phase or root key> §5, revision <n> (frozen) |
 | **at_sha · AT paths** | — until approved · `<tests/…/X.feature>, <tests/…/Steps.cs>` |
@@ -87,7 +87,7 @@ Ordered; each row compiles on the previous. Op ∈ KEEP · MODIFY · EXTEND · N
 ## Leader notes
 
 - **Three failure modes this shape prevents:** rebuilding what exists (§2 + KEEP rows), changing more than asked (§4 + `git diff --stat`), breaking working behaviour (`@existing` baseline).
-- **First comment on each sub-task** carries the assignee's mention and one line: `Mode: acceptance-tests — write the tests per test-driven-development, then done.` or `Mode: build — implement per test-driven-development against at_sha <sha>, then done.` The procedure itself is in that skill; do not restate it.
+- **First comment on each sub-task** carries the assignee's mention and one line: `Mode: acceptance-tests — write the tests per test-driven-development, then done.` or `Mode: build — implement per test-driven-development against at_sha <sha>, then done.` or `Mode: build-ui — implement per test-driven-development (UI presentation: no tests; skip and list what you break), then done.` The procedure itself is in that skill; do not restate it.
 - **Approving the acceptance tests:** read the pushed test files against the spec (every scenario present, none softened, literal expected values, readable), then fill the `at_sha · AT paths` header row of the Build description and add one changelog line. Never a new section.
 - **A scope change** from product-owner becomes new §3 rows (and §7 names) in a new brief for the new stage, plus a changelog line on the parent's plan comment. Never re-arm a finished Acceptance-tests stage for spec drift.
 - **Gate sub-tasks** (Review) get a pointer table, not a brief: repo · branch · base · `at_sha` + AT paths · Build sub-task(s) for rework · root ticket, plus a cycle-specific emphasis section of at most 5 bullets.

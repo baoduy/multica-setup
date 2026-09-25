@@ -5,6 +5,11 @@
   "source_workspace_id": "4539126d-0687-4993-8852-3554b7c5fb50",
   "skills": [
     {
+      "name": "api-feature-doc-template",
+      "dir": "skills/api-feature-doc-template",
+      "source_id": "12adb40d-40ac-41ea-a0f1-d9ef17f02b64"
+    },
+    {
       "name": "archify",
       "dir": "skills/archify",
       "source_id": "b1159a20-f4a6-489a-aed0-f682ed5db3ab"
@@ -55,11 +60,6 @@
       "source_id": "d51f0785-df57-483c-8aba-af3555f99f2f"
     },
     {
-      "name": "feature-doc-template",
-      "dir": "skills/feature-doc-template",
-      "source_id": "88ae7e11-7fcb-4432-9819-8e6c36c9832d"
-    },
-    {
       "name": "helm-k8s-conventions",
       "dir": "skills/helm-k8s-conventions",
       "source_id": "5598ea2d-815f-44f3-b7da-08e8f7bdbd4c"
@@ -73,6 +73,11 @@
       "name": "leader-gitops",
       "dir": "skills/leader-gitops",
       "source_id": "47aaa59f-26a6-4c0e-9209-24d20c378179"
+    },
+    {
+      "name": "library-doc-template",
+      "dir": "skills/library-doc-template",
+      "source_id": "88ae7e11-7fcb-4432-9819-8e6c36c9832d"
     },
     {
       "name": "medium-publishing",
@@ -375,11 +380,12 @@
       "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
       "source_runtime_provider": "claude",
       "skill_names": [
+        "api-feature-doc-template",
         "archify",
         "blocker-report",
         "codegraph",
-        "feature-doc-template",
         "interview-me",
+        "library-doc-template",
         "sdlc-flow-squad-worker-playbook",
         "sdlc-gitflow"
       ],

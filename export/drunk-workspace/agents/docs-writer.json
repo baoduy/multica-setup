@@ -22,11 +22,12 @@
   "source_id": "f3b4c442-b24c-4155-8bad-4e3b895c4d8b",
   "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
   "skill_names": [
+    "api-feature-doc-template",
     "archify",
     "blocker-report",
     "codegraph",
-    "feature-doc-template",
     "interview-me",
+    "library-doc-template",
     "sdlc-flow-squad-worker-playbook",
     "sdlc-gitflow"
   ],
