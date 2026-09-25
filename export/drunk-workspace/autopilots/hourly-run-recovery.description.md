@@ -27,19 +27,38 @@ Failures that are not safe to retry are never retried, and an issue already woke
 
 # Steps
 
-1. **Fetch the agents.** `multica agent list --output json`. Keep both `id` and `name` for each — the name becomes the mention label, the id the mention target.
+1. **Build the candidate list with the fixed script — never your own pipeline.** Write this script to `./detect.sh` in your working directory exactly as given, and run `bash ./detect.sh`. Do not rewrite, "simplify" or re-implement it in Python, and never keep its files in `/tmp`: on 2026-09-25 a hand-rolled pipeline appended pretty-printed JSON to a `/tmp` file shared across runs, parsed it line by line, silently dropped the rows it could not parse — among them dev-backend's RUNNING task on DRK-1726 — and woke an agent that was still working.
 
-2. **Fetch every agent's task history.** For each agent id: `multica agent tasks <agent-id> --output json`. This returns the agent's FULL history in one call, not a page — no pagination needed. Concatenate all agents' rows into ONE list before analysing anything; recovery is cross-agent and a per-agent view produces false positives.
+   ```bash
+   multica agent list --output json > ./agents.json
+   jq -r '.[].id' ./agents.json | while read -r a; do
+     multica agent tasks "$a" --output json || echo "SWEEP PARTIAL: agent tasks failed for $a" >&2
+   done > ./tasks.json
+   jq -s --slurpfile agents ./agents.json --argjson now "$(date -u +%s)" '
+     def ts: sub("\\.[0-9]+"; "") | fromdateiso8601;
+     ($agents[0] | map({(.id): .name}) | add) as $names
+     | [.[][] | select((.issue_id // "") != "")]
+     | group_by(.issue_id)
+     | map((sort_by(.created_at) | last) as $n
+         | select(all(.[]; .status | IN("running", "pending", "dispatched", "queued") | not))
+         | select(($n.created_at | ts) >= $now - 6*3600)
+         | (if $n.status == "failed" then "A"
+            elif $n.status == "completed" and ($n.completed_at | ts) <= $now - 1800 then "B"
+            else empty end) as $class
+         | {class: $class, issue_id: $n.issue_id, agent_id: $n.agent_id, agent_name: $names[$n.agent_id],
+            task_id: $n.id, created_at: $n.created_at, completed_at: $n.completed_at,
+            error: ($n.error // "" | .[0:200]), output: ($n.result.output // "" | tostring | .[0:200])})
+   ' ./tasks.json > ./candidates.json
+   ```
 
-3. **Find the stranded runs.** Reduce the combined list to the NEWEST task per `issue_id`, then keep an issue only when ALL of these hold:
-   - `issue_id` is non-empty (an empty `issue_id` is a chat or `run_only` task — not issue work, skip it)
-   - the newest task's `created_at` is within the last 6 hours
-   - NO task on that `issue_id` is currently `running`, `pending`, `dispatched` or `queued` — a mention at an agent that already has a task in flight on the issue is silently dropped by the backend, so waking one is a wasted no-op
+   Any `SWEEP PARTIAL` line on stderr, or a non-zero exit, means the sweep is partial: wake nothing and go to step 9. `./candidates.json` is the ONLY source of stranded issues for the rest of the run; `agent_id` / `agent_name` in each row are the agent to mention.
 
-   Taking the newest task per issue is what makes "nothing has picked it up since" true: any agent's later task on the same issue means it recovered. Then classify what remains:
-   - **Class A — killed run**: the newest task is `failed`. Go on to step 5 to decide whether the error is safe to retry.
-   - **Class B — abandoned turn**: the newest task is `completed` and its `completed_at` is at least **30 minutes** ago. The grace period keeps you from racing a leader who is about to promote the next stage in their own turn. Class B skips step 5 entirely — there is no error to classify.
-   - Any other status (`cancelled`, and anything in flight) is not stranded.
+2. **What the script already decided — do not re-filter it.** It concatenates every agent's full task history (`multica agent tasks` returns all of it in one call, no pagination) and reduces it to the NEWEST task per `issue_id` across all agents — recovery is cross-agent, and any agent's later task on the issue means it recovered. It keeps an issue only when the `issue_id` is non-empty (empty is a chat or `run_only` task), the newest task was created within the last 6 hours, and NO task on that issue is `running`, `pending`, `dispatched` or `queued` — a mention at an agent that already has a task in flight is either dropped or queues a duplicate run behind the live one.
+
+3. **The two classes in `class`.**
+   - **A — killed run**: the newest task is `failed`. Go on to step 5 to decide whether the error is safe to retry.
+   - **B — abandoned turn**: the newest task is `completed` and its `completed_at` is at least **30 minutes** ago. The grace period keeps you from racing a leader who is about to promote the next stage in their own turn. Class B skips step 5 entirely — there is no error to classify.
+   - Anything else (`cancelled`, in flight, too recent) is not in the file.
 
 4. **Keep only actively-open LEAF issues.** For each stranded issue: `multica issue get <issue-id> --output json`, and `multica issue children <issue-id> --output json`.
 
@@ -58,7 +77,7 @@ Failures that are not safe to retry are never retried, and an issue already woke
 
 6. **Apply the guard and the cap.** The wake list is the class-A transient issues plus every class-B issue **that survived step 4** — an issue filtered out there (has children, or its status is not `todo`/`in_progress`) or classified PERMANENT at step 5 is not stranded, does not count toward the guard, and never appears in a report. If the wake list exceeds 3 issues, wake NOTHING and go to step 9. Otherwise read each remaining issue's counter with `multica issue property list <issue-id> --output json` and take `Wake count` (absent means 0). A value `>= 3` moves that issue off the wake list onto the hand-off list of step 7b.
 
-7. **Wake each surviving issue — as a REPLY, never as a new thread root.** First find where to attach: `multica issue comment list <issue-id> --roots-only --output json`, and take the NEWEST root comment that you did not author. Post the wake as a reply to it: `multica issue comment add <issue-id> --content-file <path> --parent <that-root-comment-id>` (write the content file inside your working directory, never `/tmp`). Only when the issue has no such root — no comments at all, or every root is one of your own — post without `--parent`. The body opens with the crashed agent's mention, written as a `mention://agent/<agent-id>` markdown link using that agent's real id, and reads:
+7. **Wake each surviving issue — as a REPLY, never as a new thread root.** Immediately before each wake, re-run `bash ./detect.sh` and confirm the issue is still listed: `jq -e --arg i <issue-id> 'any(.[]; .issue_id == $i)' ./candidates.json`. A non-zero exit means an agent picked it up while you worked — skip it silently, no comment and no counter bump. Then find where to attach: `multica issue comment list <issue-id> --roots-only --output json`, and take the NEWEST root comment that you did not author. Post the wake as a reply to it: `multica issue comment add <issue-id> --content-file <path> --parent <that-root-comment-id>` (write the content file inside your working directory, never `/tmp`). Only when the issue has no such root — no comments at all, or every root is one of your own — post without `--parent`. The body opens with the crashed agent's mention, written as a `mention://agent/<agent-id>` markdown link using that agent's real id, and reads:
 
    ```
    <mention link for the crashed agent>
@@ -97,7 +116,7 @@ Failures that are not safe to retry are never retried, and an issue already woke
    Then create ONE issue: `multica issue create --title "Run recovery needs attention (<UTC date>)" --description-file ./escalation.md --assignee-id <owner user_id> --priority high --project <drunk-others id>` (id from `multica project list --output json`). The description carries exactly three things:
 
    - one line naming the reason — the guard tripping with its count, or which step left the sweep partial;
-   - one table, one row per wake-list issue. **Identify each issue by its ticket identifier (`DRK-1673`), never by its UUID** — `multica issue get` returns it as `identifier`, and step 4 already fetched every one of them. Name the agent by its `name` from step 1, never its id:
+   - one table, one row per wake-list issue. **Identify each issue by its ticket identifier (`DRK-1673`), never by its UUID** — `multica issue get` returns it as `identifier`, and step 4 already fetched every one of them. Name the agent by its `agent_name` from step 1, never its id:
 
      | Ticket | Title | Class | Agent | Stopped at (UTC) | Wake count | Error / last output |
      |---|---|---|---|---|---|---|
