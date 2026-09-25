@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-03 |
-| **Version** | 1.1 |
+| **Version** | 1.2 |
 | **Status** | Active |
 | **Owner** | release-manager (`dev`→`main`) · dev-leader (cycle git-flow) |
 | **Applies to** | Every agent that branches, commits, pushes, or opens a PR in a drunk repo |
@@ -64,14 +64,14 @@ no separate branch strategy for a different repo class.
 7. **PR titles carry the ROOT main ticket's key in `[<KEY>]` form; bodies and titles never contain `Closes`/`Fixes`/`Resolves` next to an issue key** — that auto-completes the ticket and kills the remaining pipeline phases. Check for an existing open PR (`gh pr list --head <branch> --base <base> --state open`) before opening a second.
 8. **Devops CI/CD changes follow the same `dev` rule — there is no separate track.** `devops` branches `chore/<issue-key>` from freshly fetched `origin/dev`, opens exactly one PR to `dev`, and `pr-reviewer` scores and merges it on APPROVED — identical mechanics to a feature cycle. There is no Helm/GitOps exception in drunk: a Helm chart repo is just another repo in scope, released the same `dev`→`main` way (merge triggers the chart/image publish, not a deploy).
 9. **Merge conflicts:** resolve mechanical ones (whitespace, import order, trivial renames) on a *detached* checkout of the feature branch (`git checkout --detach origin/<branch>` takes no lock), commit, push by refspec, re-check `mergeable`. Escalate **substantive** conflicts (overlapping logic, deleted code) to the code's owner (dev-backend, via dev-leader) — never guess.
-10. **Release-manager's two acts and nothing else:** open `gh pr create --base main --head dev` and merge it (`--merge`, no squash/rebase, preserving `dev` history). Never run, read, or wait on application code, tests, builds, or the CI publish itself — that is CI's job, out of scope even for the custodian of the branch it publishes from.
+10. **Release-manager's three acts and nothing else:** open `gh pr create --base main --head dev`; check whether the release is critical ([Policy 08](08-container-build-and-release.md) statement 2a) from commit subjects and PR labels alone; and merge it (`--merge`, no squash/rebase, preserving `dev` history) — a critical release only after the resolved owner replies. Never run, read, or wait on application code, tests, builds, or the CI publish itself — that is CI's job, out of scope even for the custodian of the branch it publishes from.
 
 ## Roles & responsibilities
 
 - **dev-leader** — cuts the cycle's feature branch, opens the single `feature`→`dev` PR after its own gate passes, resolves mechanical conflicts, never merges (pr-reviewer owns the merge), never targets `main`.
 - **devops** — cuts `chore/<issue-key>` from `dev`, opens one PR to `dev`, never merges its own PR, never targets `main`.
 - **pr-reviewer** — merges every `feature`/`chore` PR into `dev` on APPROVED; treats a PR based on `main` as an automatic blocking finding; never touches `main`.
-- **release-manager** — the sole agent that opens and merges the `dev`→`main` release PR; never creates feature branches; never merges any other PR.
+- **release-manager** — the sole agent that opens and merges the `dev`→`main` release PR, holding a critical one for the owner; never creates feature branches; never merges any other PR.
 - **product-owner** — authorizes the release phase (`[P<num>-2]`); read-only on code and git, never branches or opens PRs.
 
 ## Definition of Done / compliance

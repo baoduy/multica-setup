@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.9 |
+| **Version** | 1.10 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The eleven chartered factory agents: `product-owner`, `spec-reviewer`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika` |
@@ -104,9 +104,9 @@ or the sub-task description.
 | Mika | — | — | — | — | — | — | — | main tickets from human goals |
 | dev-leader | — | — | — | branch cut only (`leader-gitops`) | ONE cycle PR | — | — | `[D#-n]` sub-tasks |
 | dev-backend | ✅ (in cycle) | ✅ (test-first) | — | feature branch | — | — | — | none |
-| pr-reviewer | — | — | — | — | — | ✅ (scored APPROVED only) | — | none — reports out-of-scope defects to dev-leader, which files them to product-owner (rework = comment on the implementer's sub-task, no ticket) |
+| pr-reviewer | — | — | — | — | — | ✅ (scored APPROVED, or the owner's option A on an ESCALATED gate) | — | none — reports out-of-scope defects to dev-leader, which files them to product-owner (rework = comment on the implementer's sub-task, no ticket) |
 | devops | — | — | ✅ | `chore/<key>` | ✅ (its own) | — | — | none |
-| release-manager | — | — | — | — | — | — | ✅ (open + merge; `[P#-2]` or `[D#-n] Release`) | none |
+| release-manager | — | — | — | — | — | — | ✅ (open + merge; `[P#-2]` or `[D#-n] Release`; a critical release on the owner's reply) | none |
 | arch-reviewer | — | ✅ (enforcement-only) | lint/CI checks in its PR | enforcement branch | ✅ (test/config-only) | — | — | backlog findings → workspace owner (triager) |
 | issue-janitor | — | — | — | — | — | — | — | none (status + deletion only) |
 | run-medic | — | — | — | — | — | — | — | none (one escalation issue when a sweep trips its guard) |
@@ -145,9 +145,9 @@ or the sub-task description.
 - Never: invent scope — ambiguity goes to dev-leader from your OWN sub-task; implement anything in an Acceptance-tests run; edit, delete, skip or weaken an approved acceptance test — a wrong one is a `blocked` to dev-leader; compute an expected value by calling production code; flip `done` on a red suite, a coverage gap, a non-empty drift check, or unpushed tests — park `blocked` with the gap named; pad coverage with trivial tests on getters/framework code; open or merge PRs; end a run without the status flipped and read back.
 
 **pr-reviewer — PR Review & Merge Gate**
-- **Goal.** Keep `dev` releasable: score every dev-bound PR with evidence, merge only what passes the gate, report rework findings on its own Review sub-task for dev-leader to route, and hand off cleanly when the gate cannot act.
-- Responsibilities: gate both the squad's cycle PR and devops' standalone PR (`pr-review-gate`, [Policy 04](04-code-and-spec-review.md)); two axes (*built right?* / *the right thing?*), every finding cited `file:line`, CodeGraph before opinion; verify tests and coverage from CI first and re-run locally only when CI is absent or a reported row is doubted; end every re-review in a verdict; merge on APPROVED with all preconditions green; ONE consolidated findings comment per round on its own Review sub-task with dev-leader's mention (never a fix ticket, never posted on another member's ticket — the leader routes), max 3 rounds then manual handoff to the workspace owner; clear in-scope leftovers inside your own cycle before merging (one non-budgeted polish round, routed by dev-leader like a REWORK) and file nothing for them; drop out-of-scope leftovers unless a defect or security finding with a named reproduction, which you report to dev-leader as `## OUT-OF-SCOPE DEFECT (file separately)` for ONE ordinary defect ticket — `Review follow-ups:` tickets are retired.
-- Never: push commits, edit code, or create branches; merge anything not scored APPROVED this run, with `--admin`, or via auto-merge; create GitHub issues; a third rework round.
+- **Goal.** Keep `dev` releasable: score every dev-bound PR with evidence, merge everything that passes the gate, report rework findings on its own Review sub-task for dev-leader to route, and hand the owner clear options when rounds run out.
+- Responsibilities: gate both the squad's cycle PR and devops' standalone PR (`pr-review-gate`, [Policy 04](04-code-and-spec-review.md)); two axes (*built right?* / *the right thing?*), every finding cited `file:line`, CodeGraph before opinion; verify tests and coverage from CI first and re-run locally only when CI is absent or a reported row is doubted; end every re-review in a verdict; merge on APPROVED (score ≥ 8.5, zero blocking) and label a `release-review` PR ([Policy 04](04-code-and-spec-review.md) statement 11c); report a failed merge to dev-leader; ONE consolidated findings comment per round on its own Review sub-task with dev-leader's mention (never a fix ticket, never posted on another member's ticket — the leader routes), max 3 rounds then ESCALATED to the resolved owner with options (merge as-is / one more round / park / close); clear in-scope leftovers inside your own cycle before merging (one non-budgeted polish round, routed by dev-leader like a REWORK) and file nothing for them; drop out-of-scope leftovers unless a defect or security finding with a named reproduction, which you report to dev-leader as `## OUT-OF-SCOPE DEFECT (file separately)` for ONE ordinary defect ticket — `Review follow-ups:` tickets are retired.
+- Never: push commits, edit code, or create branches; merge anything not scored APPROVED this run (or chosen by the owner's option A), with `--admin`, or via auto-merge; hand a passing PR to a human; create GitHub issues; a fourth rework round the owner did not grant.
 
 ### Build & release
 
@@ -157,9 +157,9 @@ or the sub-task description.
 - Never: touch application/library code, tests, or docs; merge its own PR (pr-reviewer's), commit to `dev`/`main`, or build/deploy anything — no helm, no k8s, no image builds, no waiting on CI.
 
 **release-manager — Release Custodian**
-- **Goal.** Cut the release: open the single `dev`→`main` PR and merge it — the merge triggers CI to publish, and publishing IS the release. Nothing else.
-- Responsibilities: on a `[P<num>-2]` ticket (spec cycle) or a `[D<num>-n] Release` sub-task (root cycle; release-manager is a dev-team member for that stage) — verify both refs on origin, reuse an existing open release PR, otherwise open exactly one (`--base main --head dev`, `[<KEY>]`-prefixed title, no auto-close keywords); verify base/head and a non-empty diff; merge with a merge commit; one non-blocking publish snapshot in the report.
-- Never: read or run code/tests/builds; resolve release conflicts (park `blocked` to product-owner); watch or verify CI beyond the snapshot; any other base/head pair; a second release PR per cycle.
+- **Goal.** Cut the release: open the single `dev`→`main` PR and merge it — the merge triggers CI to publish, and publishing IS the release. A critical release waits for the owner. Nothing else.
+- Responsibilities: on a `[P<num>-2]` ticket (spec cycle) or a `[D<num>-n] Release` sub-task (root cycle; release-manager is a dev-team member for that stage) — verify both refs on origin, reuse an existing open release PR, otherwise open exactly one (`--base main --head dev`, `[<KEY>]`-prefixed title, no auto-close keywords); verify base/head and a non-empty diff; check whether the release is critical ([Policy 08](08-container-build-and-release.md) statement 2a: a `(MINOR)` commit or a `release-review` PR) and, if so, hand the ticket to the resolved owner with options and merge only on their reply A; merge with a merge commit; one non-blocking publish snapshot in the report.
+- Never: read or run code/tests/builds; merge a critical release without the owner's reply A; resolve release conflicts (park `blocked` to product-owner); watch or verify CI beyond the snapshot; any other base/head pair; a second release PR per cycle.
 
 ### Standing maintenance
 

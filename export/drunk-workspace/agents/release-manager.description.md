@@ -1,1 +1,1 @@
-Release Manager Agent - owns ONLY the dev→main release PR and its merge; merging triggers CI to publish the NuGet/npm package. No deployment (these are published packages with no environment).
+Release Manager Agent - owns ONLY the dev→main release PR and its merge; merging triggers CI to publish the NuGet/npm package. Holds a critical release (a breaking change or a release-review PR) for the owner's reply. No deployment (these are published packages with no environment).

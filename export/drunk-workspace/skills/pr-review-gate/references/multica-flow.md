@@ -13,7 +13,7 @@ Read your review sub-task's properties: `multica issue property list <own-subtas
 ```bash
 multica issue property set <own-subtask-id> --name "Gate round" --value <N>
 multica issue property set <own-subtask-id> --name "Gate score" --value <X.X>
-multica issue property set <own-subtask-id> --name "Gate verdict" --value <APPROVED|DEFERRED|REWORK|POLISH|ESCALATED|MERGE_FAILED|ALREADY_MERGED>
+multica issue property set <own-subtask-id> --name "Gate verdict" --value <APPROVED|REWORK|POLISH|ESCALATED|MERGE_FAILED|ALREADY_MERGED|OWNER_MERGED>
 ```
 
 Properties show on the board and in `multica issue children --resolve-properties`, which is how the leader and the human see a parked gate without opening threads.
@@ -26,15 +26,22 @@ When the state guard finds the PR `MERGED` before you have reviewed anything: po
 
 ## Verdict actions
 
-### APPROVED (score ≥ bar, all auto-merge preconditions pass)
+### APPROVED (score ≥ bar, zero `blocking`)
 
-1. GitHub: report comment + best-effort approve vote + MERGE the PR (`gh pr merge --merge`) and verify state MERGED (`references/github.md`). If the merge command fails, switch to the Manual handoff path below — do not flip `done`.
-2. Post the score announcement + report summary — explicitly stating the PR is MERGED into `dev` — as a plain comment on your OWN sub-task (no mention).
+1. GitHub: `release-review` label first when a trigger applies (SKILL.md, Release-review label), then report comment + best-effort approve vote + MERGE the PR (`gh pr merge --merge`) and verify state MERGED (`references/github.md`). If the merge fails, take the MERGE_FAILED path below — do not flip `done`.
+2. Post the score announcement + report summary — explicitly stating the PR is MERGED into `dev`, the release-review trigger(s) or `none`, and anything noted at merge (CI pending, CI red not caused by this PR, coverage unknown, large diff) — as a plain comment on your OWN sub-task (no mention).
 3. Pin properties, flip your sub-task to `done`. The stage barrier wakes the squad leader; do not mention anyone.
 
-### APPROVAL DEFERRED (score ≥ bar, a precondition fails)
+There is no deferred verdict. A passing PR is never reassigned to a human, whatever the report notes.
 
-NO vote, NO merge. Post the report comment on the PR, opening with `APPROVAL DEFERRED — manual review required` and naming the exact precondition (e.g. "coverage unknown"). Then run the Manual handoff below — the workspace owner reviews and merges; never flip `done` yourself on a deferred gate.
+### MERGE_FAILED (score ≥ bar, the merge did not happen)
+
+A draft PR, a late conflict because `dev` moved, or any other `gh pr merge` error. PR mechanics are dev-leader's (`leader-gitops`), so the fix goes there, never to the owner.
+
+1. Keep the score; do not re-score and do not touch `Gate round`.
+2. Post ONE comment on your OWN sub-task: PR URL, score, the exact error text in a code block, and what dev-leader must do (mark ready, bring the branch up to date with `dev`, or escalate a failure it cannot fix — permission, branch protection — per its recovery rules). End with dev-leader's mention.
+3. Flip your sub-task `blocked`, pin `Gate verdict` = MERGE_FAILED.
+4. On dev-leader's re-arm: head unchanged (`gh pr view --json headRefOid`) → re-check state and merge the already-scored PR; head changed (the branch was updated from `dev`) → re-review in full as a normal re-review. Either way END with a verdict.
 
 ### REWORK (score < bar, or any blocking finding)
 
@@ -49,23 +56,34 @@ If `Gate round` ≥ `maxReworkRounds` (default 3) and the PR still fails the bar
 
 **Wake sanity check (first command of every wake):** `multica issue runs <own-subtask> --siblings`. If the trigger comment is your own findings comment, or another run of yours is already in flight, END with no comment, no status change and no re-sent mention. Never conclude a wake was misrouted from your own runtime identity alone.
 
-**Re-review trigger:** the leader's re-arm — your review sub-task flipped `in_progress` and ONE comment on it with your mention pointing at the fix report(s). A re-arm with no new commit on the feature branch since your last verdict (`gh pr view --json headRefOid` unchanged) is not a new round: say so in one plain comment with the leader's mention and END. Otherwise confirm the reported commits are on the feature branch (`git ls-remote origin <feature-branch>` / `gh pr view --json headRefOid`), re-review the UPDATED PR in full (Round tracking above: fresh collect + analyze + score, closure table first), and END with a verdict from this table — APPROVED (merge), DEFERRED, REWORK (only while `Gate round` < 3), or ESCALATED. The round cap never leaves the gate parked: with rounds spent and the bar met, you merge.
+**Re-review trigger:** the leader's re-arm — your review sub-task flipped `in_progress` and ONE comment on it with your mention pointing at the fix report(s). A re-arm with no new commit on the feature branch since your last verdict (`gh pr view --json headRefOid` unchanged) is not a new round: say so in one plain comment with the leader's mention and END. Otherwise confirm the reported commits are on the feature branch (`git ls-remote origin <feature-branch>` / `gh pr view --json headRefOid`), re-review the UPDATED PR in full (Round tracking above: fresh collect + analyze + score, closure table first), and END with a verdict from this table — APPROVED (merge), REWORK (only while `Gate round` < 3), or ESCALATED. The round cap never leaves the gate parked: with rounds spent and the bar met, you merge. (After MERGE_FAILED, an unchanged head means "retry the merge", not "no new round" — see MERGE_FAILED above.)
 
 ### ESCALATE (rework rounds exhausted, or repeated same-root-cause failure)
 
+`Gate round` = 3 and the PR still fails the bar or carries a `blocking` finding — including the re-review after a round the owner granted with option B. This is the only verdict that reaches a human, and the pipeline waits on the owner's reply.
+
 1. GitHub: report comment only.
-2. Pin `Gate verdict` = ESCALATED, then run the Manual handoff below — the workspace owner decides (merge as-is, keep iterating, or park).
-3. Also post on YOUR review sub-task with the squad leader's mention: rounds used, per-round history (score + what was and wasn't fixed), current top findings, and that the review sub-task is now handed to the workspace owner.
+2. Pin `Gate verdict` = ESCALATED, then run the Owner handoff below.
 
-## Manual handoff (resolved owner) — for DEFERRED, ESCALATED, or a failed merge
-
-The gate could not merge; the resolved owner takes over the review sub-task for manual review + merge.
+## Owner handoff (ESCALATED only)
 
 1. Resolve the owner at runtime per `sdlc-flow-delivery-pipeline` "Who the human owner is" (`Owner`-property-first: your review sub-task's own `Owner`, else nearest ancestor's `Owner` via `multica issue property list <id> --output json`; else ROOT ticket `creator_id` when `creator_type` is `member`; else workspace owner via `multica workspace member list --output json`, role `owner`). Never hardcode a name/UUID; keep both the member's `user_id` and name.
 2. Reassign YOUR review sub-task to the owner and reopen it: `multica issue update <own-subtask-id> --assignee-id <owner-user_id>` then `multica issue status <own-subtask-id> todo`.
-3. Post ONE comment on the sub-task with a MEMBER mention `[@<owner-name>](mention://member/<owner-user_id>)` (notify-only — NEVER an agent mention): PR URL, score, verdict, the exact reason auto-merge was not possible (failed precondition / rounds exhausted / merge error text), findings summary, and the instruction: review the PR, merge it into `dev` manually, then flip THIS ticket to `done` (that flip fires the stage barrier and resumes the pipeline).
-4. Pin `Gate verdict` (DEFERRED / ESCALATED / MERGE_FAILED).
-5. Post the report on YOUR review sub-task with the squad leader's mention so the leader knows the gate is parked with a human. You are then out of the loop — the owner's `done` flip completes the review stage.
+3. Post ONE comment on the sub-task in the `blocker-report` Blocker shape, written to a file. `## BLOCKER`: PR URL, score, rounds used with the per-round history (score + what was and wasn't fixed), the open findings with `file:line`; **From:** the owner's MEMBER mention `[@<owner-name>](mention://member/<owner-user_id>)` (notify-only). `## OPTIONS`, recommendation first:
+   - **A — merge as-is.** The open findings ship to `dev`. Leave A out, and say why, when the diff holds a secret or a `blocking (critical)` finding.
+   - **B — one more round, with your guidance.** Say what to fix or accept; dev-leader routes it and you re-review once more.
+   - **C — park.** No reply needed; the PR stays open and the cycle waits with you.
+   - **D — close the PR.** dev-leader closes it and hands the work back to its parent's owner to re-scope or cancel.
+
+   Close with: "Reply with the letter and dev-leader's mention (plus your guidance for B)." Name dev-leader in prose — this comment carries no agent mention link.
+4. Post nothing else. You are out of the loop until dev-leader re-arms you with the owner's choice.
+
+## Owner's choice (relayed by dev-leader)
+
+dev-leader reassigns the sub-task back to you (`--no-start`), flips it `in_progress --no-start` and mentions you with the owner's reply quoted and linked — that mention is the wake. Confirm the reply on your sub-task is from the resolved owner (a member), then:
+
+- **A** — re-check `gh pr view --json state,headRefOid`. Still `OPEN` at the head you escalated → merge (`gh pr merge --merge`, verify MERGED), post a plain comment "merged on the owner's decision" naming the owner and linking the reply, pin `Gate verdict` = OWNER_MERGED (leave `Gate score` at your last score), flip `done`. The head moved → re-review in full instead. No `release-review` label: the owner has just reviewed it.
+- **B** — this is a normal re-review once the fix lands: END with APPROVED or ESCALATED. Never a REWORK verdict at `Gate round` = 3.
 
 ## Leftover findings (non-gating / out-of-scope)
 
@@ -104,4 +122,4 @@ State the outcome in your score announcement: `Leftovers: polish round N | none 
 
 ## On-demand mode (mention outside a review sub-task)
 
-Reply with the full report as a comment on the issue where you were mentioned (`--content-file`). No GitHub writes, no fix tickets, no votes, no status changes — unless the mentioning comment explicitly instructs it AND (for approval) the preconditions pass. If the requester is a member, you may include their member mention (`mention://member/<user_id>` — notify-only); never agent-mention in the reply.
+Reply with the full report as a comment on the issue where you were mentioned (`--content-file`). No GitHub writes, no fix tickets, no votes, no status changes — unless the mentioning comment explicitly instructs it AND (for approval) the score passes. If the requester is a member, you may include their member mention (`mention://member/<user_id>` — notify-only); never agent-mention in the reply.
