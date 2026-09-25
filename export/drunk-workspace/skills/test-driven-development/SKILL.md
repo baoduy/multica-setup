@@ -84,6 +84,15 @@ RED is not just the author stage — it is a property every finished test must s
 - **Every edge case the brief names anywhere — §3 row, contract, rules, §9, a prose note — needs a fact or an explicit "no fact, reason".**
 - **Never mutate ambient state in a test** (`CultureInfo.CurrentCulture`, environment variables, static config). Scope and restore it, or pin it on a dedicated thread.
 
+## UI presentation Build (`Mode: build-ui`)
+
+Policy 02 statement 1a: a change confined to a front-end app's screens, layouts, components, styling and copy ships without new tests. No Acceptance-tests stage comes before it and there is no `at_sha`. In this mode:
+
+- Write no test, no coverage figure and no mutation report — the outer and inner loops above do not run.
+- Run the app's build, typecheck, lint and every existing suite, unit and acceptance. Each test your change broke gets the runner's own skip (`test.skip`, `it.skip`) and a one-line note — `// skipped: <KEY> — UI presentation change; restored in the UI test pass` — never deleted, never rewritten to pass.
+- A §3 file outside the presentation surface (route handler, `lib/`, data access, auth, session, contract, middleware, config) is mis-routed: `blocked` to the leader.
+- Done when: build, typecheck and lint clean; every existing suite passes with the skips; every skipped test listed in the report (file · test name · the control it drove); every §3 row implemented and nothing outside §3 changed; pushed; report posted; sub-task `done`.
+
 ## Done when (standard list — the EVIDENCE rows of your completion report)
 
 - Build clean, no new warnings.

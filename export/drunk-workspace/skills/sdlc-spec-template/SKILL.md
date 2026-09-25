@@ -100,7 +100,7 @@ Business language · Real data ("treasury-ops", 100.00 SGD, never "a user") · I
 
 ## Verification
 
-Testing is never optional and never negotiated at spec time. dev-team writes the §5 scenarios as acceptance tests first, implements against them frozen, and self-verifies at ≥80% coverage per touched class plus a clean pack (`test-driven-development`). §5 says what the suite covers and which kind each scenario is, never whether it runs.
+Testing is never optional and never negotiated at spec time. dev-team writes the §5 scenarios as acceptance tests first, implements against them frozen, and self-verifies at ≥80% coverage per touched class plus a clean pack (`test-driven-development`). §5 says what the suite covers and which kind each scenario is, never whether it runs. The one exception is set by policy, not by the spec: a UI presentation change (screens, layouts, components, styling, copy — Policy 02 §1a) is built without tests, and its §5 scenarios are still written and tagged — they scope the later UI test pass.
 
 ## Quality bar
 

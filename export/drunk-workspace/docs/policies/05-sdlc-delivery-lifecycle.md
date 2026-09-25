@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-05 |
-| **Version** | 1.8 |
+| **Version** | 1.9 |
 | **Status** | Active |
 | **Owner** | product-owner |
 | **Applies to** | Every ticket that flows through the drunk software factory |
@@ -59,7 +59,7 @@ on code. **spec-reviewer** — the automated spec-review gate (Workflow B only).
 the leader runs cycle git-flow itself) — implementation, acceptance-test-first in two runs:
 dev-backend writes the spec's scenarios as RED acceptance tests, dev-leader reads and freezes
 them (`at_sha`), dev-backend implements against them in Build at ≥80% coverage plus a mutation
-report per touched class with a clean pack ([Policy 02](02-testing-and-quality.md) §1/§4). No QC squad or QC role exists —
+report per touched class with a clean pack ([Policy 02](02-testing-and-quality.md) §1/§4); a UI presentation change is built without tests (Policy 02 §1a). No QC squad or QC role exists —
 dev-team self-verifies; there is no SANDBOX to deploy to and no BDD integration stage.
 **pr-reviewer** — the automated PR review + merge gate for every `dev`-bound PR (both
 dev-team's cycle PR and devops' standalone PR). **release-manager** — owns the single
@@ -148,7 +148,8 @@ playbook; squad members follow the worker playbook. Branch authority is enforced
 
 - No BDD-integration waiver exists in drunk (unlike a deployed-service factory) — there is
   no SANDBOX stage to waive in the first place. dev-team's in-repo unit/integration
-  verification at ≥80% per-touched-class coverage is never optional and never waived.
+  verification at ≥80% per-touched-class coverage is never optional and never waived, except for
+  UI presentation files ([Policy 02](02-testing-and-quality.md) statement 1a).
 - Docs/config-only requests still take the light dev route (Branch → Update → PR → gate)
   — the Build/Update sub-task carries no coverage requirement when there is nothing to test.
 - A sub-issue never gets a `[P<num>-2]` release phase, whatever a package consumer can

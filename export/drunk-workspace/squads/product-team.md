@@ -25,7 +25,7 @@ Only you create issues in this squad. Members report on their own tickets; you r
 |---|---|---|
 | feature from an approved spec | dev-team | `[P<num>-1] Implementation`, `todo`, stage 1, description = the FULL approved spec opening with `Spec revision: <n>`; frozen for the cycle |
 | confirmed bug (≥90% or requester-confirmed) | dev-team | the ROOT ticket reassigned to the dev-team squad at `todo`; the root-cause report is the brief; dev-team stages its own Release; no phases |
-| tests | dev-team, inside `[P<num>-1]` | never a separate phase, never waived |
+| tests | dev-team, inside `[P<num>-1]` | never a separate phase, never waived — except UI presentation, built without tests (Policy 02 §1a) |
 | `dev`→`main` release | release-manager | `[P<num>-2]`, `backlog`, stage 2, promoted after `[P<num>-1]` verifies; only on a root ticket, and only when a package consumer can observe the change |
 | CI/CD, build/test, package-publish automation | devops | `[P<num>-1] CI/CD change` + `[P<num>-1c]` (Workflow D2); never through the spec gate or release-manager |
 | docs-only change | dev-team (Route B) | the ROOT ticket reassigned to dev-team with a `## Brief`; no `[S<num>]`, no phases. A requester may assign it to dev-team directly |

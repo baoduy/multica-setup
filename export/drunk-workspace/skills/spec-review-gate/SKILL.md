@@ -53,7 +53,7 @@ The spec is business-level and carries no `file:line` — there are no code cita
 - **Neither table applies and the spec says nothing** — `minor`. §3a reads `None — no data contract change.` / `None — no API change.`, so a reader knows it was considered.
 - **§3a rows contradict §3 or §5** — a field §3a never declares appearing in a scenario, an endpoint §3 never requires: `major` consistency defect.
 
-**Test-tag check** (part of Completeness) — **there is no separate Test Scope section anymore; the suite split lives in the §5 scenario tags.** Testing is never optional in drunk-workspace: dev-team self-verifies every change at ≥80% per-touched-class coverage (tests authored test-first by dev-backend) as part of Implementation, whatever the spec says.
+**Test-tag check** (part of Completeness) — **there is no separate Test Scope section anymore; the suite split lives in the §5 scenario tags.** Testing is never optional in drunk-workspace: dev-team self-verifies every change at ≥80% per-touched-class coverage (tests authored test-first by dev-backend) as part of Implementation, whatever the spec says — except a UI presentation change, which policy builds without tests (Policy 02 §1a); its §5 scenarios are still written and tagged, and a spec that relies on that exception is not a waiver finding.
 
 - **Every §5 scenario carries `@integration` or `@unit`.** An untagged scenario is a `major`; the tag is what tells dev-team which suite each criterion belongs to.
 - **Any statement that waives, defers, or skips testing is a `blocker`.** A spec proposing to opt out of the suite is proposing a rule the pipeline does not have — there is no requester decision to honour here.
