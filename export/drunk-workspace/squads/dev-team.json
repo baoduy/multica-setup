@@ -17,10 +17,6 @@
       "role": "reviewer"
     },
     {
-      "agent_name": "docs-writer",
-      "role": "developer"
-    },
-    {
       "agent_name": "release-manager",
       "role": "release"
     }

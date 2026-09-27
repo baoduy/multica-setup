@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-05 |
-| **Version** | 1.9 |
+| **Version** | 1.10 |
 | **Status** | Active |
 | **Owner** | product-owner |
 | **Applies to** | Every ticket that flows through the drunk software factory |
@@ -32,6 +32,7 @@
 
    BUG (A): research ─▶ root-cause + confidence  ≥90% auto-delegate C · <90% requester confirms
    CI/CD (D): devops only — no spec gate, but still 🦅 PR GATE on the standalone chore/<key> PR
+   DOCS (E):  docs-writer only, and only when a human asks — no spec gate, 🦅 PR GATE on the standalone docs/<key> PR
 
    Barriers: done = fires the stage · blocked+mention = needs help · mentions ARE actions (assign a human a ticket)
 ```
@@ -46,25 +47,28 @@ image IS the release. There is no SANDBOX, no PRD, no promotion beyond `main`.
 
 ## Scope
 
-All four workflows: **A** bug/question, **B** feature/enhancement spec, **C**
+All five workflows: **A** bug/question, **B** feature/enhancement spec, **C**
 orchestrated delivery (the shared implementation → release tail), **D** CI/CD & build
-automation. All drunk repos: `DKNet` family, `DKNet.Templates`, `drunk-pulumi-*`,
+automation, **E** docs on request. All drunk repos: `DKNet` family, `DKNet.Templates`, `drunk-pulumi-*`,
 `drunk-others` (Python MCP, Docker, Helm).
 
 ## Actors
 
 **product-owner** — research, spec, orchestration of the main ticket end to end; read-only
 on code. **spec-reviewer** — the automated spec-review gate (Workflow B only).
-**dev-team** (squad; leader **dev-leader**; members dev-backend, docs-writer, pr-reviewer;
+**dev-team** (squad; leader **dev-leader**; members dev-backend, pr-reviewer;
 the leader runs cycle git-flow itself) — implementation, acceptance-test-first in two runs:
 dev-backend writes the spec's scenarios as RED acceptance tests, dev-leader reads and freezes
 them (`at_sha`), dev-backend implements against them in Build at ≥80% coverage plus a mutation
 report per touched class with a clean pack ([Policy 02](02-testing-and-quality.md) §1/§4); a UI presentation change is built without tests (Policy 02 §1a). No QC squad or QC role exists —
-dev-team self-verifies; there is no SANDBOX to deploy to and no BDD integration stage.
-**pr-reviewer** — the automated PR review + merge gate for every `dev`-bound PR (both
-dev-team's cycle PR and devops' standalone PR). **release-manager** — owns the single
+dev-team self-verifies; there is no SANDBOX to deploy to and no BDD integration stage. A
+dev-team cycle writes no docs pages (statement 3a).
+**pr-reviewer** — the automated PR review + merge gate for every `dev`-bound PR (dev-team's
+cycle PR and the standalone PRs of devops and docs-writer). **release-manager** — owns the single
 `dev`→`main` release PR and its merge; the only agent that ever targets `main`. **devops**
 — CI/CD pipelines and build/publish automation, outside the squad flow, no spec gate.
+**docs-writer** — library and API feature docs, written only when a human asks for them,
+outside the squad flow, no spec gate.
 **Humans** — the requester (ticket creator) and the workspace owner (escalation valve).
 
 ## Policy statements
@@ -77,9 +81,9 @@ dev-team's cycle PR and devops' standalone PR). **release-manager** — owns the
 
 3. **CI/CD flow (D):** pipelines and build/publish automation are `devops` work — never enter the dev-team cycle, never open a spec gate, and never trigger a `[P<num>-2]` release phase on their own. Two doors: **direct** (requester assigns devops; product-owner stays out) or **delegated**, classified into **D1** analysis-only (report + STOP, requester decides) or **D2** change-requested (`[P<num>-1]` to devops → `[P<num>-1c]` PR review to pr-reviewer). Unlike a sibling factory's Helm/GitOps carve-out, a **standalone devops PR to `dev` gets the same `pr-review-gate` merge, not a human-only merge** — there is no deploy act to reserve for a human here.
 
-3a. **Docs flow (E):** a docs-only change to a library repo (README, `docs/`, comments, changelog; no source, no test surface) is a dev-team Route B root cycle with no spec gate and no release. Two doors, like Workflow D: **direct** (the requester or Mika assigns `dev-team` straight away; product-owner stays out) or **delegated** (product-owner clarifies, appends a `## Brief` to the root, and reassigns the ROOT to `dev-team`). No phases. The moment the change touches source or tests it is Workflow B.
+3a. **Docs flow (E): docs are written when a human asks, never every cycle.** A docs-only change to a library repo (README, `docs/`, guides, changelog; no source, no test surface) is `docs-writer` work — it never enters the dev-team cycle, never opens a spec gate and never triggers a release. Two doors, like Workflow D: **direct** (the requester or Mika assigns `docs-writer` straight away; product-owner stays out) or **delegated** (product-owner clarifies, then creates `[P<num>-1] Docs: <scope>` to docs-writer and `[P<num>-1c] Review docs PR: <scope>` to pr-reviewer). docs-writer lands ONE `docs/<issue-key>` PR to `dev`, which pr-reviewer scores and merges like devops' PR. The moment the change touches source or tests it is Workflow B. **A dev-team cycle writes no docs pages:** in-code API comments and, for a breaking change, the `Breaking` changelog entry naming the replacement ([Policy 01](01-coding-standards.md) statement 12) ship in dev-backend's Build; dev-leader's final report lists every doc page the change made stale under `Docs impact:` (or `Docs impact: none`), so the owner can ask for them.
 
-3b. **Phases exist for approved specs only.** `[P<num>-1]` / `[P<num>-2]` are Workflow C, downstream of a spec gate. `[P<num>-1]` pins `Spec revision: <n>` and the spec is **frozen** for the cycle: a later change is a scope comment on the phase ticket with dev-team's mention, which dev-leader turns into ONE scope stage; a finished Acceptance-tests stage is never re-armed for spec drift, and neither the root nor the phase description is edited while the cycle runs.
+3b. **Phases exist for approved specs only.** `[P<num>-1]` / `[P<num>-2]` are Workflow C, downstream of a spec gate. The one exception is the single-change pair `[P<num>-1]` + `[P<num>-1c]` of Workflows D2 and E, which carries no spec and no release. `[P<num>-1]` pins `Spec revision: <n>` and the spec is **frozen** for the cycle: a later change is a scope comment on the phase ticket with dev-team's mention, which dev-leader turns into ONE scope stage; a finished Acceptance-tests stage is never re-armed for spec drift, and neither the root nor the phase description is edited while the cycle runs.
 
 4. **Gates front-load quality** — the spec gate before implementation, the PR gate before every merge into `dev` (see [Policy 04](04-code-and-spec-review.md)).
 
@@ -87,9 +91,9 @@ dev-team's cycle PR and devops' standalone PR). **release-manager** — owns the
 
 6. **Mentions are actions.** An agent/squad mention (real UUID, resolved at runtime) enqueues a run; a member (human) mention only renders a link and delivers nothing. To make a human act, **assign them a ticket at `todo`** — never rely on a mention. Never agent-mention in FYI/ack/done comments.
 
-7. **Titles, projects, labels:** **every ROOT main ticket title carries one type prefix** — `[Feature]` · `[Enhance]` · `[Bug]` · `[Question]` · `[CICD]` · `[Docs]` — followed by the plain title; children carry `[S<num>]` (spec review, keyed to the main ticket) / `[P<num>-n]` (product-owner's phase tickets, keyed to the main ticket, `n`: `-1` implementation or CI/CD change, `-2` release) / `[D<num>-n]` (dev-team sub-tasks, keyed to the parent PHASE ticket, `n` = stage). Labels on main tickets **only** (`main` + `feature`/`bug`/`question`/`cicd`/`docs` + optional domain). Every sub-task parents directly to its cycle parent — never nested deeper. Every child stays in the SAME domain project as the main ticket.
+7. **Titles, projects, labels:** **every ROOT main ticket title carries one type prefix** — `[Feature]` · `[Enhance]` · `[Bug]` · `[Question]` · `[CICD]` · `[Docs]` — followed by the plain title; children carry `[S<num>]` (spec review, keyed to the main ticket) / `[P<num>-n]` (product-owner's phase tickets, keyed to the main ticket, `n`: `-1` implementation, CI/CD change or docs, `-2` release) / `[D<num>-n]` (dev-team sub-tasks, keyed to the parent PHASE ticket, `n` = stage). Labels on main tickets **only** (`main` + `feature`/`bug`/`question`/`cicd`/`docs` + optional domain). Every sub-task parents directly to its cycle parent — never nested deeper. Every child stays in the SAME domain project as the main ticket.
 
-7a. **The root prefix is product-owner's, set at intake.** The requester and Mika create root tickets with a plain title; product-owner adds or corrects the prefix on the root ticket when it labels the ticket and posts the spec (`multica issue update <root-id> --title "<prefix> <plain title>" --no-start` — **always `--no-start`**, a title update on a ticket assigned to you otherwise wakes a second run of yourself). Where product-owner never touches the ticket — a CI/CD ticket taken through the direct door by devops, a docs ticket handed straight to dev-team — the first agent to pick it up sets the prefix the same way. Reclassifying the workflow changes the prefix with it.
+7a. **The root prefix is product-owner's, set at intake.** The requester and Mika create root tickets with a plain title; product-owner adds or corrects the prefix on the root ticket when it labels the ticket and posts the spec (`multica issue update <root-id> --title "<prefix> <plain title>" --no-start` — **always `--no-start`**, a title update on a ticket assigned to you otherwise wakes a second run of yourself). Where product-owner never touches the ticket — a CI/CD ticket taken through the direct door by devops, a docs ticket taken through the direct door by docs-writer — the first agent to pick it up sets the prefix the same way. Reclassifying the workflow changes the prefix with it.
 
 7b. **The prefix is root-only.** It never appears on a child, and it changes no child's title, numbering or `<num>` keying: `[S<num>]`, `[P<num>-n]` and `[D<num>-n]` are keyed off the root's key NUMBER, never its title. Emitting a type prefix on a sub-task is a defect.
 
@@ -125,9 +129,10 @@ The label stays the source of truth — `[Feature]` and `[Enhance]` both carry t
 - **product-owner** — classifies the workflow, researches with CodeGraph, runs the clarification gate, authors the spec, creates and promotes phase tickets, triages follow-ups, flips the main ticket `done`. Never touches code or git.
 - **spec-reviewer** — scores Workflow B specs, gates REWORK/APPROVED/MANUAL HANDOFF.
 - **dev-leader / dev-team** — decomposes `[P<num>-1]` into `[D<num>-n]` sub-tasks, self-verifies, cuts the branch, opens the one PR.
-- **pr-reviewer** — scores and merges every `dev`-bound PR, both dev-team's and devops'.
+- **pr-reviewer** — scores and merges every `dev`-bound PR: dev-team's, devops' and docs-writer's.
 - **release-manager** — opens the single `dev`→`main` release PR, checks whether it is critical, and merges it — a critical one only on the owner's reply; nothing else.
 - **devops** — owns Workflow D end to end under D1/D2; lands its change via a `chore/<issue-key>` PR to `dev`.
+- **docs-writer** — owns Workflow E, only on a human's request; lands its change via a `docs/<issue-key>` PR to `dev`.
 
 ## Definition of Done / compliance
 
@@ -135,6 +140,7 @@ The label stays the source of truth — `[Feature]` and `[Enhance]` both carry t
 - Feature delivered as a sub-issue: spec approved → PR merged into `dev` with a pr-reviewer score → sub-issue `done` with a final summary naming the parent as release owner. No release PR, no publish — both belong to the parent.
 - Bug: root-cause report posted with a calibrated confidence; delegation (or requester confirmation) recorded before any Workflow C work starts.
 - CI/CD: devops' PR merged into `dev`; main ticket `done` with a plain summary; no `[S#]` and no `[P<num>-2]` ever created for this flow.
+- Docs: docs-writer's PR merged into `dev`; main ticket `done` with a plain summary; no `[S#]`, no `[P<num>-2]`, and no Docs sub-task in any dev-team cycle.
 - Every stage transition leaves exactly one promotion comment in the completion shape; no stranded children (every `blocked` child has a dispatched `## BLOCKER` comment).
 
 ## Enforcement
@@ -150,8 +156,9 @@ playbook; squad members follow the worker playbook. Branch authority is enforced
   no SANDBOX stage to waive in the first place. dev-team's in-repo unit/integration
   verification at ≥80% per-touched-class coverage is never optional and never waived, except for
   UI presentation files ([Policy 02](02-testing-and-quality.md) statement 1a).
-- Docs/config-only requests still take the light dev route (Branch → Update → PR → gate)
-  — the Build/Update sub-task carries no coverage requirement when there is nothing to test.
+- Config-only requests still take the light dev route (Branch → Update → PR → gate)
+  — the Update sub-task carries no coverage requirement when there is nothing to test.
+  Docs-only requests are Workflow E: docs-writer's own `docs/<issue-key>` PR, same gate.
 - A sub-issue never gets a `[P<num>-2]` release phase, whatever a package consumer can
   observe — the parent releases its children together.
 - Workflow D never gets a `[P<num>-2]` release phase — a CI/CD change to build/publish

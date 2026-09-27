@@ -14,7 +14,7 @@ Create tickets in the domain project the repo belongs to (`drunk-net`, `drunk-pu
 |---|---|
 | feature, enhancement, bug, question about a library repo | `product-owner` (default when in doubt) |
 | CI/CD pipeline or package-publish automation | `devops` |
-| docs-only change to a library repo (README, `docs/`, changelog) | `dev-team` squad (`--assignee-id <squad id>` from `multica squad list --output json`) |
+| docs-only change to a library repo (README, `docs/`, changelog) | `docs-writer` (`--assignee-id <agent id>` from `multica agent list --output json`) |
 | blog post for drunkcoding.net | `blog-team` squad |
 | mechanical, fully specified code chore the requester already scoped | `dev-team` squad |
 

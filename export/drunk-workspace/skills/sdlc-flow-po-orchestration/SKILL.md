@@ -10,7 +10,7 @@ Classify on what the request asks you to CHANGE, not on its label, and reclassif
 |---|---|
 | question about the platform, or a defect to root-cause | **A** → confirmed bug: root handed to dev-team |
 | feature or enhancement to a library repo | **B** → C |
-| docs-only change to a library repo (README, `docs/`, comments, changelog; no source, no test surface) | **E** → root handed to dev-team |
+| docs a human asked for (README, `docs/`, guides, changelog; no source, no test surface) | **E** → `[P<num>-1] Docs` to docs-writer + `[P<num>-1c]` to pr-reviewer |
 | CI/CD pipeline or build/publish automation | **D** |
 | delivery of an approved SPEC (Workflow B only) | **C** |
 
@@ -32,7 +32,7 @@ A "docs" change that also edits source, a test, or a config value existing tests
 2. **Labels**: root only — `main` + exactly one of `feature`/`bug`/`question`/`cicd`/`docs` (+ a domain label when one fits), resolved via `multica label list --output json`. Never label a sub-issue.
 
 2a. **Root title prefix**: in the same step, make the root title read `<prefix> <plain title>` with exactly one prefix matching the label you just set — `[Feature]` (new capability) · `[Enhance]` (change to behaviour that exists) · `[Bug]` · `[Question]` · `[CICD]` · `[Docs]`. `[Feature]` and `[Enhance]` share the `feature` label; the prefix is the finer split. Rename with `multica issue update <root-id> --title "<prefix> <plain title>" --no-start` — **`--no-start` is mandatory**, the root is assigned to you and a title update without it wakes a second run of yourself. Correct a prefix already there if it is wrong, keep the plain title as the requester wrote it otherwise, and re-prefix when you reclassify the workflow. Never prefix a sub-issue: children keep `[S<num>]`/`[P<num>-n]`/`[D<num>-n]`, keyed off the root's key number, which your rename does not touch.
-3. **Status**: `in_progress` from intake until the last phase verifies, then `done` (Workflow B/C/D). On Workflow A (≥90% or confirmed) and E the ticket itself is reassigned to dev-team at `todo` and you are out; dev-leader finalizes it — `in_review` for the owner on a root, `done` on a sub-issue, which stages no release either. Never `in_review` from you. `cancelled` is the requester's call.
+3. **Status**: `in_progress` from intake until the last phase verifies, then `done` (Workflow B/C/D/E). On Workflow A (≥90% or confirmed) the ticket itself is reassigned to dev-team at `todo` and you are out; dev-leader finalizes it — `in_review` for the owner on a root, `done` on a sub-issue, which stages no release either. Never `in_review` from you. `cancelled` is the requester's call.
 
 ## Research (CodeGraph first)
 
@@ -62,7 +62,7 @@ No deliverable while any open question remains. Load `interview-me` and `multica
 
 ## Workflow C — orchestrated delivery (approved specs only)
 
-After the spec gate passed. Bugs and docs never come here: they are handed to dev-team as the root ticket (Workflows A and E). Two phases on a root ticket, one on a sub-issue; there is no deploy or QC stage.
+After the spec gate passed. Bugs never come here: they are handed to dev-team as the root ticket (Workflow A). Docs never come here either (Workflow E), and no phase you create here asks for docs. Two phases on a root ticket, one on a sub-issue; there is no deploy or QC stage.
 
 1. **Create the phases** (idempotent: `multica issue children <your-ticket-id> --output json` first; reconcile existing `[P<num>-…]` instead of re-creating). Same project, parent = your ticket:
    - `[P<num>-1] Implementation: <scope>` — `--assignee-id <dev-team squad id>` (from `multica squad list --output json`), `--stage 1`, `todo`. Description = the FULL approved spec, opening with `Spec revision: <n>` (your ticket's `revision` from `multica issue get`); the squad must never need the root ticket. One phase ticket per repository, sequenced by dependency when the Scope spans two. **The spec is frozen at this moment.** A change you need afterwards is never an edit to the root description or the phase description while the cycle runs: post it as ONE scope comment on the phase ticket with dev-team's mention, and dev-leader adds a scope stage. Edit the root description only after the cycle closes, for the record.
@@ -83,9 +83,11 @@ After the spec gate passed. Bugs and docs never come here: they are handed to de
 
 A requester may assign devops directly and bypass you; that is supported. Never adopt, re-parent or wrap such a ticket.
 
-## Workflow E — docs-only
+## Workflow E — docs on request
 
-Intake and label (`main` + `docs`), clarify to zero open questions (which repo, which files, what to say), no spec. Then hand the ROOT ticket to dev-team: append a `## Brief` section to the root description naming the exact repo, files and changes, and `multica issue update <root-id> --assignee-id <dev-team squad id> --status todo`. dev-team runs Route B, pr-reviewer merges, dev-leader finalizes the root to `in_review` for the owner. No `[S<num>]`, no phases, no release unless the brief asks for one. A docs ticket assigned to dev-team directly by the requester or Mika is the supported short path; never adopt it.
+`docs-writer` owns this end to end, and only because a human asked for the docs; you never spec it, never route it through dev-team or release-manager, and never open a spec gate. Intake and label (`main` + `docs`), clarify only what genuinely blocks the writing (which repo, which feature or library, who reads it), then create `[P<num>-1] Docs: <scope>` (assignee docs-writer by id, `--stage 1`, `todo`; self-contained description: repo, feature or package, audience, pages to add or change, landing rule = `docs/<issue-key>` branch and ONE PR to `dev`) and `[P<num>-1c] Review docs PR: <scope>` (assignee pr-reviewer, `--stage 2`, `backlog`; description says pr-reviewer scores and merges into `dev` on APPROVED). On `[P<num>-1]` done, verify an open PR based on `dev` exists (`multica issue pull-requests`), then promote `[P<num>-1c]` with ONE comment (PR link, no mention). On `[P<num>-1c]` done, verify merged, flip the root `done` with a plain summary. No `[S<num>]`, no `[P<num>-2]`. A docs ticket assigned to docs-writer directly by the requester or Mika is the supported short path; never adopt it. Never add a docs phase to a Workflow A, B or C ticket — dev-leader's `Docs impact:` line tells the owner what to ask for.
+
+REWORK on a `[P<num>-1c]` (Workflow D2 or E) ends with your mention: flip `[P<num>-1]` `in_progress --no-start`, post the findings pointer there with its assignee's mention, and on that `done` re-arm `[P<num>-1c]` (`in_progress --no-start` + pr-reviewer's mention).
 
 ## Hard rules
 
