@@ -26,7 +26,6 @@
     "codegraph",
     "compose-delivery",
     "helm-chart-delivery",
-    "multica-brainstorming",
     "sdlc-flow-delivery-pipeline",
     "sdlc-flow-squad-member-protocol",
     "sdlc-gitflow"

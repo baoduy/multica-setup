@@ -16,7 +16,7 @@ What people ask for and what they actually want are different things. The cheape
 
 **When NOT to use:** unambiguous self-contained asks, pure information requests, mechanical operations, user explicitly chose speed over verification, or you already pass the 95% stop test below.
 
-**Needs a live user.** Never invoke in non-interactive contexts (CI, scheduled runs, autonomous loops) — there, flag the underspecification as a blocker instead of guessing.
+**Needs a live user.** On a Multica ticket the thread is the live user: each wake is one turn, and the requester answers in writing on the ticket. Never invoke in CI, scheduled runs or autopilots — there, flag the underspecification as a blocker instead of guessing.
 
 ## The Process
 
@@ -36,6 +36,8 @@ GUESS: <your hypothesis for the answer, with the reasoning that produced it>
 
 Wait for the reaction before the next question. One at a time because the third question depends on the first answer, and batches get skim-read. A guess attached because reacting to a wrong guess is faster than generating an answer from scratch, and it surfaces YOUR assumptions — which is what the interview exists to expose. Mitigate polite agreement by being visibly willing to be wrong and occasionally guessing where you expect push-back.
 
+On a Multica ticket a round is ONE numbered comment: every question that does not depend on another's answer, each with its guess; a dependent question waits for the next round (`multica-brainstorming` step 2).
+
 3. **Listen for "want vs. should want".** Danger answers pattern-match best-practice talk without specifics: "scalable", "clean architecture", "the standard approach", "I'm supposed to…". When you hear one, ask: *"If you didn't have to justify this to anyone, what would you actually want?"* — that question often does more work than the previous five.
 
 4. **Restate intent in the user's own words** when confidence is high — tight, line-by-line confirmable:
@@ -52,7 +54,7 @@ Yes / no / refine?
 
 "Out of scope" is non-negotiable — half of misalignment is silent disagreement about what is NOT being built.
 
-5. **Confirm — explicit yes only.** NOT yes: "whatever you think is best" (delegation — re-ask with two concrete options), "sounds good" / "sure, let's go" (ambiguous — ask "anything you'd refine?"), silence then "okay start" (gave up, not converged — ask what you missed). Fold corrections in, restate, loop until explicit yes.
+5. **Confirm — explicit yes only.** NOT yes: "whatever you think is best" (delegation — re-ask with two concrete options), "sounds good" / "sure, let's go" (ambiguous — ask "anything you'd refine?"), silence then "okay start" (gave up, not converged — ask what you missed). On a ticket, a status move, a resolved thread or silence is not a yes either. Fold corrections in, restate, loop until explicit yes.
 
 ## The 95% stop test
 

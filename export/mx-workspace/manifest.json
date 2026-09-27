@@ -160,7 +160,6 @@
         "blocker-report",
         "codegraph",
         "leader-gitops",
-        "multica-brainstorming",
         "sdlc-flow-delivery-pipeline",
         "sdlc-flow-squad-leader-playbook",
         "sdlc-gitflow",
@@ -230,7 +229,6 @@
         "bug-report",
         "codegraph",
         "leader-gitops",
-        "multica-brainstorming",
         "sdlc-flow-delivery-pipeline",
         "sdlc-flow-squad-leader-playbook",
         "sdlc-impl-brief"
@@ -276,7 +274,6 @@
         "codegraph",
         "compose-delivery",
         "helm-chart-delivery",
-        "multica-brainstorming",
         "sdlc-flow-delivery-pipeline",
         "sdlc-flow-squad-member-protocol",
         "sdlc-gitflow"

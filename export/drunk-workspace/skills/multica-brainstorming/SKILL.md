@@ -1,100 +1,126 @@
 ---
 name: multica-brainstorming
-description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation, then records agreed design on Multica issue and hands off through SDLC flow."
+description: "You MUST use this before specifying or designing any feature, enhancement or behaviour change. Runs the requester dialogue on the Multica ticket - numbered questions with your best guesses, approaches, and a spec preview the requester approves in writing - then hands off through the SDLC flow."
 ---
 
 # Brainstorming Ideas Into Designs (Multica)
 
-Turn ideas into fully formed designs through collaborative dialogue, record agreed design **on Multica issue**, and hand it to SDLC flow. Design lives in platform — never in local file, never in git commit.
+Turn an idea into an agreed design through dialogue with the requester, record it **on the Multica issue**, and hand it to the SDLC flow. On a ticket every wake is one turn: each round is ONE comment, and only the requester's written reply moves the dialogue on. The design lives in the platform — never in a local file, never in a git commit.
 
 <HARD-GATE>
-Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented design and requester has approved it. This applies to EVERY project regardless of perceived simplicity.
+Write no spec, design or code, scaffold nothing, and take no implementation action until the requester has approved the spec preview (step 4) in writing. This applies to EVERY change regardless of perceived simplicity.
 </HARD-GATE>
 
 ## Precedence
 
-Where your role skill already defines spec procedure — product-owner's Workflow B section list and its spec-review gate in `sdlc-flow-po-orchestration`, for instance — **that procedure owns deliverable's shape and location.** This skill governs only dialogue that produces it and hand-off that follows. Never blend two contradictory procedures: follow role skill and flag mismatch to workspace owner.
+Where your role skill already defines the procedure — product-owner's Workflow B, the seven sections of `sdlc-spec-template`, and the spec-review gate in `sdlc-flow-po-orchestration` — **that procedure owns the deliverable's shape and location.** This skill governs only the dialogue that produces it and the hand-off that follows. Workflows with no spec (A, D, E) use step 2 only, limited to what genuinely blocks the work. Never blend two contradictory procedures: follow the role skill and flag the mismatch to the workspace owner.
+
+`interview-me` owns the intent (who, why, success, constraint, out of scope); this skill owns what follows. Run both as ONE dialogue — one comment per round, never one per skill.
 
 ## Anti-Pattern: "This Is Too Simple To Need A Design"
 
-Every change goes through this process — config tweak, one label, one-line pipeline edit. "Simple" work is where unexamined assumptions waste most effort. Design may be three sentences, but you MUST present it and get approval.
+"Simple" work is where unexamined assumptions waste most effort. The preview may be five lines, but you MUST present it and get approval.
 
 ## Checklist
 
-Create task for each item and complete them in order:
+Track these in your own todo list — never as Multica issues — and complete them in order:
 
-1. **Read context** — ticket first, then code
-2. **Ask clarifying questions** — one per message
-3. **Propose 2-3 approaches** — trade-offs plus your recommendation
-4. **Present design** — in sections, approval after each
-5. **Record design on issue** — into description via `--description-file`
+1. **Read context** — ticket and thread first, then code
+2. **Clarify** — numbered questions, each with your best guess, ONE comment per round
+3. **Propose approaches** — only when the requester has a real choice
+4. **Present the spec preview** — ONE comment, approved in writing
+5. **Record the design** — where your role skill says; the original ask survives
 6. **Self-review what you recorded** — placeholders, contradictions, ambiguity, scope
-7. **Request review** — ONE comment mentioning requester, then STOP
-8. **Hand off through SDLC flow** — never implement product code off back of your own design
+7. **Hand off through the SDLC flow** — never implement off the back of your own design
 
-Steps 4→5 and 6→7 loop on "no, revise" until requester approves.
+Steps 2–4 loop until the requester approves the preview in writing.
 
 ## 1. Read context
 
-Ticket is context, not just code:
+The ticket is context, not just the code:
 
-- `multica issue get <id> --output json` — description, status, assignee, parent, project.
-- `multica issue comment list <id> --output json` — decisions already made. Read this BEFORE asking anything; never ask what thread already answered.
-- `multica issue children <id> --output json` and `multica issue metadata list <id> --output json` when ticket has structure.
+- `multica issue get <id> --output json` — description, status, assignee, creator, parent, project.
+- `multica issue comment list <id> --output json` — decisions already made. Read this BEFORE asking anything; never ask what the thread already answered.
+- `multica issue children <id> --output json` and `multica issue metadata list <id> --output json` when the ticket has structure.
 - Then code: `multica repo checkout <url> --ref dev`, CodeGraph before grep (`codegraph explore "<symbols or question>"`), every conclusion citing `file:line`. No evidence → say so; never guess.
-- Pipeline YAML, build scripts and chart values are NOT in code graph — read those files directly.
+- Pipeline YAML, build scripts and chart values are NOT in the code graph — read those files directly. A claim about a document (README, `docs/` page, design file) is checked against the document itself, never against a code inventory of it.
 
-**Assess scope before detail.** If request is several independent subsystems, say so immediately and help decompose it into separate tickets rather than refining design that should be three designs. Each piece gets its own ticket → design → delivery cycle.
+**Assess scope before detail.** If the request is several independent subsystems, say so in the first round and help decompose it into separate tickets rather than refining a design that should be three designs. Each piece gets its own ticket → design → delivery cycle.
 
-## 2. Ask clarifying questions
+## 2. Clarify
 
-- One question per message. Multiple choice when it fits, open-ended when it doesn't.
-- Ask ONLY what research cannot answer: business rules, scope, priorities, trade-off preferences.
-- Focus on purpose, constraints, success criteria.
-- On ticket rather than in chat, post open questions as ONE numbered comment mentioning requester (`mention://member/<id>` for humans, resolved from ticket's creator fields), then **STOP and wait**. Repeat until zero open questions remain.
+Ask ONLY what research cannot answer: business rules, scope, priorities, trade-off preferences.
+
+Each round is ONE comment, mentioning the requester — `mention://member/<id>` for a human, `mention://agent/<id>` for an agent creator (`creator_type`/`creator_id` from `multica issue get`):
+
+- **My read:** your one-line hypothesis of what the requester wants, with a confidence number.
+- **Numbered questions**, each with **Guess:** and the evidence behind it. Ask only questions that do not depend on each other's answers; a dependent question waits for the next round.
+- **Reply by number** — ask for "1 yes · 2 no, because …", so every answer is traceable.
+
+Then **STOP and wait**, ticket `in_progress`. Repeat until zero open questions remain.
+
+**Only a written reply answers.** A status move, a resolved thread, or silence is not an answer and never confirms a guess. On such a wake, post ONE short comment listing the numbers still open, with the requester's mention, and stop.
+
+**Cover these before the preview** — they are what the spec gate most often finds nobody asked:
+
+- **Out of scope** — what this change does NOT do.
+- **Examples** — for each business rule, 1–2 cases with real values, plus one refusal or edge case. Agreed examples become the §5 scenarios.
+- **Contract** — for each new or changed field: required or optional, allowed values, default, and what existing rows get. For each refusal: which field is at fault.
+- **Break or add** — must any existing caller change (a package consumer, another service, an external client)? Additive or breaking is the requester's call, never yours.
+- **Prerequisites** — anything outside the team the change waits on (a consent, a secret, another ticket), and who owns it.
+
+A decision made anywhere else — a side thread, another ticket, a chat — goes into the next round's comment, so it lands on this ticket.
 
 ## 3. Propose approaches
 
-2-3 options with trade-offs. Lead with your recommendation and reasoning for it. YAGNI ruthlessly — strip speculative features out of every option before you present it.
+Only when the requester has a real choice: 2–3 lettered options in that round's comment, your recommendation first with its reason. YAGNI ruthlessly — strip speculative features out of every option before you present it.
 
-## 4. Present design
+Options differ in behaviour, scope or contract — never in classes, layers or files. For product-owner that design belongs to dev-leader (Policy 06 statement 2).
 
-- Scale each section to its complexity: few sentences when straightforward, up to 200-300 words when nuanced.
-- Ask after each section whether it reads right so far. Be ready to go back.
-- Cover architecture, components, data flow, error handling, testing.
-- **Design for isolation** — each unit has one clear purpose, well-defined interface, and can be understood and tested on its own. For each unit, answer: what does it do, how is it used, what does it depend on? If consumer must read unit's internals to use it, boundary is wrong.
-- **In existing codebase** — follow patterns already there. Include targeted fixes for problems that genuinely block work; propose no unrelated refactoring.
+## 4. Present the spec preview
 
-## 5. Record design on issue
+ONE comment, mentioning the requester, before any spec is written:
 
-Multica issue is durable home of design.
+- **Summary** — two sentences: what changes, who benefits.
+- **Done means** — the result a person can observe when the change works.
+- **Rules** — each business rule, with its agreed examples.
+- **Contract** — each new or changed field and endpoint, or `none`.
+- **Placement** — the owning repo, each new dependency, additive or breaking, or `stays inside <repo>`.
+- **Not in this change** — one per bullet.
+- **Decisions** — each answer so far, with who gave it and where.
 
-- Write design to file **inside your working directory** (e.g. `./design.md`), then `multica issue update <id> --description-file ./design.md`. Delete file afterwards. Treat failed write as fatal — never let stale file from another run leak in.
-- Diagrams, screenshots, renders: `multica attachment upload <path>`. That command is only thing that actually delivers file to reader.
-- **Never make local path deliverable** — no `docs/…/design.md` as record, no git commit, no absolute path or `file://` link in comment. Runtime path is dead to every reader but you. Reference code locations as inline code (`path/to/file.cs:42`), never as link.
-- **No ticket yet?** Present design in conversation and ASK whether to create issue for it. Never auto-create one, and never assign it to yourself.
+Before posting, check the rules against each other. Two rules that cannot both hold ("an empty group can be moved" and "no group is its own parent") are a question for the requester, not a spec.
+
+End with: "Reply `approved`, or name the lines to change." Then **STOP**. A written approval releases step 5; anything else starts a new round.
+
+## 5. Record the design on the issue
+
+The Multica issue is the durable home of the design.
+
+- **Keep the original ask.** Before the first description write, post the requester's original description as ONE comment headed `Original request` (no mention) unless the thread already has one.
+- **product-owner** — the spec goes into the ticket description per `sdlc-flow-po-orchestration` Workflow B, built from the approved preview; every Decisions line becomes a §4 Decisions entry.
+- Write the file **inside your working directory** (e.g. `./spec.md`), then `multica issue update <id> --description-file ./spec.md`. Delete the file afterwards. Treat a failed write as fatal — never let a stale file from another run leak in.
+- Diagrams, screenshots, renders: `multica attachment upload <path>`. That command is the only thing that actually delivers a file to a reader.
+- **Never make a local path the deliverable** — no `docs/…/design.md` as the record, no git commit, no absolute path or `file://` link in a comment. A runtime path is dead to every reader but you. Reference code locations as inline code (`path/to/file.cs:42`), never as a link.
+- **No ticket yet?** Run the dialogue in the conversation and ASK whether to create an issue for it. Never auto-create one, and never assign it to yourself.
 
 ## 6. Self-review what you recorded
 
 Re-read it with fresh eyes and fix inline — one pass, no loop:
 
 1. **Placeholders** — any "TBD", "TODO", empty section, or vague requirement?
-2. **Consistency** — do sections contradict each other? Does architecture match described behaviour?
-3. **Scope** — is this one deliverable, or does it need splitting into separate tickets?
-4. **Ambiguity** — could requirement be read two ways? Pick one and state it explicitly.
+2. **Consistency** — do sections contradict each other, or the approved preview?
+3. **Coverage** — every preview decision is recorded; every agreed example is a scenario.
+4. **Scope** — is this one deliverable, or does it need splitting into separate tickets?
+5. **Ambiguity** — could a requirement be read two ways? It is a question for the requester, not your pick.
 
-## 7. Request review
+## 7. Hand off through the SDLC flow
 
-ONE comment via `--content-file`: what design decides, what changed since last round, and what you need from reader. Mention requester with `mention://member/<id>`. Then **STOP and wait** — their reply is gate. If they ask for changes, revise description and re-run step 6.
+The approved design is input to the delivery pipeline, never a licence to implement. Shared contract: `sdlc-flow-delivery-pipeline`. Your terminal step depends on your role:
 
-Never agent-mention teammate in review request only human needs to read: agent mention enqueues run and can create loops.
+- **product-owner** — the design becomes the main-ticket spec. Feature or enhancement → spec-review gate, then Workflow C once APPROVED. CI/CD → Workflow D, straight to `devops`, no spec gate. You stay read-only on code throughout.
+- **platform assistants (`default`, `claude_ultra`) and Mika** — you never spec or implement. Stop at the confirmed intent (`interview-me` step 4), write it into the ticket you file, and route per your own routing rules: product work to `product-owner`, CI/CD to `devops`, docs to `docs-writer`.
 
-## 8. Hand off through SDLC flow
+Mention only the requester in a dialogue comment. Never mention another agent there: every agent mention link enqueues a run, even a quoted one.
 
-Approved design is input to delivery pipeline, never licence to implement. Shared contract is `sdlc-flow-delivery-pipeline`; your terminal step depends on your role:
-
-- **product-owner** — design becomes main-ticket spec. Feature or enhancement → spec-review gate, then Workflow C once APPROVED. You stay read-only on code throughout.
-- **devops** — CI/CD config is yours to build, committed directly to `dev` (no PR, no deploy workflows — packages have no deployed environment).
-- **squad members** — design feeds your leader's staged sub-tasks. Work stage you were given, PR into `dev`, and let pr-reviewer gate decide.
-
-Status discipline on your own ticket: finished → `done` (never `in_review` — it fires no trigger and strands ticket); waiting on answers → stay `in_progress`; genuinely stuck → `blocked` plus plain comment for whoever must unblock you.
+Status discipline on your own ticket: finished → `done` (never `in_review` — it fires no trigger and strands the ticket); waiting on answers → stay `in_progress`; genuinely stuck → `blocked` plus a plain comment for whoever must unblock you.

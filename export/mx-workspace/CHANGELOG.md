@@ -4,6 +4,33 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-27 — clarification dialogue runs on the ticket; only a written reply answers (live)
+
+Ported from drunk-workspace (its 2026-09-27 (e)); no policy amended.
+
+`multica-brainstorming` is rewritten for the ticket, where every wake is one turn: each round is
+ONE numbered comment (requester's mention, a one-line read with a confidence number, every
+question with a guess and its evidence, replies by number), approaches only when the requester
+has a real choice and never in classes or layers, then ONE spec-preview comment (Summary, Done
+means, Rules with examples, Contract, Placement, Not in this change, Decisions) approved in
+writing before any spec. A status move, a resolved thread or silence confirms no guess. Before
+the preview the dialogue covers out of scope, real-value examples plus one refusal or edge case
+per rule, the business side of the contract, additive or breaking as the requester's call, and
+outside prerequisites. The original description is kept as an `Original request` comment before
+the first description write. The hand-off list drops the devops and squad-member lines and keeps
+product-owner and the platform assistants, who stop at the confirmed intent and route.
+`interview-me` (identical in both bundles) states that on a ticket the thread is the live user
+and a round is one numbered comment of independent questions — matching the Clarification gate's
+existing "ONE numbered comment".
+
+Skill assignments: `multica-brainstorming` detached from `dev-leader`, `qc-leader` and `devops` —
+named in none of their instructions, and its "every change needs an approved design" gate
+contradicted Workflow D's "clarify only what genuinely blocks". README skill tables updated.
+
+Open: mx `product-owner` still has `multica-brainstorming` attached but named nowhere inline
+(Policy 06 statement 9 names only `interview-me`), so it is rarely opened. Naming it in the
+Clarification gate would amend Policy 06 — owner's call.
+
 ## 2026-09-27 — architecture reviewed at both gates; dev-backend proves the coding standards before the PR (live)
 
 Two owner-approved changes ported from drunk-workspace (its 2026-09-27 (c) and (d)).

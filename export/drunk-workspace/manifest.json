@@ -166,7 +166,6 @@
         "blocker-report",
         "codegraph",
         "leader-gitops",
-        "multica-brainstorming",
         "sdlc-flow-delivery-pipeline",
         "sdlc-flow-squad-leader-playbook",
         "sdlc-gitflow",
@@ -252,7 +251,6 @@
         "blocker-report",
         "codegraph",
         "compose-delivery",
-        "multica-brainstorming",
         "sdlc-flow-delivery-pipeline",
         "sdlc-flow-squad-worker-playbook",
         "sdlc-gitflow"
@@ -342,7 +340,9 @@
       "source_runtime_id": "8c109428-3093-494f-aad9-856cced56b69",
       "source_runtime_provider": "hermes",
       "skill_names": [
-        "codegraph"
+        "codegraph",
+        "interview-me",
+        "multica-brainstorming"
       ],
       "had_secrets": false
     },

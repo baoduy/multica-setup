@@ -8,7 +8,7 @@ Research, specification, architecture, and orchestration agent for this workspac
 
 - **Shared contract** (actors, workflows, caps): `sdlc-flow-delivery-pipeline`.
 - **Procedure** for Workflows A–E and phase orchestration: `sdlc-flow-po-orchestration`. Load on every root-ticket wake; its `references/` cover the rare cases.
-- Clarification gate: load `interview-me` and `multica-brainstorming` on every wake that carries an open question — interview the requester one question at a time, present the design back, never guess a requirement. `sdlc-flow-po-orchestration` owns the deliverable's shape; those skills own the dialogue.
+- Clarification gate: load `interview-me` and `multica-brainstorming` on every wake that carries an open question — each round is ONE numbered comment with your best guess on every question, and a spec preview comes before any spec. Only the requester's written reply answers; a status move or silence confirms no guess, and you never guess a requirement. `sdlc-flow-po-orchestration` owns the deliverable's shape; those skills own the dialogue.
 - Research with CodeGraph before grep/manual reading (`codegraph` skill); every conclusion cites `file:line` — no evidence, no claim.
 - Follow the seven-section business spec template in `sdlc-spec-template` skill (shared spec contract — takes precedence wherever another skill differs); approval gate on finished spec is automated spec-review gate, with requester involved only at clarification and on escalation.
 

@@ -47,8 +47,8 @@ without jargon. 🦊 the "foreman" always knows which step you're on.*
   YOUR IDEA ──▶ "an app that studies reels and remixes them"
      │
      ▼
-  ┌──────────────────────┐  asks one question at a time,   ──▶ the ticket SPEC
-  │ 1. THE INTERVIEW     │  recommends an answer each           (5 sections)
+  ┌──────────────────────┐  asks numbered questions,       ──▶ the ticket SPEC
+  │ 1. THE INTERVIEW     │  each with a guessed answer          (5 sections)
   │    (product-owner)   │
   └──────────────────────┘
      │
@@ -849,16 +849,16 @@ authoritative source, superseding any prose description of "who loads what".
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 🦊 product-owner (8)   | `blocker-report` · `bug-report` · `codegraph` · `interview-me` · `multica-brainstorming` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-po-orchestration` · `sdlc-spec-template`         |
 | 🦉 spec-reviewer (6)   | `blocker-report` · `codegraph` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-member-protocol` · `sdlc-spec-template` · `spec-review-gate`                                         |
-| 🐺 dev-leader (8)      | `blocker-report` · `codegraph` · `leader-gitops` · `multica-brainstorming` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-leader-playbook` · `sdlc-gitflow` · `sdlc-impl-brief` |
+| 🐺 dev-leader (7)      | `blocker-report` · `codegraph` · `leader-gitops` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-leader-playbook` · `sdlc-gitflow` · `sdlc-impl-brief` |
 | 🔨 dev-backend (8)     | `blocker-report` · `codegraph` · `dknet-ddd-conventions` · `dotnet10-efcore10-standards` · `sdlc-flow-squad-member-protocol` · `sdlc-gitflow` · `test-driven-development` · `testing-standards` |
 | 🐳 release-manager (3) | `blocker-report` · `sdlc-flow-squad-member-protocol` · `sdlc-gitflow`                                                                                                  |
 | 🦅 pr-reviewer (6)     | `blocker-report` · `codegraph` · `dknet-ddd-conventions` · `pr-review-gate` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-member-protocol`                                        |
-| 🐝 qc-leader (9)       | `bdd-report` · `blocker-report` · `bug-report` · `codegraph` · `leader-gitops` · `multica-brainstorming` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-leader-playbook` · `sdlc-impl-brief` |
+| 🐝 qc-leader (8)       | `bdd-report` · `blocker-report` · `bug-report` · `codegraph` · `leader-gitops` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-leader-playbook` · `sdlc-impl-brief` |
 | 🐜 qc-tester (4)       | `bdd-report` · `blocker-report` · `codegraph` · `sdlc-flow-squad-member-protocol`                                                                   |
 | 🐞 qc-runner (4)       | `bdd-report` · `blocker-report` · `codegraph` · `sdlc-flow-squad-member-protocol` |
 | 🔍 bdd-reviewer (5)    | `bdd-report` · `bdd-review-sweep` · `blocker-report` · `codegraph` · `testing-standards` |
 | 🤝 Mika (0)            | — (chief-of-staff assistant; no workspace skills bound) |
-| 🐙 devops (8)          | `blocker-report` · `codegraph` · `compose-delivery` · `helm-chart-delivery` · `multica-brainstorming` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-member-protocol` · `sdlc-gitflow`                |
+| 🐙 devops (7)          | `blocker-report` · `codegraph` · `compose-delivery` · `helm-chart-delivery` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-member-protocol` · `sdlc-gitflow`                |
 | 🐲 claude_ultra (4)    | `autopilot-spec` · `blocker-report` · `interview-me` · `multica-brainstorming`                                                                                         |
 | 🐼 default (4)         | `autopilot-spec` · `blocker-report` · `interview-me` · `multica-brainstorming`                                                                                         |
 | 🏛️ arch-reviewer (7)  | `architecture-review-sweep` · `blocker-report` · `bug-report` · `codegraph` · `dknet-ddd-conventions` · `dotnet10-efcore10-standards` · `sdlc-gitflow`                                 |
@@ -904,7 +904,7 @@ agent, was retired when the squad leaders took over its git-flow duties (see `CH
 
 | Skill                   | Governs                                                               | Bound to                   |
 | ----------------------- | --------------------------------------------------------------------- | -------------------------- |
-| `multica-brainstorming` | Multica-native intent/requirements/design exploration before building | 🦊 🐲 🐼 🐙 🐺 🐝 |
+| `multica-brainstorming` | Multica-native requester dialogue — numbered questions with guesses, spec preview approved in writing | 🦊 🐲 🐼 |
 | `autopilot-spec`        | Goal → Context → Steps structure for autopilot runbooks               | 🐲 🐼                      |
 
 
@@ -913,7 +913,7 @@ agent, was retired when the squad leaders took over its git-flow duties (see `CH
 
 | Skill          | Governs                                  | Bound to |
 | -------------- | ---------------------------------------- | -------- |
-| `interview-me` | one-question-at-a-time intent extraction | 🦊 🐲 🐼 |
+| `interview-me` | intent extraction — numbered questions, each with a guess | 🦊 🐲 🐼 |
 
 
 **D · Implementation &amp; delivery**
