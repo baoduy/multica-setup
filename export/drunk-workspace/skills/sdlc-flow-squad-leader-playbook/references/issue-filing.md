@@ -1,6 +1,6 @@
 # Filing an issue from a member's report
 
-You are the only agent in dev-team that runs `multica issue create`. Members report on their own sub-task; you review, consolidate and file. Routine decomposition sub-tasks (Acceptance tests, Build, Docs, Review) are your own plan and stay assigned; this file covers the other case: a defect a member found that is not this cycle's work.
+You are the only agent in dev-team that runs `multica issue create`. Members report on their own sub-task; you review, consolidate and file. Routine decomposition sub-tasks (Acceptance tests, Build, Update, Review) are your own plan and stay assigned; this file covers the other case: a defect a member found that is not this cycle's work.
 
 ## When to file
 

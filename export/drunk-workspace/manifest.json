@@ -421,10 +421,6 @@
           "role": "reviewer"
         },
         {
-          "agent_name": "docs-writer",
-          "role": "developer"
-        },
-        {
           "agent_name": "release-manager",
           "role": "release"
         }
@@ -453,6 +449,10 @@
         {
           "agent_name": "devops",
           "role": "devops"
+        },
+        {
+          "agent_name": "docs-writer",
+          "role": "member"
         },
         {
           "agent_name": "pr-reviewer",

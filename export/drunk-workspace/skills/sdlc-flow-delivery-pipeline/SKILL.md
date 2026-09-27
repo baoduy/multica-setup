@@ -24,10 +24,11 @@ The numbers the whole factory quotes. Change one here and it changes everywhere 
 
 - **product-owner** — leader of product-team. Research, spec, orchestration of the ticket it is assigned. Read-only on code. A root ticket (no parent) it owns through release; a sub-issue (has a parent) it owns through development only — the parent's owner releases all its children together.
 - **spec-reviewer** — automated spec gate (Workflow B). Approve bar 8.5, max 5 rework rounds.
-- **dev-team** — squad led by **dev-leader**; members dev-backend (tests and code, acceptance-test-first), docs-writer (documentation only), pr-reviewer (PR gate, merges into `dev`), release-manager (a `Release` stage on root cycles). The leader cuts the one feature branch and opens the one PR itself (`leader-gitops`).
-- **pr-reviewer** — automated PR gate for every `dev`-bound PR (dev-team's cycle PR and devops' standalone PR). Approve bar 8.5 — every passing PR merges, labelled `release-review` when a trigger applies; max 3 rework rounds plus one polish round, then the owner chooses.
+- **dev-team** — squad led by **dev-leader**; members dev-backend (tests and code, acceptance-test-first; in-code API comments and a breaking change's `Breaking` changelog entry ship in Build), pr-reviewer (PR gate, merges into `dev`), release-manager (a `Release` stage on root cycles). The leader cuts the one feature branch and opens the one PR itself (`leader-gitops`). A cycle writes no docs pages; the leader's final report carries a `Docs impact:` line naming the pages the change made stale.
+- **pr-reviewer** — automated PR gate for every `dev`-bound PR (dev-team's cycle PR and the standalone PRs of devops and docs-writer). Approve bar 8.5 — every passing PR merges, labelled `release-review` when a trigger applies; max 3 rework rounds plus one polish round, then the owner chooses.
 - **release-manager** — opens and merges the single `dev`→`main` release PR, as `[P<num>-2]` on a spec cycle or `[D<num>-n] Release` on a root cycle. A critical release (a `(MINOR)` commit or a `release-review` PR) waits for the owner's reply A. CI publishes the package on merge.
 - **devops** — CI/CD pipelines, package-publish automation, docker-compose files. Lands as `chore/<issue-key>` PR to `dev`, gated by pr-reviewer. Never enters the squad flow, never gets a spec gate.
+- **docs-writer** — library and API feature docs with `archify` diagrams, written only when a human asks. Lands as `docs/<issue-key>` PR to `dev`, gated by pr-reviewer. Never enters the squad flow, never gets a spec gate.
 - **Humans** — the requester (root creator) and the resolved owner (`Owner` property). Business clarifications and escalations only.
 
 ## Workflows
@@ -38,18 +39,18 @@ The numbers the whole factory quotes. Change one here and it changes everywhere 
 | feature or enhancement to a library repo | **B → C** | clarify to zero open questions → business spec in the root description → `[S<num>]` gate → C |
 | delivery of an approved spec | **C** | `[P<num>-1] Implementation` (dev-team, `todo`, stage 1; description pins `Spec revision: <n>`, frozen for the cycle) → `[P<num>-2] Release` (release-manager, `backlog`, stage 2; root tickets only) → ticket `done`. On a sub-issue the cycle ends at the verified `[P<num>-1]` — no release phase |
 | CI/CD or build/publish automation | **D** | D1 analysis-only ends at the report; D2 `[P<num>-1] CI/CD change` (devops, stage 1) → `[P<num>-1c] Review CI/CD PR` (pr-reviewer, stage 2) → root `done`. No spec gate, no release phase |
-| docs-only change to a library repo | **E** | the ROOT is reassigned to dev-team with a `## Brief` (Route B) → dev-leader finalizes `in_review`. No spec gate, no release. A docs ticket may also be assigned to dev-team directly, bypassing product-owner |
+| docs a human asked for | **E** | `[P<num>-1] Docs` (docs-writer, stage 1) → `[P<num>-1c] Review docs PR` (pr-reviewer, stage 2) → root `done`. No spec gate, no release phase. A docs ticket may also be assigned to docs-writer directly, bypassing product-owner |
 
-All traffic inside a squad is routed by its leader: members write only on their own sub-task and mention only the leader; a review REWORK travels pr-reviewer → dev-leader → implementer → dev-leader → pr-reviewer, never member to member. Inside dev-team a cycle is `[D<num>-1] Acceptance tests` → leader's inline AT approval (pins `at_sha`) → `[D<num>-2] Build` (+ `Docs` at the same stage) → leader opens the PR → `[D<num>-3] Review` (→ `[D<num>-4] Release` on a root cycle that republishes). Route B (docs/config only) is a single `[D<num>-1] Update` then Review. Squad specifics are in the squad briefing the leader receives.
+All traffic inside a squad is routed by its leader: members write only on their own sub-task and mention only the leader; a review REWORK travels pr-reviewer → dev-leader → implementer → dev-leader → pr-reviewer, never member to member; on a `[P<num>-1c]` it travels pr-reviewer → product-owner → devops or docs-writer → product-owner → pr-reviewer. Inside dev-team a cycle is `[D<num>-1] Acceptance tests` → leader's inline AT approval (pins `at_sha`) → `[D<num>-2] Build` → leader opens the PR → `[D<num>-3] Review` (→ `[D<num>-4] Release` on a root cycle that republishes). Route B (config only) is a single `[D<num>-1] Update` then Review. Squad specifics are in the squad briefing the leader receives.
 
 ## Stage ownership
 
 | Ticket | Owner | Created by | Starts when |
 |---|---|---|---|
-| root ticket | product-owner (spec, CI/CD) or dev-team (confirmed bug, docs, direct-door ticket) | requester or Mika | assignment at `todo`; product-owner reassigns a bug/docs root to dev-team after its gate |
+| root ticket | product-owner (spec, CI/CD, docs) or dev-team (confirmed bug, direct-door ticket), or devops / docs-writer (direct-door ticket) | requester or Mika | assignment at `todo`; product-owner reassigns a bug root to dev-team after its gate |
 | `[S<num>]` | spec-reviewer | product-owner | `todo`; re-armed `blocked`→`in_progress --no-start` + mention |
-| `[P<num>-1]` | dev-team → dev-leader, or devops | product-owner | created `todo` |
-| `[P<num>-1c]` | pr-reviewer | product-owner | promoted once the devops PR URL is posted |
+| `[P<num>-1]` | dev-team → dev-leader, devops, or docs-writer | product-owner | created `todo` |
+| `[P<num>-1c]` | pr-reviewer | product-owner | promoted once the devops or docs-writer PR URL is posted |
 | `[P<num>-2]` | release-manager | product-owner | promoted after `[P<num>-1]` verifies |
 | `[D<num>-n]` | dev-team members (incl. release-manager on a root cycle) | dev-leader | stage promotion |
 
