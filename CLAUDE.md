@@ -3,6 +3,15 @@
 Rules for editing workspace bundles here (in addition to `../CLAUDE.md`:
 analyse first, local bundle first, ask before pushing live).
 
+## Git
+
+- Commit and push straight to `dev` in this repo — no feature branch, no PR.
+  This overrides the default "branch first when on the default branch" rule.
+- Before committing, sync with `origin/dev` (`git fetch` + rebase or
+  fast-forward); never force-push `dev`.
+- One commit per accepted change, message prefixed with the bundle
+  (`drunk:`, `mx:`, or `drunk+mx:`).
+
 ## Scoring rubrics (review gates)
 
 When creating or editing any scoring rubric (pr-review-gate, spec-review-gate,
