@@ -4,6 +4,66 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-27 — architecture reviewed at both gates; dev-backend proves the coding standards before the PR (live)
+
+Two owner-approved changes ported from drunk-workspace (its 2026-09-27 (c) and (d)).
+
+**Architecture at both gates.** The spec gains **§3b Architecture impact**: Owner (the repo, and
+inside a service the bounded context, that owns the change), Dependencies (each new dependency
+between repos or services, with its direction), Public surface (each contract other services or
+external callers consume — HTTP API, Service Bus event or message, webhook payload, shared
+package — `additive`, `breaking` with the callers that must change, or `none`), Integration
+(each new interaction between repos or services) — or one `None — stays inside <repo>` line.
+Repos, services and bounded contexts only; which layer inside a service holds the logic stays
+dev-leader's. mx ships deployed services, so there is no `(MINOR)` versioning rule on a break
+(Policy 08 has none). The spec gate gains **Architecture fit 15%**: weights are now Coverage &
+traceability 25 · Gherkin 20 · Business clarity 20 · Architecture fit 15 · Completeness 10 ·
+Security 10. The PR category Maintainability & design becomes **Architecture & design** at the
+same 15%: a diff contradicting §3b is `blocking`; a new `DKNET-LAYER-*` / `DKNET-AGG-004` /
+`DKNET-REPO-004` violation in touched code, or a dependency between repos or services §3b never
+declared, is `important`; the gate never re-decides §3b. Bars, bands, caps and round limits are
+unchanged (spec: APPROVED ≥ 9.0, REVIEW REQUESTED 8.0–8.9, REWORK < 8.0, 5 rounds; PR: 8.5, 3
+rounds). The PR rubric's calibration anchors were rewritten from the deduction math — the old
+"8.5 for one `important`" and "8.0 for 1–2 `important`" disagreed with it (one alone computes
+9.5–9.9, two compute 9.0–9.8; in-scope findings still take a rework round per statement 7).
+
+**Standards self-review.** Every dev-backend `Build:` and `Fix (review):` ends with a Standards
+EVIDENCE row: both .NET stack skills and the repo's `CLAUDE.md` opened, rule-ids checked, a
+CodeGraph reuse search per new public symbol, `CLEAN-SRP-001..003` and `CLEAN-DRY-001/002`
+measured, SOLID at the boundaries crossed (`DKNET-LAYER-001..004`, `DKNET-AGG-004`,
+`DKNET-REPO-004`, `CLEAN-DIP-001`), vendor docs cited for a framework API the repo does not use
+yet. dev-leader's brief names the at-risk rule-ids in a `Standards` row; a missing or
+contradicted row is an `important` PR-gate finding.
+
+Amended **MX-POL-06 v2.2** (authority line, diagram, statement 1: §3b is the second exception to
+the role boundary; statement 2: seven sections; statement 3: no code words in §3b; new statement
+3c: the four lines, blocker and major severities, CodeGraph grounding; statement 10: the brief
+honours §3b; Definition of Done, enforcement, references), **MX-POL-04 v1.3** (diagram; statement
+3: spec weights and Architecture fit; statement 4: Architecture & design with the §3b, layering
+and Standards-row checks; statement 9: reviewers do not design inside a service; both
+scorecards and the worked example; Definition of Done), **MX-POL-01 v1.2** (Enforced at; new
+statement 17: the Standards self-review; Definition of Done; enforcement), **MX-POL-05 v1.4**
+(diagram and statement 1: seven-section spec, was a stale "11-section") and **MX-POL-09 v1.3**
+(product-owner authors a seven-section spec, was a stale "five-section"; spec-reviewer's Never
+line allows §3b; dev-leader's brief honours §3b and names the `Standards` row; dev-backend's
+Build carries the Standards row; pr-reviewer checks the diff against §3b and the layering).
+Cascaded to `sdlc-spec-template` (placement exception, seven sections, §3b row, format rule,
+scale-to-size, quality bar 6), `spec-review-gate` (contract line, collect step reads each repo's
+`CLAUDE.md`/`AGENTS.md`, new **§3b placement** check with inline rules and severities,
+code-level-design line, weights table, verdict scorecard), `pr-review-gate` (pass 5
+**Architecture & design** with the checks inline, both scorecards;
+`references/scoring-rubric.md` category row and anchors), `sdlc-impl-brief` (§3b binding,
+`Standards` header row and paragraph, Done-when row), `sdlc-flow-squad-member-protocol`
+(self-review check 8 **Standards** with the rules inline and the row shape; finishing step 1 no
+longer says "six checks"), `test-driven-development` (Verification list),
+`sdlc-flow-po-orchestration` (Workflow B step 2, hard rule), `sdlc-flow-delivery-pipeline`
+(seven-section spec), `squads/product-team.md` (seven-section spec), `squads/dev-team.md`
+(Build row), `agents/product-owner.md`, `agents/spec-reviewer.md`, `agents/dev-backend.md` (open
+the stack skills before coding), `agents/dev-leader.md`, `agents/pr-reviewer.md` and `README.md`
+(spec-gate weights, section counts, skill catalog row, glossary). The spec gate has no deduction
+math, no count caps and no numeric calibration anchors in mx, so it got no anchors — flagged to
+the owner, not added.
+
 ## 2026-09-24 — PR review round cap raised from 2 to 3 (live)
 
 🦅 pr-reviewer may now issue 3 REWORK verdicts before ESCALATED → MANUAL HANDOFF (was 2), on

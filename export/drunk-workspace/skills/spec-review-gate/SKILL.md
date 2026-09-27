@@ -2,7 +2,7 @@
 
 Comprehensive review of product-owner Workflow B spec with weighted 1–10 score and automated gate actions for drunk-workspace delivery pipeline. This gate REPLACES human requester-approval step for specs, so its bar is quality bar: a spec approved here goes straight to implementation. Pipeline: **collect → analyze → score → gate**.
 
-**Spec contract — six sections (§3a Contract changes included), completeness tests, format rules and the BRIEF Gherkin standard — lives in `sdlc-spec-template` skill. Load it on every review; it is what you score conformance against, and it wins over this file wherever they differ. This file owns only weights, severities, calibration and gate mechanics.**
+**Spec contract — seven sections (§3a Contract changes and §3b Architecture impact included), completeness tests, format rules and the BRIEF Gherkin standard — lives in `sdlc-spec-template` skill. Load it on every review; it is what you score conformance against, and it wins over this file wherever they differ. This file owns only weights, severities, calibration and gate mechanics.**
 
 ## Modes
 
@@ -13,7 +13,7 @@ Comprehensive review of product-owner Workflow B spec with weighted 1–10 score
 
 1. Read your review sub-task, then PARENT main ticket (`multica issue get <parent-id> --output json`): spec is main ticket's **description**. Read its recent comments for requester's clarification answers (context for §4 Scope decisions).
 2. Round bookkeeping: read the `Gate round` property on YOUR review sub-task (`multica issue property list <subtask-id> --output json`). Unset = no rework rounds yet (round 0).
-3. Check out every repo spec's Scope section names: `multica repo checkout <url> --ref dev` (fall back to no `--ref` if `dev` does not exist). At each repo root, foreground (never `&`): `codegraph status . 2>/dev/null | grep -q "Nodes:" || codegraph init --yes .` — the folder alone proves nothing, only `Nodes:` from `codegraph status` does.
+3. Check out every repo spec's Scope section names: `multica repo checkout <url> --ref dev` (fall back to no `--ref` if `dev` does not exist). At each repo root, foreground (never `&`): `codegraph status . 2>/dev/null | grep -q "Nodes:" || codegraph init --yes .` — the folder alone proves nothing, only `Nodes:` from `codegraph status` does. Read each repo's `CLAUDE.md`/`AGENTS.md` too: its own conventions decide which repo and context own what, and they override the generic stack rules below.
 
 ## Analyze — verify claims against real code
 
@@ -22,18 +22,25 @@ The spec is business-level and carries no `file:line` — there are no code cita
 - **Scope names are real, and complete.** Every repo and package §4 Scope names exists and is reachable (`codegraph explore` / checkout). A Scope naming a repo or package that does not exist is a **blocker**. A repo the §3a contract or a §3 requirement plainly implies but §4 never names is a **major** — the squad sizes the work off this list.
 - **The §3a contract is reviewable, not designed.** You check that every new or changed field carries a type, a length where the type needs one, and the attributes a developer must know, and that every new, changed or removed endpoint carries a verb and a path. You do NOT rule on whether a field should be a `decimal(18,2)` or whether the route should be `/v1/x` — that is design, and design is dev-leader's. A contract that is missing, or too thin to build from, is the finding; a contract you would have drawn differently is not.
 - **Current State and invariants are plausible.** §2 Current State and any §3 invariant claims a property of the system today — where a claim is clearly contradicted by the code (a behaviour that does not exist, an invariant the system does not hold), that is a **blocker**. You are confirming the spec is grounded, not auditing a design.
-- **Do not review design.** The spec proposes none. Whether a change is minimal, reuses the right helper, or mirrors the right pattern is dev-leader's call at decomposition and pr-reviewer's at merge gate. Re-inventing an existing helper is no longer a spec finding — there is nothing in the spec that could re-invent it.
+- **§3b placement fits the system.** This is the spec's one architecture question, answered at the level of repos, packages and bounded contexts — never classes, folders or layers inside a repo. Check with `codegraph explore` and the repos' `CLAUDE.md`/`AGENTS.md`:
+  - **Owner** is the repo or context that owns this behaviour and data. Business rules never live in a Pulumi, Helm or Docker repo; one bounded context never writes another context's entities.
+  - **Dependencies** point the way the stack allows and create no cycle. For .NET/DKNet: a domain or core package never depends on an infrastructure, EF Core provider or application package; a library never depends on a service. Confirm the direction against today's package references.
+  - **Public surface** matches the change. If §3a or §3 removes or changes a member, endpoint or field a published package's callers use, the call is `breaking` and says the release carries `(MINOR)` (Policy 08 statement 12) — never a major bump.
+  - **Integration** is named for every new interaction between repos.
+  - Severities: a wrong owner, a cycle or a dependency against the layering, a breaking change called `additive` or `none`, or a §3b line the code plainly contradicts is a **blocker**. A missing §3b, or a missing Owner, Dependencies or Public surface line, when the change crosses repos or touches a published package's public surface is a **major** — scored once, here, not again under Completeness. A new interaction between repos with no Integration line is a **major**. A §3b dependency on a repo §4 Scope never names is a **major**. A one-repo change with no dependency or public-surface change and no `None — stays inside <repo>` line is a **minor**.
+- **Do not review code-level design.** The spec proposes none below §3b. Whether a change is minimal, reuses the right helper, mirrors the right pattern, or puts logic in the right layer inside a repo is dev-leader's call at decomposition and pr-reviewer's at merge gate — pr-reviewer also checks the code against §3b. Re-inventing an existing helper is no longer a spec finding — there is nothing in the spec that could re-invent it.
 - Every finding carries a severity — `blocker`, `major`, `minor`, `nit` — and cites the spec section it concerns. Include at least one `praise` finding when deserved.
 
 ## Score — weighted rubric (score each dimension 1–10)
 
 | Dimension | Weight | Checks |
 |---|---|---|
-| Requirement coverage & traceability | 30% | Every Gherkin acceptance criterion traces back to a Goal in §1, AND every business requirement is covered by ≥1 scenario. A gap in either direction is at least `major`. |
-| Gherkin quality | 25% | Score against **BRIEF standard defined in `sdlc-spec-template`** — do not restate or reinterpret it here. Its primary test governs: *would this wording need to change if implementation changed?* Remember two carve-outs it sets: **no hard step count** (never a finding on its own), and imperative phrasing where mechanism IS requirement is at most `minor`. |
+| Requirement coverage & traceability | 25% | Every Gherkin acceptance criterion traces back to a Goal in §1, AND every business requirement is covered by ≥1 scenario. A gap in either direction is at least `major`. |
+| Gherkin quality | 20% | Score against **BRIEF standard defined in `sdlc-spec-template`** — do not restate or reinterpret it here. Its primary test governs: *would this wording need to change if implementation changed?* Remember two carve-outs it sets: **no hard step count** (never a finding on its own), and imperative phrasing where mechanism IS requirement is at most `minor`. |
 | Business clarity & problem framing | 20% | **Do NOT score whether the spec names concrete files, classes or patterns to mirror — that is dev-leader's and pr-reviewer's job.** Score instead: is §1 Goals substantial enough that a non-engineer could act on it · is the affected user or role named · does §1 give a real success signal · is §2 Current State a clear before-picture in business terms · is §3 Expected State observable from outside, with any invariant stated as a property design must preserve ("an existing consumer's dependency-injection registration keeps working after the upgrade") rather than as a mechanism. A thin or missing §1 Goals is a `blocker`: it is the section the whole spec exists to convey. **Readability** is scored here too, against the writing rules in `sdlc-spec-template`: a paragraph over 3 sentences, a sentence over about 25 words, or a metaphor/idiom in §1–§4 is a `minor` (quote it); a §1 a non-engineer cannot follow is a `major`. |
+| Architecture fit | 15% | §3b against the Scope repos' own conventions and stack standards, per the **§3b placement** check under Analyze: owner, dependency direction, public-surface call, integration. Severities are listed there. |
 | Security | 10% | The §3 Security line is present and concrete: input validation, authn/authz, secret handling, sensitive-data exposure in logs/responses, idempotency/replay safety where relevant — or an explicit "no new attack surface" statement with reasoning. A missing or vague Security line is a `blocker`. |
-| Completeness & unambiguity | 15% | **All six sections present and in the order `sdlc-spec-template` defines** (a `**Summary.**` line before §1 and the fixed sub-labels in §1 and §4 are part of that template) — that skill is the list; do not maintain a copy here. Zero TBD/TODO/placeholders. No contradictions between sections. §4 Scope carries ZERO open questions and names every repo touched. §3a carries the data and API contract. Any violation is at least `major`. **Plus the contract gates and format gates below.** |
+| Completeness & unambiguity | 10% | **All seven sections present and in the order `sdlc-spec-template` defines** (a `**Summary.**` line before §1 and the fixed sub-labels in §1 and §4 are part of that template) — that skill is the list; do not maintain a copy here. Zero TBD/TODO/placeholders. No contradictions between sections. §4 Scope carries ZERO open questions and names every repo touched. §3a carries the data and API contract. Any violation is at least `major`. **Plus the contract gates and format gates below.** |
 
 **Format gates** (part of Completeness) — rules live in `sdlc-spec-template`; these are severities for breaking them. Each is a `blocker`:
 
@@ -73,13 +80,14 @@ The spec is business-level and carries no `file:line` — there are no code cita
 
 Final score = weighted sum, then caps, one decimal.
 
-**Calibration anchors:**
+**Calibration anchors** — worked from the weights above: one `major` costs 2 × weight (0.2–0.5 points), one `blocker` costs 4 × weight (0.4–1.0 points) before its cap, one `minor` costs 0.05–0.125.
 
-- **9.5** — Implementable without ever opening main ticket's comment thread; zero findings above `nit`.
-- **8.5–9.4** — Implementable; exactly one `major` (two would trigger the 8.4 cap), no blockers.
-- **8.0** — Sound framing but 1–2 majors in coverage or clarity → below the bar, REWORK with a short fix list.
-- **6.0** — A blocker (format gate, contract gate, thin §1 Goals, missing Security line) or a coverage gap wide enough that dev-team would have to guess.
-- **3.0** — Spec describes a different problem than the requester asked for, or contradicts the real system throughout.
+- **9.5–10** — Implementable without ever opening main ticket's comment thread; no `major` or `blocker`, a few `minor`s at most.
+- **8.5–9.8** — Implementable; exactly one `major`, no blockers. Alone it scores 9.5–9.8; `minor`s can pull it lower, and below 8.5 it is REWORK.
+- **8.4** — Two or more `major`s and no blocker: the cap sets the score. The arithmetic alone would give 9.0–9.6.
+- **6.9** — Any blocker (format gate, contract gate, §3b placement, thin §1 Goals, missing Security line): the cap sets the score. One blocker alone would compute to 9.0–9.6.
+- **≤ 6.0** — Several dimensions collapsed, e.g. a coverage gap wide enough that dev-team would have to guess: Coverage 2 (−2.0), Gherkin 2 (−1.6), Clarity 8 (−0.4) → 6.0.
+- **3.0** — Spec describes a different problem than the requester asked for, or contradicts the real system throughout: every dimension near 3.
 
 Never inflate. When uncertain whether a finding is a `blocker`, it is a `blocker`: cost of a bad approved spec is a wasted dev cycle. When torn between two scores, pick the lower one and say why.
 
@@ -118,7 +126,7 @@ On a re-armed round: full fresh review, AND open the verdict with a **closure ta
 ```
 Spec review — round <R+1>
 Score: X.X / 10  →  {APPROVED | REWORK round <R+1> | MANUAL HANDOFF}
-Specified right: Gherkin X/10 · Completeness X/10
+Specified right: Gherkin X/10 · Architecture fit X/10 · Completeness X/10
 Right thing: Coverage & traceability X/10 · Business clarity X/10 · Security X/10
 Findings:
 1. [severity] <spec section> — one line (file:line where relevant)

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-05 |
-| **Version** | 1.10 |
+| **Version** | 1.11 |
 | **Status** | Active |
 | **Owner** | product-owner |
 | **Applies to** | Every ticket that flows through the drunk software factory |
@@ -73,7 +73,7 @@ outside the squad flow, no spec gate.
 
 ## Policy statements
 
-1. **Feature flow (B):** intake → clarify with the requester until **zero** open questions → six-section business spec on the main ticket ([Policy 06](06-requirements-and-spec.md) statement 3) → `[S#]` spec-review gate → on APPROVED, Workflow C: `[P<num>-1]` implementation (dev-team, always including in-repo unit/integration verification — there is no separate QC phase) → dev cycle (Branch → Build → PR → `pr-review-gate` merges into `dev`) → `[P<num>-2]` release `dev`→`main` (release-manager opens + merges; CI publishes the package/image) → main ticket `done`. **Two phases only** — no deploy phase and no QC phase exist because there is no deployed environment.
+1. **Feature flow (B):** intake → clarify with the requester until **zero** open questions → seven-section business spec on the main ticket ([Policy 06](06-requirements-and-spec.md) statement 3) → `[S#]` spec-review gate → on APPROVED, Workflow C: `[P<num>-1]` implementation (dev-team, always including in-repo unit/integration verification — there is no separate QC phase) → dev cycle (Branch → Build → PR → `pr-review-gate` merges into `dev`) → `[P<num>-2]` release `dev`→`main` (release-manager opens + merges; CI publishes the package/image) → main ticket `done`. **Two phases only** — no deploy phase and no QC phase exist because there is no deployed environment.
 
 1b. **A sub-issue stops at development.** The shape of the ticket assigned to product-owner decides where its ownership ends: a **root** ticket (no parent) runs to release as above; a **sub-issue** (it has a parent) gets the same classification, spec and gates but **no `[P<num>-2]`** — it terminates at the verified `[P<num>-1]` and flips `done`, which fires the parent's stage barrier. The parent's owner releases all of its children together in one `dev`→`main` PR, so partial releases of a decomposed feature never happen. The same shape rule already governs dev-team: it stages a `Release` only on a cycle whose ticket has no parent. A sub-issue also keeps its parent's project and carries no labels.
 

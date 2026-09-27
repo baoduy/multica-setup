@@ -7,7 +7,7 @@
 | Correctness & logic | 25% | No logic defects; concurrency and error paths sound; idempotent where required | A defect producing wrong results or data loss in a realistic path |
 | Security | 20% | No findings; sensitive paths follow established patterns; no new attack surface | Any exploitable issue, secret in diff, or authz bypass |
 | Testing & coverage | 20% | Changed behavior fully covered incl. edge cases; coverage on changed lines ≥ threshold; tests assert behavior | New logic with no tests, or tests that assert nothing |
-| Maintainability & design | 15% | Fits existing architecture; no duplication; clear naming; small cohesive units | Copy-paste duplication, god-methods, leaky abstractions |
+| Architecture & design | 15% | Matches the spec's §3b placement; no new layering or boundary violation from the stack skill; no duplication; clear naming; small cohesive units | Contradicts §3b (wrong owner, reversed or cyclic dependency, undeclared public break), domain reaching into infrastructure, copy-paste duplication, god-methods |
 | Spec conformance | 10% | Diff does exactly what the cycle ticket spec / acceptance criteria describe; no scope creep | Solves a different problem, or large unrelated changes bundled in |
 | Style & conventions | 5% | Matches repo `.editorconfig`/conventions; analyzers clean | Fights the codebase's established style throughout |
 | AI-slop gate | 5% | No LLM anti-patterns | Pervasive redundant comments, defensive wrapping, dead code, reinvented BCL helpers |
@@ -65,10 +65,13 @@ There is no human-review middle band and no deferred verdict: **≥ 8.5 → APPR
 
 ## Calibration anchors
 
-- **9.5** — Small, focused, spec-linked change; tests included; zero findings above `nit`, and every in-scope `nit` already cleared by a polish round before merge (an open in-scope `nit` at merge time is not a 9.5, it is an unfinished cycle).
-- **8.5–9.4** — Correct, safe, covered; exactly one `important` finding (two would trigger the 8.4 cap).
-- **8.0** — Correct and safe, but 1–2 `important` maintainability/testing gaps → below the bar, REWORK with a short fix list.
-- **6.0** — At least one `blocking` issue OR untested new logic; needs rework before merge.
-- **3.0** — Security-relevant defect or fundamentally wrong approach.
+Worked from the weights above: one `important` costs 2 × weight (0.1–0.5 points), one `blocking` costs 4 × weight (0.2–1.0 points) before its cap.
+
+- **9.5–10** — Small, focused, spec-linked change; tests included; zero findings above `nit`, and every in-scope `nit` already cleared by a polish round before merge (an open in-scope `nit` at merge time is not a 9.5, it is an unfinished cycle).
+- **8.5–9.9** — Correct, safe, covered; exactly one `important` finding. Alone it scores 9.5–9.9; `nit`s can pull it lower, and below 8.5 it is REWORK.
+- **8.4** — Two or more `important` findings and no `blocking`: the cap sets the score. The arithmetic alone would give 9.0–9.8.
+- **6.9 / 6.5** — Any `blocking` finding, or CI failing because of this PR: 6.9. New logic with no tests: 6.5. The cap sets the score; one `blocking` alone would compute to 9.0–9.8.
+- **≤ 6.0** — Several categories collapsed, e.g. Correctness 2 (−2.0), Security 2 (−1.6), Testing 8 (−0.4) → 6.0.
+- **3.0** — A `blocking (critical)` security finding (the 3.0 cap), or a fundamentally wrong approach that leaves most categories near their floor.
 
 Report the final score to one decimal. Never inflate a score to reach a gate; when torn between two scores, pick the lower one and say why.

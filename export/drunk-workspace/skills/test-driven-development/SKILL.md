@@ -103,6 +103,7 @@ Policy 02 statement 1a: a change confined to a front-end app's screens, layouts,
 - `git diff <at_sha>..HEAD -- <AT paths>` empty; every added test listed.
 - Every §3 row implemented; nothing outside §3 changed (`git diff --stat`); every §4 constraint respected.
 - Clean `dotnet pack` / `npm pack`. No `TODO`, commented-out code or placeholder left.
+- Standards row: stack skill opened, rule-ids checked, reuse search per new public symbol, SRP and DRY measured (worker playbook check 8, Policy 01 statement 15).
 - Plus the brief's §8 extra checks.
 - Pushed to the cycle's feature branch (`HEAD` == `origin/<branch>`), completion report posted (`blocker-report` shape, DEVIATIONS listed), sub-task `done`.
 

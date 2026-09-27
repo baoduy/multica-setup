@@ -17,7 +17,7 @@ ENTRY   👤 requirement → main ticket (mx-main, assignee product-team, todo)
   1 ── ANALYSE    product-owner   intake + labels, CodeGraph research (file:line),
                                   clarify to ZERO open questions, incl. the BDD-scope
                                   question → metadata bdd_required=true|false
-  2 ── SPEC       product-owner   11-section business spec into the main ticket
+  2 ── SPEC       product-owner   7-section business spec into the main ticket
   3 ── GATE       spec-reviewer   [S<num>] Spec review, scored 1–10
                                   APPROVED ≥9.0 → delegate
                                   REVIEW REQUESTED (8.0–8.9 or trigger) → 👤 holds [S<num>]

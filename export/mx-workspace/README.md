@@ -194,7 +194,7 @@ on code, always.** SANDBOX is the last environment it reaches (production is `pr
   │                clarification gate ⟲ → ZERO open questions · delivery scope (judged, ask if unsure)
   │                → ship_required + bdd_required metadata
   │
-  ├── ②  SPEC      write the 11-section business spec into the main-ticket DESCRIPTION
+  ├── ②  SPEC      write the 7-section business spec into the main-ticket DESCRIPTION
   │
   ├── ③  GATE      [S#] Spec review → 🦉
   │                ✅ APPROVED (≥ 9.0) → ④   ⟲ REWORK (max 5) → revise + re-arm
@@ -345,12 +345,13 @@ big picture.*
   │   ├── research  checkout dev · CodeGraph first · cite claims as file:line
   │   ├── clarify   ⟲ numbered questions + @👤 ─▶ STOP ─▶ repeat until zero
   │   │             (never ask what the code already answers)
-  │   └── spec      5 sections into the ticket DESCRIPTION · no open questions
+  │   └── spec      7 sections into the ticket DESCRIPTION · no open questions
   │
   ├── ②  SPEC-REVIEW GATE — 🦉 spec-reviewer
   │   ├── start     🦊 opens [S#] Spec review   parent = main · 🦉 · todo
-  │   ├── score     verify every file:line, then weigh:  traceability 30%
-  │   │            · Gherkin 25% · business clarity 20% · completeness 15% · security 10%
+  │   ├── score     verify every file:line, then weigh:  traceability 25%
+  │   │            · Gherkin 20% · business clarity 20% · architecture fit 15%
+  │   │            · completeness 10% · security 10%
   │   ├── pass      ✅ ≥ 9.0 and no blockers ─▶ [S#] done · verdict + @🦊 ─▶ ③
   │   ├── review    ◔ 8.0–8.9 or a trigger ─▶ REVIEW REQUESTED — 👤 holds [S#]
   │   ├── rework    ⟲ < 8.0 or any blocker ─▶ findings + @🦊 ─▶ 🦊 revises,
@@ -891,7 +892,7 @@ agent, was retired when the squad leaders took over its git-flow duties (see `CH
 | `sdlc-impl-brief`                 | the dev sub-task contract: nine-section implementation brief leaders write into coding sub-tasks                                         | 🐺 🐝                   |
 | `blocker-report`                  | the two fixed report shapes — completion (RESULT / EVIDENCE / LEFT OPEN) and blocker (`## BLOCKER` + `## OPTIONS`)                                                                         | all agents              |
 | `bug-report`                      | the standard 3-section body (Scope (Git Repo, Module/Classes) / Root cause / Suggested owner) for every separately-filed bug/defect issue | 🦊 🐝 🏛️               |
-| `sdlc-spec-template`              | the 11-section business-spec contract the `[S#]` gate scores against                                                                     | 🦊 🦉                   |
+| `sdlc-spec-template`              | the 7-section business-spec contract the `[S#]` gate scores against (§3a contract, §3b architecture impact)                              | 🦊 🦉                   |
 | `spec-review-gate`                | spec rubric, verdicts, 5-round cap, handoff                                                                                              | 🦉                      |
 | `pr-review-gate`                  | PR rubric, merge gate, 3-round cap, handoff, follow-ups filing                                                                           | 🦅                      |
 | `bdd-report`                      | BDD test-report format on qc-team sub-issues                                                                                             | 🐝 🐜 🐞 🔍             |
@@ -1062,7 +1063,7 @@ picture wrong.
 | **PR (pull request)**     | A proposal to merge one branch's changes into another, reviewed before it's accepted.                                                     |
 | **PRD / production**      | The real, customer-facing environment. The last stop, handled by 🌙 prd-release.                                                          |
 | **SANDBOX**               | The internal **test environment** where a change goes live for the team to try before production.                                         |
-| **spec**                  | The written plan for a request — 5 sections describing what to build and why, scored before any building starts.                         |
+| **spec**                  | The written plan for a request — 7 sections describing what to build and why, scored before any building starts.                         |
 | **squad / team**          | A group of agents with a leader that delivers one kind of work (product, dev, or QC).                                                     |
 | **ticket / issue**        | A single unit of tracked work on a board (a request, a bug, a sub-task).                                                                  |
 

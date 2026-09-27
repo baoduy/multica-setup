@@ -8,6 +8,8 @@ This is not the spec. The business spec lives on the root or phase ticket (`sdlc
 
 **The spec's §3a contract is binding input.** Every field and endpoint §3a declares has a Change set row covering it. A field or endpoint you need beyond §3a is your design call and gets its own row; one that changes what §3a agreed — a different type, length, verb or path — goes back to product-owner on the ticket instead of landing quietly in the brief.
 
+**The spec's §3b placement is binding too.** Put the change in the repo and bounded context §3b names as Owner, and add only the dependencies it declares, in the direction it declares. A design that needs a different owner, a new dependency or a public-surface break §3b did not declare goes back to product-owner on the ticket — pr-reviewer blocks a diff that contradicts §3b.
+
 ## Writing rules (agent reader)
 
 1. Tables over prose. One row per unit of work. One line per cell.
@@ -32,6 +34,7 @@ Copy from `# <KEY>` down and write it with `--description-file`. The same brief 
 | **Spec** | <phase or root key> §5, revision <n> (frozen) |
 | **at_sha · AT paths** | — until approved · `<tests/…/X.feature>, <tests/…/Steps.cs>` |
 | **Projects in scope** | `<src/A>, <src/B>, <tests/C>` |
+| **Standards** | `<stack skill(s)>` · at risk: `<3–5 rule-ids, e.g. DKNET-LAYER-001, CLEAN-SRP-001>` |
 
 ## 1. Goal
 <one sentence: what works after this change that did not before>

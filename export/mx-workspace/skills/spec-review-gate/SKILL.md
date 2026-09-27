@@ -2,7 +2,7 @@
 
 Comprehensive review of product-owner Workflow B spec with weighted 1–10 score and automated gate actions for Monxa delivery pipeline. This gate front-loads spec approval so requester is not bottleneck on every spec — but it does not replace them. Spec scoring 9.0+ with no blockers goes straight to implementation; marginal pass, or anything reviewer judges requester should see, goes to requester first. Pipeline: **collect → analyze → score → gate**.
 
-**Spec contract — six sections (§3a Contract changes included), their completeness tests, format rules, BRIEF Gherkin standard and the §5 QC-Scope preamble — lives in `sdlc-spec-template` skill. Load it on every review; it is what you score conformance against, and it wins over this file wherever they differ. This file owns only weights, severities, calibration and gate mechanics.**
+**Spec contract — seven sections (§3a Contract changes and §3b Architecture impact included), their completeness tests, format rules, BRIEF Gherkin standard and the §5 QC-Scope preamble — lives in `sdlc-spec-template` skill. Load it on every review; it is what you score conformance against, and it wins over this file wherever they differ. This file owns only weights, severities, calibration and gate mechanics.**
 
 ## Modes
 
@@ -13,7 +13,7 @@ Comprehensive review of product-owner Workflow B spec with weighted 1–10 score
 
 1. Read your review sub-task, then PARENT main ticket (`multica issue get <parent-id> --output json`): spec is main ticket's **description**. Read its recent comments for requester's clarification answers (context for §4 Scope decisions).
 2. Round bookkeeping: read metadata key `spec_review_round` on YOUR review sub-task (`multica issue metadata list <subtask-id> --output json`). Missing key = no rework rounds yet (round 0).
-3. Check out every repo spec's Scope section names: `multica repo checkout <url> --ref dev` (fall back to no `--ref` if `dev` does not exist). Confirm `.codegraph/` exists at each repo root; run `codegraph init` there if missing.
+3. Check out every repo spec's Scope section names: `multica repo checkout <url> --ref dev` (fall back to no `--ref` if `dev` does not exist). Confirm `.codegraph/` exists at each repo root; run `codegraph init` there if missing. Read each repo's `CLAUDE.md`/`AGENTS.md` too: its own conventions decide which repo and context own what, and they override the generic stack rules below.
 
 ## Analyze — verify claims against real code
 
@@ -22,18 +22,25 @@ The spec is business-level and carries no `file:line` and no Change Map — the 
 - **Scope names are real, and complete.** Every repo and service §4 Scope names exists and is reachable (`codegraph explore` / checkout). A Scope naming a repo or service that does not exist is a **blocker**. A repo the §3a contract or a §3 requirement plainly implies but §4 never names is a **major** — Monxa is one platform across many repos and the squads are sized off this list.
 - **The §3a contract is reviewable, not designed.** Check that every new or changed field carries a type, a length where the type needs one, and the attributes a developer must know, and that every new, changed or removed endpoint carries a verb and a path. Do NOT rule on whether the field should be `decimal(18,2)` or the route `/v1/x` — that is design, and design is dev-leader's. A contract missing, or too thin to build from, is the finding; a contract you would have drawn differently is not.
 - **Current State and invariants are plausible.** §2 Current State and any §3 invariant claims a property of the system today — where a claim is clearly contradicted by the code (a behaviour that does not exist, an invariant the system does not hold), that is a **blocker**. You are confirming the spec is grounded, not auditing a design.
-- **Do not review design.** The spec proposes none. Whether a change is minimal, reuses the right service, or mirrors the right pattern is dev-leader's call at decomposition and pr-reviewer's at merge gate — the schema-cost of a new entity or table surfaces in the impl-brief's Change set, not in the spec.
+- **§3b placement fits the platform.** This is the spec's one architecture question, answered at the level of repos, services and bounded contexts — never classes, folders or layers inside a service. Check with `codegraph explore` and the repos' `CLAUDE.md`/`AGENTS.md`:
+  - **Owner** is the repo or context that owns this behaviour and data. Business rules never live in a helm or infra repo or in `monxa.bdd-integration`; one service never writes another service's database or entities — it calls that service's API or consumes its event; one bounded context never writes another context's entities.
+  - **Dependencies** point the way the platform allows and create no cycle. Two services never call each other synchronously in both directions; a shared package never depends on a service. Confirm every direction against today's HTTP clients, Service Bus subscriptions and package references.
+  - **Public surface** matches the change. If §3a or §3 removes or changes an endpoint, field, event, message or webhook payload another service or an external caller (merchant, partner) uses, the call is `breaking` and names the callers that must change, each of them in §4 Scope.
+  - **Integration** is named for every new interaction between repos or services.
+  - Severities: a wrong owner, a cycle or a dependency against the layering, a breaking change called `additive` or `none`, or a §3b line the code plainly contradicts is a **blocker**. A missing §3b, or a missing Owner, Dependencies or Public surface line, when the change crosses repos or services or touches a public surface is a **major** — scored once, here, not again under Completeness. A new interaction between repos or services with no Integration line is a **major**. A §3b dependency on a repo §4 Scope never names is a **major**. A one-repo change with no dependency or public-surface change and no `None — stays inside <repo>` line is a **minor**.
+- **Do not review code-level design.** The spec proposes none below §3b. Whether a change is minimal, reuses the right service, mirrors the right pattern, or puts logic in the right layer inside a service is dev-leader's call at decomposition and pr-reviewer's at merge gate — pr-reviewer also checks the code against §3b. The schema-cost of a new entity or table surfaces in the impl-brief's Change set, not in the spec.
 - Every finding carries severity — `blocker`, `major`, `minor`, `nit` — and cites the spec section it concerns. Include at least one `praise` finding when deserved.
 
 ## Score — weighted rubric (score each dimension 1–10)
 
 | Dimension | Weight | Checks |
 |---|---|---|
-| Requirement coverage & traceability | 30% | Every Gherkin acceptance criterion traces back to a Goal in §1, AND every business requirement is covered by ≥1 scenario. Gap in either direction is at least `major`. |
-| Gherkin quality | 25% | Score against **BRIEF standard defined in `sdlc-spec-template`** — do not restate or reinterpret it here. Its primary test governs: *would this wording need to change if implementation changed?* Remember two carve-outs it sets: **no hard step count** (never finding on its own), and imperative phrasing where mechanism IS requirement is at most `minor`. |
+| Requirement coverage & traceability | 25% | Every Gherkin acceptance criterion traces back to a Goal in §1, AND every business requirement is covered by ≥1 scenario. Gap in either direction is at least `major`. |
+| Gherkin quality | 20% | Score against **BRIEF standard defined in `sdlc-spec-template`** — do not restate or reinterpret it here. Its primary test governs: *would this wording need to change if implementation changed?* Remember two carve-outs it sets: **no hard step count** (never finding on its own), and imperative phrasing where mechanism IS requirement is at most `minor`. |
 | Business clarity & problem framing | 20% | **Do NOT reward the spec for naming classes or patterns to mirror — that is dev-leader's job in the impl-brief, and rewarding it here is what produced 867-word Technical Design sections.** Score instead: is §1 Goals substantial enough that a non-engineer could act on it · is the affected role named · does §1 give a real success signal · is §2 Current State a clear before-picture in business terms · is §3 Expected State observable from outside, with any invariant stated as a property design must preserve ("a payout must never fail because of a notification") rather than as a mechanism. Thin or missing §1 Goals is `blocker`: it is the section the whole spec exists to convey. |
+| Architecture fit | 15% | §3b against the Scope repos' own conventions and the platform's layering, per the **§3b placement** check under Analyze: owner, dependency direction, public-surface call, integration. Severities are listed there. |
 | Security | 10% | The §3 Security line is present and concrete: input validation, authn/authz, secret handling, sensitive-data exposure in logs/responses, payment idempotency/replay where relevant — or an explicit "no new attack surface" statement with reasoning. Missing or vague Security line is `blocker`. |
-| Completeness & unambiguity | 15% | **All six sections present and in the order `sdlc-spec-template` defines** — that skill is the list; do not maintain a copy here. Zero TBD/TODO/placeholders. No contradictions between sections. §4 Scope carries ZERO open questions and names every repo and service touched. §3a carries the data and API contract. Any violation is at least `major`. **Plus the contract gates and format gates below.** |
+| Completeness & unambiguity | 10% | **All seven sections present and in the order `sdlc-spec-template` defines** — that skill is the list; do not maintain a copy here. Zero TBD/TODO/placeholders. No contradictions between sections. §4 Scope carries ZERO open questions and names every repo and service touched. §3a carries the data and API contract. Any violation is at least `major`. **Plus the contract gates and format gates below.** |
 
 **Format gates** (part of Completeness) — rules live in `sdlc-spec-template`; these are severities for breaking them. Each is `blocker`:
 
@@ -130,10 +137,11 @@ Score: X.X / 10  →  {APPROVED | REVIEW REQUESTED — <trigger or "marginal pas
 
 | Category | Weight | Score |
 |---|---|---|
-| Requirement coverage & traceability | 30% | X.X |
-| Gherkin quality | 25% | X.X |
+| Requirement coverage & traceability | 25% | X.X |
+| Gherkin quality | 20% | X.X |
 | Business clarity & problem framing | 20% | X.X |
-| Completeness & unambiguity | 15% | X.X |
+| Architecture fit | 15% | X.X |
+| Completeness & unambiguity | 10% | X.X |
 | Security considerations | 10% | X.X |
 | Weighted total | 100% | X.X / 10 |
 

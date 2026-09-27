@@ -14,7 +14,7 @@ Every sub-task runs on a fresh checkout, so the repo folder may hold `.codegraph
 
 ## Self-review before you report done
 
-Once the code is pushed and the suite is green, read `git diff origin/<base-branch>...HEAD` end to end as if someone else wrote it, then carry the results into the completion report. Seven checks, all of which the review gate will run anyway:
+Once the code is pushed and the suite is green, read `git diff origin/<base-branch>...HEAD` end to end as if someone else wrote it, then carry the results into the completion report. Eight checks, all of which the review gate will run anyway:
 
 1. **Mutation report on every touched class.** Stryker (`dotnet stryker` / `npx stryker run`) scoped to touched classes; every survivor dispositioned (`killed — added <test>` / `equivalent` / `accepted — <why>`). Tool unavailable → manual: invert each guard you added, run, confirm RED, restore, and say the tool was unavailable.
 2. **Grep your new assertions** for fragment matches (`ShouldContain`, `Contains`, substring asserts); each pins exact expected text or is anchored to its member.
@@ -24,7 +24,16 @@ Once the code is pushed and the suite is green, read `git diff origin/<base-bran
 6. **Scope.** `git diff --stat` shows nothing outside §3 and nothing in §4.
 7. **Acceptance-test drift** (Build and rework): `git diff <at_sha>..HEAD -- <AT paths>` shows no modified or deleted approved scenario; every test you added is listed by file. A frozen AT you had to change is a `blocked` with the leader's mention, before any of this.
 
-EVIDENCE carries one row per check with its measured result. Anything a check found that you could not fix inside §3 goes in LEFT OPEN with `file:line`; a self-review finding declared there is never held against the cycle. Docs and config sub-tasks, and `build-ui` Builds, run checks 4–6; Acceptance-tests sub-tasks run 2 and 4–6.
+8. **Standards** (Build and `build-ui`; Policy 01 statement 15). Open the stack skill the brief's `Standards` row names — `dknet-ddd-conventions` + `dotnet10-efcore10-standards` for .NET, `nodejs-typescript-standards` + `pulumi-azure-iac-standards` for TypeScript/Pulumi, `python-mcp-standards`, `helm-k8s-conventions`, `docker-image-standards` — and check the diff against its rule-ids, the brief's at-risk ones first. Then, whatever the stack:
+   - **Reuse:** `codegraph explore` for every new public symbol before keeping it — an existing helper, extension or base type that does the job replaces yours.
+   - **DRY:** the same non-trivial block in 3+ places, or 2 copies that already drifted, is merged at the newer, tested copy (`CLEAN-DRY-001/002`).
+   - **Less code:** no dead code, no interface with one implementation and no test-double need, no forwarding wrapper, no reinvented framework or stdlib helper (`CLEAN-LESS-001..004`).
+   - **SRP:** measure every touched class — over ~300 lines, a method over ~50 lines or complexity 10, a constructor with 7+ dependencies is split (`CLEAN-SRP-001..003`).
+   - **SOLID at the boundaries you crossed:** dependencies point the way the layering allows (.NET: domain never references infrastructure, EF provider types or HTTP clients, `DKNET-LAYER-001..004`; aggregates reference each other by id, `DKNET-AGG-004`); published API is extend-only (Policy 01 statement 12); each new class has one reason to change; depend on an abstraction only where a test fakes it.
+   - **New framework API or pattern** the repo does not already use: check the vendor's current official docs (Context7 or the vendor site) and cite the page.
+   The row: `Standards | <skills opened> | rule-ids checked: <ids> | reuse: <symbol → reused X / none found> | SRP: largest class <n> lines, method <n> lines / complexity <n>, ctor <n> deps | DRY: <none / merged file:line> | docs: <n/a / url>`.
+
+EVIDENCE carries one row per check with its measured result. Anything a check found that you could not fix inside §3 goes in LEFT OPEN with `file:line`; a self-review finding declared there is never held against the cycle. Docs and config sub-tasks run checks 4–6, `build-ui` Builds 4–6 and 8; Acceptance-tests sub-tasks run 2 and 4–6.
 
 ## Finishing a task
 

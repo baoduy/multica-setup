@@ -85,7 +85,7 @@ layers squad conventions on top of it and never contradicts it.
 
 The review gate is not where your own defects should surface. Once the code is pushed and the suite is green, review your own diff as if someone else wrote it — read `git diff origin/<base-branch>...HEAD` end to end, not your memory of what you changed — then carry the result into the completion report.
 
-Seven checks. All cheap, and all of them things the review gate WILL run anyway:
+Eight checks. All cheap, and all of them things the review gate WILL run anyway:
 
 1. **Mutation report on every touched class.** Run Stryker (`dotnet stryker` / `npx stryker run`) scoped to the classes you touched; every surviving mutant gets a disposition (`killed — added <test>` / `equivalent` / `accepted — <why>`). Tool unavailable → manual: delete or invert each guard you added, run, confirm RED, restore — and say the tool was unavailable. A test that stays green proves nothing (`test-driven-development`).
 2. **Grep your own new assertions** for fragment matches (`ShouldContain`, `Contains`, substring asserts). Each must pin the exact expected text or be anchored to the member it belongs to.
@@ -94,6 +94,14 @@ Seven checks. All cheap, and all of them things the review gate WILL run anyway:
 5. **Re-read every comment and doc comment you wrote or touched** against the code beside it. A comment that overstates what the code does is a defect; so is a class remark that lists two of three cases.
 6. **Scope.** `git diff --stat` shows nothing outside §3 and nothing in §4.
 7. **Acceptance-test drift** (Build and Fix sub-tasks). `git diff <at_sha>..HEAD -- <AT paths>` shows no modified or deleted approved scenario; every test you ADDED is listed by file. A frozen AT you had to change is not a self-review row — it is a `blocked` with the leader's mention, before any of this.
+8. **Standards** (dev-backend `Build:` and `Fix (review):` sub-tasks; Policy 01 statement 17). Open `dknet-ddd-conventions`, `dotnet10-efcore10-standards` and the repo's own `CLAUDE.md`, and check the diff against their rule-ids — the brief's `Standards` at-risk ones first. Then:
+   - **Reuse:** `codegraph explore` for every new public symbol before keeping it — an existing helper, extension, spec or base type that does the job replaces yours.
+   - **DRY:** the same non-trivial block in 3+ places, or 2 copies that already drifted, is merged at the newer, tested copy (`CLEAN-DRY-001/002`) — the same `Where` in two handlers becomes one spec, the same guard in every handler an aggregate invariant.
+   - **Less code:** no dead code, no interface with one implementation and no test-double need, no forwarding wrapper, no reinvented BCL or framework helper (`CLEAN-LESS-001..004`).
+   - **SRP:** measure every touched class — over ~300 lines, a method over ~50 lines or complexity 10, a constructor with 7+ dependencies is split (`CLEAN-SRP-001..003`).
+   - **SOLID at the boundaries you crossed:** `Domains` never references `Infra`, EF provider types or HTTP clients; an endpoint only maps request → bus message → response; `Infra` never reaches into `AppServices`; partner client types stay out of the domain and public DTOs (`DKNET-LAYER-001..004`); aggregates reference each other by id (`DKNET-AGG-004`); `AppServices` never take a `DbContext` (`DKNET-REPO-004`); a public endpoint, event or message contract changes only as the spec's §3a/§3b declared; each new class has one reason to change; depend on an abstraction where one exists instead of a concrete infrastructure type (`CLEAN-DIP-001`), and add one only where a test fakes it.
+   - **New framework API or pattern** the repo does not already use: check the vendor's current official docs (Microsoft Learn, or Context7) and cite the page.
+   The row: `Standards | <skills opened> | rule-ids checked: <ids> | reuse: <symbol → reused X / none found> | SRP: largest class <n> lines, method <n> lines / complexity <n>, ctor <n> deps | DRY: <none / merged file:line> | docs: <n/a / url>`.
 
 Then report it. EVIDENCE carries one row per check with its measured result — the mutation you ran and what went red, the per-branch numbers, the grep outcome. Anything a check found that you could NOT fix inside §3 goes in LEFT OPEN with `file:line`: that is the line the reviewer reads, and a self-review finding declared there is never held against the cycle. A completion report with no self-review rows is an unfinished turn.
 
@@ -101,7 +109,7 @@ Then report it. EVIDENCE carries one row per check with its measured result — 
 
 ## Finishing task
 
-1. Run the self-review above — all six checks — then decide verdict against acceptance criteria you were given. Never report done without self-review EVIDENCE rows.
+1. Run the self-review above — every check your sub-task type runs — then decide verdict against acceptance criteria you were given. Never report done without self-review EVIDENCE rows.
 2. On PASS: post ONE plain comment on YOUR sub-task in completion-report
    shape from `blocker-report` skill (RESULT / EVIDENCE / LEFT OPEN) —
    EVIDENCE rows are measured numbers your role owes (coverage %, suite

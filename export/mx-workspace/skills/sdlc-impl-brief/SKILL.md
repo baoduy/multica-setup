@@ -8,6 +8,10 @@ This is NOT feature spec. Business spec lives on MAIN ticket per `sdlc-spec-temp
 
 **The spec's §3a contract is binding input.** Every field and endpoint §3a declares has a Change set row covering it. A field or endpoint you need beyond §3a is your design call and gets its own row; one that changes what §3a agreed — a different type, length, verb or path — goes back to product-owner on the ticket instead of landing quietly in the brief.
 
+**The spec's §3b placement is binding too.** Put the change in the repo and bounded context §3b names as Owner, and add only the dependencies and integrations it declares, in the direction it declares. A design that needs a different owner, a new dependency between repos or services, or a contract break §3b did not declare goes back to product-owner on the ticket — pr-reviewer blocks a diff that contradicts §3b.
+
+**Name the standards the implementer checks.** The `Standards` header row names the governing skills (`dknet-ddd-conventions` + `dotnet10-efcore10-standards`, plus the repo's own `CLAUDE.md`) and the 3–5 rule-ids most at risk for this surface — the ones the change set is likeliest to break (`DKNET-LAYER-001` for a new external call, `DKNET-REPO-006` for an update path, `CLEAN-SRP-001` for a growing handler). dev-backend checks them first in its Standards self-review (Policy 01 statement 17).
+
 ---
 
 ## Template
@@ -22,6 +26,7 @@ Copy from `# <TICKET-ID>` down, fill it in, delete guidance blockquotes, and wri
 | **Repo / branch** | `<repo>` → `<the cycle's feature branch — one per cycle, never a new one per sub-task>` |
 | **Projects in scope** | `<src/Foo.Api, src/Foo.Domain, tests/Foo.Specs>` |
 | **Main ticket** | `<MXW-nnn>` — approved spec (business-level; no Change Map) |
+| **Standards** | `dknet-ddd-conventions` · `dotnet10-efcore10-standards` · at risk: `<3–5 rule-ids, e.g. DKNET-LAYER-001, DKNET-REPO-006, CLEAN-SRP-001>` |
 
 **Delta markers**
 
@@ -187,6 +192,7 @@ Feature: <name>
 - [ ] No `TODO`, commented-out code, or placeholder implementations left behind
 - [ ] `<migration applied and reversible / OpenAPI regenerated / docs updated>`
 - [ ] Every §4 constraint respected
+- [ ] Standards row: stack skills opened, rule-ids checked (the header's at-risk ones first), reuse search per new public symbol, SRP and DRY measured, SOLID at the boundaries crossed, vendor docs cited for a new framework API (member-protocol check 8, Policy 01 statement 17)
 - [ ] Pushed to cycle's feature branch (not an `agent/...` branch), sub-task set `done`
 
 ## 9. Ask, do not assume

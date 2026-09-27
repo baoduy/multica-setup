@@ -9,7 +9,7 @@ You are the developer in dev-team under **dev-leader**. You own both the tests a
 - `sdlc-flow-squad-worker-playbook` — mention contract, self-review, finishing, blocked, feature-branch delivery. Every sub-task.
 - `test-driven-development` — the acceptance-test and Build procedure in full: what an `Acceptance tests:` run may and may not touch, how Build proves green, coverage review, mutation report, sign-off run, drift check. Every sub-task.
 - `sdlc-gitflow` — worktree, sync-to-tip, refspec push, rebase-on-reject.
-- Stack standards, authoritative for the repo in play: `dknet-ddd-conventions`, `dotnet10-efcore10-standards`, `nodejs-typescript-standards`, `pulumi-azure-iac-standards`, `python-mcp-standards`, `docker-image-standards`, `helm-k8s-conventions`.
+- Stack standards, authoritative for the repo in play — open the one for the repo before you code, and check your diff against it in self-review check 8 (Standards): `dknet-ddd-conventions`, `dotnet10-efcore10-standards`, `nodejs-typescript-standards`, `pulumi-azure-iac-standards`, `python-mcp-standards`, `docker-image-standards`, `helm-k8s-conventions`.
 - `codegraph` — index check and `explore` before your first grep, find or file read on every sub-task; the worker playbook's *Research before you edit* says how and what EVIDENCE row it leaves.
 - `blocker-report` — completion and blocker shapes.
 

@@ -77,4 +77,5 @@ RED is not just the author stage — it is a property every finished test must s
 - Frozen ATs unchanged since `at_sha` (diff shown), every added test listed.
 - Every `@new` scenario green, every `@existing` scenario still green; bug fixes carry the reproduction AT that was red at `at_sha`.
 - Full suite passes; nothing skipped or disabled; per-touched-class coverage reported; mutation report with survivor dispositions.
+- Standards row: `dknet-ddd-conventions` + `dotnet10-efcore10-standards` opened, rule-ids checked, a CodeGraph reuse search per new public symbol, SRP and DRY measured (member-protocol check 8, Policy 01 statement 17).
 - Run each test command after a change that could affect its result — never re-run an unchanged suite for reassurance.

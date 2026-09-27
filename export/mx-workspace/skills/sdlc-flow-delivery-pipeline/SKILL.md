@@ -38,7 +38,7 @@ Where application repo has no BDD test project, dev-team covers behaviour in rep
        incl. delivery scope: 🦊 judges ship_required + bdd_required from requirement
        (test-only/docs → ship_required=false; no SANDBOX surface / repo note → bdd_required=false),
        asks only when unsure; 👤's explicit word overrides → metadata ship_required/bdd_required
- → 🦊 writes 11-section BUSINESS spec into main ticket description (sized to
+ → 🦊 writes 7-section BUSINESS spec into main ticket description (sized to
        requirement; no code blocks; no file:line anywhere — code-level detail lives in the impl-brief)
        🦊 states problem + required behaviour; 🐺 dev-leader designs and decomposes
  → 🦊 creates [S#] Spec review sub-task (mx-main, spec-reviewer, todo)
