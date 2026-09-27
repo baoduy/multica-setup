@@ -191,6 +191,10 @@ order. A route whose path differs from the main one (async hand-off, external
 call, compensation) gets its own diagram in its 🔌 Endpoints section; an event
 that travels on after it is raised may get one in 📣 Events.
 
+Every diagram is drawn with archify, never Mermaid — even where the repo's own
+template offers Mermaid as a fallback. Only an `erDiagram` a repo template asks
+for may stay Mermaid: archify has no table-schema type.
+
 The archify type is your call: pick the one that best shows what that diagram
 must answer, using archify's own type router (its `guide` command settles a
 close call) — typically a sequence or workflow for the flow, a lifecycle for

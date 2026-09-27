@@ -98,6 +98,9 @@ transforms — gets its own diagram after its example, and how the package sits
 among its siblings goes in 🧱 Where it fits. One diagram per shape; never draw
 the same flow twice.
 
+Every diagram is drawn with archify, never Mermaid — even where the repo's own
+template offers Mermaid as a fallback.
+
 The archify type is your call: pick the one that best shows what that diagram
 must answer, using archify's own type router (its `guide` command settles a
 close call). A Pulumi component's flow is the resources it creates, in order,
