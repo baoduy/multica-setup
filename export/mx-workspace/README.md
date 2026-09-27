@@ -343,8 +343,9 @@ big picture.*
   ├── ①  INTAKE & SPEC — 🦊 product-owner
   │   ├── start     👤 files the main ticket   mx-main · assignee 🦊 · todo
   │   ├── research  checkout dev · CodeGraph first · cite claims as file:line
-  │   ├── clarify   ⟲ numbered questions + @👤 ─▶ STOP ─▶ repeat until zero
-  │   │             (never ask what the code already answers)
+  │   ├── clarify   ⟲ numbered questions + guesses + @👤 ─▶ STOP ─▶ repeat until zero
+  │   │             (never ask what the code already answers; only a written reply answers)
+  │   ├── preview   spec preview + @👤 ─▶ STOP ─▶ written approval
   │   └── spec      7 sections into the ticket DESCRIPTION · no open questions
   │
   ├── ②  SPEC-REVIEW GATE — 🦉 spec-reviewer
@@ -700,10 +701,10 @@ own judgement. Loads only `sdlc-gitflow`. Runs in two turns.
 
 ### 3.4 · 🐙 devops — CI/CD pipeline setup
 
-Sets up and maintains the CI/CD pipelines for the workspace repos — and nothing else. Works
-**only on the `dev` branch** and refuses anything that isn't CI/CD. Unlike the pipeline's
-git agents it opens no PRs: it commits pipeline config straight to `dev`.
-Skills: `brainstorming` · `sdlc-gitflow`.
+Keeps the CI/CD pipelines, helm chart configuration and docker-compose files correct — and
+nothing else. App-repo changes land via the squad's feature branch or one gated
+`chore/<issue-key>` PR to `dev`, never a direct commit; every chart change is a PR a human merges.
+Skills: `compose-delivery` · `helm-chart-delivery` · `sdlc-gitflow` (full list in §5).
 
 #### At a glance
 
@@ -749,7 +750,7 @@ Skills: `brainstorming` · `sdlc-gitflow`.
 | #   | Touch point                              | State         | Detail                                                                                                                    |
 | --- | ---------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | 1   | File the request                         | 👤 always     | the request itself — irreducible                                                                                          |
-| 2   | Business clarifications                  | 👤 always     | rules/scope the code cannot answer; agents forbidden from asking what the repo answers                                    |
+| 2   | Business clarifications                  | 👤 always     | rules/scope the code cannot answer, then the spec preview approved in writing; agents forbidden from asking what the repo answers |
 | 3   | Spec approval                            | 🤖 automated  | 🦉 gate, APPROVED at ≥9.0 with no blockers (8.0–8.9 → requester review)                                                                                |
 | 4   | Bug-fix approval                         | 🤖 automated  | ≥90% confidence → auto-delegate (FYI only, reply to halt)                                                                 |
 | 5   | SANDBOX deploy (P#-2b, DevOps)           | 👤 deliberate | requester deploys `main` → SANDBOX; the `dev`→`main` release (P#-2a) is automated                                         |

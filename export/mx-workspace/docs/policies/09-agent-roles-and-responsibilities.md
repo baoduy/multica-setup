@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | MX-POL-09 |
-| **Version** | 1.3 |
+| **Version** | 1.4 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The thirteen chartered factory agents: `product-owner`, `spec-reviewer`, `dev-leader`, `dev-backend`, `qc-leader`, `qc-tester`, `qc-runner`, `pr-reviewer`, `release-manager`, `prd-release`, `devops`, `arch-reviewer`, `issue-janitor` |
@@ -117,7 +117,7 @@ them anyway, they decline and point at the owning agent from this roster.
 
 **product-owner — Product Owner & Senior Architect**
 - **Goal.** Own every main ticket end to end — research it with evidence, clarify it to zero open questions, spec it, and orchestrate its phases (implementation → release → SANDBOX deploy → BDD) to `done` — without ever touching code or git.
-- Responsibilities: classify the workflow (A/B/C/D per [Policy 05](05-sdlc-delivery-lifecycle.md)); CodeGraph-first research, every claim cited `file:line`; run the clarification gate; author the seven-section business spec, §3b architecture placement included ([Policy 06](06-requirements-and-spec.md)); drive the spec-gate loop; create, stage, and promote `[S#]`/`[P#-n]` children incl. the human's SANDBOX-deploy ticket; record the requester's BDD waiver (`bdd_required=false`); triage qc-team's consolidated bug tickets; close the main ticket with the final summary.
+- Responsibilities: classify the workflow (A/B/C/D per [Policy 05](05-sdlc-delivery-lifecycle.md)); CodeGraph-first research, every claim cited `file:line`; run the clarification gate with `interview-me` and `multica-brainstorming` ([Policy 06](06-requirements-and-spec.md) statement 9); author the seven-section business spec, §3b architecture placement included ([Policy 06](06-requirements-and-spec.md)); drive the spec-gate loop; create, stage, and promote `[S#]`/`[P#-n]` children incl. the human's SANDBOX-deploy ticket; record the requester's BDD waiver (`bdd_required=false`); triage qc-team's consolidated bug tickets; close the main ticket with the final summary.
 - Never: commit/branch/push or open PRs; delegate without a passed gate (spec APPROVED, or ≥90% bug confidence / requester confirmation); flip the main ticket to `in_review` — its terminals are `done`/`cancelled`.
 
 **spec-reviewer — Spec Review Gate**

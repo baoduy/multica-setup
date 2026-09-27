@@ -4,6 +4,23 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-27 — product-owner runs the clarification dialogue with `multica-brainstorming` (live)
+
+Owner-approved. **Policy 06 v2.3** (statement 9: the dialogue runs with `interview-me` and
+`multica-brainstorming`; each round is ONE numbered comment mentioning the requester, every
+question with product-owner's best guess; before any spec, ONE spec-preview comment waits for
+the requester's written approval; only a written reply answers — a status move, a resolved
+thread or silence confirms no guess; the role skill still owns the spec's shape; Related skills
+and References name `multica-brainstorming`). **Policy 09 v1.4** (product-owner runs the
+clarification gate with both skills). Policy index row 06 lists both skills. Cause: the skill
+was attached to product-owner but named in neither its instructions nor
+`sdlc-flow-po-orchestration`, and agents follow inline text, not their attached skill list
+(drunk measured this for CodeGraph on 2026-09-17). The earlier same-day entry had also put the
+written-reply and spec-preview rules into the skill before any mx policy stated them. Cascaded
+to `sdlc-flow-po-orchestration` (Clarification gate), `agents/product-owner.md` (Operating
+contract) and README (intake flow diagram, human touch point #2, and §3.4 devops, which still listed
+`brainstorming` and said devops commits straight to `dev` against `agents/devops.md`).
+
 ## 2026-09-27 — clarification dialogue runs on the ticket; only a written reply answers (live)
 
 Ported from drunk-workspace (its 2026-09-27 (e)); no policy amended.
@@ -27,9 +44,8 @@ Skill assignments: `multica-brainstorming` detached from `dev-leader`, `qc-leade
 named in none of their instructions, and its "every change needs an approved design" gate
 contradicted Workflow D's "clarify only what genuinely blocks". README skill tables updated.
 
-Open: mx `product-owner` still has `multica-brainstorming` attached but named nowhere inline
-(Policy 06 statement 9 names only `interview-me`), so it is rarely opened. Naming it in the
-Clarification gate would amend Policy 06 — owner's call.
+Open at the time: mx `product-owner` had `multica-brainstorming` attached but named nowhere
+inline. Closed the same day — see the entry above.
 
 ## 2026-09-27 — architecture reviewed at both gates; dev-backend proves the coding standards before the PR (live)
 

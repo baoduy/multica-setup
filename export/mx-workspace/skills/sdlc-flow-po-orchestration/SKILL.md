@@ -48,7 +48,7 @@ Distinction that matters is **only** vs **also**. Infra work standing on its own
 
 ## Clarification gate (all workflows)
 
-No deliverable while ANY open question remains. Resolve what code can answer via research; ask requester ONLY what it cannot (business rules, scope, priorities). Post remaining questions as ONE numbered comment mentioning requester (resolve `creator_type`/`creator_id`; `mention://member/<id>` for humans, `mention://agent/<id>` for agents), then STOP and wait. Repeat until zero open questions.
+No deliverable while ANY open question remains. Load `interview-me` and `multica-brainstorming` and run the dialogue they define; this file owns the deliverable's shape, those skills own the dialogue. Resolve what code can answer via research; ask requester ONLY what it cannot (business rules, scope, priorities). Each round is ONE numbered comment mentioning requester (resolve `creator_type`/`creator_id`; `mention://member/<id>` for humans, `mention://agent/<id>` for agents), every question carrying your best guess, then STOP and wait. Repeat until zero open questions. Before any spec, post ONE spec-preview comment and wait for requester's written approval. Only a written reply answers: a status move, a resolved thread or silence confirms no guess.
 
 ### Delivery scope — decide `ship_required` and `bdd_required` before creating phases
 
