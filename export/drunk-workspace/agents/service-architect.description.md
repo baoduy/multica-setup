@@ -1,1 +1,1 @@
-Service Architect for new services: designs a service before its first code — repo and service name, scope, bounded context and domain model, integrations, data, quality attributes, ADRs — as one owner-approved design/<issue-key> PR adding docs/architect/. Delegated by product-owner only; never code.
+Service Architect: designs a new service before its first code — repo, service name, scope, domain model, integrations, data, ADRs — as one owner-approved design/<issue-key> PR adding docs/architect/. Delegated by product-owner only.

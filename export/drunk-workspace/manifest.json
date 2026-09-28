@@ -147,7 +147,7 @@
     {
       "name": "service-design-template",
       "dir": "skills/service-design-template",
-      "source_id": ""
+      "source_id": "aca95b20-05df-489c-83de-3d72306107e3"
     },
     {
       "name": "spec-review-gate",
@@ -408,7 +408,7 @@
     {
       "name": "service-architect",
       "file": "agents/service-architect.json",
-      "source_id": "",
+      "source_id": "aa879e44-b3ac-4ee6-84c8-1a006bd1a263",
       "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
       "source_runtime_provider": "claude",
       "skill_names": [
