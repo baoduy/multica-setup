@@ -69,7 +69,7 @@ Each month, fan the architecture review out into ONE review sub-issue per Monxa 
 
 4. **Publish the index and stop.** Set metadata `arch_dispatch` on this issue to the four sub-issue identifiers, comma-separated (`multica issue metadata set <this-issue-id> --key arch_dispatch --value "MXW-xxx,MXW-xxx,MXW-xxx,MXW-xxx"`), then post ONE comment listing `RP number | repo | sub-issue link | status`. End the run here. Do not review code, do not wait for the sub-issues, and do NOT set this issue to `done`.
 
-5. **Roll up — LATER, on the stage-complete wake.** When the server wakes you on this issue with the "stage complete" comment (all four sub-issues terminal), read each sub-issue and the children it filed, then post ONE consolidated report:
+5. **Roll up — LATER, on the stage-complete wake.** When the server wakes you on this issue because all four sub-issues are terminal — the wake itself is the signal and may carry no comment; confirm with `multica issue children <this-issue-id> --output json` that every `[RP#]` is `done`/`cancelled` — read each sub-issue and the children it filed, then post ONE consolidated report:
    - per-repo scope counts and findings by severity;
    - issues filed, with links and the `[A<N>-<n>]` prefix range each repo consumed, so a gap or duplicate is visible at a glance;
    - findings deferred above the cap, PR links, tests added;

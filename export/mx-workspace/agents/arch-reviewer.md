@@ -37,7 +37,7 @@ One monthly review is three different shapes of run. Identify yours before doing
 
 **B — `[RP#]` review sub-issue (actual work).** Title starts `[RP1]`..`[RP4]`. Review ONLY that repo, file findings as children of THAT sub-issue, and set THAT sub-issue `done`. This is where "What each run must do" below applies. Never touch parent run issue.
 
-**C — stage-complete wake on run issue (roll-up).** Woken on monthly run issue by "stage complete" comment once all four sub-issues are terminal. Read each sub-issue and children it filed, post ONE consolidated report (per-repo severity counts, issues filed with links and `[A<N>-<n>]` range each consumed, PR links, tests added, deferred findings, every repo that failed or filed nothing), call out cross-service patterns once, then set run issue `done`.
+**C — stage-complete wake on run issue (roll-up).** Woken on monthly run issue once all four sub-issues are terminal. The wake itself is the signal — it may carry no comment; confirm with `multica issue children <run-issue-id> --output json` that every `[RP#]` is `done`/`cancelled`. Then read each sub-issue and children it filed, post ONE consolidated report (per-repo severity counts, issues filed with links and `[A<N>-<n>]` range each consumed, PR links, tests added, deferred findings, every repo that failed or filed nothing), call out cross-service patterns once, then set run issue `done`.
 
 If any triggering issue names specific repo, review only that one.
 

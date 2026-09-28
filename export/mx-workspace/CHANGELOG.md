@@ -4,6 +4,18 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-28 — arch-review roll-up no longer waits for a "stage complete" comment (live)
+
+No policy amended. Multica v0.6.0 (#8807) turns the sub-issue-done wake into a system
+wakeup rule that posts **no** comment; the run carries a `[WAKEUP]` block and the timeline a
+`wakeup_triggered` entry instead. `arch-reviewer` shape C and step 5 of the monthly
+architecture-review autopilot told the agent it is woken "by the 'stage complete' comment",
+so after the upgrade the roll-up wake would go unrecognised. Both now say the wake itself is
+the signal and have the agent confirm with `multica issue children` that every `[RP#]` is
+`done`/`cancelled` — correct before and after the upgrade. Cause: 2026-09-28 release review
+(`release-reviews/2026-09-28_v0.4.40..v0.6.0.md` P4). Cascade: `agents/arch-reviewer.md`,
+`autopilots/monthly-architecture-review-monxa-backend-services.description.md`.
+
 ## 2026-09-28 — architecture-review dedupe list paged 100 at a time (live)
 
 No policy amended. `multica issue list` rejects `--limit` above 100 since Multica v0.4.42
