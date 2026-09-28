@@ -4,6 +4,14 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-28 — architecture-review dedupe list paged 100 at a time (live)
+
+No policy amended. `multica issue list` rejects `--limit` above 100 since Multica v0.4.42
+(#7896); `architecture-review-sweep` §4 asked for `--limit 200`, so the cheap dedupe pass
+errored on every run. It now reads `--limit 100 --offset 0 --fields identifier,title,status`
+and repeats while `has_more` is true (release review P1; same change in drunk). Cascade:
+`skills/architecture-review-sweep/SKILL.md`.
+
 ## 2026-09-27 — product-owner runs the clarification dialogue with `multica-brainstorming` (live)
 
 Owner-approved. **Policy 06 v2.3** (statement 9: the dialogue runs with `interview-me` and

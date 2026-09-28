@@ -74,11 +74,13 @@ Line numbers are deliberately **not** in fingerprint — they drift on every unr
 
 **Repo prefix is mandatory** when a run covers more than one repository. Without it, same rule hitting same relative path in two services collides and you silently skip a real finding. Also set an `arch_repo` metadata key so findings can be filtered per service.
 
-**Cheap first pass** — one call, build seen-set from titles:
+**Cheap first pass** — build seen-set from titles, one page of 100 at a time (the CLI rejects `--limit` above 100):
 
 ```bash
-multica issue list --project <project-id> --limit 200 --output json
+multica issue list --project <project-id> --limit 100 --offset 0 --fields identifier,title,status --output json
 ```
+
+Repeat with `--offset 100`, `200`, … while the response's `has_more` is `true`. Stopping at the first page misses older findings and files duplicates.
 
 **Precise confirmation** — only for survivors that made cut:
 
