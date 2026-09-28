@@ -8,7 +8,7 @@ Mention exactly ONE agent per comment — the one who must act.
 
 ## Standalone PR (`[P<num>-1c]`, product-team)
 
-A `[P<num>-1c] Review CI/CD PR` or `Review docs PR` gates devops' `chore/<key>` or docs-writer's `docs/<key>` PR. Everything in this file applies with three substitutions: the leader is **product-owner** — every dev-leader hop and mention below goes to product-owner; the PR URL is in product-owner's promotion comment on your own sub-task; and the findings form ONE group for the PR's author (devops or docs-writer), git/PR mechanics included. product-owner re-arms you the same way dev-leader does.
+A `[P<num>-1c] Review CI/CD PR`, `Review docs PR` or `Review design PR` gates devops' `chore/<key>`, docs-writer's `docs/<key>` or service-architect's `design/<key>` PR. Everything in this file applies with three substitutions: the leader is **product-owner** — every dev-leader hop and mention below goes to product-owner; the PR URL is in product-owner's promotion comment on your own sub-task; and the findings form ONE group for the PR's author (devops, docs-writer or service-architect), git/PR mechanics included. product-owner re-arms you the same way dev-leader does. A design PR never merges on score — see Design PR owner review below.
 
 ## Round tracking (before anything else in pipeline mode)
 
@@ -36,7 +36,23 @@ When the state guard finds the PR `MERGED` before you have reviewed anything: po
 2. Post the score announcement + report summary — explicitly stating the PR is MERGED into `dev`, the release-review trigger(s) or `none`, and anything noted at merge (CI pending, CI red not caused by this PR, coverage unknown, large diff) — as a plain comment on your OWN sub-task (no mention).
 3. Pin properties, flip your sub-task to `done`. The stage barrier wakes the squad leader; do not mention anyone.
 
-There is no deferred verdict. A passing PR is never reassigned to a human, whatever the report notes.
+There is no deferred verdict. A passing PR is never reassigned to a human, whatever the report notes — the one exception is a `design/<key>` PR, below.
+
+### Design PR owner review (`[P<num>-1c] Review design PR`, score ≥ bar, zero `blocking`)
+
+A service design binds every later spec and PR in its repo, so the owner approves it (Policy 04 statement 9a). Do NOT merge.
+
+1. GitHub: report comment + best-effort approve vote. No merge, no label.
+2. Pin `Gate verdict` = APPROVED, `Gate score`, `Gate round` as usual.
+3. Resolve the owner (Owner handoff step 1 below), reassign your sub-task to them and reopen it at `todo` (step 2).
+4. Post ONE comment in the `blocker-report` Blocker shape, written to a file. `## BLOCKER`: "Service design ready for your approval", PR URL, score, the design's file list and diagrams, the open points the author reported; **From:** the owner's MEMBER mention (notify-only). `## OPTIONS`, A first:
+   - **A — approve and merge.** The design lands on `dev` and binds the repo.
+   - **B — revise, with your guidance.** Say what to change; product-owner routes it to service-architect and you re-review once it lands.
+   - **C — park.** The PR stays open; nothing proceeds.
+   - **D — close.** You close the PR; product-owner cancels the design phases.
+
+   Close with: "Reply with the letter and product-owner's mention (plus your guidance for B)." Name product-owner in prose — this comment carries no agent mention link.
+5. Post nothing else. product-owner hands the sub-task back with the owner's choice. **A** → as the Owner's choice A below: head unchanged → merge, pin OWNER_MERGED, `done`; head moved → re-review in full. **B** → re-review in full once the fix lands; a pass comes back to this section, and an owner's B round does not increment `Gate round`. The owner may instead merge on GitHub: the state guard then records ALREADY_MERGED.
 
 ### MERGE_FAILED (score ≥ bar, the merge did not happen)
 
@@ -82,7 +98,7 @@ If `Gate round` ≥ `maxReworkRounds` (default 3) and the PR still fails the bar
    Close with: "Reply with the letter and dev-leader's mention (plus your guidance for B)." Name dev-leader in prose — this comment carries no agent mention link.
 4. Post nothing else. You are out of the loop until dev-leader re-arms you with the owner's choice.
 
-## Owner's choice (relayed by dev-leader)
+## Owner's choice (relayed by dev-leader; by product-owner on a `[P<num>-1c]`)
 
 dev-leader reassigns the sub-task back to you (`--no-start`), flips it `in_progress --no-start` and mentions you with the owner's reply quoted and linked — that mention is the wake. Confirm the reply on your sub-task is from the resolved owner (a member), then:
 

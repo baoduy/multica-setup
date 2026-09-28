@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-05 |
-| **Version** | 1.11 |
+| **Version** | 1.12 |
 | **Status** | Active |
 | **Owner** | product-owner |
 | **Applies to** | Every ticket that flows through the drunk software factory |
@@ -33,6 +33,7 @@
    BUG (A): research ─▶ root-cause + confidence  ≥90% auto-delegate C · <90% requester confirms
    CI/CD (D): devops only — no spec gate, but still 🦅 PR GATE on the standalone chore/<key> PR
    DOCS (E):  docs-writer only, and only when a human asks — no spec gate, 🦅 PR GATE on the standalone docs/<key> PR
+   DESIGN (F): new service only — 🦊 clarify → empty repo → service-architect's design/<key> PR → 🦅 PR GATE → 👤 owner approves → merge
 
    Barriers: done = fires the stage · blocked+mention = needs help · mentions ARE actions (assign a human a ticket)
 ```
@@ -47,9 +48,9 @@ image IS the release. There is no SANDBOX, no PRD, no promotion beyond `main`.
 
 ## Scope
 
-All five workflows: **A** bug/question, **B** feature/enhancement spec, **C**
+All six workflows: **A** bug/question, **B** feature/enhancement spec, **C**
 orchestrated delivery (the shared implementation → release tail), **D** CI/CD & build
-automation, **E** docs on request. All drunk repos: `DKNet` family, `DKNet.Templates`, `drunk-pulumi-*`,
+automation, **E** docs on request, **F** new-service design. All drunk repos: `DKNet` family, `DKNet.Templates`, `drunk-pulumi-*`,
 `drunk-others` (Python MCP, Docker, Helm).
 
 ## Actors
@@ -64,11 +65,13 @@ report per touched class with a clean pack ([Policy 02](02-testing-and-quality.m
 dev-team self-verifies; there is no SANDBOX to deploy to and no BDD integration stage. A
 dev-team cycle writes no docs pages (statement 3a).
 **pr-reviewer** — the automated PR review + merge gate for every `dev`-bound PR (dev-team's
-cycle PR and the standalone PRs of devops and docs-writer). **release-manager** — owns the single
+cycle PR and the standalone PRs of devops, docs-writer and service-architect). **release-manager** — owns the single
 `dev`→`main` release PR and its merge; the only agent that ever targets `main`. **devops**
 — CI/CD pipelines and build/publish automation, outside the squad flow, no spec gate.
 **docs-writer** — library and API feature docs, written only when a human asks for them,
 outside the squad flow, no spec gate.
+**service-architect** — the design of a new service, before its first code (Workflow F),
+delegated by product-owner only, no spec gate; its PR merges only on the owner's approval.
 **Humans** — the requester (ticket creator) and the workspace owner (escalation valve).
 
 ## Policy statements
@@ -83,7 +86,9 @@ outside the squad flow, no spec gate.
 
 3a. **Docs flow (E): docs are written when a human asks, never every cycle.** A docs-only change to a library repo (README, `docs/`, guides, changelog; no source, no test surface) is `docs-writer` work — it never enters the dev-team cycle, never opens a spec gate and never triggers a release. Two doors, like Workflow D: **direct** (the requester or Mika assigns `docs-writer` straight away; product-owner stays out) or **delegated** (product-owner clarifies, then creates `[P<num>-1] Docs: <scope>` to docs-writer and `[P<num>-1c] Review docs PR: <scope>` to pr-reviewer). docs-writer lands ONE `docs/<issue-key>` PR to `dev`, which pr-reviewer scores and merges like devops' PR. The moment the change touches source or tests it is Workflow B. **A dev-team cycle writes no docs pages:** in-code API comments and, for a breaking change, the `Breaking` changelog entry naming the replacement ([Policy 01](01-coding-standards.md) statement 12) ship in dev-backend's Build; dev-leader's final report lists every doc page the change made stale under `Docs impact:` (or `Docs impact: none`), so the owner can ask for them.
 
-3b. **Phases exist for approved specs only.** `[P<num>-1]` / `[P<num>-2]` are Workflow C, downstream of a spec gate. The one exception is the single-change pair `[P<num>-1]` + `[P<num>-1c]` of Workflows D2 and E, which carries no spec and no release. `[P<num>-1]` pins `Spec revision: <n>` and the spec is **frozen** for the cycle: a later change is a scope comment on the phase ticket with dev-team's mention, which dev-leader turns into ONE scope stage; a finished Acceptance-tests stage is never re-armed for spec drift, and neither the root nor the phase description is edited while the cycle runs.
+3b. **Phases exist for approved specs only.** `[P<num>-1]` / `[P<num>-2]` are Workflow C, downstream of a spec gate. The one exception is the single-change pair `[P<num>-1]` + `[P<num>-1c]` of Workflows D2, E and F, which carries no spec and no release. `[P<num>-1]` pins `Spec revision: <n>` and the spec is **frozen** for the cycle: a later change is a scope comment on the phase ticket with dev-team's mention, which dev-leader turns into ONE scope stage; a finished Acceptance-tests stage is never re-armed for spec drift, and neither the root nor the phase description is edited while the cycle runs.
+
+3c. **Service design flow (F): a new service is designed before its first code, and the owner approves the design.** A request that needs a service or repo that does not exist yet is Workflow F. **One door, delegated:** a design ticket assigned to `service-architect` directly is handed to product-owner. product-owner runs the clarification gate with the requester until the repo name, service name, purpose, users, what is in and out of scope, and the neighbouring repos are settled, and asks the requester to create the empty repo with a `dev` branch — no phase starts before it exists. Then product-owner creates `[P<num>-1] Design: <service>` to service-architect and `[P<num>-1c] Review design PR: <service>` to pr-reviewer. service-architect lands ONE `design/<issue-key>` PR to `dev` that adds `docs/architect/` ([Policy 06](06-requirements-and-spec.md) statement 14). pr-reviewer scores it like a docs PR, but a passing design PR never merges on score: it goes to the resolved owner with options, and merges only on the owner's reply A, relayed by product-owner ([Policy 04](04-code-and-spec-review.md) statement 9a). No spec gate, no release. Once merged, the design binds every later spec and implementation in that repo ([Policy 06](06-requirements-and-spec.md) statement 5c); changing it is a new Workflow F ticket, never a spec or a code PR. Building the service is ordinary Workflow B tickets after that, the first one usually the scaffold.
 
 4. **Gates front-load quality** — the spec gate before implementation, the PR gate before every merge into `dev` (see [Policy 04](04-code-and-spec-review.md)).
 
@@ -91,7 +96,7 @@ outside the squad flow, no spec gate.
 
 6. **Mentions are actions.** An agent/squad mention (real UUID, resolved at runtime) enqueues a run; a member (human) mention only renders a link and delivers nothing. To make a human act, **assign them a ticket at `todo`** — never rely on a mention. Never agent-mention in FYI/ack/done comments.
 
-7. **Titles, projects, labels:** **every ROOT main ticket title carries one type prefix** — `[Feature]` · `[Enhance]` · `[Bug]` · `[Question]` · `[CICD]` · `[Docs]` — followed by the plain title; children carry `[S<num>]` (spec review, keyed to the main ticket) / `[P<num>-n]` (product-owner's phase tickets, keyed to the main ticket, `n`: `-1` implementation, CI/CD change or docs, `-2` release) / `[D<num>-n]` (dev-team sub-tasks, keyed to the parent PHASE ticket, `n` = stage). Labels on main tickets **only** (`main` + `feature`/`bug`/`question`/`cicd`/`docs` + optional domain). Every sub-task parents directly to its cycle parent — never nested deeper. Every child stays in the SAME domain project as the main ticket.
+7. **Titles, projects, labels:** **every ROOT main ticket title carries one type prefix** — `[Feature]` · `[Enhance]` · `[Bug]` · `[Question]` · `[CICD]` · `[Docs]` · `[Design]` — followed by the plain title; children carry `[S<num>]` (spec review, keyed to the main ticket) / `[P<num>-n]` (product-owner's phase tickets, keyed to the main ticket, `n`: `-1` implementation, CI/CD change, docs or design, `-2` release) / `[D<num>-n]` (dev-team sub-tasks, keyed to the parent PHASE ticket, `n` = stage). Labels on main tickets **only** (`main` + `feature`/`bug`/`question`/`cicd`/`docs`/`design` + optional domain). Every sub-task parents directly to its cycle parent — never nested deeper. Every child stays in the SAME domain project as the main ticket.
 
 7a. **The root prefix is product-owner's, set at intake.** The requester and Mika create root tickets with a plain title; product-owner adds or corrects the prefix on the root ticket when it labels the ticket and posts the spec (`multica issue update <root-id> --title "<prefix> <plain title>" --no-start` — **always `--no-start`**, a title update on a ticket assigned to you otherwise wakes a second run of yourself). Where product-owner never touches the ticket — a CI/CD ticket taken through the direct door by devops, a docs ticket taken through the direct door by docs-writer — the first agent to pick it up sets the prefix the same way. Reclassifying the workflow changes the prefix with it.
 
@@ -107,12 +112,13 @@ outside the squad flow, no spec gate.
 | `[Question]` | `question` | a question with no change wanted |
 | `[CICD]` | `cicd` | a pipeline or build-script change |
 | `[Docs]` | `docs` | a docs-only change |
+| `[Design]` | `design` | a new service's design, before its first code |
 
 The label stays the source of truth — `[Feature]` and `[Enhance]` both carry the `feature` label, so the prefix is the finer split the labels do not make. A prefix that disagrees with the label is a defect: fix the pair, never argue it.
 
 8. **Escalation is an action, not a status.** A squad that escalates still owns its cycle: post ONE standalone `## BLOCKER` + `## OPTIONS` comment (per [`blocker-report`](../../skills/blocker-report/SKILL.md)), deliver it (agent mention for an agent hop, ticket reassignment at `todo` for a human hop), park the blocked child. Ending a turn with a stuck child and no dispatched comment is a flow defect.
 
-9. **Human touch points are capped:** business clarifications (always the requester, irreducible), spec review (5 rework rounds, then manual handoff), bug confidence (< 90% waits for requester confirmation), PR review (3 rework rounds, then the resolved owner picks an option and the pipeline waits — a PR that passes the score is never handed to a human, [Policy 04](04-code-and-spec-review.md) statements 5 and 11), critical release (a `dev`→`main` release carrying a `(MINOR)` commit or a `release-review` PR waits for the owner's reply, [Policy 08](08-container-build-and-release.md) statement 2a), squad fix attempts (2 on the same root cause, then escalate). A defect a member finds outside its cycle is filed by its leader to `product-owner` at `todo` and enters the bug flow — the confidence gate is the only human hop it gets. The escalation human is the resolved owner per [Policy 10](10-ticket-ownership-and-owner-pickup.md).
+9. **Human touch points are capped:** business clarifications (always the requester, irreducible), spec review (5 rework rounds, then manual handoff), bug confidence (< 90% waits for requester confirmation), PR review (3 rework rounds, then the resolved owner picks an option and the pipeline waits — a PR that passes the score is never handed to a human, [Policy 04](04-code-and-spec-review.md) statements 5 and 11), service design (the owner approves every design PR, statement 3c), critical release (a `dev`→`main` release carrying a `(MINOR)` commit or a `release-review` PR waits for the owner's reply, [Policy 08](08-container-build-and-release.md) statement 2a), squad fix attempts (2 on the same root cause, then escalate). A defect a member finds outside its cycle is filed by its leader to `product-owner` at `todo` and enters the bug flow — the confidence gate is the only human hop it gets. The escalation human is the resolved owner per [Policy 10](10-ticket-ownership-and-owner-pickup.md).
 
 9a. **Gate state lives on custom properties.** Review gates pin `Gate verdict`, `Gate round` and `Gate score` on their own sub-task (never on issue metadata), so a parked gate is visible on the board and in `multica issue children --resolve-properties` without reading threads. Leaders and product-owner read those properties on every wake.
 
@@ -129,10 +135,11 @@ The label stays the source of truth — `[Feature]` and `[Enhance]` both carry t
 - **product-owner** — classifies the workflow, researches with CodeGraph, runs the clarification gate, authors the spec, creates and promotes phase tickets, triages follow-ups, flips the main ticket `done`. Never touches code or git.
 - **spec-reviewer** — scores Workflow B specs, gates REWORK/APPROVED/MANUAL HANDOFF.
 - **dev-leader / dev-team** — decomposes `[P<num>-1]` into `[D<num>-n]` sub-tasks, self-verifies, cuts the branch, opens the one PR.
-- **pr-reviewer** — scores and merges every `dev`-bound PR: dev-team's, devops' and docs-writer's.
+- **pr-reviewer** — scores and merges every `dev`-bound PR: dev-team's, devops', docs-writer's and service-architect's — a design PR only on the owner's reply.
 - **release-manager** — opens the single `dev`→`main` release PR, checks whether it is critical, and merges it — a critical one only on the owner's reply; nothing else.
 - **devops** — owns Workflow D end to end under D1/D2; lands its change via a `chore/<issue-key>` PR to `dev`.
 - **docs-writer** — owns Workflow E, only on a human's request; lands its change via a `docs/<issue-key>` PR to `dev`.
+- **service-architect** — owns Workflow F's design phase; lands `docs/architect/` via a `design/<issue-key>` PR to `dev`, merged on the owner's approval.
 
 ## Definition of Done / compliance
 
@@ -141,6 +148,7 @@ The label stays the source of truth — `[Feature]` and `[Enhance]` both carry t
 - Bug: root-cause report posted with a calibrated confidence; delegation (or requester confirmation) recorded before any Workflow C work starts.
 - CI/CD: devops' PR merged into `dev`; main ticket `done` with a plain summary; no `[S#]` and no `[P<num>-2]` ever created for this flow.
 - Docs: docs-writer's PR merged into `dev`; main ticket `done` with a plain summary; no `[S#]`, no `[P<num>-2]`, and no Docs sub-task in any dev-team cycle.
+- Service design: service-architect's PR merged into `dev` on the owner's reply A; main ticket `done` with a plain summary linking the design; no `[S#]` and no `[P<num>-2]`.
 - Every stage transition leaves exactly one promotion comment in the completion shape; no stranded children (every `blocked` child has a dispatched `## BLOCKER` comment).
 
 ## Enforcement

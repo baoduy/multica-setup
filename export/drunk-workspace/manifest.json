@@ -145,6 +145,11 @@
       "source_id": "eeb27a95-84fc-46dd-93f5-7442f4849a7d"
     },
     {
+      "name": "service-design-template",
+      "dir": "skills/service-design-template",
+      "source_id": ""
+    },
+    {
       "name": "spec-review-gate",
       "dir": "skills/spec-review-gate",
       "source_id": "f11d1e45-8dd2-42ae-8f43-f76674fbf78b"
@@ -399,6 +404,27 @@
       "source_runtime_provider": "claude",
       "skill_names": [],
       "had_secrets": false
+    },
+    {
+      "name": "service-architect",
+      "file": "agents/service-architect.json",
+      "source_id": "",
+      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "archify",
+        "blocker-report",
+        "codegraph",
+        "dknet-ddd-conventions",
+        "docker-image-standards",
+        "dotnet10-efcore10-standards",
+        "nodejs-typescript-standards",
+        "python-mcp-standards",
+        "sdlc-flow-squad-worker-playbook",
+        "sdlc-gitflow",
+        "service-design-template"
+      ],
+      "had_secrets": true
     }
   ],
   "squads": [
@@ -452,6 +478,10 @@
         },
         {
           "agent_name": "docs-writer",
+          "role": "member"
+        },
+        {
+          "agent_name": "service-architect",
           "role": "member"
         },
         {

@@ -6,7 +6,7 @@
 
 **The contract is the exception.** The data and API surface a change adds is what the whole team must agree on before code starts, so it belongs in the spec: §3a carries the new fields with their types and attributes, and the endpoints with their verbs and paths. Everything below that surface stays dev-leader's: which class holds the field, which handler serves the route, what gets reused. dev-leader may add rows to the contract in its impl-brief and must say so there; it may never contradict a §3a row.
 
-**Placement is the second exception.** Where the change sits between repos and packages is agreed before code too, so §3b states it: which repo or bounded context owns the change, which repo or package starts depending on which, and whether a published package's public surface breaks. Only repos, packages and bounded contexts appear there — never a class, folder, layer or file. Which layer inside a repo holds the logic stays dev-leader's, and the PR gate checks the code against §3b.
+**Placement is the second exception.** Where the change sits between repos and packages is agreed before code too, so §3b states it: which repo or bounded context owns the change, which repo or package starts depending on which, and whether a published package's public surface breaks. Only repos, packages and bounded contexts appear there — never a class, folder, layer or file. Which layer inside a repo holds the logic stays dev-leader's, and the PR gate checks the code against §3b. A repo with an approved service design (`docs/architect/` on `dev`) fixes placement already: §3b opens with `Fits <service> design revision <n>` and must not contradict that design — a spec that needs it changed waits for a Workflow F ticket.
 
 ## Who reads a spec
 
@@ -71,6 +71,8 @@ One row per endpoint. A changed endpoint says what changes in Purpose. A removed
 ## 3b. Architecture impact
 
 A change that stays inside one repo, adds no dependency and changes no public surface writes one line: `None — stays inside <repo>; no new dependency; no public-surface change.` Otherwise, all four lines:
+
+<When a Scope repo has an approved service design, open with: `Fits <service> design revision <n>.`>
 
 - **Owner:** <the repo — and inside a service, the bounded context — that owns the new behaviour and each new entity>
 - **Dependencies:** <each new or changed dependency, one per bullet, with its direction: "`<package A>` starts using `<package B>`" — or `none`>

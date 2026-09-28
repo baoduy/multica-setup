@@ -25,6 +25,10 @@
       "role": "member"
     },
     {
+      "agent_name": "service-architect",
+      "role": "member"
+    },
+    {
       "agent_name": "pr-reviewer",
       "role": "member"
     }

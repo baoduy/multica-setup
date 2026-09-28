@@ -1,6 +1,6 @@
 # SDLC Flow — Squad Worker Playbook
 
-For squad member agents (dev-backend, docs-writer, pr-reviewer, release-manager, devops) working staged sub-tasks under a leader. Your own instructions define your role, your quality gates and your leader's mention markdown; the Workspace Context defines statuses, wakes and ticket conventions. Your sub-task description is your brief: squad instructions go to the leader only, so everything you need is in the sub-task or in your skills.
+For squad member agents (dev-backend, docs-writer, service-architect, pr-reviewer, release-manager, devops) working staged sub-tasks under a leader. Your own instructions define your role, your quality gates and your leader's mention markdown; the Workspace Context defines statuses, wakes and ticket conventions. Your sub-task description is your brief: squad instructions go to the leader only, so everything you need is in the sub-task or in your skills.
 
 ## Mention contract
 

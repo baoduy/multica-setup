@@ -74,6 +74,6 @@ gh pr review $PR -R $R --request-changes --body "Automated review gate: score {S
 
 ## Hard limits
 
-- The ONLY permitted merge is `gh pr merge` of the PR you scored APPROVED in this run, or the ESCALATED PR whose owner chose option A — never any other PR, never `--admin`, never auto-merge, never edit the PR base/branch. The only other GitHub writes are report comments, votes and the `release-review` label.
+- The ONLY permitted merge is `gh pr merge` of the PR you scored APPROVED in this run, or the ESCALATED or design PR whose owner chose option A — never any other PR, never `--admin`, never auto-merge, never edit the PR base/branch. The only other GitHub writes are report comments, votes and the `release-review` label.
 - Never create GitHub issues — findings go to Multica sub-issues only.
 - Never print tokens; if auth fails, stop and report per the blocked path in `references/multica-flow.md`.

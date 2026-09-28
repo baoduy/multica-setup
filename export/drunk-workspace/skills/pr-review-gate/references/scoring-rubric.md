@@ -61,7 +61,7 @@ Coverage UNKNOWN (no artifact, no per-class numbers on the Build sub-task, tests
 
 ## Binary gate mapping (this workspace)
 
-There is no human-review middle band and no deferred verdict: **≥ 8.5 → APPROVED and merged**; **< 8.5 → REWORK** (then ESCALATED after 3 rounds). The caps guarantee that anything ≥ 8.5 already has: no blocking findings, at most one open `important` finding, spec conformance intact, tests present, CI green or a stated CI exception, coverage not measured below threshold. Two or more `important` findings loop back to dev-team via the 8.4 cap — the weighted average alone would not catch them (one `important` in a 25% category only costs 0.5), which is exactly why the cap exists.
+There is no human-review middle band and no deferred verdict: **≥ 8.5 → APPROVED and merged** (a `design/<key>` PR: APPROVED and handed to the owner, merged on their reply A — Policy 04 statement 9a); **< 8.5 → REWORK** (then ESCALATED after 3 rounds). The caps guarantee that anything ≥ 8.5 already has: no blocking findings, at most one open `important` finding, spec conformance intact, tests present, CI green or a stated CI exception, coverage not measured below threshold. Two or more `important` findings loop back to dev-team via the 8.4 cap — the weighted average alone would not catch them (one `important` in a 25% category only costs 0.5), which is exactly why the cap exists.
 
 ## Calibration anchors
 

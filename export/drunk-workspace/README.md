@@ -34,6 +34,7 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 | ---------------- | ------- | ------------------- | -------- |
 | arch-reviewer    | claude  | claude-opus-5-5[1m] | xhigh    |
 | product-owner    | claude  | claude-opus-5-5[1m] | xhigh    |
+| service-architect | claude | claude-opus-5-5[1m] | high     |
 | spec-reviewer    | claude  | claude-opus-5-5[1m] | high     |
 | dev-leader       | claude  | claude-opus-5-5[1m] | high     |
 | pr-reviewer      | claude  | claude-opus-5-5[1m] | xhigh    |
@@ -50,5 +51,5 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 | medium-publisher | claude  | (runtime default)   | —        |
 
 
-Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5-5[1m]`) — arch-reviewer, product-owner, pr-reviewer and the `claude_ultra` assistant at `xhigh`, dev-leader and spec-reviewer at `high`; `dev-backend` rides opus on the standard tier (`claude-opus-5-5`) at `high`; devops, release, writing and the `default` assistant ride sonnet. `run-medic` rides haiku at `low`: hourly run recovery is pattern-matching over agent task rows, not judgment.
+Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5-5[1m]`) — arch-reviewer, product-owner, pr-reviewer and the `claude_ultra` assistant at `xhigh`, dev-leader, spec-reviewer and service-architect at `high`; `dev-backend` rides opus on the standard tier (`claude-opus-5-5`) at `high`; devops, release, writing and the `default` assistant ride sonnet. `run-medic` rides haiku at `low`: hourly run recovery is pattern-matching over agent task rows, not judgment.
 `issue-janitor` and `Mika` are the only agents still off the claude runtime (hermes, runtime default model).
