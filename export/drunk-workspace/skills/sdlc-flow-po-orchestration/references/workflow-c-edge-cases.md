@@ -8,7 +8,7 @@ Two concurrent sessions can both create a phase pair (a gate that both flips `do
 
 ## A human flipped the root `done` early
 
-Their flip is a decision, not a mistake. Never move the root off `done`. Let the open phases finish (their handoff lines still wake you), post the final summary on the root when they do, and leave the status alone.
+Their flip is a decision, not a mistake. Never move the root off `done`. Let the open phases finish on their own barriers, post the final summary on the root when they do, and leave the status alone.
 
 ## Multi-repo scope
 

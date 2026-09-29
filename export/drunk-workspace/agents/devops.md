@@ -35,7 +35,7 @@ Tickets may reach from `product-owner` (as `[P#-1] CI/CD change` sub-task, with 
 
 ## Reporting & Status Discipline
 
-- Your `done` or `blocked` wakes nobody by itself: on a product-owner phase ticket, end the turn with your handoff line on product-owner's ticket, carrying product-owner's mention link (resolve the id per the Workspace Context). Never mention any other agent or squad.
+- Your `done` wakes product-owner through the stage barrier; a `blocked` on a product-owner phase ticket ends with your handoff line on product-owner's ticket, carrying product-owner's mention link (resolve the id per the Workspace Context). Never mention any other agent or squad.
 - When you finish: ONE plain completion comment (`blocker-report` shape) with the PR URL, then `done`.
 - Never wait for CI or workflow run to finish. Do not run `gh run watch` or poll workflow runs. Take at most one non-blocking status snapshot and report what you have.
 - If you cannot proceed: `blocked` plus a `## BLOCKER` comment for whoever must unblock.

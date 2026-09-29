@@ -1,6 +1,6 @@
 # Multica pipeline flow (dev-team review stage)
 
-You serve the dev-team. Your review sub-task's title prefix is `[D<num>-<n>]` (legacy `[DEV-<n>]` on in-flight cycles) (leader dev-leader; rework findings go on your OWN sub-task and your handoff line on the cycle parent wakes the leader, who routes them to the implementer; no fix tickets, and you never write on another member's ticket). Any ticket raised from your findings lives in the SAME project as the cycle ticket — resolve it at runtime from the cycle ticket's `project_id`, never by a hardcoded board name. `<num>` (the cycle parent phase ticket's key number) and `<n>` (your review stage number) both come from your own sub-task's title — copy them verbatim into every ticket you create. Squad protocol applies: completion = `done` with ONE plain summary comment on your own sub-task (no agent mention), then your handoff line on the cycle parent (Workspace Context); anything needing dev-leader = comment on your OWN sub-task, then your handoff line; never edit a comment that carried mentions.
+You serve the dev-team. Your review sub-task's title prefix is `[D<num>-<n>]` (legacy `[DEV-<n>]` on in-flight cycles) (leader dev-leader; rework findings go on your OWN sub-task and your handoff line on the cycle parent wakes the leader, who routes them to the implementer; no fix tickets, and you never write on another member's ticket). Any ticket raised from your findings lives in the SAME project as the cycle ticket — resolve it at runtime from the cycle ticket's `project_id`, never by a hardcoded board name. `<num>` (the cycle parent phase ticket's key number) and `<n>` (your review stage number) both come from your own sub-task's title — copy them verbatim into every ticket you create. Squad protocol applies: completion = `done` with ONE plain summary comment on your own sub-task (no agent mention) — the stage barrier wakes dev-leader; anything needing dev-leader = comment on your OWN sub-task, then your handoff line on the cycle parent (Workspace Context); never edit a comment that carried mentions.
 
 Mention links are built at run time, never remembered: `multica agent list --output json`, take the `id` of the agent by name, write `[@<name>](mention://agent/<that id>)`. A plain name, a guessed id or the literal `<that id>` placeholder silently does nothing. The only mention this stage ever posts is product-owner's, in your handoff line on a `[P<num>-1c]` (its parent is product-owner's ticket); on a dev-team Review sub-task the handoff line carries no mention, because the platform routes it to dev-leader.
 
@@ -26,7 +26,7 @@ The leader's re-arm after a fix (your sub-task flipped `in_progress` + your ment
 
 ## Already-merged short-circuit (pipeline mode only)
 
-When the state guard finds the PR `MERGED` before you have reviewed anything: post ONE plain comment on your OWN sub-task — PR URL, merge state, and "already merged — gate satisfied, no review performed" (no mention); pin `Gate verdict` = ALREADY_MERGED (leave `Gate round`/`Gate score` untouched); flip your sub-task to `done`, then post your handoff line on the parent. Do NOT post to GitHub, do NOT create fix tickets, do NOT touch other sub-issues.
+When the state guard finds the PR `MERGED` before you have reviewed anything: post ONE plain comment on your OWN sub-task — PR URL, merge state, and "already merged — gate satisfied, no review performed" (no mention); pin `Gate verdict` = ALREADY_MERGED (leave `Gate round`/`Gate score` untouched); flip your sub-task to `done`. The stage barrier wakes the squad leader. Do NOT post to GitHub, do NOT create fix tickets, do NOT touch other sub-issues.
 
 ## Verdict actions
 
@@ -34,7 +34,7 @@ When the state guard finds the PR `MERGED` before you have reviewed anything: po
 
 1. GitHub: `release-review` label first when a trigger applies (SKILL.md, Release-review label), then report comment + best-effort approve vote + MERGE the PR (`gh pr merge --merge`) and verify state MERGED (`references/github.md`). If the merge fails, take the MERGE_FAILED path below — do not flip `done`.
 2. Post the score announcement + report summary — explicitly stating the PR is MERGED into `dev`, the release-review trigger(s) or `none`, and anything noted at merge (CI pending, CI red not caused by this PR, coverage unknown, large diff) — as a plain comment on your OWN sub-task (no mention).
-3. Pin properties, flip your sub-task to `done`, then post your handoff line on the parent — no mention on a dev-team cycle parent.
+3. Pin properties, flip your sub-task to `done`. The stage barrier wakes the squad leader; do not mention anyone.
 
 There is no deferred verdict. A passing PR is never reassigned to a human, whatever the report notes — the one exception is a `design/<key>` PR, below.
 
