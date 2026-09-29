@@ -4,6 +4,16 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-29 (b) — workspace context names who prefixes a root product-owner never touches (live)
+
+No policy amended: Policy 05 statement 7a already gives the root type prefix (`[Feature]` ·
+`[Enhance]` · `[Bug]` · `[Question]` · `[CICD]`) to the first agent that picks up a root
+product-owner never touches. The workspace context said only "set by product-owner at intake",
+unlike drunk's, so an agent working a root routed straight to it read no duty to prefix it. It
+now carries the same clause as drunk. The prefix rule itself has been live in mx since
+2026-09-22 (b); roots filed before then keep their plain titles, as in drunk. Cascade:
+`workspace/workspace.context.md`.
+
 ## 2026-09-29 — a child wakes its parent's owner with one handoff line; stage barriers wake nobody (live)
 
 Owner-approved. **Policy 05 v1.5** (statement 5: a child keeps its report, `## BLOCKER` and
