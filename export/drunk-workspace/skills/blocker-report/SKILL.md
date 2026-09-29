@@ -38,6 +38,8 @@ Deviations from the brief: none | <n>, see below
 - <one line each> — or `none`
 ```
 
+A `build-ui` Build (UI presentation, Policy 02 §1a) writes `n/a — UI presentation` in the @existing / @new, AT drift, Coverage and Mutation rows, puts typecheck and lint in the Build row, counts its skips in the Tests row, and adds one row: `Skipped tests | <n>: <file> · <test> · <control it drove>, …` — or `none`.
+
 Rules:
 
 - **RESULT is one line plus the deviation count.** A deviation is anything the brief said that you did differently. It goes in the DEVIATIONS table with its reason, never in prose. Delete the DEVIATIONS section when there are none.
@@ -83,7 +85,7 @@ Rules:
 - 2 or 3 options. Exactly one `✅ Recommended`, first. Each option is decidable from its line alone. Include "park it" or "ship without" whenever it is a real choice. Options are things YOU can do once approved, unless the blocker is access, credentials or a business decision.
 - `## QUESTIONS` only when a real question remains beyond choosing an option. Delete the section otherwise.
 - Under 25 lines. Evidence, logs and links go below the three sections.
-- The report is additive, not the delivery: an agent hop still needs `blocked` plus the leader's mention; a human hop still needs the ticket reassigned to the human at `todo`.
+- The report is additive, not the delivery: an agent hop still needs `blocked` plus the handoff line on the parent (Workspace Context); a human hop still needs the ticket reassigned to the human at `todo`, asked to reply with the next agent's mention.
 - When it clears, reply in the same thread with what unblocked it, one line.
 
 ## Root-cause report (product-owner, Workflow A)

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-02 |
-| **Version** | 1.3 |
+| **Version** | 1.4 |
 | **Status** | Active |
 | **Owner** | dev-backend |
 | **Applies to** | Every code or behaviour change in a drunk repo, across every stack |
@@ -22,6 +22,8 @@
                    [leader, inline]       read ATs vs spec ──▶ pin at_sha (frozen)
                    [Build run]            implement ──▶ ATs GREEN · suite green · ≥80% · mutation report · drift check empty
    Bug fix (Prove-It):  reproduction AT authored RED and frozen ──▶ fix in Build ──▶ green ──▶ full suite
+   UI presentation (1a): no AT stage, no new tests ──▶ Build done on build · typecheck · lint · existing suites green
+                         a test the change breaks ──▶ skipped with a note ──▶ ONE follow-up issue (dev-leader)
 
    No deployed environment to test against — these are published packages.
    Coverage is measured on the feature branch, per TOUCHED class/module, never repo-wide:
@@ -49,7 +51,7 @@ statements but follows the runner and structure conventions below.
 
 1. **Acceptance-test-first, authored and implemented in separate runs, verified by outcome.**
    Every change is proven by acceptance tests derived from the spec's Gherkin before its PR
-   opens. dev-backend owns both halves but never in one run: the **`Acceptance tests:` stage**
+   opens — except a UI presentation change (statement 1a). dev-backend owns both halves but never in one run: the **`Acceptance tests:` stage**
    turns the brief's §7 into executable, RED tests against the package's public API (plus the
    §5 signature stubs so they compile) and pushes them; dev-leader reads them against the spec
    and pins `at_sha`; the **`Build:` stage** implements against those frozen tests until green.
@@ -61,6 +63,21 @@ statements but follows the runner and structure conventions below.
    attests "it failed first" proves only that it ran; the independent read before implementation
    and the lock afterwards are what make red-then-green evidence. For a defect the acceptance
    test is the Prove-It reproduction — see `test-driven-development`.
+1a. **UI presentation ships without new tests, for now.** A UI presentation change — the screens
+   and layouts, components, styling and copy of a front-end app (in DKNet.Accounts.Api:
+   `ui/components/**` and the `page`, `layout` and `.css` files under `ui/app/**`) — has no
+   Acceptance-tests stage, no `at_sha`, no new tests, no coverage figure and no mutation report.
+   Its Build is done when the app's build, typecheck and lint pass and its existing test suites
+   pass. The rest of a front-end app keeps the full bar in the same cycle: server route handlers
+   (`ui/app/**/route.ts`), data access, auth, session and contract code (`ui/lib/**`,
+   `ui/contract/**`), middleware and build config. An existing test the change breaks is skipped
+   with the runner's own skip and a one-line note naming the ticket — never deleted, never
+   rewritten to pass — and dev-leader files ONE follow-up issue per cycle naming the change's §5
+   scenarios and every skipped test: the scope of the later UI test pass. The §5 scenarios are
+   still written in the spec. A bug fix and a PR-gate rework finding keep their reproduction test
+   ([Policy 07](07-bug-and-defect-management.md)). Why: drunk has no UI test standard yet, and the
+   owner chose to build the console's presentation first and test it in its own pass (DRK-1745,
+   2026-09-25).
 2. **Correct runner per stack — no substitutions.** TypeScript repos run **jest via ts-jest**
    (`jest.config.js`, `preset: ts-jest`); do not add mocha/vitest (`TS-TEST-001` — note this
    supersedes the stale `PULUMI-TEST-001` mocha reference, which is not the real runner).
@@ -81,7 +98,8 @@ statements but follows the runner and structure conventions below.
    **Coverage review is a mandatory Build step**: after the implementation is green,
    dev-backend measures coverage per touched class and reads each class against its tests —
    every public behaviour, branch, and error path the change added must be exercised; gaps are
-   closed with behaviour tests before sign-off, never left for review to find.
+   closed with behaviour tests before sign-off, never left for review to find. UI presentation
+   files are exempt under statement 1a.
 5. **Test behaviour and contracts, not implementation.** Tests survive behaviour-preserving
    refactors: no asserting on private members, internal call order, or brittle selectors.
    Assert on state/outcome. Pulumi tests mock the SDK/cloud-provider calls, never real cloud
@@ -92,8 +110,8 @@ statements but follows the runner and structure conventions below.
    `npm pack` (TS). Combined unit + BDD-unit coverage of every class/module **touched** in the
    cycle reaches **≥80%**, measured only over files the feature branch changed
    (`git diff --name-only origin/dev...origin/<feature-branch>`, excluding test files) — never
-   a repo-wide figure.
-6a. **Mutation report per touched class — coverage's honesty check.** Coverage says a line ran; only mutation says an assertion would have caught it changing. Every Build reports a mutation run scoped to the classes it touched (`dotnet stryker` on .NET, `npx stryker run` on TypeScript) with **every survivor dispositioned** — `killed — added <test>` / `equivalent` / `accepted — <why>`. Tool genuinely unavailable → the manual equivalent: invert each guard the change added, run, confirm RED, restore, and say in the report that the tool was unavailable. A Build reported `done` without a mutation report and its dispositions is incomplete the same way a missing coverage row is; dev-leader sends it back and never promotes past it.
+   a repo-wide figure. UI presentation files (statement 1a) are outside this gate.
+6a. **Mutation report per touched class — coverage's honesty check.** Coverage says a line ran; only mutation says an assertion would have caught it changing. Every Build except a UI presentation one (statement 1a) reports a mutation run scoped to the classes it touched (`dotnet stryker` on .NET, `npx stryker run` on TypeScript) with **every survivor dispositioned** — `killed — added <test>` / `equivalent` / `accepted — <why>`. Tool genuinely unavailable → the manual equivalent: invert each guard the change added, run, confirm RED, restore, and say in the report that the tool was unavailable. A Build reported `done` without a mutation report and its dispositions is incomplete the same way a missing coverage row is; dev-leader sends it back and never promotes past it.
 7. **Never inflate coverage.** No trivial tests on getters or framework code. If 80% on a
    touched class is genuinely unreachable, flag the untestable paths to dev-leader instead of
    padding; if code is untestable as written, propose the smallest design change rather than
@@ -125,19 +143,21 @@ statements but follows the runner and structure conventions below.
 - **dev-leader** — gates the cycle: no PR authorization or finalize while a Build sub-task is
   `blocked`, its report lacks per-touched-class coverage evidence, or the Review sub-task is
   `blocked` mid-rework. Never runs tests itself — reads the evidence and trusts the PR gate's
-  independent re-check.
+  independent re-check. On a UI presentation Build (statement 1a) there is no coverage evidence
+  to read; dev-leader files the follow-up issue (§5 scenarios and skipped tests) before the PR opens.
 - **pr-reviewer** — re-checks coverage and behaviour-vs-implementation assertions at the PR
   gate as an independent pass over the same diff — the only pair of eyes on the tests that did
   not write the code, so a coverage miss or an implementation-shaped test here is REWORK.
 
 ## Definition of Done / compliance
 
-- New/changed logic has a test; every bug fix carries a reproduction test that failed before
-  the fix and passes after.
+- New/changed logic has a test (UI presentation: statement 1a); every bug fix carries a
+  reproduction test that failed before the fix and passes after.
 - Full suite green — pre-existing tests plus new ones — zero errors, zero warnings.
 - ≥80% combined coverage on every touched class/module, reported per file, never repo-wide.
 - A mutation report per touched class, every survivor dispositioned (statement 6a).
-- No skipped/disabled test introduced to make the suite pass.
+- No skipped/disabled test introduced to make the suite pass — except a test a UI presentation
+  change broke, skipped under statement 1a with its note and listed in its follow-up issue.
 - Clean `dotnet pack` / `npm pack` (or the Python package's equivalent build check).
 
 ## Enforcement
@@ -145,11 +165,14 @@ statements but follows the runner and structure conventions below.
 `pr-review-gate`'s testing dimension verifies tests exist for changed logic, assert behaviour
 not implementation, cover edge cases, and that changed-line coverage meets the gate (override
 per repo via `.pr-review.json`). A coverage miss or missing tests on touched logic is a
-`blocking`/`important` finding that forces REWORK regardless of the weighted score.
+`blocking`/`important` finding that forces REWORK regardless of the weighted score. UI
+presentation files carry no test requirement (statement 1a); a test skipped without its note,
+or a UI presentation cycle without its follow-up issue, is an `important` finding.
 
 ## Exceptions & waivers
 
-- The in-repo coverage gate (statement 6) has **no** waiver — there is no deployed
+- The in-repo coverage gate (statement 6) has **no** waiver beyond statement 1a's UI
+  presentation exception — there is no deployed
   environment or later integration stage to catch what it would have found; this is the
   only proof a published package works.
 - A coverage override lives in a repo's `.pr-review.json`, never granted ad hoc per PR.

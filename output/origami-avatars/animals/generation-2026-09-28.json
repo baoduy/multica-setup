@@ -1,0 +1,116 @@
+{
+  "mode": "built-in image_gen",
+  "generated_at": "2026-09-28",
+  "animals": [
+    {
+      "name": "elephant",
+      "prompt": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a slate blue elephant with broad folded ears, a curved angular trunk and small ivory tusks. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image, suitable for 512x512 avatar export.",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "sha256": "a9470629f83a89a64039ac06cc85840d6a0750d5da18389a2853a1e5a86c7bbc",
+      "file": "output/origami-avatars/animals/elephant.png",
+      "size_512_file": "output/origami-avatars/animals/512x512/elephant.png"
+    },
+    {
+      "name": "giraffe",
+      "prompt": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a golden ochre giraffe with chestnut paper patches, a long folded neck and small ossicones. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image, suitable for 512x512 avatar export.",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "sha256": "45eaa4210cd4d3bdfaf573ffa4b08ad2eed960f7a57aee65d576909e4d1793df",
+      "file": "output/origami-avatars/animals/giraffe.png",
+      "size_512_file": "output/origami-avatars/animals/512x512/giraffe.png"
+    },
+    {
+      "name": "penguin",
+      "prompt": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a charcoal and ivory penguin with small orange folded beak and feet, upright compact body. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image, suitable for 512x512 avatar export.",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "sha256": "7bc7ed1fb872f44f0a3577d76fd2fba735f273ed2eb7ef1c33ef5a441f32b894",
+      "file": "output/origami-avatars/animals/penguin.png",
+      "size_512_file": "output/origami-avatars/animals/512x512/penguin.png"
+    },
+    {
+      "name": "turtle",
+      "prompt": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a sage green turtle with an emerald geometric folded shell and four short flippers. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image, suitable for 512x512 avatar export.",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "sha256": "12ff4c2d11d7f13a70af69e222d6073f621699112f21eda180a9a98953e5621c",
+      "file": "output/origami-avatars/animals/turtle.png",
+      "size_512_file": "output/origami-avatars/animals/512x512/turtle.png"
+    },
+    {
+      "name": "koala",
+      "prompt": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a soft ash gray koala with broad rounded folded ears, ivory chest and large charcoal nose. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image, suitable for 512x512 avatar export.",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "sha256": "f1dfa39363e1fd7f91c39e7efc60054db2f10a72c5c3828a8f95b98ac37e09c7",
+      "file": "output/origami-avatars/animals/koala.png",
+      "size_512_file": "output/origami-avatars/animals/512x512/koala.png"
+    },
+    {
+      "name": "hedgehog",
+      "prompt": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a warm chestnut hedgehog with layered triangular paper spines, cream face and tiny pointed nose. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image, suitable for 512x512 avatar export.",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "sha256": "b4f4e8c1a4e40c9f6b0bcd3c9f3d8037038408772a389bd42ac2a28504d24140",
+      "file": "output/origami-avatars/animals/hedgehog.png",
+      "size_512_file": "output/origami-avatars/animals/512x512/hedgehog.png"
+    },
+    {
+      "name": "peacock",
+      "prompt": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a teal peacock with a compact fan of blue and emerald folded tail feathers and restrained gold accents. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image, suitable for 512x512 avatar export.",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "sha256": "20a0e5e02a8bccfcdfcdc94eaea8f968042e0eb242948bf9f2e7e48a0f416ea8",
+      "file": "output/origami-avatars/animals/peacock.png",
+      "size_512_file": "output/origami-avatars/animals/512x512/peacock.png"
+    },
+    {
+      "name": "seahorse",
+      "prompt": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a coral orange seahorse with a curled angular tail, folded ridged belly and small delicate fin. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image, suitable for 512x512 avatar export.",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "sha256": "01d02f5050e8fa88fbfd62fa914af5a72e51c8f4b2ec68908cabeff1b053510f",
+      "file": "output/origami-avatars/animals/seahorse.png",
+      "size_512_file": "output/origami-avatars/animals/512x512/seahorse.png"
+    },
+    {
+      "name": "flamingo",
+      "prompt": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a blush pink flamingo with gracefully folded curved neck, black-tipped beak and slender folded legs. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image, suitable for 512x512 avatar export.",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "sha256": "6fecb98fc8a6e95925a42ab23ed9d1ce57086d7392a8e30a92d9e8ead66cb6fa",
+      "file": "output/origami-avatars/animals/flamingo.png",
+      "size_512_file": "output/origami-avatars/animals/512x512/flamingo.png"
+    },
+    {
+      "name": "raccoon",
+      "prompt": "Use case: stylized-concept. Asset type: one square agent avatar, part of a consistent origami animal collection. Primary request: a smoky gray raccoon with a charcoal eye mask, ivory muzzle and a clearly banded folded tail. Style: premium handcrafted folded-paper sculpture, tactile matte paper, crisp geometric creases, refined soft studio lighting, coherent restrained origami construction. Composition: a single centered animal in a three-quarter front view, fully inside a circular safe area with generous 15% margins, clear recognizable silhouette at small icon sizes. Plain warm ivory background with a very subtle grounding shadow. No letters, text, logos, border, accessories, watermarks, extra animals, collage, or grid. Deliver a single square image, suitable for 512x512 avatar export.",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "sha256": "76dd0a0684e9e1ba071a89f6faf5a71c18b1c9bcae56877e2821751e4c46463f",
+      "file": "output/origami-avatars/animals/raccoon.png",
+      "size_512_file": "output/origami-avatars/animals/512x512/raccoon.png"
+    }
+  ]
+}

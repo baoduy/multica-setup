@@ -8,11 +8,11 @@ Two concurrent sessions can both create a phase pair (a gate that both flips `do
 
 ## A human flipped the root `done` early
 
-Their flip is a decision, not a mistake. Never move the root off `done`. Let the open phases finish on their own barriers, post the final summary on the root when they do, and leave the status alone.
+Their flip is a decision, not a mistake. Never move the root off `done`. Let the open phases finish (their handoff lines still wake you), post the final summary on the root when they do, and leave the status alone.
 
 ## Multi-repo scope
 
-A phase ticket names exactly one repository. When the spec's Scope spans two (a library and its template or consumer), create one `[P<num>-n] Implementation` per repo, sequenced by dependency, with a Release stage between them when the consumer needs the published package: `[P-1]` library → `[P-2]` Release → `[P-3]` consumer → `[P-4]` Release. dev-leader rejects a multi-repo phase `blocked` with your mention; that is your decomposition defect to fix by splitting.
+A phase ticket names exactly one repository. When the spec's Scope spans two (a library and its template or consumer), create one `[P<num>-n] Implementation` per repo, sequenced by dependency, with a Release stage between them when the consumer needs the published package: `[P-1]` library → `[P-2]` Release → `[P-3]` consumer → `[P-4]` Release. dev-leader rejects a multi-repo phase `blocked`, announced by its handoff line on your ticket; that is your decomposition defect to fix by splitting.
 
 ## Leftovers-shaped tickets
 

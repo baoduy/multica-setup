@@ -42,13 +42,13 @@ Rules:
 - **At most one paragraph below LEFT OPEN.** If it needs more, it is blocker
   report (below) or spec discussion on main ticket — not completion
   comment.
-- **One comment per event.** Stage barrier gets ONE promotion comment in
+- **One comment per event.** A completed stage gets ONE promotion comment in
   this shape (RESULT = what stage closed and what is now `todo`, with whom) —
   never summary comment plus separate promotion comment.
 - **Final report to human:** same shape; RESULT carries PR link, score
   and merge commit. Detail lives in stage comments — link, don't repeat.
-- Status and mention rules are unchanged and owned by your role skill:
-  status flip fires barrier; this file only fixes comment's format.
+- Status, handoff and mention rules are owned by your role skill and the
+  workspace context; this file only fixes comment's format.
 
 ## Blocker report — work cannot proceed
 
@@ -114,7 +114,7 @@ carries your best guess so human can confirm with one word.
 
 ## Resolving blocker — answer is not resolution
 
-Any agent answering someone else's `## BLOCKER`: an answer alone moves nothing — only a status transition or agent mention enqueues a run (wake contract: `sdlc-flow-delivery-pipeline`; MXW-1016 stalled on a correct answer nobody actuated). So: (1) reply INSIDE the `## BLOCKER` thread, never as a new root comment; (2) actuate in the SAME wake — flip the blocked issue `blocked`→`in_progress` (`multica issue status <id> in_progress --no-start`) with a resume comment carrying the assignee's mention link — a leader's move; a member answering another member's blocker instead reports on its OWN ticket with the leader's mention, or, when you lack authority over that issue, mention one agent who has it; (3) end-of-turn self-check: turn changed no status and enqueued no run → go back and actuate before ending.
+Any agent answering someone else's `## BLOCKER`: an answer alone moves nothing — only a status transition or agent mention enqueues a run (wake contract: `sdlc-flow-delivery-pipeline`; MXW-1016 stalled on a correct answer nobody actuated). So: (1) reply INSIDE the `## BLOCKER` thread, never as a new root comment; (2) actuate in the SAME wake — flip the blocked issue `blocked`→`in_progress` (`multica issue status <id> in_progress --no-start`) with a resume comment carrying the assignee's mention link — a leader's move; a member answering another member's blocker instead reports on its OWN ticket and posts its handoff line, or, when you lack authority over that issue, mention one agent who has it; (3) end-of-turn self-check: turn changed no status and enqueued no run → go back and actuate before ending.
 
 ## Options rules
 

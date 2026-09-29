@@ -81,7 +81,7 @@ a policy gap — file it upward.
 | [03](03-source-control-branching.md)  | Source Control &amp; Branching   | .NET dev ⭐  | `sdlc-gitflow`, `leader-gitops`                                   | PR review gate, leaders      |
 | [04](04-code-and-spec-review.md)      | Code &amp; Spec Review           | .NET dev ⭐  | `pr-review-gate`, `spec-review-gate`, `architecture-review-sweep` | the gates themselves         |
 | [05](05-sdlc-delivery-lifecycle.md)   | SDLC Delivery Lifecycle          | all         | `sdlc-flow-delivery-pipeline`                                     | product-owner + gates        |
-| [06](06-requirements-and-spec.md)     | Requirements &amp; Specification | product     | `sdlc-spec-template`, `sdlc-impl-brief`                           | spec review gate             |
+| [06](06-requirements-and-spec.md)     | Requirements &amp; Specification | product     | `sdlc-spec-template`, `sdlc-impl-brief`, `interview-me`, `multica-brainstorming` | spec review gate             |
 | [07](07-bug-and-defect-management.md) | Bug &amp; Defect Management      | all         | `bug-report`, `blocker-report`                                    | product-owner, qc-team       |
 | [08](08-release-management.md)        | Release Management               | ops/release | `prd-release-runbook`, `helm-chart-delivery`                      | release-manager, prd-release |
 | [09](09-agent-roles-and-responsibilities.md) | Agent Roles &amp; Responsibilities | every agent ⭐ | none — governs `agents/**` instructions and `squads/**` briefings (each charter names its agent's skills) | agent instructions + every gate |

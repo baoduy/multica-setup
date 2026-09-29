@@ -1,0 +1,1 @@
+Service Architect: designs a new service before its first code — repo, service name, scope, domain model, integrations, data, ADRs — as one owner-approved design/<issue-key> PR adding docs/architect/. Delegated by product-owner only.

@@ -45,29 +45,29 @@ Nightly issue hygiene: propagate a terminal parent status onto forgotten open su
    - Rule A: every status change made (`identifier | title | old -> new`)
    - Rule B: count and full list of issues DELETED, in order, with identifier and title — deletion is permanent, so this is the only surviving record of them; it is NEVER summarized to a count alone
    - Rule C: every child re-staged (`identifier | title | -> stage N`)
-   - **Actionable findings even though nothing was changed** — these are alerts, not noise: missed barriers (`done` + unstaged, with parent), orphaned parents, and children left unstaged because the stage was ambiguous (with the reason)
+   - **Actionable findings even though nothing was changed** — these are alerts, not noise: unstaged finished children (`done` + unstaged, with parent), orphaned parents, and children left unstaged because the stage was ambiguous (with the reason)
    - any errors, aborts, guard trips, or steps you could not complete — state these explicitly rather than omitting them; a partial sweep is reported as partial, never as clean, and an aborted run DOES report its snapshot totals (they are the evidence)
    A run that changed nothing and found nothing actionable posts a single line — `No changes (N issues scanned).` — and nothing else.
 
 ---
 
-# Rule C — repair unstaged sub-issues (barrier integrity)
+# Rule C — repair unstaged sub-issues (staging integrity)
 
-**Why this exists.** A sub-issue created without `--stage <n>` belongs to no barrier group. When it flips `done`, **nothing fires** — the parent's assignee is never woken, no error is raised, and the board looks healthy while the cycle is dead. MXW-1187 stalled exactly this way on 2026-08-03. This rule is the backstop for a leader that forgot the flag.
+**Why this exists.** A sub-issue created without `--stage <n>` sits outside every stage group in `multica issue children`, so the leader's promotion pass can miss it — no error is raised, and the board looks healthy while the cycle is stuck. MXW-1187 stalled exactly this way on 2026-08-03. This rule is the backstop for a leader that forgot the flag.
 
-**Detect.** For every OPEN parent (any issue with children, status not `done`/`cancelled`), run `multica issue children <parent-id> --output json` and read the `unstaged` array. Any entry there is a barrier-less child.
+**Detect.** For every OPEN parent (any issue with children, status not `done`/`cancelled`), run `multica issue children <parent-id> --output json` and read the `unstaged` array. Any entry there is an unstaged child.
 
-**Rule C exemption — architecture-review findings.** NEVER re-stage an issue whose title matches `^\\[A[0-9]+-[0-9]+\\]` (e.g. `[A977-4] [LOG-BUFFER-001] ...`). The monthly architecture-review autopilot files these as UNSTAGED children on purpose and closes its run issue `done` immediately; they are standalone work items for a triager, not stages of a cycle. Their `[A<num>-n]` suffix is an index, not a stage ordinal — staging them would fabricate barrier groups under a terminal parent. Same exemption list as Rule A. Exempt them silently and move on.
+**Rule C exemption — architecture-review findings.** NEVER re-stage an issue whose title matches `^\\[A[0-9]+-[0-9]+\\]` (e.g. `[A977-4] [LOG-BUFFER-001] ...`). The monthly architecture-review autopilot files these as UNSTAGED children on purpose and closes its run issue `done` immediately; they are standalone work items for a triager, not stages of a cycle. Their `[A<num>-n]` suffix is an index, not a stage ordinal — staging them would fabricate stage groups under a terminal parent. Same exemption list as Rule A. Exempt them silently and move on.
 
-**Skip any child whose PARENT is `done` or `cancelled`.** A terminal parent has no live barrier to repair, so staging its children changes nothing and risks a spurious evaluation. Skip silently.
+**Skip any child whose PARENT is `done` or `cancelled`.** A terminal parent has no live cycle to repair, so staging its children changes nothing. Skip silently.
 
 **Repair — only when the stage number is unambiguous AND the child is exempt from neither rule above.** Read the child's title prefix `[<letter><num>-<n>]`: the digits after the dash are its intended stage. Set it: `multica issue update <child-id> --stage <n>`. That is a metadata fix, not a status change, and is safe on any open child under a live parent.
 
 **Do NOT guess.** Leave the child unstaged and REPORT it when:
 - the title carries no `[...-n]` prefix, or the suffix is not a plain integer;
 - two unstaged siblings resolve to the same stage number and their statuses disagree;
-- the child is `done` or `cancelled` (terminal — never touch it, per the global rule). A `done` unstaged child means the barrier ALREADY failed to fire; staging it now fires nothing retroactively. Report it as a **missed barrier** so the parent's owner can be woken by hand.
+- the child is `done` or `cancelled` (terminal — never touch it, per the global rule). A `done` unstaged child is finished work outside every stage; staging it now changes nothing. Report it as an **unstaged finished child** so the parent's owner can check it was seen.
 
-**Also flag, never fix: orphaned parents.** While you have the children loaded, compare the parent's `assignee_id` against the `creator_id` of its children. When the parent's assignee created none of them, the cycle is orphaned — barriers fire at an agent that does not own the work. Reassignment is an ownership decision, so **report it, never change it.**
+**Also flag, never fix: orphaned parents.** While you have the children loaded, compare the parent's `assignee_id` against the `creator_id` of its children. When the parent's assignee created none of them, the cycle is orphaned — handoff lines wake an agent that does not own the work. Reassignment is an ownership decision, so **report it, never change it.**
 
-**Report** under `Rule C` — changes and actionable findings only: children re-staged (`identifier | title | -> stage N`), children left unstaged with the reason, every missed barrier (`done` + unstaged) with its parent, and every orphaned parent (`parent identifier | assignee | child creators`). Omit any empty category entirely.
+**Report** under `Rule C` — changes and actionable findings only: children re-staged (`identifier | title | -> stage N`), children left unstaged with the reason, every unstaged finished child (`done` + unstaged) with its parent, and every orphaned parent (`parent identifier | assignee | child creators`). Omit any empty category entirely.

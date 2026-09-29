@@ -6,6 +6,8 @@
 
 **The contract is the exception.** The data and API surface a change adds is what the whole team must agree on before code starts, so it belongs in the spec: §3a carries the new fields with their types and attributes, and the endpoints with their verbs and paths. Everything below that surface stays dev-leader's: which class holds the field, which handler serves the route, what gets reused. dev-leader may add rows to the contract in its impl-brief and must say so there; it may never contradict a §3a row.
 
+**Placement is the second exception.** Where the change sits between repos and packages is agreed before code too, so §3b states it: which repo or bounded context owns the change, which repo or package starts depending on which, and whether a published package's public surface breaks. Only repos, packages and bounded contexts appear there — never a class, folder, layer or file. Which layer inside a repo holds the logic stays dev-leader's, and the PR gate checks the code against §3b. A repo with an approved service design (`docs/architect/` on `dev`) fixes placement already: §3b opens with `Fits <service> design revision <n>` and must not contradict that design — a spec that needs it changed waits for a Workflow F ticket.
+
 ## Who reads a spec
 
 The requester, the workspace owner, the spec gate, the dev-leader, and the implementer. The humans may have intermediate English and no context. Write for them:
@@ -15,7 +17,7 @@ The requester, the workspace owner, the spec gate, the dev-leader, and the imple
 3. Bullets over paragraphs. A paragraph is at most 3 sentences.
 4. Numbers as digits (16 routes, 80%). Dates as `2026-09-15`.
 5. Name a thing the same way every time. Define an acronym once, in brackets.
-6. No code words: no class names, method signatures, file paths, flags or `file:line` — in any section, §3a included. Product and package names and error codes in backticks are fine. §3a is the only place entity, field and endpoint names appear.
+6. No code words: no class names, method signatures, file paths, flags or `file:line` — in any section, §3a and §3b included. Product and package names and error codes in backticks are fine. §3a is the only place entity, field and endpoint names appear.
 7. Lead with the answer. Reasoning comes after, short.
 
 ## Template
@@ -66,6 +68,17 @@ One row per field. Length is required for text and decimal types. Say `n/a` wher
 
 One row per endpoint. A changed endpoint says what changes in Purpose. A removed endpoint names what replaces it.
 
+## 3b. Architecture impact
+
+A change that stays inside one repo, adds no dependency and changes no public surface writes one line: `None — stays inside <repo>; no new dependency; no public-surface change.` Otherwise, all four lines:
+
+<When a Scope repo has an approved service design, open with: `Fits <service> design revision <n>.`>
+
+- **Owner:** <the repo — and inside a service, the bounded context — that owns the new behaviour and each new entity>
+- **Dependencies:** <each new or changed dependency, one per bullet, with its direction: "`<package A>` starts using `<package B>`" — or `none`>
+- **Public surface:** <each published package touched: `additive`, `breaking` or `none`. For `breaking`: what callers must change, and "the release carries `(MINOR)`">
+- **Integration:** <each new interaction between repos: package reference, HTTP call or event — or `none`>
+
 ## 4. Scope
 - **Repos / packages:** <every repo the change touches — one per bullet, each with what changes in one clause. Include consumers that must be updated and repos that only need a version bump. Names only, never a file or class.>
 - **Not in this change:** <one per bullet>
@@ -84,7 +97,7 @@ Feature: <name>
 ```
 ```
 
-Section tests: §1 is done when a non-engineer could act on it. §2 is done when it describes today's behaviour without saying how it is built. §3 is done when every requirement can be checked from outside and every invariant is a property. §3a is done when a developer can create every field and call every endpoint without asking a question. §4 is done when it names every repo the change touches and holds zero open questions. §5 is done when every requirement in §3 has at least one scenario and every scenario traces to §1.
+Section tests: §1 is done when a non-engineer could act on it. §2 is done when it describes today's behaviour without saying how it is built. §3 is done when every requirement can be checked from outside and every invariant is a property. §3a is done when a developer can create every field and call every endpoint without asking a question. §3b is done when a reviewer can tell, without opening the code, which repo owns the change, which way every new dependency points, and whether any published package breaks. §4 is done when it names every repo the change touches and holds zero open questions. §5 is done when every requirement in §3 has at least one scenario and every scenario traces to §1.
 
 ## Gherkin — BRIEF
 
@@ -100,7 +113,7 @@ Business language · Real data ("treasury-ops", 100.00 SGD, never "a user") · I
 
 ## Verification
 
-Testing is never optional and never negotiated at spec time. dev-team writes the §5 scenarios as acceptance tests first, implements against them frozen, and self-verifies at ≥80% coverage per touched class plus a clean pack (`test-driven-development`). §5 says what the suite covers and which kind each scenario is, never whether it runs.
+Testing is never optional and never negotiated at spec time. dev-team writes the §5 scenarios as acceptance tests first, implements against them frozen, and self-verifies at ≥80% coverage per touched class plus a clean pack (`test-driven-development`). §5 says what the suite covers and which kind each scenario is, never whether it runs. The one exception is set by policy, not by the spec: a UI presentation change (screens, layouts, components, styling, copy — Policy 02 §1a) is built without tests, and its §5 scenarios are still written and tagged — they scope the later UI test pass.
 
 ## Quality bar
 
@@ -109,5 +122,6 @@ Testing is never optional and never negotiated at spec time. dev-team writes the
 3. **Complete** — every requirement in §3 has a scenario.
 4. **Secure** — the Security line is concrete.
 5. **Contract-complete** — every field and endpoint the change needs is in §3a with its type, length and attributes, and §4 names every repo touched.
+6. **Well-placed** — §3b puts the change in the repo that owns it, every new dependency points the way the stack's layering allows, and every public-surface break is declared.
 
 If the requester asks for an over-built or insecure outcome, push back with evidence at the clarification gate instead of writing it down.

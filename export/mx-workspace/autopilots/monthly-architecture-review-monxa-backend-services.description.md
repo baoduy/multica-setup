@@ -14,7 +14,7 @@ Each month, fan the architecture review out into ONE review sub-issue per Monxa 
 - **Constraints**
   - **This run reviews NO code.** It dispatches, then stops. Every checkout, every analysis, every filed finding happens inside the `[RP#]` sub-issue runs.
   - **`--status todo` is what starts a review.** An agent-assigned sub-issue created at `todo` enqueues its assignee immediately; `backlog` sets the assignee and fires nothing, which would park the whole review forever.
-  - **Do NOT pass `--stage`.** All four sub-issues must sit in one implicit stage. The server then wakes the parent assignee EXACTLY ONCE — when the LAST sub-issue reaches a terminal status. That single wake is the only trigger for the roll-up in step 5; four separate stages would fragment it and park three of the four reviews.
+  - **Do NOT pass `--stage`.** The four reviews are one parallel set, not a sequence. Each `[RP#]` run ends with a handoff line on this issue carrying your mention, and that line is what wakes the roll-up in step 5 — the platform's sub-issue-done wakeup is switched off in this workspace.
   - **Do NOT close this run issue at dispatch.** It stays `in_progress` until all four reviews are terminal. The nightly issue-hygiene autopilot propagates a terminal parent status onto open children: closing this issue early flips all four `[RP#]` sub-issues to `done` overnight and the review silently never happens. `[RP#]` is NOT on the hygiene exemption list — an open parent is the only thing protecting the sub-issues.
   - **The `[A<N>-<n>]` prefix on filed findings is still mandatory** — it is the hygiene autopilot's exemption marker, and a finding without it WILL be flipped to `done` the next night. `N` is now the numeric part of the `[RP#]` REVIEW SUB-ISSUE's identifier (not this run issue's), and `n` restarts at 1 within each repo. Each repo review is its own run, so a counter continuing across repos is no longer possible.
   - A repo review that fails no longer costs the other three — each is a separate task. Report the failure in the roll-up anyway. If a sub-issue's run dies, the hourly stuck-run recovery autopilot revives it; do not build your own retry.
@@ -46,7 +46,7 @@ Each month, fan the architecture review out into ONE review sub-issue per Monxa 
    - file at most 10 enhancement issues, highest severity first, **as children of that `[RP#]` sub-issue** (`--parent <that-sub-issue-id>`) into `mx-main` at `backlog`, `--assignee-id <owner-user_id>` (the workspace owner resolved at runtime, per Audience — never `--assignee`, name matching is fuzzy, and never a hardcoded UUID), each titled `[A<sub-issue-number>-<n>] [<RULE-ID>] <what and where>`, with `arch_finding`, `arch_severity` and `arch_repo` metadata set. Everything above the cap goes in the report body only;
    - add architecture tests for mechanically-checkable rules (Tier 1 clean / Tier 2 baseline allow-list) and open ONE test-only PR against `dev` with both `--head` and `--base` explicit; never modify production code; build and tests green locally before pushing; leave `TEST_DB_PROVIDER` unset;
    - post the per-repo report on that sub-issue and set THAT SUB-ISSUE to `done` (never `in_review`);
-   - do not touch this run issue and do not review any other repo.
+   - then post ONE handoff line on this run issue: `<RP key> done — report on <RP key>`, ending with arch-reviewer's mention link, built at run time from `multica agent list --output json` (describe it in prose in the description file — a pasted link there is itself a wake); that line wakes the roll-up. Touch this run issue with nothing else and do not review any other repo.
 
 3. **Create the four review sub-issues**, one `multica issue create` each, in `RP` order:
    ```
@@ -69,7 +69,7 @@ Each month, fan the architecture review out into ONE review sub-issue per Monxa 
 
 4. **Publish the index and stop.** Set metadata `arch_dispatch` on this issue to the four sub-issue identifiers, comma-separated (`multica issue metadata set <this-issue-id> --key arch_dispatch --value "MXW-xxx,MXW-xxx,MXW-xxx,MXW-xxx"`), then post ONE comment listing `RP number | repo | sub-issue link | status`. End the run here. Do not review code, do not wait for the sub-issues, and do NOT set this issue to `done`.
 
-5. **Roll up — LATER, on the stage-complete wake.** When the server wakes you on this issue with the "stage complete" comment (all four sub-issues terminal), read each sub-issue and the children it filed, then post ONE consolidated report:
+5. **Roll up — LATER, on a handoff wake.** Each `[RP#]` run's handoff line on this issue wakes you. Confirm with `multica issue children <this-issue-id> --output json` that every `[RP#]` is `done`/`cancelled`; while any is still open, end the run with no comment — the last handoff line wakes you again. When all four are terminal, read each sub-issue and the children it filed, then post ONE consolidated report:
    - per-repo scope counts and findings by severity;
    - issues filed, with links and the `[A<N>-<n>]` prefix range each repo consumed, so a gap or duplicate is visible at a glance;
    - findings deferred above the cap, PR links, tests added;

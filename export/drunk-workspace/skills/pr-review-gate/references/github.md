@@ -29,7 +29,19 @@ gh pr checks $PR -R $R > .pr-review/$PR/checks.txt || true
 
 Gate-relevant fields: `isDraft` (draft ⇒ never approve), `baseRefName` (must be `dev`), `author.login` vs `$SELF` (self-authored ⇒ votes impossible), `reviewDecision` (already `APPROVED` by a human ⇒ comment only, never duplicate votes).
 
-**Coverage on changed lines:** if CI publishes a coverage artifact (Cobertura/lcov), download it (`gh run download -R $R --name coverage`) and intersect with `files.txt`. Otherwise use the coverage numbers dev-backend measured and reported per touched class on the cycle's Build sub-task (its done gates at >=80% per touched class before the PR stage — cite that comment in your report). Otherwise, if the repo's test suite runs cheaply, run it once with coverage from the checkout (read-only; do not commit anything). Else mark coverage **unknown** — that blocks auto-approve (APPROVAL DEFERRED) but does not force REWORK. A config/docs-only diff has no coverable lines — the precondition is satisfied vacuously; say so in the report.
+**Coverage on changed lines:** if CI publishes a coverage artifact (Cobertura/lcov), download it (`gh run download -R $R --name coverage`) and intersect with `files.txt`. Otherwise use the coverage numbers dev-backend measured and reported per touched class on the cycle's Build sub-task (its done gates at >=80% per touched class before the PR stage — cite that comment in your report). Otherwise, if the repo's test suite runs cheaply, run it once with coverage from the checkout (read-only; do not commit anything). Else mark coverage **unknown** — state it in the report; it neither caps the score nor blocks the merge. A config/docs-only diff has no coverable lines; say so in the report.
+
+## CI — wait, re-run, attribute
+
+```bash
+gh pr checks $PR -R $R --json name,state,link      # poll every ~2 min, foreground, max 30 min total
+RUN=$(gh run list -R $R --branch <feature-branch> --json databaseId,conclusion -q '[.[]|select(.conclusion=="failure")][0].databaseId')
+gh run rerun $RUN -R $R --failed                    # ONE re-run of the failed jobs, then poll again
+gh run list -R $R --branch dev --workflow "<workflow>" --limit 1 --json conclusion,headSha   # same check red on dev?
+gh run view $RUN -R $R --log-failed | tail -60      # which project/test failed, or an infra error
+```
+
+Quote the evidence you used in the report. No evidence that the PR did not cause a red check means it did.
 
 ## Phase 4 — Actions
 
@@ -39,15 +51,18 @@ Report comment (all verdicts):
 gh pr comment $PR -R $R --body-file .pr-review/$PR/report.md
 ```
 
-APPROVED (only when every auto-merge precondition passes):
+APPROVED (score ≥ bar, zero `blocking`):
 
 ```bash
+# only when a release-review trigger applies (SKILL.md, Release-review label):
+gh label create release-review -R $R --color B60205 --description "Owner reviews the dev→main release that ships this PR" --force
+gh pr edit $PR -R $R --add-label release-review
 gh pr review $PR -R $R --approve --body "Automated review gate: score {SCORE}/10. Full report in the PR comments."   # best-effort: skipped when self-authored
 gh pr merge $PR -R $R --merge
 gh pr view $PR -R $R --json state -q .state   # MUST print MERGED before reporting
 ```
 
-If `gh pr merge` fails (branch protection, missing permission, late conflict): do NOT retry with `--admin` or enable auto-merge — take the manual-handoff path in `references/multica-flow.md` and quote the exact error.
+If `gh pr merge` fails (draft, late conflict, branch protection, missing permission): do NOT retry with `--admin` or enable auto-merge — take the MERGE_FAILED path in `references/multica-flow.md` (to dev-leader) and quote the exact error.
 
 REWORK:
 
@@ -59,6 +74,6 @@ gh pr review $PR -R $R --request-changes --body "Automated review gate: score {S
 
 ## Hard limits
 
-- The ONLY permitted merge is `gh pr merge` of the PR you scored APPROVED in this run with all preconditions passing — never any other PR, never `--admin`, never auto-merge, never edit the PR base/branch.
+- The ONLY permitted merge is `gh pr merge` of the PR you scored APPROVED in this run, or the ESCALATED or design PR whose owner chose option A — never any other PR, never `--admin`, never auto-merge, never edit the PR base/branch. The only other GitHub writes are report comments, votes and the `release-review` label.
 - Never create GitHub issues — findings go to Multica sub-issues only.
 - Never print tokens; if auth fails, stop and report per the blocked path in `references/multica-flow.md`.

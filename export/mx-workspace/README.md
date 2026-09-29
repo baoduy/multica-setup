@@ -47,8 +47,8 @@ without jargon. 🦊 the "foreman" always knows which step you're on.*
   YOUR IDEA ──▶ "an app that studies reels and remixes them"
      │
      ▼
-  ┌──────────────────────┐  asks one question at a time,   ──▶ the ticket SPEC
-  │ 1. THE INTERVIEW     │  recommends an answer each           (5 sections)
+  ┌──────────────────────┐  asks numbered questions,       ──▶ the ticket SPEC
+  │ 1. THE INTERVIEW     │  each with a guessed answer          (5 sections)
   │    (product-owner)   │
   └──────────────────────┘
      │
@@ -99,7 +99,7 @@ without jargon. 🦊 the "foreman" always knows which step you're on.*
 
 **Legend** — 👤 human · 🦊 product-owner · 🦉 spec-reviewer · 🐺 dev-leader · 🔨 dev-backend · 🐳 release-manager · 🦅 pr-reviewer · 🐝 qc-leader · 🐜 qc-tester · 🐞 qc-runner
 
-**Trigger mechanics** — assignment at `todo` starts the assignee · `backlog→todo` promotion starts the assignee · child `done` fires the stage barrier that wakes the parent's owner · agent mention triggers a run (NOT deduped — one mention, one run, even when the target is already running) · member (human) mention notifies only. A stage barrier re-fires on every re-entry into `done`, so members never flip their own sub-task out of `done`; the LEADER re-triggers fix work by flipping the sub-task `in_progress --no-start` (adding the blocked gate's key to `Retrigger on done`, comma-separated when there are several) and then posting the ONE mention — the re-fired barrier is the expected "fix is back" signal. Every mention link in a posted comment is a wake, quoted or not. Members write only on their own ticket and mention only their leader.
+**Trigger mechanics** — assignment at `todo` starts the assignee · `backlog→todo` promotion starts the assignee · a child's handoff line on its parent wakes the parent's owner (an agent's plain comment on a squad-assigned ticket wakes that squad's leader; stage barriers are switched off) · agent mention triggers a run (NOT deduped — one mention, one run, even when the target is already running) · member (human) mention notifies only. Members never flip their own sub-task out of `done`; the LEADER re-triggers fix work by flipping the sub-task `in_progress --no-start` (adding the blocked gate's key to `Retrigger on done`, comma-separated when there are several) and then posting the ONE mention — the member's next `done` and handoff line are the expected "fix is back" signal. Every mention link in a posted comment is a wake, quoted or not. Members write only on their own ticket plus their handoff line, and mention nobody.
 
 ---
 
@@ -194,7 +194,7 @@ on code, always.** SANDBOX is the last environment it reaches (production is `pr
   │                clarification gate ⟲ → ZERO open questions · delivery scope (judged, ask if unsure)
   │                → ship_required + bdd_required metadata
   │
-  ├── ②  SPEC      write the 11-section business spec into the main-ticket DESCRIPTION
+  ├── ②  SPEC      write the 7-section business spec into the main-ticket DESCRIPTION
   │
   ├── ③  GATE      [S#] Spec review → 🦉
   │                ✅ APPROVED (≥ 9.0) → ④   ⟲ REWORK (max 5) → revise + re-arm
@@ -242,14 +242,14 @@ web-hook-deliverer). **No devops in this squad** — pipeline/helm work is never
 ```
 [P#-1] Implementation — cycle parent on mx-code · in_progress until the gate passes
   │   stage 1 is created `todo`; every later stage is `backlog`, promoted by 🐺 only when the
-  │   previous barrier fires AND its deliverable verifies (the self-management contract)
+  │   previous stage is done AND its deliverable verifies (the self-management contract)
   │
   ├── ⚙      BRANCH   🐺   leader cuts the feature branch inline from latest `dev` (no sub-task, `leader-gitops`)
   ├── D-1  BUILD    🔨   branch gate (`ls-remote`) first · implement to spec · commit + push
   ├── D-2  VERIFY   🧪   full suite green · zero errors · coverage > 80% on touched classes  ◀─┐
   ├── ⚙      PR       🐺   leader opens the ONE PR inline · head = feature branch · base = `dev` (no sub-task, `leader-gitops`) │
   └── D-3  REVIEW   🦅   PR-state guard, then score 1–10                                       │
-          ├── ✅ APPROVED → 🦅 merges into `dev` → barrier wakes 🐺 (verifies merge + score)    │
+          ├── ✅ APPROVED → 🦅 merges into `dev` → handoff wakes 🐺 (verifies merge + score)    │
           └── ⟲ REWORK / 🧪 red → ONE consolidated Fix: → 🔨, then ALWAYS re-arm D-2 first ────┘
                                    (review fix = unverified code; re-verify before re-review)
           ⛔ caps: 2 failed rounds on the same root cause → escalate (phase → 🦊; root → 👤)
@@ -294,7 +294,7 @@ calls against the deployed SANDBOX — and deliver each cycle as **ONE merged PR
       │                        (selection VISIBLE in the report — narrow run ≠ "suite green")        │
       ├── ⚙      PR         🐝   leader opens the ONE PR inline · head = feature branch · base = `dev` (no sub-task, `leader-gitops`) │
       └── T-3  REVIEW     🦅   score 1–10                                                             │
-              ├── ✅ APPROVED → 🦅 merges into `dev` → barrier wakes 🐝                                │
+              ├── ✅ APPROVED → 🦅 merges into `dev` → handoff wakes 🐝                                │
               └── ⟲ REWORK / 🐞 test-code red → ONE Fix: → 🐜, then ALWAYS re-arm T-2 first ──────────┘
               ⛔ caps: 2 failed rounds same root cause → escalate
 
@@ -343,19 +343,21 @@ big picture.*
   ├── ①  INTAKE & SPEC — 🦊 product-owner
   │   ├── start     👤 files the main ticket   mx-main · assignee 🦊 · todo
   │   ├── research  checkout dev · CodeGraph first · cite claims as file:line
-  │   ├── clarify   ⟲ numbered questions + @👤 ─▶ STOP ─▶ repeat until zero
-  │   │             (never ask what the code already answers)
-  │   └── spec      5 sections into the ticket DESCRIPTION · no open questions
+  │   ├── clarify   ⟲ numbered questions + guesses + @👤 ─▶ STOP ─▶ repeat until zero
+  │   │             (never ask what the code already answers; only a written reply answers)
+  │   ├── preview   spec preview + @👤 ─▶ STOP ─▶ written approval
+  │   └── spec      7 sections into the ticket DESCRIPTION · no open questions
   │
   ├── ②  SPEC-REVIEW GATE — 🦉 spec-reviewer
   │   ├── start     🦊 opens [S#] Spec review   parent = main · 🦉 · todo
-  │   ├── score     verify every file:line, then weigh:  traceability 30%
-  │   │            · Gherkin 25% · business clarity 20% · completeness 15% · security 10%
+  │   ├── score     verify every file:line, then weigh:  traceability 25%
+  │   │            · Gherkin 20% · business clarity 20% · architecture fit 15%
+  │   │            · completeness 10% · security 10%
   │   ├── pass      ✅ ≥ 9.0 and no blockers ─▶ [S#] done · verdict + @🦊 ─▶ ③
   │   ├── review    ◔ 8.0–8.9 or a trigger ─▶ REVIEW REQUESTED — 👤 holds [S#]
   │   ├── rework    ⟲ < 8.0 or any blocker ─▶ findings + @🦊 ─▶ 🦊 revises,
   │   │             re-arms [S#] ─▶ full re-review               rounds 1–5
-  │   └── cap       ⛔ round > 5 ─▶ 👤 requester · their done-flip releases it
+  │   └── cap       ⛔ round > 5 ─▶ 👤 requester · their @-reply releases it
   │
   ├── ③  SPLIT INTO PHASES — 🦊 product-owner · Workflow C
   │   ├── start     [S#] done wakes 🦊 · FYIs 👤 with the score
@@ -379,19 +381,19 @@ big picture.*
   │   │   ├── ⟲ AT rejected / wrong ─▶ re-arm [D#-1] ─▶ 🔨 (never edited in build)
   │   │   └── ⟲ [D#-3] rework    ─▶ ONE Fix ─▶ 🔨   ⛔ 3 rounds ─▶ 👤 owner
   │   ├── done      ✅ 🦅 merges into dev · leftovers ─▶ ONE follow-ups ─▶ 🦊
-  │   └── ═══ barrier · wakes 🦊 — verifies the merged PR + review score ═══
+  │   └── ═══ handoff · wakes 🦊 — verifies the merged PR + review score ═══
   │
   ├── ⑤  RELEASE — 🐳 release-manager
   │   ├── start     🦊 promotes [P#-2a] ─▶ todo + comment (PR link, score)
   │   ├── release   🐳 opens ONE dev→main PR, merges it (automated, no human)
   │   │             CI then builds the image on `main` (the SANDBOX line)
-  │   └── ═══ barrier · wakes 🦊 — promotes [P#-2b] ═══
+  │   └── ═══ handoff · wakes 🦊 — promotes [P#-2b] ═══
   │
   ├── ⑥  DEPLOY — 👤 requester
   │   ├── start     🦊 promotes [P#-2b] ─▶ todo + comment (release PR link)
   │   ├── deploy    👤 argoCD-deploys main ─▶ SANDBOX · flips [P#-2b] done
   │   │             the one remaining hands-on human step
-  │   └── ═══ barrier · wakes 🦊 — refreshes [P#-3] with PR + deploy facts ═══
+  │   └── ═══ handoff · wakes 🦊 — refreshes [P#-3] with PR + deploy facts ═══
   │
   ├── ⑦  QC CYCLE — 🐝 qc-leader
   │   ├── start     [P#-3] todo · sub-issues in mx-qc-board · wake checklist
@@ -405,7 +407,7 @@ big picture.*
   │   │   └── [T#-1] run    🐞   the suites against SANDBOX · no branch, no PR
   │   ├── defects   🐝 files ONE consolidated, deduped bug ─▶ 🦊 (todo)
   │   ├── done      consolidated test report on [P#-3] ─▶ done
-  │   └── ═══ barrier · wakes 🦊 — verifies report + merged QC PR ═══
+  │   └── ═══ handoff · wakes 🦊 — verifies report + merged QC PR ═══
   │
   └── ⑧  CLOSE — 🦊 product-owner
       ├── done      main ticket ─▶ done · summary: spec ─▶ release ─▶ deploy ─▶ QC
@@ -520,8 +522,8 @@ agent does it.
 
 Four agents run **outside** the feature/bug pipeline (§1–§2): 🏛️ arch-reviewer, 🧹
 issue-janitor, 🌙 prd-release and 🐙 devops. Each does its whole job alone, belongs to no
-squad, and reports by **status only** (`done` on success, `blocked` when stuck — never
-`in_review`, which fires no trigger). What differs is the trigger: arch-reviewer and
+squad, and reports by status (`done` on success, `blocked` when stuck — never
+`in_review`, which fires no trigger), plus a handoff line on the parent when its ticket has one. What differs is the trigger: arch-reviewer and
 issue-janitor fire on a **schedule** (a Multica autopilot); prd-release and devops fire on
 **ticket assignment**. All four appear in §5 (skills) and §6 (models) like every other agent.
 
@@ -699,10 +701,10 @@ own judgement. Loads only `sdlc-gitflow`. Runs in two turns.
 
 ### 3.4 · 🐙 devops — CI/CD pipeline setup
 
-Sets up and maintains the CI/CD pipelines for the workspace repos — and nothing else. Works
-**only on the `dev` branch** and refuses anything that isn't CI/CD. Unlike the pipeline's
-git agents it opens no PRs: it commits pipeline config straight to `dev`.
-Skills: `brainstorming` · `sdlc-gitflow`.
+Keeps the CI/CD pipelines, helm chart configuration and docker-compose files correct — and
+nothing else. App-repo changes land via the squad's feature branch or one gated
+`chore/<issue-key>` PR to `dev`, never a direct commit; every chart change is a PR a human merges.
+Skills: `compose-delivery` · `helm-chart-delivery` · `sdlc-gitflow` (full list in §5).
 
 #### At a glance
 
@@ -748,7 +750,7 @@ Skills: `brainstorming` · `sdlc-gitflow`.
 | #   | Touch point                              | State         | Detail                                                                                                                    |
 | --- | ---------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | 1   | File the request                         | 👤 always     | the request itself — irreducible                                                                                          |
-| 2   | Business clarifications                  | 👤 always     | rules/scope the code cannot answer; agents forbidden from asking what the repo answers                                    |
+| 2   | Business clarifications                  | 👤 always     | rules/scope the code cannot answer, then the spec preview approved in writing; agents forbidden from asking what the repo answers |
 | 3   | Spec approval                            | 🤖 automated  | 🦉 gate, APPROVED at ≥9.0 with no blockers (8.0–8.9 → requester review)                                                                                |
 | 4   | Bug-fix approval                         | 🤖 automated  | ≥90% confidence → auto-delegate (FYI only, reply to halt)                                                                 |
 | 5   | SANDBOX deploy (P#-2b, DevOps)           | 👤 deliberate | requester deploys `main` → SANDBOX; the `dev`→`main` release (P#-2a) is automated                                         |
@@ -848,16 +850,16 @@ authoritative source, superseding any prose description of "who loads what".
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 🦊 product-owner (8)   | `blocker-report` · `bug-report` · `codegraph` · `interview-me` · `multica-brainstorming` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-po-orchestration` · `sdlc-spec-template`         |
 | 🦉 spec-reviewer (6)   | `blocker-report` · `codegraph` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-member-protocol` · `sdlc-spec-template` · `spec-review-gate`                                         |
-| 🐺 dev-leader (8)      | `blocker-report` · `codegraph` · `leader-gitops` · `multica-brainstorming` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-leader-playbook` · `sdlc-gitflow` · `sdlc-impl-brief` |
+| 🐺 dev-leader (7)      | `blocker-report` · `codegraph` · `leader-gitops` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-leader-playbook` · `sdlc-gitflow` · `sdlc-impl-brief` |
 | 🔨 dev-backend (8)     | `blocker-report` · `codegraph` · `dknet-ddd-conventions` · `dotnet10-efcore10-standards` · `sdlc-flow-squad-member-protocol` · `sdlc-gitflow` · `test-driven-development` · `testing-standards` |
 | 🐳 release-manager (3) | `blocker-report` · `sdlc-flow-squad-member-protocol` · `sdlc-gitflow`                                                                                                  |
 | 🦅 pr-reviewer (6)     | `blocker-report` · `codegraph` · `dknet-ddd-conventions` · `pr-review-gate` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-member-protocol`                                        |
-| 🐝 qc-leader (9)       | `bdd-report` · `blocker-report` · `bug-report` · `codegraph` · `leader-gitops` · `multica-brainstorming` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-leader-playbook` · `sdlc-impl-brief` |
+| 🐝 qc-leader (8)       | `bdd-report` · `blocker-report` · `bug-report` · `codegraph` · `leader-gitops` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-leader-playbook` · `sdlc-impl-brief` |
 | 🐜 qc-tester (4)       | `bdd-report` · `blocker-report` · `codegraph` · `sdlc-flow-squad-member-protocol`                                                                   |
 | 🐞 qc-runner (4)       | `bdd-report` · `blocker-report` · `codegraph` · `sdlc-flow-squad-member-protocol` |
 | 🔍 bdd-reviewer (5)    | `bdd-report` · `bdd-review-sweep` · `blocker-report` · `codegraph` · `testing-standards` |
 | 🤝 Mika (0)            | — (chief-of-staff assistant; no workspace skills bound) |
-| 🐙 devops (8)          | `blocker-report` · `codegraph` · `compose-delivery` · `helm-chart-delivery` · `multica-brainstorming` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-member-protocol` · `sdlc-gitflow`                |
+| 🐙 devops (7)          | `blocker-report` · `codegraph` · `compose-delivery` · `helm-chart-delivery` · `sdlc-flow-delivery-pipeline` · `sdlc-flow-squad-member-protocol` · `sdlc-gitflow`                |
 | 🐲 claude_ultra (4)    | `autopilot-spec` · `blocker-report` · `interview-me` · `multica-brainstorming`                                                                                         |
 | 🐼 default (4)         | `autopilot-spec` · `blocker-report` · `interview-me` · `multica-brainstorming`                                                                                         |
 | 🏛️ arch-reviewer (7)  | `architecture-review-sweep` · `blocker-report` · `bug-report` · `codegraph` · `dknet-ddd-conventions` · `dotnet10-efcore10-standards` · `sdlc-gitflow`                                 |
@@ -891,7 +893,7 @@ agent, was retired when the squad leaders took over its git-flow duties (see `CH
 | `sdlc-impl-brief`                 | the dev sub-task contract: nine-section implementation brief leaders write into coding sub-tasks                                         | 🐺 🐝                   |
 | `blocker-report`                  | the two fixed report shapes — completion (RESULT / EVIDENCE / LEFT OPEN) and blocker (`## BLOCKER` + `## OPTIONS`)                                                                         | all agents              |
 | `bug-report`                      | the standard 3-section body (Scope (Git Repo, Module/Classes) / Root cause / Suggested owner) for every separately-filed bug/defect issue | 🦊 🐝 🏛️               |
-| `sdlc-spec-template`              | the 11-section business-spec contract the `[S#]` gate scores against                                                                     | 🦊 🦉                   |
+| `sdlc-spec-template`              | the 7-section business-spec contract the `[S#]` gate scores against (§3a contract, §3b architecture impact)                              | 🦊 🦉                   |
 | `spec-review-gate`                | spec rubric, verdicts, 5-round cap, handoff                                                                                              | 🦉                      |
 | `pr-review-gate`                  | PR rubric, merge gate, 3-round cap, handoff, follow-ups filing                                                                           | 🦅                      |
 | `bdd-report`                      | BDD test-report format on qc-team sub-issues                                                                                             | 🐝 🐜 🐞 🔍             |
@@ -903,7 +905,7 @@ agent, was retired when the squad leaders took over its git-flow duties (see `CH
 
 | Skill                   | Governs                                                               | Bound to                   |
 | ----------------------- | --------------------------------------------------------------------- | -------------------------- |
-| `multica-brainstorming` | Multica-native intent/requirements/design exploration before building | 🦊 🐲 🐼 🐙 🐺 🐝 |
+| `multica-brainstorming` | Multica-native requester dialogue — numbered questions with guesses, spec preview approved in writing | 🦊 🐲 🐼 |
 | `autopilot-spec`        | Goal → Context → Steps structure for autopilot runbooks               | 🐲 🐼                      |
 
 
@@ -912,7 +914,7 @@ agent, was retired when the squad leaders took over its git-flow duties (see `CH
 
 | Skill          | Governs                                  | Bound to |
 | -------------- | ---------------------------------------- | -------- |
-| `interview-me` | one-question-at-a-time intent extraction | 🦊 🐲 🐼 |
+| `interview-me` | intent extraction — numbered questions, each with a guess | 🦊 🐲 🐼 |
 
 
 **D · Implementation &amp; delivery**
@@ -1048,7 +1050,7 @@ picture wrong.
 | **agent**                 | An AI worker with one specific job and a nickname (see the cast in Part 1).                                                               |
 | **argoCD**                | The tool that pushes approved code out to a running environment. "argoCD-deploy to SANDBOX" = make the new version live on the test site. |
 | **backlog / todo / done** | The status of a ticket. `backlog` = queued but not started, `todo` = ready to start (this is what wakes an agent), `done` = finished.     |
-| **barrier**               | An automatic checkpoint: when a step finishes, it "fires the barrier" that wakes whoever was waiting on it.                               |
+| **handoff line**          | The one-line comment a finished child posts on its parent; it wakes the parent's owner. Stage barriers are switched off on this server.  |
 | **BDD / Gherkin**         | A way of writing tests as plain-language scenarios ("Given… When… Then…") that non-programmers can read. Gherkin is the exact format.     |
 | **branch**                | A separate copy of the code to work on safely without disturbing the main copy. See `feature`, `dev`, `main`.                             |
 | **CI/CD**                 | Automation that builds, tests, and ships code without a human running the steps by hand.                                                  |
@@ -1062,7 +1064,7 @@ picture wrong.
 | **PR (pull request)**     | A proposal to merge one branch's changes into another, reviewed before it's accepted.                                                     |
 | **PRD / production**      | The real, customer-facing environment. The last stop, handled by 🌙 prd-release.                                                          |
 | **SANDBOX**               | The internal **test environment** where a change goes live for the team to try before production.                                         |
-| **spec**                  | The written plan for a request — 5 sections describing what to build and why, scored before any building starts.                         |
+| **spec**                  | The written plan for a request — 7 sections describing what to build and why, scored before any building starts.                         |
 | **squad / team**          | A group of agents with a leader that delivers one kind of work (product, dev, or QC).                                                     |
 | **ticket / issue**        | A single unit of tracked work on a board (a request, a bug, a sub-task).                                                                  |
 

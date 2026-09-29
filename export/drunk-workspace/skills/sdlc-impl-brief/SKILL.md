@@ -8,6 +8,10 @@ This is not the spec. The business spec lives on the root or phase ticket (`sdlc
 
 **The spec's §3a contract is binding input.** Every field and endpoint §3a declares has a Change set row covering it. A field or endpoint you need beyond §3a is your design call and gets its own row; one that changes what §3a agreed — a different type, length, verb or path — goes back to product-owner on the ticket instead of landing quietly in the brief.
 
+**The spec's §3b placement is binding too.** Put the change in the repo and bounded context §3b names as Owner, and add only the dependencies it declares, in the direction it declares. A design that needs a different owner, a new dependency or a public-surface break §3b did not declare goes back to product-owner on the ticket — pr-reviewer blocks a diff that contradicts §3b.
+
+**The repo's approved service design binds the same way.** When `dev` holds `docs/architect/`, read it before the brief: aggregates, entities, events, endpoints and dependencies follow its domain and integration files, and every non-goal stays out. A brief that needs the design changed goes back to product-owner on the ticket — the design changes only through a Workflow F ticket.
+
 ## Writing rules (agent reader)
 
 1. Tables over prose. One row per unit of work. One line per cell.
@@ -20,18 +24,19 @@ This is not the spec. The business spec lives on the root or phase ticket (`sdlc
 
 ## Template
 
-Copy from `# <KEY>` down and write it with `--description-file`. The same brief is the description of both the `Acceptance tests:` and the `Build:` sub-task for a surface; only the `Mode` row differs.
+Copy from `# <KEY>` down and write it with `--description-file`. The same brief is the description of both the `Acceptance tests:` and the `Build:` sub-task for a surface; only the `Mode` row differs. A UI presentation surface has only the Build sub-task: `Mode: build-ui`, `at_sha` row `n/a — UI presentation`, and §7 still names the spec's scenarios for the later UI test pass.
 
 ```markdown
 # <KEY> — <imperative title>
 
 | | |
 |---|---|
-| **Mode** | `acceptance-tests` \| `build` |
+| **Mode** | `acceptance-tests` \| `build` \| `build-ui` (UI presentation, Policy 02 §1a: no tests) |
 | **Repo · branch · base** | `<url.git>` → `feature/<key>-<slug>` @ `<base sha>` |
 | **Spec** | <phase or root key> §5, revision <n> (frozen) |
 | **at_sha · AT paths** | — until approved · `<tests/…/X.feature>, <tests/…/Steps.cs>` |
 | **Projects in scope** | `<src/A>, <src/B>, <tests/C>` |
+| **Standards** | `<stack skill(s)>` · at risk: `<3–5 rule-ids, e.g. DKNET-LAYER-001, CLEAN-SRP-001>` |
 
 ## 1. Goal
 <one sentence: what works after this change that did not before>
@@ -87,7 +92,7 @@ Ordered; each row compiles on the previous. Op ∈ KEEP · MODIFY · EXTEND · N
 ## Leader notes
 
 - **Three failure modes this shape prevents:** rebuilding what exists (§2 + KEEP rows), changing more than asked (§4 + `git diff --stat`), breaking working behaviour (`@existing` baseline).
-- **First comment on each sub-task** carries the assignee's mention and one line: `Mode: acceptance-tests — write the tests per test-driven-development, then done.` or `Mode: build — implement per test-driven-development against at_sha <sha>, then done.` The procedure itself is in that skill; do not restate it.
+- **First comment on each sub-task** carries the assignee's mention and one line: `Mode: acceptance-tests — write the tests per test-driven-development, then done.` or `Mode: build — implement per test-driven-development against at_sha <sha>, then done.` or `Mode: build-ui — implement per test-driven-development (UI presentation: no tests; skip and list what you break), then done.` The procedure itself is in that skill; do not restate it.
 - **Approving the acceptance tests:** read the pushed test files against the spec (every scenario present, none softened, literal expected values, readable), then fill the `at_sha · AT paths` header row of the Build description and add one changelog line. Never a new section.
 - **A scope change** from product-owner becomes new §3 rows (and §7 names) in a new brief for the new stage, plus a changelog line on the parent's plan comment. Never re-arm a finished Acceptance-tests stage for spec drift.
 - **Gate sub-tasks** (Review) get a pointer table, not a brief: repo · branch · base · `at_sha` + AT paths · Build sub-task(s) for rework · root ticket, plus a cycle-specific emphasis section of at most 5 bullets.

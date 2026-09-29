@@ -42,6 +42,6 @@ Weekly issue hygiene (Sunday and Monday 09:00 SGT): propagate a terminal parent 
    - Rule A: every status change made (`identifier | title | old -> new`)
    - Rule B: count and full list of issues DELETED, in order, with identifier and title — deletion is permanent, so this is the only surviving record of them; it is NEVER summarized to a count alone
    - Rule C: every child re-staged (`identifier | title | -> stage N`)
-   - **Actionable findings even though nothing was changed** — these are alerts, not noise: missed barriers (`done` + unstaged, with parent), orphaned parents, and children left unstaged because the stage was ambiguous (with the reason)
+   - **Actionable findings even though nothing was changed** — these are alerts, not noise: unstaged finished children (`done` + unstaged, with parent), orphaned parents, and children left unstaged because the stage was ambiguous (with the reason)
    - any errors, aborts, guard trips, or steps you could not complete — state these explicitly rather than omitting them; a partial sweep is reported as partial, never as clean, and an aborted run DOES report its snapshot totals (they are the evidence)  
      A run that changed nothing and found nothing actionable posts a single line — `No changes (N issues scanned).` — and nothing else.

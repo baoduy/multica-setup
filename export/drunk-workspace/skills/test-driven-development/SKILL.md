@@ -23,7 +23,7 @@ Your sub-task description is an `sdlc-impl-brief`. Its header row **Mode** tells
 
 1. **Author** (`Mode: acceptance-tests`, fresh run, no implementation in context). Read the §7 scenario names, fetch their Gherkin from the Spec ticket, and read §5 and §6. One executable AT per scenario: the feature file is the spec's Gherkin verbatim for the §7 scenarios (library repos without a BDD harness: one public-API test per scenario, named after it). Step definitions drive the application through its inbound port; outbound ports are replaced by hand-written in-memory fakes (see Ports-and-adapters below). **Expected values are literals copied from the spec — never computed by calling production code.** The only production code allowed is the signatures §5 names, with bodies that `throw new NotImplementedException()` (or the stack's equivalent), so the suite compiles. Run it: every `@existing` scenario green, every `@new` scenario red with a reason you can name (not-implemented, assertion), one row per scenario — a `@new` scenario that is already green means the scenario is wrong or the brief's §2 is. Commit tests + stubs, push. Report the RED commit SHA, the AT file paths, and the per-scenario table (`scenario | status | failure reason`), then `done`. Do not implement anything.
 2. **Approve** (leader, no execution). Reads the ATs against the spec: every scenario present, none softened, expected values literal and traceable to the spec, business-readable. Pins `at_sha` and the AT paths into the Build sub-task. A rejected AT set goes back to the author with the scenario named — never to the Build run.
-3. **Implement** (`Mode: build`, fresh run; `at_sha` and AT paths are in the brief header). The approved ATs are **frozen**: at done, `git diff <at_sha>..HEAD -- <AT paths>` shows no modified or deleted scenario. You may ADD tests — list every addition in the report. An approved AT that is wrong, or unreachable without changing §4 code → `blocked` with the leader's mention. Never edit, skip, tag out, or weaken one to reach green. Implement until the ATs are green, with whatever inner loop you like.
+3. **Implement** (`Mode: build`, fresh run; `at_sha` and AT paths are in the brief header). The approved ATs are **frozen**: at done, `git diff <at_sha>..HEAD -- <AT paths>` shows no modified or deleted scenario. You may ADD tests — list every addition in the report. An approved AT that is wrong, or unreachable without changing §4 code → `blocked` with your handoff line (Workspace Context). Never edit, skip, tag out, or weaken one to reach green. Implement until the ATs are green, with whatever inner loop you like.
 4. **Verify by outcome.** ATs green, full suite green (zero errors, zero warnings, nothing skipped), coverage per touched class ≥80%, mutation report on touched classes, AT-drift check empty. These artefacts are the evidence; a sentence saying you did TDD is not.
 
 ## Inner loop — programmer tests (yours)
@@ -84,6 +84,15 @@ RED is not just the author stage — it is a property every finished test must s
 - **Every edge case the brief names anywhere — §3 row, contract, rules, §9, a prose note — needs a fact or an explicit "no fact, reason".**
 - **Never mutate ambient state in a test** (`CultureInfo.CurrentCulture`, environment variables, static config). Scope and restore it, or pin it on a dedicated thread.
 
+## UI presentation Build (`Mode: build-ui`)
+
+Policy 02 statement 1a: a change confined to a front-end app's screens, layouts, components, styling and copy ships without new tests. No Acceptance-tests stage comes before it and there is no `at_sha`. In this mode:
+
+- Write no test, no coverage figure and no mutation report — the outer and inner loops above do not run.
+- Run the app's build, typecheck, lint and every existing suite, unit and acceptance. Each test your change broke gets the runner's own skip (`test.skip`, `it.skip`) and a one-line note — `// skipped: <KEY> — UI presentation change; restored in the UI test pass` — never deleted, never rewritten to pass.
+- A §3 file outside the presentation surface (route handler, `lib/`, data access, auth, session, contract, middleware, config) is mis-routed: `blocked` to the leader.
+- Done when: build, typecheck and lint clean; every existing suite passes with the skips; every skipped test listed in the report (file · test name · the control it drove); every §3 row implemented and nothing outside §3 changed; pushed; report posted; sub-task `done`.
+
 ## Done when (standard list — the EVIDENCE rows of your completion report)
 
 - Build clean, no new warnings.
@@ -94,6 +103,7 @@ RED is not just the author stage — it is a property every finished test must s
 - `git diff <at_sha>..HEAD -- <AT paths>` empty; every added test listed.
 - Every §3 row implemented; nothing outside §3 changed (`git diff --stat`); every §4 constraint respected.
 - Clean `dotnet pack` / `npm pack`. No `TODO`, commented-out code or placeholder left.
+- Standards row: stack skill opened, rule-ids checked, reuse search per new public symbol, SRP and DRY measured (worker playbook check 8, Policy 01 statement 15).
 - Plus the brief's §8 extra checks.
 - Pushed to the cycle's feature branch (`HEAD` == `origin/<branch>`), completion report posted (`blocker-report` shape, DEVIATIONS listed), sub-task `done`.
 

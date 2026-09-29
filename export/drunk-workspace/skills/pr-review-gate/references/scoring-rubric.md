@@ -7,7 +7,7 @@
 | Correctness & logic | 25% | No logic defects; concurrency and error paths sound; idempotent where required | A defect producing wrong results or data loss in a realistic path |
 | Security | 20% | No findings; sensitive paths follow established patterns; no new attack surface | Any exploitable issue, secret in diff, or authz bypass |
 | Testing & coverage | 20% | Changed behavior fully covered incl. edge cases; coverage on changed lines ≥ threshold; tests assert behavior | New logic with no tests, or tests that assert nothing |
-| Maintainability & design | 15% | Fits existing architecture; no duplication; clear naming; small cohesive units | Copy-paste duplication, god-methods, leaky abstractions |
+| Architecture & design | 15% | Matches the spec's §3b placement; no new layering or boundary violation from the stack skill; no duplication; clear naming; small cohesive units | Contradicts §3b (wrong owner, reversed or cyclic dependency, undeclared public break), domain reaching into infrastructure, copy-paste duplication, god-methods |
 | Spec conformance | 10% | Diff does exactly what the cycle ticket spec / acceptance criteria describe; no scope creep | Solves a different problem, or large unrelated changes bundled in |
 | Style & conventions | 5% | Matches repo `.editorconfig`/conventions; analyzers clean | Fights the codebase's established style throughout |
 | AI-slop gate | 5% | No LLM anti-patterns | Pervasive redundant comments, defensive wrapping, dead code, reinvented BCL helpers |
@@ -43,28 +43,35 @@ Severity comes from what a finding DOES, not from whether this PR introduced it.
 | Approved acceptance test modified or deleted after `at_sha` (drift check non-empty) without a leader re-pin | 6.9 max (`blocking`; forces REWORK — the fix is to restore the scenario and make it pass, or take it to the leader) |
 | Any `@new` scenario red, skipped or tagged out at HEAD | 6.9 max (`blocking`) |
 | No mutation evidence on touched classes with new logic (neither tool report nor manual run stated) | 7.9 max |
-| CI failing | 6.9 max (coverage-ratchet exception below) |
+| CI failing, caused by this PR | 6.9 max (three exceptions below) |
 | Coverage on changed lines measured BELOW threshold (default 80%) | 7.9 max (forces REWORK: dev-backend's bar is measurable and fixable) |
-| Docs-only / comment-only / typo-fix PR with green CI | floor of 9.0 (fast-path; preconditions still apply) |
+| Docs-only / comment-only / typo-fix PR with green CI | floor of 9.0 (fast-path) |
 
 **Caps beat the floor.** The docs-only 9.0 floor applies only when no cap fired: a docs-only PR carrying a `blocking` finding is 6.9 max like any other.
 
-Coverage UNKNOWN (no artifact, tests not cheaply runnable) is NOT a cap — it fails the auto-approve precondition instead, so a ≥ 8.5 PR lands on APPROVAL DEFERRED and a human decides.
+Coverage UNKNOWN (no artifact, no per-class numbers on the Build sub-task, tests not cheaply runnable) is NOT a cap and does not block the merge — state `Coverage: unknown (<why>)` in the report.
 
-**Workflow-fix exception to the CI cap.** The `CI failing` cap does not fire when the PR changes the workflow file(s) that produce the red check (a Workflow D CI/CD PR whose purpose is to change what CI does). The red result is the behaviour under change; score the merit, state `CI: red by design (<check>)`, and let the auto-merge preconditions' workflow-fix exception decide the merge.
+**Workflow-fix exception to the CI cap.** The `CI failing` cap does not fire when the PR changes the workflow file(s) that produce the red check (a Workflow D CI/CD PR whose purpose is to change what CI does). The red result is the behaviour under change; score the merit, state `CI: red by design (<check>)`, and merge on score plus devops' `gh run` evidence on the branch.
 
-**Coverage-ratchet exception to the CI cap.** The `CI failing` cap does NOT fire when EVERY red check is a coverage-ratchet check (`codecov/patch`, `codecov/project` or equivalent), the diff's own coverage bar is met, and nothing else is red. Score the merit; merit ≥ bar ⇒ **APPROVAL DEFERRED** (a human decides), never REWORK, and **never increment `Gate round`**. A rework round must never be spent on a number no rework can reach: a small diff's patch percentage is fixed by the repo's ratchet config, a branch unreachable by construction cannot be covered, and a brief that instructs removing `[ExcludeFromCodeCoverage]` lowers project coverage by arithmetic. State the check, its target and the arithmetic in the report. If the ratchet config itself is the defect, that is an out-of-scope finding against the repo, not a finding against the PR — and a brief instruction that breaks CI by arithmetic is a brief defect, reported to the leader, not a deduction from the implementer. (DRK-1204: merit 9.9 scored 6.9, both rework rounds burnt, human merge — for one line C# cannot admit.)
+**Coverage-ratchet exception to the CI cap.** The `CI failing` cap does NOT fire when EVERY red check is a coverage-ratchet check (`codecov/patch`, `codecov/project` or equivalent), the diff's own coverage bar is met, and nothing else is red. Score the merit; merit ≥ bar ⇒ **APPROVED and merged**, never REWORK, and **never increment `Gate round`**. A rework round must never be spent on a number no rework can reach: a small diff's patch percentage is fixed by the repo's ratchet config, a branch unreachable by construction cannot be covered, and a brief that instructs removing `[ExcludeFromCodeCoverage]` lowers project coverage by arithmetic. State the check, its target and the arithmetic in the report. If the ratchet config itself is the defect, that is an out-of-scope finding against the repo, not a finding against the PR — and a brief instruction that breaks CI by arithmetic is a brief defect, reported to the leader, not a deduction from the implementer. (DRK-1204: merit 9.9 scored 6.9, both rework rounds burnt, human merge — for one line C# cannot admit.)
+
+**Not-caused-by-this-PR exception to the CI cap.** The `CI failing` cap does NOT fire when, after ONE re-run of the failed jobs, the gate can show the red was not caused by this PR: the same check is red on `dev`'s head, the failure sits in a project or test the diff does not touch and does not reach (CodeGraph), or it is an infrastructure error (runner, checkout, network, a cancelled run, a restore advisory on a package the diff does not change). Score the merit, state `CI: red, not caused by this PR (<check>, <evidence>)`, merge on score. No evidence means caused: the cap stays. Measured over 47 deferred PRs (2026-08 to 2026-09), about 8 were red for reasons the PR did not cause — flaky tests, infrastructure, an unrelated advisory.
+
+**UI presentation exception to the test caps** (Policy 02 statement 1a). Files that only render a front-end app — screens and layouts, components, styling, copy; never route handlers, data access, auth, session, contract code, middleware or build config — carry no test requirement. The `No tests`, `No mutation evidence` and `Coverage below threshold` caps do not fire on them, and they are left out of the Testing & coverage category, which checks the exception's own duties for them instead: every existing test the change broke is skipped with the runner's skip and a one-line note naming the ticket (never deleted, never rewritten to pass), and the Review description links dev-leader's follow-up issue naming the cycle's §5 scenarios and every skipped test. Each skipped test without its note, a deleted or rewritten test, and a missing follow-up issue is an `important` finding. A UI-presentation-only PR scores the category on those duties alone. The `CI failing` cap still applies — a skipped test is not a red one.
 
 ## Binary gate mapping (this workspace)
 
-There is no human-review middle band: **≥ 8.5 → APPROVED** (or APPROVAL DEFERRED when a precondition fails); **< 8.5 → REWORK**. The caps guarantee that anything ≥ 8.5 already has: no blocking findings, at most one open `important` finding, spec conformance intact, tests present, CI green, coverage ≥ threshold. Two or more `important` findings loop back to dev-team via the 8.4 cap — the weighted average alone would not catch them (one `important` in a 25% category only costs 0.5), which is exactly why the cap exists.
+There is no human-review middle band and no deferred verdict: **≥ 8.5 → APPROVED and merged** (a `design/<key>` PR: APPROVED and handed to the owner, merged on their reply A — Policy 04 statement 9a); **< 8.5 → REWORK** (then ESCALATED after 3 rounds). The caps guarantee that anything ≥ 8.5 already has: no blocking findings, at most one open `important` finding, spec conformance intact, tests present, CI green or a stated CI exception, coverage not measured below threshold. Two or more `important` findings loop back to dev-team via the 8.4 cap — the weighted average alone would not catch them (one `important` in a 25% category only costs 0.5), which is exactly why the cap exists.
 
 ## Calibration anchors
 
-- **9.5** — Small, focused, spec-linked change; tests included; zero findings above `nit`, and every in-scope `nit` already cleared by a polish round before merge (an open in-scope `nit` at merge time is not a 9.5, it is an unfinished cycle).
-- **8.5–9.4** — Correct, safe, covered; exactly one `important` finding (two would trigger the 8.4 cap).
-- **8.0** — Correct and safe, but 1–2 `important` maintainability/testing gaps → below the bar, REWORK with a short fix list.
-- **6.0** — At least one `blocking` issue OR untested new logic; needs rework before merge.
-- **3.0** — Security-relevant defect or fundamentally wrong approach.
+Worked from the weights above: one `important` costs 2 × weight (0.1–0.5 points), one `blocking` costs 4 × weight (0.2–1.0 points) before its cap.
+
+- **9.5–10** — Small, focused, spec-linked change; tests included; zero findings above `nit`, and every in-scope `nit` already cleared by a polish round before merge (an open in-scope `nit` at merge time is not a 9.5, it is an unfinished cycle).
+- **8.5–9.9** — Correct, safe, covered; exactly one `important` finding. Alone it scores 9.5–9.9; `nit`s can pull it lower, and below 8.5 it is REWORK.
+- **8.4** — Two or more `important` findings and no `blocking`: the cap sets the score. The arithmetic alone would give 9.0–9.8.
+- **6.9 / 6.5** — Any `blocking` finding, or CI failing because of this PR: 6.9. New logic with no tests: 6.5. The cap sets the score; one `blocking` alone would compute to 9.0–9.8.
+- **≤ 6.0** — Several categories collapsed, e.g. Correctness 2 (−2.0), Security 2 (−1.6), Testing 8 (−0.4) → 6.0.
+- **3.0** — A `blocking (critical)` security finding (the 3.0 cap), or a fundamentally wrong approach that leaves most categories near their floor.
 
 Report the final score to one decimal. Never inflate a score to reach a gate; when torn between two scores, pick the lower one and say why.

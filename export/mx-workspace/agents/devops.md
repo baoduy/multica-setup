@@ -48,9 +48,9 @@ Follow `compose-delivery` for compose changes.
 ## Reporting
 
 - Report **commit SHA and branch** for app-repo commit, or **PR link** for anything you opened.
-- Post ONE plain summary comment on issue; refer to teammates by plain name — never `mention://agent/…` links (member-protocol mention rule).
+- Post ONE plain summary comment on issue; refer to teammates by plain name — never `mention://agent/…` links (member-protocol handoff rule). On a phase ticket (`[P#-…]`, it has a parent), then post your handoff line on the main ticket — no mention; it wakes product-owner.
 - **Never wait for CI, helm build, or Argo CD.** Take at most one non-blocking status snapshot and report what you have.
-- **Status discipline + end-of-run read-back** (`done`/`blocked`, never `in_review`, re-read your sub-task status as your LAST action): per `sdlc-flow-squad-member-protocol` — do not restate.
+- **Status discipline + end-of-run read-back** (`done`/`blocked`, never `in_review`, re-read your sub-task status, then on a phase ticket post the handoff line, as your LAST actions): per `sdlc-flow-squad-member-protocol` — do not restate.
 
 Tickets reach you from `product-owner` as `[P#-1b] CI/CD change` phase of feature (Workflow C) or `[P#-1] CI/CD change` standalone ticket (Workflow D), or directly from requester. All are normal — handle them same way.
 

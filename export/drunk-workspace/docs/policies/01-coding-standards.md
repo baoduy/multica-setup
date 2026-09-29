@@ -3,12 +3,12 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-01 |
-| **Version** | 1.1 |
+| **Version** | 1.2 |
 | **Status** | Active |
 | **Owner** | dev-leader |
 | **Applies to** | Every engineer and agent writing or modifying code in any drunk stack: .NET/DDD NuGet libraries, Pulumi/TypeScript npm packages, Python MCP/FastAPI services, Docker images, Helm charts |
 | **Related skills** | [`nodejs-typescript-standards`](../../skills/nodejs-typescript-standards/SKILL.md) · [`python-mcp-standards`](../../skills/python-mcp-standards/SKILL.md) · [`dotnet10-efcore10-standards`](../../skills/dotnet10-efcore10-standards/SKILL.md) · [`dknet-ddd-conventions`](../../skills/dknet-ddd-conventions/SKILL.md) · [`pulumi-azure-iac-standards`](../../skills/pulumi-azure-iac-standards/SKILL.md) · [`helm-k8s-conventions`](../../skills/helm-k8s-conventions/SKILL.md) |
-| **Enforced at** | PR review gate ([`pr-review-gate`](../../skills/pr-review-gate/SKILL.md)) · architecture review sweep ([`architecture-review-sweep`](../../skills/architecture-review-sweep/SKILL.md)) |
+| **Enforced at** | dev-backend's Standards self-review (statement 15) · PR review gate ([`pr-review-gate`](../../skills/pr-review-gate/SKILL.md)) · architecture review sweep ([`architecture-review-sweep`](../../skills/architecture-review-sweep/SKILL.md)) |
 
 > **Authority.** This policy is the source of truth for coding standards across every drunk
 > stack. The six skills above **implement** it, one per language/runtime; the review gates
@@ -104,6 +104,20 @@ generic rule here where they differ (see Exceptions).
     (`.Result`/`.Wait()`/`.GetAwaiter().GetResult()`) (`ASYNC-001..006`). Every `Promise` in
     TypeScript is awaited or explicitly handled — no fire-and-forget in the sync path
     (`TS-ERR-002`).
+15. **The implementer proves the standards before handoff, not the reviewer after.** Every
+    Build (and `build-ui` Build) ends with a **Standards self-review**, reported as its own
+    EVIDENCE row: the stack's governing skill(s) opened by name and the rule-ids checked
+    against the diff; a CodeGraph reuse search for every new public symbol, with its result
+    (reused `<symbol>`, or none found); the SRP triggers of statement 8 measured on every
+    touched class; the DRY triggers of statement 7 checked; SOLID at the boundaries the diff
+    crosses — dependency direction per the stack's layering rules, published API extend-only
+    (statement 12), one reason to change per new class. A change that adopts a framework or
+    library API or pattern the repo does not already use checks that vendor's current
+    official documentation and cites it in the row. A violation found is fixed inside the
+    brief's §3, or listed in LEFT OPEN with `file:line`. dev-leader's implementation brief
+    names the governing skill(s) and the 3–5 rule-ids most at risk for its surface
+    (`Standards` row). A missing Standards row, or one the diff contradicts, is an
+    `important` PR-gate finding.
 
 ## Roles & responsibilities
 
@@ -111,7 +125,9 @@ generic rule here where they differ (see Exceptions).
   stack; never writes code itself.
 - **dev-backend** — implements against these standards inside the domain project the ticket
   resolves to (`drunk-net` / `drunk-pulumi` / `drunk-others`); applies SOLID/KISS/YAGNI and the
-  stack's own skill.
+  stack's own skill, and proves it in the Standards self-review row (statement 15).
+- **dev-leader** also names the governing skill(s) and the rule-ids most at risk in every
+  implementation brief's `Standards` row.
 - **pr-reviewer** — scores every PR against these rule-ids via `pr-review-gate`; a `blocking`
   finding on any id here caps the score regardless of the weighted average.
 - **arch-reviewer** — runs the monthly `architecture-review-sweep`, matching the skill to each
@@ -130,8 +146,10 @@ generic rule here where they differ (see Exceptions).
 
 ## Enforcement
 
+- **dev-backend's Standards self-review** (statement 15) is the first check, before the PR
+  exists; pr-reviewer treats a missing or contradicted row as an `important` finding.
 - **`pr-review-gate`** scores every PR against the governing skill's rule-ids (security →
-  correctness → testing → maintainability → AI-slop); a `blocking` finding overrides the
+  correctness → testing → architecture & design → AI-slop); a `blocking` finding overrides the
   weighted average.
 - **`architecture-review-sweep`** runs monthly across all stacks, applies the matching skill
   per repo, files ≤10 ranked findings after dedupe, and converts checkable rules into

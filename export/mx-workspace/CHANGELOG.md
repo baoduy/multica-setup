@@ -4,6 +4,180 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-29 (b) — workspace context names who prefixes a root product-owner never touches (live)
+
+No policy amended: Policy 05 statement 7a already gives the root type prefix (`[Feature]` ·
+`[Enhance]` · `[Bug]` · `[Question]` · `[CICD]`) to the first agent that picks up a root
+product-owner never touches. The workspace context said only "set by product-owner at intake",
+unlike drunk's, so an agent working a root routed straight to it read no duty to prefix it. It
+now carries the same clause as drunk. The prefix rule itself has been live in mx since
+2026-09-22 (b); roots filed before then keep their plain titles, as in drunk. Cascade:
+`workspace/workspace.context.md`.
+
+## 2026-09-29 — a child wakes its parent's owner with one handoff line; stage barriers wake nobody (live)
+
+Owner-approved. **Policy 05 v1.5** (statement 5: a child keeps its report, `## BLOCKER` and
+questions on its own ticket, flips `done`/`blocked`, then posts ONE line on the parent —
+`<KEY> done — report on <KEY>` / `<KEY> blocked — BLOCKER on <KEY>` — with no mention of any
+kind on a squad-assigned parent, which every main and phase ticket here is; the agent's mention
+on an agent-assigned parent; nothing on a member-assigned one; a human who finishes a ticket
+for an agent replies with that agent's mention), **Policy 03 v1.2** (3b: a missing branch is
+`blocked` + the handoff line), **Policy 04 v1.4** and **Policy 09 v1.5** (gates and members wake
+the leader with the handoff line, never a mention). Members no longer mention anyone; the
+`<@leader>` mention tokens are gone from dev-backend, qc-runner and qc-tester.
+
+Cause: since the Multica v0.6.0 upgrade (2026-09-28) the sub-issue-done wake is a wakeup rule
+whose dispatch has a hard-coded 2 s budget. This server reaches its Postgres in Azure Singapore
+at 70–400 ms a round trip and a dispatch needs about 30, so every stage-barrier wake and every
+agent-created wakeup timed out (drunk DRK-1796's leader never woke after its Build closed; the
+same server hosts this workspace). An agent's plain comment on a squad-assigned ticket enqueues
+the leader inside the request (`routeAssignedSquadLeaderFallback`, `server/internal/handler/comment.go`)
+with no dispatcher, and a busy leader gets it folded into its queued run or replayed after the
+current one. The old fallback — the leader's mention on the member's own sub-task — started a
+plain agent run on the child with no squad briefing. The owner switches the platform's
+sub-issue-done wakeup off in Settings → Wakeups, and agents are told never to create wakeup
+rules. `--stage` stays mandatory: it is now the order the leader promotes in, not a wake.
+
+The monthly architecture review no longer relies on the all-closed wake: each `[RP#]` run ends
+with a handoff line on the run issue carrying arch-reviewer's mention, and the roll-up runs on
+the wake that finds all four terminal (earlier wakes end silently).
+
+Cascade: workspace context (wake list, handoff line, human replies, member write rule,
+staging rationale, `Retrigger on done`, Fix-stage rationale, missing branch), `CLAUDE.md`,
+`README.md` (trigger mechanics, diagrams, glossary), `sdlc-flow-squad-member-protocol`
+(Mention rule → Handoff rule; the barrier self-check is gone), `sdlc-flow-squad-leader-playbook`
+(handoff wakes, reply-under-trigger rule, Barrier frontier removed, staging and fix-loop
+rationale), `sdlc-flow-delivery-pipeline` (wake contract; Barrier poisoning → stages order
+promotion), `sdlc-flow-po-orchestration`, `spec-review-gate`, `pr-review-gate` +
+`references/multica-flow.md`, `blocker-report`, `test-driven-development`, `sdlc-impl-brief`,
+agents `arch-reviewer`, `dev-backend`, `devops`, `issue-janitor`, `pr-reviewer`, `qc-leader`,
+`qc-runner`, `qc-tester`, `release-manager`, squads `dev-team`, `qc-team`, `product-team`,
+autopilots `monthly-architecture-review-monxa-backend-services`,
+`weekly-issue-hygiene-cancelled-cleanup`. Same change in drunk.
+
+## 2026-09-28 — arch-review roll-up no longer waits for a "stage complete" comment (live)
+
+No policy amended. Multica v0.6.0 (#8807) turns the sub-issue-done wake into a system
+wakeup rule that posts **no** comment; the run carries a `[WAKEUP]` block and the timeline a
+`wakeup_triggered` entry instead. `arch-reviewer` shape C and step 5 of the monthly
+architecture-review autopilot told the agent it is woken "by the 'stage complete' comment",
+so after the upgrade the roll-up wake would go unrecognised. Both now say the wake itself is
+the signal and have the agent confirm with `multica issue children` that every `[RP#]` is
+`done`/`cancelled` — correct before and after the upgrade. Cause: 2026-09-28 release review
+(`release-reviews/2026-09-28_v0.4.40..v0.6.0.md` P4). Cascade: `agents/arch-reviewer.md`,
+`autopilots/monthly-architecture-review-monxa-backend-services.description.md`.
+
+## 2026-09-28 — architecture-review dedupe list paged 100 at a time (live)
+
+No policy amended. `multica issue list` rejects `--limit` above 100 since Multica v0.4.42
+(#7896); `architecture-review-sweep` §4 asked for `--limit 200`, so the cheap dedupe pass
+errored on every run. It now reads `--limit 100 --offset 0 --fields identifier,title,status`
+and repeats while `has_more` is true (release review P1; same change in drunk). Cascade:
+`skills/architecture-review-sweep/SKILL.md`.
+
+## 2026-09-27 — product-owner runs the clarification dialogue with `multica-brainstorming` (live)
+
+Owner-approved. **Policy 06 v2.3** (statement 9: the dialogue runs with `interview-me` and
+`multica-brainstorming`; each round is ONE numbered comment mentioning the requester, every
+question with product-owner's best guess; before any spec, ONE spec-preview comment waits for
+the requester's written approval; only a written reply answers — a status move, a resolved
+thread or silence confirms no guess; the role skill still owns the spec's shape; Related skills
+and References name `multica-brainstorming`). **Policy 09 v1.4** (product-owner runs the
+clarification gate with both skills). Policy index row 06 lists both skills. Cause: the skill
+was attached to product-owner but named in neither its instructions nor
+`sdlc-flow-po-orchestration`, and agents follow inline text, not their attached skill list
+(drunk measured this for CodeGraph on 2026-09-17). The earlier same-day entry had also put the
+written-reply and spec-preview rules into the skill before any mx policy stated them. Cascaded
+to `sdlc-flow-po-orchestration` (Clarification gate), `agents/product-owner.md` (Operating
+contract) and README (intake flow diagram, human touch point #2, and §3.4 devops, which still listed
+`brainstorming` and said devops commits straight to `dev` against `agents/devops.md`).
+
+## 2026-09-27 — clarification dialogue runs on the ticket; only a written reply answers (live)
+
+Ported from drunk-workspace (its 2026-09-27 (e)); no policy amended.
+
+`multica-brainstorming` is rewritten for the ticket, where every wake is one turn: each round is
+ONE numbered comment (requester's mention, a one-line read with a confidence number, every
+question with a guess and its evidence, replies by number), approaches only when the requester
+has a real choice and never in classes or layers, then ONE spec-preview comment (Summary, Done
+means, Rules with examples, Contract, Placement, Not in this change, Decisions) approved in
+writing before any spec. A status move, a resolved thread or silence confirms no guess. Before
+the preview the dialogue covers out of scope, real-value examples plus one refusal or edge case
+per rule, the business side of the contract, additive or breaking as the requester's call, and
+outside prerequisites. The original description is kept as an `Original request` comment before
+the first description write. The hand-off list drops the devops and squad-member lines and keeps
+product-owner and the platform assistants, who stop at the confirmed intent and route.
+`interview-me` (identical in both bundles) states that on a ticket the thread is the live user
+and a round is one numbered comment of independent questions — matching the Clarification gate's
+existing "ONE numbered comment".
+
+Skill assignments: `multica-brainstorming` detached from `dev-leader`, `qc-leader` and `devops` —
+named in none of their instructions, and its "every change needs an approved design" gate
+contradicted Workflow D's "clarify only what genuinely blocks". README skill tables updated.
+
+Open at the time: mx `product-owner` had `multica-brainstorming` attached but named nowhere
+inline. Closed the same day — see the entry above.
+
+## 2026-09-27 — architecture reviewed at both gates; dev-backend proves the coding standards before the PR (live)
+
+Two owner-approved changes ported from drunk-workspace (its 2026-09-27 (c) and (d)).
+
+**Architecture at both gates.** The spec gains **§3b Architecture impact**: Owner (the repo, and
+inside a service the bounded context, that owns the change), Dependencies (each new dependency
+between repos or services, with its direction), Public surface (each contract other services or
+external callers consume — HTTP API, Service Bus event or message, webhook payload, shared
+package — `additive`, `breaking` with the callers that must change, or `none`), Integration
+(each new interaction between repos or services) — or one `None — stays inside <repo>` line.
+Repos, services and bounded contexts only; which layer inside a service holds the logic stays
+dev-leader's. mx ships deployed services, so there is no `(MINOR)` versioning rule on a break
+(Policy 08 has none). The spec gate gains **Architecture fit 15%**: weights are now Coverage &
+traceability 25 · Gherkin 20 · Business clarity 20 · Architecture fit 15 · Completeness 10 ·
+Security 10. The PR category Maintainability & design becomes **Architecture & design** at the
+same 15%: a diff contradicting §3b is `blocking`; a new `DKNET-LAYER-*` / `DKNET-AGG-004` /
+`DKNET-REPO-004` violation in touched code, or a dependency between repos or services §3b never
+declared, is `important`; the gate never re-decides §3b. Bars, bands, caps and round limits are
+unchanged (spec: APPROVED ≥ 9.0, REVIEW REQUESTED 8.0–8.9, REWORK < 8.0, 5 rounds; PR: 8.5, 3
+rounds). The PR rubric's calibration anchors were rewritten from the deduction math — the old
+"8.5 for one `important`" and "8.0 for 1–2 `important`" disagreed with it (one alone computes
+9.5–9.9, two compute 9.0–9.8; in-scope findings still take a rework round per statement 7).
+
+**Standards self-review.** Every dev-backend `Build:` and `Fix (review):` ends with a Standards
+EVIDENCE row: both .NET stack skills and the repo's `CLAUDE.md` opened, rule-ids checked, a
+CodeGraph reuse search per new public symbol, `CLEAN-SRP-001..003` and `CLEAN-DRY-001/002`
+measured, SOLID at the boundaries crossed (`DKNET-LAYER-001..004`, `DKNET-AGG-004`,
+`DKNET-REPO-004`, `CLEAN-DIP-001`), vendor docs cited for a framework API the repo does not use
+yet. dev-leader's brief names the at-risk rule-ids in a `Standards` row; a missing or
+contradicted row is an `important` PR-gate finding.
+
+Amended **MX-POL-06 v2.2** (authority line, diagram, statement 1: §3b is the second exception to
+the role boundary; statement 2: seven sections; statement 3: no code words in §3b; new statement
+3c: the four lines, blocker and major severities, CodeGraph grounding; statement 10: the brief
+honours §3b; Definition of Done, enforcement, references), **MX-POL-04 v1.3** (diagram; statement
+3: spec weights and Architecture fit; statement 4: Architecture & design with the §3b, layering
+and Standards-row checks; statement 9: reviewers do not design inside a service; both
+scorecards and the worked example; Definition of Done), **MX-POL-01 v1.2** (Enforced at; new
+statement 17: the Standards self-review; Definition of Done; enforcement), **MX-POL-05 v1.4**
+(diagram and statement 1: seven-section spec, was a stale "11-section") and **MX-POL-09 v1.3**
+(product-owner authors a seven-section spec, was a stale "five-section"; spec-reviewer's Never
+line allows §3b; dev-leader's brief honours §3b and names the `Standards` row; dev-backend's
+Build carries the Standards row; pr-reviewer checks the diff against §3b and the layering).
+Cascaded to `sdlc-spec-template` (placement exception, seven sections, §3b row, format rule,
+scale-to-size, quality bar 6), `spec-review-gate` (contract line, collect step reads each repo's
+`CLAUDE.md`/`AGENTS.md`, new **§3b placement** check with inline rules and severities,
+code-level-design line, weights table, verdict scorecard), `pr-review-gate` (pass 5
+**Architecture & design** with the checks inline, both scorecards;
+`references/scoring-rubric.md` category row and anchors), `sdlc-impl-brief` (§3b binding,
+`Standards` header row and paragraph, Done-when row), `sdlc-flow-squad-member-protocol`
+(self-review check 8 **Standards** with the rules inline and the row shape; finishing step 1 no
+longer says "six checks"), `test-driven-development` (Verification list),
+`sdlc-flow-po-orchestration` (Workflow B step 2, hard rule), `sdlc-flow-delivery-pipeline`
+(seven-section spec), `squads/product-team.md` (seven-section spec), `squads/dev-team.md`
+(Build row), `agents/product-owner.md`, `agents/spec-reviewer.md`, `agents/dev-backend.md` (open
+the stack skills before coding), `agents/dev-leader.md`, `agents/pr-reviewer.md` and `README.md`
+(spec-gate weights, section counts, skill catalog row, glossary). The spec gate has no deduction
+math, no count caps and no numeric calibration anchors in mx, so it got no anchors — flagged to
+the owner, not added.
+
 ## 2026-09-24 — PR review round cap raised from 2 to 3 (live)
 
 🦅 pr-reviewer may now issue 3 REWORK verdicts before ESCALATED → MANUAL HANDOFF (was 2), on

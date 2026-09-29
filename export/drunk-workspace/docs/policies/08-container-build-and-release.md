@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-08 |
-| **Version** | 1.1 |
+| **Version** | 1.2 |
 | **Status** | Active |
 | **Owner** | devops (build/publish automation) · release-manager (the `dev`→`main` release) |
 | **Applies to** | Every drunk repo that publishes a NuGet/npm package, a container image, or a Helm chart |
@@ -65,6 +65,20 @@ covers everything CI does to produce a published artifact.
    one open release PR per cycle, `--base main --head dev`, verified on both refs before merge,
    merged with a merge commit (never squash/rebase, to preserve `dev` history on the release
    line). No other agent ever targets or merges into `main`.
+2a. **A critical release waits for the owner; every other release merges on its own.** Before
+   merging, release-manager checks the commits the release PR ships (`origin/main..origin/dev`).
+   The release is **critical** when it carries (1) a breaking change — a `(MINOR)` marker in any
+   commit subject or body — or (2) any PR the PR gate labelled `release-review`: a
+   security-sensitive change (authentication or authorization, cryptography, secret handling), a
+   build or publish supply-chain change (`.github/workflows/**`, a new package source, a lockfile
+   source line), commits a pr-reviewer run pushed, or a PR the owner asked to review personally
+   ([Policy 04](04-code-and-spec-review.md) statement 11c). A critical release is not merged:
+   release-manager reassigns its release ticket to the resolved owner
+   ([Policy 10](10-ticket-ownership-and-owner-pickup.md)) at `todo` with a `## BLOCKER` +
+   `## OPTIONS` comment listing every trigger with its commit or PR link — **A** merge now,
+   **B** hold until a fix lands — and merges only when the owner replies A with
+   release-manager's mention, re-checking first if `dev` moved since the handoff. Large diffs,
+   unknown coverage and CI exceptions do not make a release critical.
 3. **`devops` owns CI, never app code, and never `main`.** `devops` writes and maintains
    pipeline configs (GitHub Actions), build/test workflows, and the package-publish automation
    that runs off `main` — it does not touch application/library code, tests, or documentation,
@@ -141,8 +155,9 @@ covers everything CI does to produce a published artifact.
   that runs off `main`; opens PRs to `dev` only, never merges them, never touches app code,
   never touches `main`.
 - **release-manager** — the sole owner of the `dev`→`main` PR for library and image repos;
-  two acts only (open the PR, merge it); never runs tests/builds, never triggers or verifies
-  the publish beyond one snapshot.
+  three acts only (open the PR, check whether it is critical from commit subjects and PR labels,
+  merge it — a critical one on the owner's reply); never runs tests/builds, never triggers or
+  verifies the publish beyond one snapshot.
 - **pr-reviewer** — scores every PR touching a `Dockerfile`, build workflow, or chart template
   against the rule-ids above; a missing multi-arch platform list or a secret in a layer is
   `blocking`.
@@ -151,7 +166,8 @@ covers everything CI does to produce a published artifact.
 
 ## Definition of Done / compliance
 
-- **Library release:** `dev`→`main` PR opened and merged by release-manager only; CI publish
+- **Library release:** `dev`→`main` PR opened and merged by release-manager only (a critical
+  release after the owner's reply A); CI publish
   workflow started (one non-blocking snapshot); no deploy step exists or is expected.
 - **Image release:** CI build/publish workflow is wired multi-arch (`linux/amd64` +
   `linux/arm64`) from its first build; the published manifest covers both platforms.

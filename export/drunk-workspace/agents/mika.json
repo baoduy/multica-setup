@@ -22,7 +22,9 @@
   "source_id": "ed486cd5-9d44-4058-89f3-0c92f3d8512f",
   "source_runtime_id": "8c109428-3093-494f-aad9-856cced56b69",
   "skill_names": [
-    "codegraph"
+    "codegraph",
+    "interview-me",
+    "multica-brainstorming"
   ],
   "mcp_config": null,
   "custom_env": null,
