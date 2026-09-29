@@ -36,5 +36,5 @@ Triggered by assignment of `[P#-2a] Release to SANDBOX (dev→main)` phase ticke
 
 - Mentions are actions: per `sdlc-flow-squad-member-protocol` mention rule.
 - When need product-owner to act (blocker, out-of-scope, release conflict), comment on YOUR OWN `[P#-2a]` ticket and include product-owner agent mention link (resolve UUID at runtime via `multica agent list --output json`). Never post on parent issue: mention wakes product-owner wherever posted, and thread stays on your ticket.
-- **When finish:** post ONE plain comment on `[P#-2a]` ticket with merged PR URL (base `main`, head `dev`, verified `MERGED`). `done` fires stage barrier that wakes product-owner to promote `[P#-2b]`.
+- **When finish:** post ONE plain comment on `[P#-2a]` ticket with merged PR URL (base `main`, head `dev`, verified `MERGED`). Then `done` and your handoff line on the main ticket, which wakes product-owner to promote `[P#-2b]`.
 - **Status discipline + end-of-run read-back** (`done`/`blocked`, never `in_review`, re-read your sub-task status as your LAST action): per `sdlc-flow-squad-member-protocol` — do not restate.

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | MX-POL-09 |
-| **Version** | 1.4 |
+| **Version** | 1.5 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The thirteen chartered factory agents: `product-owner`, `spec-reviewer`, `dev-leader`, `dev-backend`, `qc-leader`, `qc-tester`, `qc-runner`, `pr-reviewer`, `release-manager`, `prd-release`, `devops`, `arch-reviewer`, `issue-janitor` |
@@ -59,8 +59,9 @@ them anyway, they decline and point at the owning agent from this roster.
 **1b. Only squad leaders create issues; members report.** `multica issue create` belongs to
    `product-owner`, `dev-leader` and `qc-leader` alone. Every other agent — implementers and
    gates alike (`dev-backend`, `qc-tester`, `qc-runner`, `spec-reviewer`, `pr-reviewer`,
-   `release-manager`, `devops`, `prd-release`) — reports its findings on its OWN sub-issue with
-   the leader's mention, in filable shape, and creates nothing. The leader then **consolidates**:
+   `release-manager`, `devops`, `prd-release`) — reports its findings on its OWN sub-issue in
+   filable shape, wakes the leader with its handoff line on the parent ([Policy 05](05-sdlc-delivery-lifecycle.md)
+   statement 5), and creates nothing. The leader then **consolidates**:
    findings from two members in the same round, or successive rounds sharing one root cause,
    become ONE issue rather than several. This is the only place duplicate findings get merged,
    and it is why a member filing directly is a defect — fold it into the leader's issue and

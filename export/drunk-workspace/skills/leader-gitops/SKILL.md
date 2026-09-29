@@ -32,7 +32,7 @@ Opening PR is the authorization that used to be a separate handoff — so check 
 
 1. `git fetch origin && git checkout --detach origin/<feature-branch> && git merge origin/dev` — detached HEAD, so no worktree takes branch lock.
 2. **Mechanical conflicts** (whitespace, import reorder, rebase noise, trivial renames): resolve yourself, `git add .`, `git commit -m "fix: resolve merge conflicts with dev"`, `git push origin HEAD:refs/heads/<feature-branch>`.
-3. **Substantive conflicts** (overlapping logic, deleted code): that is feature code — not yours. Post ONE comment on dev-backend's Build sub-task listing conflicted paths, with dev-backend's mention and the instruction to report back on that sub-task with your mention when pushed; when the fix lands, re-verify mergeability. No fix sub-task.
+3. **Substantive conflicts** (overlapping logic, deleted code): that is feature code — not yours. Post ONE comment on dev-backend's Build sub-task listing conflicted paths, with dev-backend's mention and the instruction to report on that sub-task and post its handoff line when pushed; when the fix lands, re-verify mergeability. No fix sub-task.
 4. Re-run mergeable check — it must print `MERGEABLE` before Review stage is promoted.
 
 ## Worktree-lock release — you own this recovery

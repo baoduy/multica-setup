@@ -99,7 +99,7 @@ without jargon. 🦊 the "foreman" always knows which step you're on.*
 
 **Legend** — 👤 human · 🦊 product-owner · 🦉 spec-reviewer · 🐺 dev-leader · 🔨 dev-backend · 🐳 release-manager · 🦅 pr-reviewer · 🐝 qc-leader · 🐜 qc-tester · 🐞 qc-runner
 
-**Trigger mechanics** — assignment at `todo` starts the assignee · `backlog→todo` promotion starts the assignee · child `done` fires the stage barrier that wakes the parent's owner · agent mention triggers a run (NOT deduped — one mention, one run, even when the target is already running) · member (human) mention notifies only. A stage barrier re-fires on every re-entry into `done`, so members never flip their own sub-task out of `done`; the LEADER re-triggers fix work by flipping the sub-task `in_progress --no-start` (adding the blocked gate's key to `Retrigger on done`, comma-separated when there are several) and then posting the ONE mention — the re-fired barrier is the expected "fix is back" signal. Every mention link in a posted comment is a wake, quoted or not. Members write only on their own ticket and mention only their leader.
+**Trigger mechanics** — assignment at `todo` starts the assignee · `backlog→todo` promotion starts the assignee · a child's handoff line on its parent wakes the parent's owner (an agent's plain comment on a squad-assigned ticket wakes that squad's leader; stage barriers are switched off) · agent mention triggers a run (NOT deduped — one mention, one run, even when the target is already running) · member (human) mention notifies only. Members never flip their own sub-task out of `done`; the LEADER re-triggers fix work by flipping the sub-task `in_progress --no-start` (adding the blocked gate's key to `Retrigger on done`, comma-separated when there are several) and then posting the ONE mention — the member's next `done` and handoff line are the expected "fix is back" signal. Every mention link in a posted comment is a wake, quoted or not. Members write only on their own ticket plus their handoff line, and mention nobody.
 
 ---
 
@@ -242,14 +242,14 @@ web-hook-deliverer). **No devops in this squad** — pipeline/helm work is never
 ```
 [P#-1] Implementation — cycle parent on mx-code · in_progress until the gate passes
   │   stage 1 is created `todo`; every later stage is `backlog`, promoted by 🐺 only when the
-  │   previous barrier fires AND its deliverable verifies (the self-management contract)
+  │   previous stage is done AND its deliverable verifies (the self-management contract)
   │
   ├── ⚙      BRANCH   🐺   leader cuts the feature branch inline from latest `dev` (no sub-task, `leader-gitops`)
   ├── D-1  BUILD    🔨   branch gate (`ls-remote`) first · implement to spec · commit + push
   ├── D-2  VERIFY   🧪   full suite green · zero errors · coverage > 80% on touched classes  ◀─┐
   ├── ⚙      PR       🐺   leader opens the ONE PR inline · head = feature branch · base = `dev` (no sub-task, `leader-gitops`) │
   └── D-3  REVIEW   🦅   PR-state guard, then score 1–10                                       │
-          ├── ✅ APPROVED → 🦅 merges into `dev` → barrier wakes 🐺 (verifies merge + score)    │
+          ├── ✅ APPROVED → 🦅 merges into `dev` → handoff wakes 🐺 (verifies merge + score)    │
           └── ⟲ REWORK / 🧪 red → ONE consolidated Fix: → 🔨, then ALWAYS re-arm D-2 first ────┘
                                    (review fix = unverified code; re-verify before re-review)
           ⛔ caps: 2 failed rounds on the same root cause → escalate (phase → 🦊; root → 👤)
@@ -294,7 +294,7 @@ calls against the deployed SANDBOX — and deliver each cycle as **ONE merged PR
       │                        (selection VISIBLE in the report — narrow run ≠ "suite green")        │
       ├── ⚙      PR         🐝   leader opens the ONE PR inline · head = feature branch · base = `dev` (no sub-task, `leader-gitops`) │
       └── T-3  REVIEW     🦅   score 1–10                                                             │
-              ├── ✅ APPROVED → 🦅 merges into `dev` → barrier wakes 🐝                                │
+              ├── ✅ APPROVED → 🦅 merges into `dev` → handoff wakes 🐝                                │
               └── ⟲ REWORK / 🐞 test-code red → ONE Fix: → 🐜, then ALWAYS re-arm T-2 first ──────────┘
               ⛔ caps: 2 failed rounds same root cause → escalate
 
@@ -357,7 +357,7 @@ big picture.*
   │   ├── review    ◔ 8.0–8.9 or a trigger ─▶ REVIEW REQUESTED — 👤 holds [S#]
   │   ├── rework    ⟲ < 8.0 or any blocker ─▶ findings + @🦊 ─▶ 🦊 revises,
   │   │             re-arms [S#] ─▶ full re-review               rounds 1–5
-  │   └── cap       ⛔ round > 5 ─▶ 👤 requester · their done-flip releases it
+  │   └── cap       ⛔ round > 5 ─▶ 👤 requester · their @-reply releases it
   │
   ├── ③  SPLIT INTO PHASES — 🦊 product-owner · Workflow C
   │   ├── start     [S#] done wakes 🦊 · FYIs 👤 with the score
@@ -381,19 +381,19 @@ big picture.*
   │   │   ├── ⟲ AT rejected / wrong ─▶ re-arm [D#-1] ─▶ 🔨 (never edited in build)
   │   │   └── ⟲ [D#-3] rework    ─▶ ONE Fix ─▶ 🔨   ⛔ 3 rounds ─▶ 👤 owner
   │   ├── done      ✅ 🦅 merges into dev · leftovers ─▶ ONE follow-ups ─▶ 🦊
-  │   └── ═══ barrier · wakes 🦊 — verifies the merged PR + review score ═══
+  │   └── ═══ handoff · wakes 🦊 — verifies the merged PR + review score ═══
   │
   ├── ⑤  RELEASE — 🐳 release-manager
   │   ├── start     🦊 promotes [P#-2a] ─▶ todo + comment (PR link, score)
   │   ├── release   🐳 opens ONE dev→main PR, merges it (automated, no human)
   │   │             CI then builds the image on `main` (the SANDBOX line)
-  │   └── ═══ barrier · wakes 🦊 — promotes [P#-2b] ═══
+  │   └── ═══ handoff · wakes 🦊 — promotes [P#-2b] ═══
   │
   ├── ⑥  DEPLOY — 👤 requester
   │   ├── start     🦊 promotes [P#-2b] ─▶ todo + comment (release PR link)
   │   ├── deploy    👤 argoCD-deploys main ─▶ SANDBOX · flips [P#-2b] done
   │   │             the one remaining hands-on human step
-  │   └── ═══ barrier · wakes 🦊 — refreshes [P#-3] with PR + deploy facts ═══
+  │   └── ═══ handoff · wakes 🦊 — refreshes [P#-3] with PR + deploy facts ═══
   │
   ├── ⑦  QC CYCLE — 🐝 qc-leader
   │   ├── start     [P#-3] todo · sub-issues in mx-qc-board · wake checklist
@@ -407,7 +407,7 @@ big picture.*
   │   │   └── [T#-1] run    🐞   the suites against SANDBOX · no branch, no PR
   │   ├── defects   🐝 files ONE consolidated, deduped bug ─▶ 🦊 (todo)
   │   ├── done      consolidated test report on [P#-3] ─▶ done
-  │   └── ═══ barrier · wakes 🦊 — verifies report + merged QC PR ═══
+  │   └── ═══ handoff · wakes 🦊 — verifies report + merged QC PR ═══
   │
   └── ⑧  CLOSE — 🦊 product-owner
       ├── done      main ticket ─▶ done · summary: spec ─▶ release ─▶ deploy ─▶ QC
@@ -522,8 +522,8 @@ agent does it.
 
 Four agents run **outside** the feature/bug pipeline (§1–§2): 🏛️ arch-reviewer, 🧹
 issue-janitor, 🌙 prd-release and 🐙 devops. Each does its whole job alone, belongs to no
-squad, and reports by **status only** (`done` on success, `blocked` when stuck — never
-`in_review`, which fires no trigger). What differs is the trigger: arch-reviewer and
+squad, and reports by status (`done` on success, `blocked` when stuck — never
+`in_review`, which fires no trigger), plus a handoff line on the parent when its ticket has one. What differs is the trigger: arch-reviewer and
 issue-janitor fire on a **schedule** (a Multica autopilot); prd-release and devops fire on
 **ticket assignment**. All four appear in §5 (skills) and §6 (models) like every other agent.
 
@@ -1050,7 +1050,7 @@ picture wrong.
 | **agent**                 | An AI worker with one specific job and a nickname (see the cast in Part 1).                                                               |
 | **argoCD**                | The tool that pushes approved code out to a running environment. "argoCD-deploy to SANDBOX" = make the new version live on the test site. |
 | **backlog / todo / done** | The status of a ticket. `backlog` = queued but not started, `todo` = ready to start (this is what wakes an agent), `done` = finished.     |
-| **barrier**               | An automatic checkpoint: when a step finishes, it "fires the barrier" that wakes whoever was waiting on it.                               |
+| **handoff line**          | The one-line comment a finished child posts on its parent; it wakes the parent's owner. Stage barriers are switched off on this server.  |
 | **BDD / Gherkin**         | A way of writing tests as plain-language scenarios ("Given… When… Then…") that non-programmers can read. Gherkin is the exact format.     |
 | **branch**                | A separate copy of the code to work on safely without disturbing the main copy. See `feature`, `dev`, `main`.                             |
 | **CI/CD**                 | Automation that builds, tests, and ships code without a human running the steps by hand.                                                  |

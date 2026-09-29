@@ -42,7 +42,7 @@ Never promote on `done` alone. `[S<num>]` → `Gate verdict` APPROVED. `[P<num>-
 
 On a `[P<num>-1c] Review design PR` the owner's reply (A / B / C / D) comes to you: relay it per `sdlc-flow-po-orchestration` Workflow F step 6.
 
-On `[P<num>-1c]` REWORK, pr-reviewer's findings end with your mention: flip `[P<num>-1]` `in_progress --no-start`, post the findings pointer there with its assignee's mention, and on that `done` re-arm `[P<num>-1c]` (`in_progress --no-start` + pr-reviewer's mention).
+On `[P<num>-1c]` REWORK, pr-reviewer's handoff line on your ticket wakes you: flip `[P<num>-1]` `in_progress --no-start`, post the findings pointer there with its assignee's mention, and on that `done` re-arm `[P<num>-1c]` (`in_progress --no-start` + pr-reviewer's mention).
 
 On `[S<num>]` REWORK you re-arm the gate yourself: revise the spec, flip the sub-task `in_progress --no-start`, then post ONE resume comment with spec-reviewer's mention. A flip to `todo` re-arms nothing — the sub-task has already run, so the mention is the only wake.
 
@@ -52,4 +52,4 @@ Escalate instead of spinning when: a business decision was never confirmed, the 
 
 ## Every wake
 
-`multica issue children <root-id> --output json --resolve-properties`, then the bounded comments of any `blocked` child or the child that woke you. Promote every phase whose gate now verifies; self-heal mis-signals (a completion report parked non-`done` → verify and flip; a `done` phase whose report says failure → leave `done`, comment with the owner's mention). Every wake that finds a stuck child ends in a loop-back, a promotion, or an escalation. Record `multica squad activity <root-id> action|no_action --reason "<why>"`.
+`multica issue children <root-id> --output json --resolve-properties`, then the bounded comments of any `blocked` child or the child named by the handoff line that woke you. Promote every phase whose gate now verifies; self-heal mis-signals (a completion report parked non-`done` → verify and flip; a `done` phase whose report says failure → leave `done`, comment with the owner's mention). Every wake that finds a stuck child ends in a loop-back, a promotion, or an escalation. Record `multica squad activity <root-id> action|no_action --reason "<why>"`.

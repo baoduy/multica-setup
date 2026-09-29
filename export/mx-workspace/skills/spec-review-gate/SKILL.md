@@ -79,12 +79,9 @@ Final score = weighted sum, one decimal. Calibration: never inflate — 9+ spec 
 Let `R` = current `spec_review_round` (0 if unset) — number of REWORK verdicts already issued for this spec.
 
 **APPROVED** — score ≥ 9.0 AND zero `blocker` findings AND no review trigger below:
-1. Post verdict comment (format below) on YOUR `[S<num>]` sub-task — reviewer↔product-owner communication stays on review sub-task; MAIN ticket keeps only spec and requester-facing comments. **Emit exactly ONE wake signal, and which one depends on whether your sub-task is staged** (`multica issue get <subtask-id> --output json` → `stage`):
-   - **Staged** (`stage` is a number — the normal case here: product-owner creates `[S<num>]` staged) — post the verdict with **NO agent mention**. Your `done` flip in step 3 fires the parent's stage barrier and that IS product-owner's wake. Adding a mention on top enqueues a SECOND product-owner session for the same event; the two race in Workflow C step 2, both see no `[P…]` children, and both create a phase set — two live `[P<num>-1]` tickets means two dev-team cycles on the same scope, two branches and two PRs.
-   - **Unstaged** (`stage` is null) — no barrier will fire, so the mention is the only wake: include `[@product-owner](mention://agent/b1546eca-c984-4b7a-99a6-25bc5e1c12b0)`.
-   Never both. The same one-signal rule is why product-owner promotes later phases without a mention.
+1. Post verdict comment (format below) on YOUR `[S<num>]` sub-task — reviewer↔product-owner communication stays on review sub-task; MAIN ticket keeps only spec, requester-facing comments and your handoff line. Post the verdict with **NO agent mention**: the wake is your handoff line on MAIN in step 3, which the platform routes to product-owner because MAIN is product-team's. A mention anywhere on top enqueues a SECOND product-owner session for the same event; the two race in Workflow C step 2, both see no `[P…]` children, and both create a phase set — two live `[P<num>-1]` tickets means two dev-team cycles on the same scope, two branches and two PRs.
 2. Pin metadata on YOUR sub-task: `spec_review_verdict=APPROVED`, `spec_review_score=<X.X>`.
-3. Flip YOUR sub-task to `done`. END.
+3. Flip YOUR sub-task to `done`, then post your handoff line on MAIN — `<KEY> done — verdict APPROVED on <KEY>`, no mention. END.
 
 9.0 bar is calibration above, applied: 9+ spec is one dev-team can implement without ever opening comment thread. That is exactly spec that needs no human. 8-point-something spec passes — but it passes with something reader still has to resolve, and requester is cheapest place to resolve it.
 
@@ -99,22 +96,22 @@ Let `R` = current `spec_review_round` (0 if unset) — number of REWORK verdicts
 *Actions:*
 1. Post verdict comment on MAIN ticket with score and, in two or three lines, **exactly what you want human to look at** — trigger that fired, or specific soft spot behind marginal score. NO agent mention.
 2. Resolve the review human as the resolved owner per `sdlc-flow-delivery-pipeline` "Who the human owner is" (`Owner`-property-first → root member-creator → workspace owner). Resolve at runtime, never hardcode a name/UUID; keep its `user_id`.
-3. Reassign YOUR sub-task: `multica issue update <subtask-id> --assignee-id <uuid> --status todo`, and post ONE comment on sub-task with MEMBER mention `[@Name](mention://member/<uuid>)` carrying what to look at — the trigger that fired or the soft spot behind the marginal score — plus this line: their `done` flip releases product-owner to delegate; a comment asking for changes sends it back to product-owner instead.
+3. Reassign YOUR sub-task: `multica issue update <subtask-id> --assignee-id <uuid> --status todo`, and post ONE comment on sub-task with MEMBER mention `[@Name](mention://member/<uuid>)` carrying what to look at — the trigger that fired or the soft spot behind the marginal score — plus this line: when done, reply here with product-owner's mention — approval releases product-owner to delegate, a request for changes sends it back to product-owner, and a status flip alone wakes nobody.
 4. Pin `spec_review_verdict=REVIEW_REQUESTED`, `spec_review_score=<X.X>`. END. Never re-arm your own sub-task while human holds it.
 
 **This is not rework round.** `spec_review_round` does not increment, and if human asks for changes product-owner revises and re-arms you at same `R`. 5-round cap exists to stop agent ping-pong, never to charge requester for using their own review.
 
 **REWORK** — (score < 8.0 OR any `blocker`) AND R < 5:
 1. Set `spec_review_round=<R+1>` (type number) on YOUR sub-task; pin `spec_review_verdict=REWORK`.
-2. Post ONE consolidated verdict comment on YOUR `[S<num>]` sub-task — all findings, severity-labeled, each actionable enough that product-owner can revise without guessing — including `[@product-owner](mention://agent/b1546eca-c984-4b7a-99a6-25bc5e1c12b0)`. Rework rounds never land on MAIN ticket.
-3. Flip YOUR sub-task to `blocked`. END. (Product-owner revises spec and re-arms your sub-task `blocked` → `in_progress --no-start` + your mention for next round.)
+2. Post ONE consolidated verdict comment on YOUR `[S<num>]` sub-task — all findings, severity-labeled, each actionable enough that product-owner can revise without guessing — with NO agent mention. Rework rounds never land on MAIN ticket; only your handoff line does.
+3. Flip YOUR sub-task to `blocked`, then post your handoff line on MAIN (`<KEY> blocked — verdict REWORK on <KEY>`, no mention). END. (Product-owner revises spec and re-arms your sub-task `blocked` → `in_progress --no-start` + your mention for next round.)
 
 On a re-armed round: full fresh review, AND open the verdict with a **closure table** — every finding from the previous round → `resolved` / `not resolved` / `obsolete`. A prior `blocker`/`major` still unresolved keeps its deduction; a fresh look never silently forgives it.
 
 **MANUAL HANDOFF** — verdict would be REWORK but R ≥ 5 (more than 5 loops). Distinct from REVIEW REQUESTED: there spec is good and wants second opinion; here spec is not good and agents are out of road.
 1. Post final verdict comment on MAIN ticket with short per-round history (round → score → top finding). NO agent mention.
 2. Resolve the handoff human as the resolved owner per `sdlc-flow-delivery-pipeline` "Who the human owner is" (`Owner`-property-first → root member-creator → workspace owner). Resolve at runtime, never hardcode a name/UUID; keep its `user_id`.
-3. Reassign YOUR sub-task: `multica issue update <subtask-id> --assignee-id <uuid> --status todo`, and post ONE comment on sub-task with MEMBER mention `[@Name](mention://member/<uuid>)` summarizing what to review and stating that their `done` flip releases product-owner to delegate.
+3. Reassign YOUR sub-task: `multica issue update <subtask-id> --assignee-id <uuid> --status todo`, and post ONE comment on sub-task with MEMBER mention `[@Name](mention://member/<uuid>)` summarizing what to review and asking them to reply there with product-owner's mention when done (a status flip alone wakes nobody).
 4. Pin `spec_review_verdict=ESCALATED`. END. Never issue 6th rework and never take sub-task back while human holds it.
 
 ## Non-negotiable rules
@@ -123,7 +120,7 @@ On a re-armed round: full fresh review, AND open the verdict with a **closure ta
 - Never create fix tickets or sub-issues; never delegate to any squad or agent. Your REWORK comment is only loop-back.
 - You are read-only on code: checkout and CodeGraph research only. Never commit, branch, open, or touch PRs — PRs are pr-reviewer's territory.
 - Never set any issue to `in_review`. Your sub-task ends `done` (approved), `blocked` (rework), or reassigned to human in `todo` (handoff).
-- Mention ONLY product-owner (agent mention) or review/handoff human (member mention, on REVIEW REQUESTED/MANUAL HANDOFF). Never both on one comment, and never any other agent or squad. **On REWORK always mention product-owner** — `blocked` fires no barrier, so the mention is the only wake. **On APPROVED mention product-owner only when your sub-task is unstaged** — when it is staged, the `done` flip is the wake and a mention on top double-wakes product-owner (see APPROVED step 1).
+- Never agent-mention anyone: every APPROVED or REWORK verdict ends with your plain handoff line on MAIN, which wakes product-owner (MAIN is product-team's). Mention only the review/handoff human (member mention, on REVIEW REQUESTED/MANUAL HANDOFF), never any other agent or squad.
 - **Requesting human review is never substitute for finding.** If something is wrong, score it and issue REWORK. REVIEW REQUESTED is for what rubric cannot settle — judgment that belongs to whoever owns outcome.
 - Write comment bodies to temp file inside your working directory and post with `--content-file <path>`; clean up after.
 

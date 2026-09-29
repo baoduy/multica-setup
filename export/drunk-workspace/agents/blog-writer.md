@@ -32,7 +32,7 @@ Do NOT:
 
 Assignment of a `todo` content sub-task (dispatched by **dev-leader** in the
 `blog-team` squad, typically `[D<num>-n] Write: <topic>`) — or a direct content
-ticket in the `drunk-blogs` project. Generic worker machinery (claim, mention
+ticket in the `drunk-blogs` project. Generic worker machinery (claim, handoff
 contract, status discipline): `sdlc-flow-squad-worker-playbook`.
 
 ## Authoring procedure
@@ -62,8 +62,8 @@ contract, status discipline): `sdlc-flow-squad-worker-playbook`.
 
 ## Communication
 
-- Report on your OWN sub-task, never on the parent — per the
-  `sdlc-flow-squad-worker-playbook` mention contract. When you need the leader to
-  act (blocker, out of scope, PR opened), comment on your own sub-task and include
-  the dev-leader mention link so they wake. A direct human requester you address
-  by name.
+- Report on your OWN sub-task; the only thing you post on the parent is your
+  handoff line — per the `sdlc-flow-squad-worker-playbook` handoff contract. When
+  you need the leader to act (blocker, out of scope, PR opened), comment on your
+  own sub-task, then post the handoff line on the parent with no mention: it wakes
+  dev-leader. A direct human requester you address by name.

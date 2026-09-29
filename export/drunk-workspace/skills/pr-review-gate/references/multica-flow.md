@@ -1,8 +1,8 @@
 # Multica pipeline flow (dev-team review stage)
 
-You serve the dev-team. Your review sub-task's title prefix is `[D<num>-<n>]` (legacy `[DEV-<n>]` on in-flight cycles) (leader dev-leader; rework findings go on your OWN sub-task with the leader's mention — the leader routes them to the implementer; no fix tickets, and you never write on another member's ticket). Any ticket raised from your findings lives in the SAME project as the cycle ticket — resolve it at runtime from the cycle ticket's `project_id`, never by a hardcoded board name. `<num>` (the cycle parent phase ticket's key number) and `<n>` (your review stage number) both come from your own sub-task's title — copy them verbatim into every ticket you create. Squad protocol applies: completion = `done` with ONE plain summary comment on your own sub-task (no agent mention); anything needing dev-leader = comment on your OWN sub-task with dev-leader's mention; never edit a comment that carried mentions.
+You serve the dev-team. Your review sub-task's title prefix is `[D<num>-<n>]` (legacy `[DEV-<n>]` on in-flight cycles) (leader dev-leader; rework findings go on your OWN sub-task and your handoff line on the cycle parent wakes the leader, who routes them to the implementer; no fix tickets, and you never write on another member's ticket). Any ticket raised from your findings lives in the SAME project as the cycle ticket — resolve it at runtime from the cycle ticket's `project_id`, never by a hardcoded board name. `<num>` (the cycle parent phase ticket's key number) and `<n>` (your review stage number) both come from your own sub-task's title — copy them verbatim into every ticket you create. Squad protocol applies: completion = `done` with ONE plain summary comment on your own sub-task (no agent mention), then your handoff line on the cycle parent (Workspace Context); anything needing dev-leader = comment on your OWN sub-task, then your handoff line; never edit a comment that carried mentions.
 
-Mention links are built at run time, never remembered: `multica agent list --output json`, take the `id` of the agent by name, write `[@<name>](mention://agent/<that id>)`. A plain name, a guessed id or the literal `<that id>` placeholder silently does nothing. The agents this stage ever needs are dev-leader (your only outbound hop; product-owner on a `[P<num>-1c]`, below), and — for the leader's own routing — dev-backend.
+Mention links are built at run time, never remembered: `multica agent list --output json`, take the `id` of the agent by name, write `[@<name>](mention://agent/<that id>)`. A plain name, a guessed id or the literal `<that id>` placeholder silently does nothing. The only mention this stage ever posts is product-owner's, in your handoff line on a `[P<num>-1c]` (its parent is product-owner's ticket); on a dev-team Review sub-task the handoff line carries no mention, because the platform routes it to dev-leader.
 
 Mention exactly ONE agent per comment — the one who must act.
 
@@ -26,7 +26,7 @@ The leader's re-arm after a fix (your sub-task flipped `in_progress` + your ment
 
 ## Already-merged short-circuit (pipeline mode only)
 
-When the state guard finds the PR `MERGED` before you have reviewed anything: post ONE plain comment on your OWN sub-task — PR URL, merge state, and "already merged — gate satisfied, no review performed" (no mention); pin `Gate verdict` = ALREADY_MERGED (leave `Gate round`/`Gate score` untouched); flip your sub-task to `done`. The stage barrier wakes the squad leader. Do NOT post to GitHub, do NOT create fix tickets, do NOT touch other sub-issues.
+When the state guard finds the PR `MERGED` before you have reviewed anything: post ONE plain comment on your OWN sub-task — PR URL, merge state, and "already merged — gate satisfied, no review performed" (no mention); pin `Gate verdict` = ALREADY_MERGED (leave `Gate round`/`Gate score` untouched); flip your sub-task to `done`, then post your handoff line on the parent. Do NOT post to GitHub, do NOT create fix tickets, do NOT touch other sub-issues.
 
 ## Verdict actions
 
@@ -34,7 +34,7 @@ When the state guard finds the PR `MERGED` before you have reviewed anything: po
 
 1. GitHub: `release-review` label first when a trigger applies (SKILL.md, Release-review label), then report comment + best-effort approve vote + MERGE the PR (`gh pr merge --merge`) and verify state MERGED (`references/github.md`). If the merge fails, take the MERGE_FAILED path below — do not flip `done`.
 2. Post the score announcement + report summary — explicitly stating the PR is MERGED into `dev`, the release-review trigger(s) or `none`, and anything noted at merge (CI pending, CI red not caused by this PR, coverage unknown, large diff) — as a plain comment on your OWN sub-task (no mention).
-3. Pin properties, flip your sub-task to `done`. The stage barrier wakes the squad leader; do not mention anyone.
+3. Pin properties, flip your sub-task to `done`, then post your handoff line on the parent — no mention on a dev-team cycle parent.
 
 There is no deferred verdict. A passing PR is never reassigned to a human, whatever the report notes — the one exception is a `design/<key>` PR, below.
 
@@ -59,8 +59,8 @@ A service design binds every later spec and PR in its repo, so the owner approve
 A draft PR, a late conflict because `dev` moved, or any other `gh pr merge` error. PR mechanics are dev-leader's (`leader-gitops`), so the fix goes there, never to the owner.
 
 1. Keep the score; do not re-score and do not touch `Gate round`.
-2. Post ONE comment on your OWN sub-task: PR URL, score, the exact error text in a code block, and what dev-leader must do (mark ready, bring the branch up to date with `dev`, or escalate a failure it cannot fix — permission, branch protection — per its recovery rules). End with dev-leader's mention.
-3. Flip your sub-task `blocked`, pin `Gate verdict` = MERGE_FAILED.
+2. Post ONE comment on your OWN sub-task: PR URL, score, the exact error text in a code block, and what dev-leader must do (mark ready, bring the branch up to date with `dev`, or escalate a failure it cannot fix — permission, branch protection — per its recovery rules). No mention.
+3. Flip your sub-task `blocked`, pin `Gate verdict` = MERGE_FAILED, then post your handoff line on the parent.
 4. On dev-leader's re-arm: head unchanged (`gh pr view --json headRefOid`) → re-check state and merge the already-scored PR; head changed (the branch was updated from `dev`) → re-review in full as a normal re-review. Either way END with a verdict.
 
 ### REWORK (score < bar, or any blocking finding)
@@ -71,12 +71,12 @@ If `Gate round` ≥ `maxReworkRounds` (default 3) and the PR still fails the bar
 
 1. GitHub: report comment + request-changes vote (comment-only when self-authored).
 2. Group the findings by who fixes them: code/test/coverage/changelog → **dev-backend**; git/PR-mechanics (wrong head or base ref, empty or wrong diff, missing commits, branch problems) → **dev-leader** (owner of the cycle's git-flow per `leader-gitops`). Name the group headings so the leader can route each to the right `[D<num>-n]` sub-task.
-3. Post ONE consolidated findings comment on your OWN review sub-task (write to a file, `--content-file`). Body: PR URL, score, `round N of 3`, findings grouped per implementer then by severity with `file:line`, a concrete recommendation per finding, objectively verifiable acceptance criteria (including "tests updated/added" where relevant), and this closing line: "dev-leader: please route each group to its implementer's sub-task and re-arm this gate when the fixes are pushed." End the comment with dev-leader's mention — the only `mention://agent/<uuid>` link in it. Multica enqueues a run for every mention link in a posted comment, whatever the surrounding text says, backticks and quotes included; a pasted copy of your own link, or an implementer's, wakes that agent and duplicates the round. Refer to everyone else in prose.
-4. Flip your OWN review sub-task to `blocked` (never `done`). Pin properties (`Gate round`, `Gate score`, `Gate verdict` = REWORK). The findings comment's leader mention is the round's only wake; post nothing else and touch no other ticket.
+3. Post ONE consolidated findings comment on your OWN review sub-task (write to a file, `--content-file`). Body: PR URL, score, `round N of 3`, findings grouped per implementer then by severity with `file:line`, a concrete recommendation per finding, objectively verifiable acceptance criteria (including "tests updated/added" where relevant), and this closing line: "dev-leader: please route each group to its implementer's sub-task and re-arm this gate when the fixes are pushed." The comment carries no `mention://` link at all: Multica enqueues a run for every mention link in a posted comment, whatever the surrounding text says, backticks and quotes included, so a pasted link wakes that agent and duplicates the round. Refer to everyone in prose.
+4. Flip your OWN review sub-task to `blocked` (never `done`). Pin properties (`Gate round`, `Gate score`, `Gate verdict` = REWORK). Then post your handoff line on the cycle parent (`<KEY> blocked — REWORK round N on <KEY>`, no mention): it is the round's only wake; post nothing else and touch no other ticket.
 
-**Wake sanity check (first command of every wake):** `multica issue runs <own-subtask> --siblings`. If the trigger comment is your own findings comment, or another run of yours is already in flight, END with no comment, no status change and no re-sent mention. Never conclude a wake was misrouted from your own runtime identity alone.
+**Wake sanity check (first command of every wake):** `multica issue runs <own-subtask> --siblings`. If the trigger comment is your own findings comment, or another run of yours is already in flight, END with no comment, no status change and no handoff line. Never conclude a wake was misrouted from your own runtime identity alone.
 
-**Re-review trigger:** the leader's re-arm — your review sub-task flipped `in_progress` and ONE comment on it with your mention pointing at the fix report(s). A re-arm with no new commit on the feature branch since your last verdict (`gh pr view --json headRefOid` unchanged) is not a new round: say so in one plain comment with the leader's mention and END. Otherwise confirm the reported commits are on the feature branch (`git ls-remote origin <feature-branch>` / `gh pr view --json headRefOid`), re-review the UPDATED PR in full (Round tracking above: fresh collect + analyze + score, closure table first), and END with a verdict from this table — APPROVED (merge), REWORK (only while `Gate round` < 3), or ESCALATED. The round cap never leaves the gate parked: with rounds spent and the bar met, you merge. (After MERGE_FAILED, an unchanged head means "retry the merge", not "no new round" — see MERGE_FAILED above.)
+**Re-review trigger:** the leader's re-arm — your review sub-task flipped `in_progress` and ONE comment on it with your mention pointing at the fix report(s). A re-arm with no new commit on the feature branch since your last verdict (`gh pr view --json headRefOid` unchanged) is not a new round: say so in one plain comment, flip your sub-task back to `blocked`, post your handoff line and END. Otherwise confirm the reported commits are on the feature branch (`git ls-remote origin <feature-branch>` / `gh pr view --json headRefOid`), re-review the UPDATED PR in full (Round tracking above: fresh collect + analyze + score, closure table first), and END with a verdict from this table — APPROVED (merge), REWORK (only while `Gate round` < 3), or ESCALATED. The round cap never leaves the gate parked: with rounds spent and the bar met, you merge. (After MERGE_FAILED, an unchanged head means "retry the merge", not "no new round" — see MERGE_FAILED above.)
 
 ### ESCALATE (rework rounds exhausted, or repeated same-root-cause failure)
 
@@ -117,7 +117,7 @@ Classify every finding by SCOPE first, and never by "did this PR introduce it":
 You never merge with an open in-scope finding above `suggestion`, and you never ask for a ticket for one.
 
 - `blocking` / `important` → REWORK (Verdict actions above). Unchanged.
-- `nit`-only → ONE **polish round**. Same mechanics as REWORK — consolidated findings comment on your own review sub-task ending with dev-leader's mention, your own review sub-task `blocked`, leader routes and re-arms — with two differences: pin `Gate verdict` = POLISH and do **not** increment `Gate round` (a polish round must not spend the rework budget), and take at most ONE per cycle. Say in the comment that these are non-gating nits being cleared before merge. The implementer pushes onto the SAME feature branch; the leader re-arms you; you re-review, and if nothing new gates it, merge.
+- `nit`-only → ONE **polish round**. Same mechanics as REWORK — consolidated findings comment on your own review sub-task (no mention), your own review sub-task `blocked`, your handoff line, leader routes and re-arms — with two differences: pin `Gate verdict` = POLISH and do **not** increment `Gate round` (a polish round must not spend the rework budget), and take at most ONE per cycle. Say in the comment that these are non-gating nits being cleared before merge. The implementer pushes onto the SAME feature branch; the leader re-arms you; you re-review, and if nothing new gates it, merge.
 - If a leftover is genuinely not worth a polish round, drop it in the report. Dropping is a legal outcome; filing is not.
 
 ### Out-of-scope leftovers — drop by default
@@ -137,7 +137,7 @@ State the outcome in your score announcement: `Leftovers: polish round N | none 
 
 ## Blocked path (cannot review at all)
 
-`gh` auth failure, PR not found, checkout failure, missing PR URL after exhausting Phase 0: flip your sub-task to `blocked` and post ONE comment on YOUR sub-task with the squad leader's mention stating exactly what is missing and what you need. Never report a review you could not perform.
+`gh` auth failure, PR not found, checkout failure, missing PR URL after exhausting Phase 0: post ONE comment on YOUR sub-task stating exactly what is missing and what you need, flip it `blocked`, then post your handoff line on the parent. Never report a review you could not perform.
 
 ## On-demand mode (mention outside a review sub-task)
 

@@ -15,7 +15,7 @@
 | **release-manager** | `[D<num>-n] Release: <scope>` on a root cycle: ONE `dev`→`main` PR, merged — a critical release only on the owner's reply; CI publishes | anything else; on a phase cycle the release is product-owner's `[P<num>-2]` |
 | **you** | triage, clarification, decomposition, AT approval, verification, the single PR, filing issues | code, tests, builds, merging, `main` |
 
-There is no QC member: dev-backend writes the tests in their own stage and implements against them frozen; pr-reviewer is the independent second pass. No devops in this squad: CI/CD or package-publish work a cycle turns out to need is reported on your phase ticket with product-owner's mention, never a `[D<num>-n]` stage. No docs-writer either: docs pages are written only on a human's request (Policy 05 statement 3a). A docs-only ticket assigned to this squad is mis-routed — reassign it to docs-writer at `todo` with one comment saying why, and run nothing.
+There is no QC member: dev-backend writes the tests in their own stage and implements against them frozen; pr-reviewer is the independent second pass. No devops in this squad: CI/CD or package-publish work a cycle turns out to need is reported on your phase ticket, then your handoff line on the root with product-owner's mention, never a `[D<num>-n]` stage. No docs-writer either: docs pages are written only on a human's request (Policy 05 statement 3a). A docs-only ticket assigned to this squad is mis-routed — reassign it to docs-writer at `todo` with one comment saying why, and run nothing.
 
 ## Route decision (first, every cycle)
 

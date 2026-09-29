@@ -85,7 +85,7 @@ Rules:
 - 2 or 3 options. Exactly one `✅ Recommended`, first. Each option is decidable from its line alone. Include "park it" or "ship without" whenever it is a real choice. Options are things YOU can do once approved, unless the blocker is access, credentials or a business decision.
 - `## QUESTIONS` only when a real question remains beyond choosing an option. Delete the section otherwise.
 - Under 25 lines. Evidence, logs and links go below the three sections.
-- The report is additive, not the delivery: an agent hop still needs `blocked` plus the leader's mention; a human hop still needs the ticket reassigned to the human at `todo`.
+- The report is additive, not the delivery: an agent hop still needs `blocked` plus the handoff line on the parent (Workspace Context); a human hop still needs the ticket reassigned to the human at `todo`, asked to reply with the next agent's mention.
 - When it clears, reply in the same thread with what unblocked it, one line.
 
 ## Root-cause report (product-owner, Workflow A)

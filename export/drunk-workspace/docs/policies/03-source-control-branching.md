@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-03 |
-| **Version** | 1.4 |
+| **Version** | 1.5 |
 | **Status** | Active |
 | **Owner** | release-manager (`dev`→`main`) · dev-leader (cycle git-flow) |
 | **Applies to** | Every agent that branches, commits, pushes, or opens a PR in a drunk repo |
@@ -51,7 +51,7 @@ no separate branch strategy for a different repo class.
 1. **Topology.** `feature/<issue-key> ──PR──> dev ──PR──> main`. `dev` = INTEGRATION; `main` = RELEASE (merging it triggers the CI publish). Every feature branch is cut from freshly fetched `origin/dev`; every squad/feature PR targets `dev`.
 2. **`main` has exactly one custodian.** `release-manager` is the **only** agent permitted to target or merge `main`, in every repo, via the single `dev`→`main` release PR (`[P<num>-2]`), authorized by product-owner. A feature or CI/CD PR based on `main` is a defect — fix the base to `dev`.
 3. **Only dev-leader cuts branches and opens the cycle PR into `dev`** — inline, per [`leader-gitops`](../../skills/leader-gitops/SKILL.md), never as separate Branch/PR sub-tasks. Exactly one PR per cycle: head = the feature branch, base = `dev`. No QC squad and no separate git custodian exist in drunk — the squad leader is both.
-3b. **Squad members never create a branch, and never push one of their own.** The `agent/...` branch the runtime puts a member on is a scratch worktree, not a delivery target. A member delivers only by refspec onto the leader's feature branch, and **never runs a bare `git push`** — with no refspec git pushes the current branch to origin under its own name, which delivers nothing and leaves a stray `agent/...` branch behind. A member whose sub-task names no branch, or whose named branch is absent from origin (`git ls-remote origin <branch>` empty), stops and asks the leader for it (`blocked` + the leader's mention on its OWN sub-task); it never cuts the branch itself, not even when the code is finished and correct.
+3b. **Squad members never create a branch, and never push one of their own.** The `agent/...` branch the runtime puts a member on is a scratch worktree, not a delivery target. A member delivers only by refspec onto the leader's feature branch, and **never runs a bare `git push`** — with no refspec git pushes the current branch to origin under its own name, which delivers nothing and leaves a stray `agent/...` branch behind. A member whose sub-task names no branch, or whose named branch is absent from origin (`git ls-remote origin <branch>` empty), stops and asks the leader for it (`blocked` on its OWN sub-task + its handoff line on the parent, [Policy 05](05-sdlc-delivery-lifecycle.md) statement 5); it never cuts the branch itself, not even when the code is finished and correct.
 3c. **A push is proved against the remote.** `git rev-parse HEAD` must equal the SHA `git ls-remote origin <feature-branch>` prints, and that SHA goes in the completion report. The local `origin/<feature-branch>` tracking ref is not proof: after a bare push it still points where it did before, so the usual `git rev-parse origin/<branch>` check passes while the remote never moved (DRK-1353, 2026-09-16 — the fix sat on `agent/dev-backend/1b37847e15ca` and dev-leader had to fast-forward the feature branch by hand).
 4. **Never `git checkout` a shared branch** (`dev`, `main`, or any feature branch). A checkout locks it in one worktree until the task ends, stalling every other agent. Stay on the auto-generated `agent/...` branch and operate on the remote.
 5. **Branch and push by refspec, without checking out:**

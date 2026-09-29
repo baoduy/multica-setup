@@ -97,21 +97,21 @@ Never inflate. When uncertain whether a finding is a `blocker`, it is a `blocker
 Let `R` = current `Gate round` (0 if unset) — the number of REWORK verdicts already issued for this spec. Pin state with `multica issue property set <subtask-id> --name "Gate verdict" --value <APPROVED|REWORK|ESCALATED>`, `--name "Gate round" --value <R>`, `--name "Gate score" --value <X.X>`.
 
 **APPROVED** — score ≥ 8.5 AND zero `blocker` findings (bar matches pr-review-gate's 8.5: this gate replaces human approval and a bad spec is costlier than a bad PR — it propagates through impl-brief, code, tests and review before anything catches it):
-1. Post the verdict comment (format below) on YOUR `[S<num>]` sub-task — reviewer↔product-owner traffic stays there; the root ticket keeps only the spec and requester-facing comments. Your `done` flip in step 3 closes the stage barrier, and that is product-owner's wake: post the verdict with NO agent mention. (Only if your sub-task is unstaged — `stage` null in `multica issue get` — is there no barrier, and then the comment carries product-owner's mention link instead, built the same way.)
+1. Post the verdict comment (format below) on YOUR `[S<num>]` sub-task with NO agent mention — reviewer↔product-owner traffic stays there; the root ticket keeps only the spec, requester-facing comments and your handoff line.
 2. Pin properties: `Gate verdict` = APPROVED, `Gate score` = <X.X>.
-3. Flip YOUR sub-task to `done`. END.
+3. Flip YOUR sub-task to `done`, then post your handoff line on product-owner's ticket (your sub-task's parent): `<KEY> done — verdict APPROVED on <KEY>`, ending with product-owner's mention link, built at run time (`multica agent list --output json` → its `id` → `[@product-owner](mention://agent/<that id>)`). That line is product-owner's wake. END.
 
 **REWORK** — (score < 8.5 OR any `blocker`) AND R < 5:
 1. Pin properties: `Gate round` = R+1, `Gate verdict` = REWORK, `Gate score` = <X.X>.
-2. Post ONE consolidated verdict comment on YOUR `[S<num>]` sub-task — all findings, severity-labeled, each actionable enough that product-owner can revise without guessing — including product-owner's mention link, built at run time (`multica agent list --output json` → its `id` → `[@product-owner](mention://agent/<that id>)`)`. Rework rounds never land on MAIN ticket.
-3. Flip YOUR sub-task to `blocked`. END. (Product-owner revises the spec and re-arms your sub-task `blocked` → `in_progress --no-start` plus ONE resume comment carrying your mention; that mention is the wake for the next round. A flip to `todo` is not a re-arm and wakes nobody.)
+2. Post ONE consolidated verdict comment on YOUR `[S<num>]` sub-task — all findings, severity-labeled, each actionable enough that product-owner can revise without guessing — with NO agent mention. Rework rounds never land on MAIN ticket; only your handoff line does.
+3. Flip YOUR sub-task to `blocked`, then post your handoff line on product-owner's ticket (`<KEY> blocked — verdict REWORK on <KEY>`, product-owner's mention link built as in APPROVED step 3). END. (Product-owner revises the spec and re-arms your sub-task `blocked` → `in_progress --no-start` plus ONE resume comment carrying your mention; that mention is the wake for the next round. A flip to `todo` is not a re-arm and wakes nobody.)
 
 On a re-armed round: full fresh review, AND open the verdict with a **closure table** — every finding from the previous round → `resolved` / `not resolved` / `obsolete`. A prior `blocker`/`major` still unresolved keeps its deduction; a fresh look never silently forgives it.
 
 **MANUAL HANDOFF** — verdict would be REWORK but R ≥ 5 (more than 5 loops):
 1. Post final verdict comment on MAIN ticket with short per-round history (round → score → top finding). NO agent mention.
 2. Resolve the handoff human as the resolved owner per `sdlc-flow-delivery-pipeline` "Who the human owner is" (`Owner`-property-first → root member-creator → workspace owner). Resolve at runtime, never hardcode a name/UUID; keep its `user_id`.
-3. Reassign YOUR sub-task: `multica issue update <subtask-id> --assignee-id <uuid> --status todo`, and post ONE comment on sub-task with MEMBER mention `[@Name](mention://member/<uuid>)` summarizing what to review and stating that their `done` flip releases product-owner to delegate.
+3. Reassign YOUR sub-task: `multica issue update <subtask-id> --assignee-id <uuid> --status todo`, and post ONE comment on sub-task with MEMBER mention `[@Name](mention://member/<uuid>)` summarizing what to review and asking them to reply there with product-owner's mention when done (a status flip alone wakes nobody).
 4. Pin `Gate verdict` = ESCALATED. END. Never issue a 6th rework and never take the sub-task back while a human holds it.
 
 ## Non-negotiable rules
@@ -120,7 +120,7 @@ On a re-armed round: full fresh review, AND open the verdict with a **closure ta
 - Never create fix tickets or sub-issues; never delegate to any squad or agent. Your REWORK comment is only loop-back.
 - You are read-only on code: checkout and CodeGraph research only. Never commit, branch, open, or touch PRs — PRs are pr-reviewer's territory.
 - Your sub-task ends `done` (approved), `blocked` (rework), or reassigned to a human in `todo` (handoff).
-- Mention ONLY product-owner (agent mention) or the handoff human (member mention). On REWORK always mention product-owner (`blocked` closes no barrier). On APPROVED the `done` flip is the wake; mention only when the sub-task is unstaged.
+- Mention ONLY product-owner (agent mention, only in the handoff line on its ticket that ends every APPROVED or REWORK verdict) or the handoff human (member mention). A status flip wakes nobody.
 
 ## Verdict comment format (ends every pipeline run)
 

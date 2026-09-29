@@ -4,6 +4,47 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-29 — a child wakes its parent's owner with one handoff line; stage barriers wake nobody (live)
+
+Owner-approved. **Policy 05 v1.5** (statement 5: a child keeps its report, `## BLOCKER` and
+questions on its own ticket, flips `done`/`blocked`, then posts ONE line on the parent —
+`<KEY> done — report on <KEY>` / `<KEY> blocked — BLOCKER on <KEY>` — with no mention of any
+kind on a squad-assigned parent, which every main and phase ticket here is; the agent's mention
+on an agent-assigned parent; nothing on a member-assigned one; a human who finishes a ticket
+for an agent replies with that agent's mention), **Policy 03 v1.2** (3b: a missing branch is
+`blocked` + the handoff line), **Policy 04 v1.4** and **Policy 09 v1.5** (gates and members wake
+the leader with the handoff line, never a mention). Members no longer mention anyone; the
+`<@leader>` mention tokens are gone from dev-backend, qc-runner and qc-tester.
+
+Cause: since the Multica v0.6.0 upgrade (2026-09-28) the sub-issue-done wake is a wakeup rule
+whose dispatch has a hard-coded 2 s budget. This server reaches its Postgres in Azure Singapore
+at 70–400 ms a round trip and a dispatch needs about 30, so every stage-barrier wake and every
+agent-created wakeup timed out (drunk DRK-1796's leader never woke after its Build closed; the
+same server hosts this workspace). An agent's plain comment on a squad-assigned ticket enqueues
+the leader inside the request (`routeAssignedSquadLeaderFallback`, `server/internal/handler/comment.go`)
+with no dispatcher, and a busy leader gets it folded into its queued run or replayed after the
+current one. The old fallback — the leader's mention on the member's own sub-task — started a
+plain agent run on the child with no squad briefing. The owner switches the platform's
+sub-issue-done wakeup off in Settings → Wakeups, and agents are told never to create wakeup
+rules. `--stage` stays mandatory: it is now the order the leader promotes in, not a wake.
+
+The monthly architecture review no longer relies on the all-closed wake: each `[RP#]` run ends
+with a handoff line on the run issue carrying arch-reviewer's mention, and the roll-up runs on
+the wake that finds all four terminal (earlier wakes end silently).
+
+Cascade: workspace context (wake list, handoff line, human replies, member write rule,
+staging rationale, `Retrigger on done`, Fix-stage rationale, missing branch), `CLAUDE.md`,
+`README.md` (trigger mechanics, diagrams, glossary), `sdlc-flow-squad-member-protocol`
+(Mention rule → Handoff rule; the barrier self-check is gone), `sdlc-flow-squad-leader-playbook`
+(handoff wakes, reply-under-trigger rule, Barrier frontier removed, staging and fix-loop
+rationale), `sdlc-flow-delivery-pipeline` (wake contract; Barrier poisoning → stages order
+promotion), `sdlc-flow-po-orchestration`, `spec-review-gate`, `pr-review-gate` +
+`references/multica-flow.md`, `blocker-report`, `test-driven-development`, `sdlc-impl-brief`,
+agents `arch-reviewer`, `dev-backend`, `devops`, `issue-janitor`, `pr-reviewer`, `qc-leader`,
+`qc-runner`, `qc-tester`, `release-manager`, squads `dev-team`, `qc-team`, `product-team`,
+autopilots `monthly-architecture-review-monxa-backend-services`,
+`weekly-issue-hygiene-cancelled-cleanup`. Same change in drunk.
+
 ## 2026-09-28 — arch-review roll-up no longer waits for a "stage complete" comment (live)
 
 No policy amended. Multica v0.6.0 (#8807) turns the sub-issue-done wake into a system

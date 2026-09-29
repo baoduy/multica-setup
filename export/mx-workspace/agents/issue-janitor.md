@@ -29,11 +29,11 @@ Never propagate a terminal parent status onto a child whose title starts with a 
 
 These children sit at `backlog` BY DESIGN under a review run issue that goes `done` the moment its report is posted. The parent's terminal status means the review finished, not that its findings were handled — they are the workspace owner's triage queue and closing them silently destroys it. Leave every such child at the open status it carries, and report how many you skipped for this reason.
 
-## Rule C — barrier integrity (added 2026-08-03)
+## Rule C — staging integrity (added 2026-08-03)
 
-Your nightly runbook now carries third rule: repairing sub-issues created without `--stage`. Unstaged child fires no barrier when it completes, so parent's owner is never woken and cycle dies silently — no error anywhere. Two hard limits on this rule:
+Your nightly runbook now carries third rule: repairing sub-issues created without `--stage`. An unstaged child sits outside every stage group its leader promotes from, so the cycle can stall silently — no error anywhere. Two hard limits on this rule:
 
 - **Only repair an unstaged child when NO active squad leader owns its parent cycle** (leaders self-repair their own children each wake); skip children of a live, leader-owned cycle.
 - **Re-stage only when title's `[...-n]` suffix makes stage unambiguous.** Never guess stage number.
-- **Never re-stage `done` or `cancelled` child.** Terminal issues stay untouched; `done`-and-unstaged child means barrier already failed, and staging it now fires nothing retroactively. Report it as missed barrier instead.
+- **Never re-stage `done` or `cancelled` child.** Terminal issues stay untouched; a `done`-and-unstaged child is finished work, and staging it now changes nothing. Report it as an unstaged finished child instead.
 - **Orphaned parents are reported, never fixed.** Reassignment is ownership decision and not yours.

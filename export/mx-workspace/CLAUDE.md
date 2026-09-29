@@ -62,19 +62,20 @@ for git/ops agents, `product-owner` for orchestration agents):
 | `source_runtime_id` | the runtime the agent runs on; reuse the value siblings use. |
 
 Instruction discipline (learned conventions, keep them):
-- Report completion via **status only** — `done` fires the stage barrier; on a phase/sub
-  ticket **never** `in_review` (wakes nobody, strands the pipeline). `blocked` + a mention
-  comment = needs help.
+- Report completion via status plus ONE handoff line on the parent — stage barriers are
+  switched off (the v0.6.0 wakeup dispatcher times out on this server), so the line is the
+  wake; on a phase/sub ticket **never** `in_review` (strands the pipeline). `blocked` + a
+  `## BLOCKER` on the child + the handoff line = needs help.
 - **Mentions are actions.** An agent mention (`[@name](mention://agent/<uuid>)`, real UUID)
   enqueues a run; a member (human) mention only notifies. Never agent-mention in FYI/done
   comments. Resolve UUIDs at runtime (`multica agent list --output json`) — don't trust a
   hardcoded UUID in prose. **Mentions are NOT deduped** — one mention, one run, even when
   the target is already `queued` or `running`; post ONE mention comment per turn.
-- **Members never flip their own sub-task out of `done`.** A stage barrier re-fires on every
-  re-entry into `done`; only the LEADER re-triggers fix work, by flipping the sub-task
+- **Members never flip their own sub-task out of `done`.** Only the LEADER re-triggers fix
+  work, by flipping the sub-task
   `in_progress --no-start` (adding the blocked gate's key to `Retrigger on done`, comma-separated when there are several) and then
-  posting the ONE mention. Members write only on their own ticket and mention only their
-  leader — no member-to-member traffic.
+  posting the ONE mention. Members write only on their own ticket plus their handoff line on
+  the parent, and mention nobody — no member-to-member traffic.
 - Git boundaries are deliberate: only the squad leaders (`dev-leader`, `qc-leader`) cut
   feature branches and open PRs into `dev` — inline, per `leader-gitops`, never as
   Branch/PR sub-tasks; only `release-manager` opens/merges the `dev`→`main` release.

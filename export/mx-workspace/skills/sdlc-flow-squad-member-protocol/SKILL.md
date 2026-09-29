@@ -2,43 +2,40 @@
 
 You are squad MEMBER (implementer, verifier, tester, runner) working under
 squad leader. This is machinery for waking right actor and closing
-sub-task. Your own instructions name your leader and carry their mention token —
-use that token wherever this skill says `<@leader>`. Leader-side machinery lives
+sub-task. Your own instructions name your leader; your handoff line on the parent is
+how you wake them, never a mention. Leader-side machinery lives
 in `sdlc-flow-squad-leader-playbook`; stage map lives in
 `sdlc-flow-delivery-pipeline`.
 
-## Mention rule
+## Handoff rule
 
-**One wake signal per handoff — status flip XOR mention, never both, never
-neither** (full wake contract: `sdlc-flow-delivery-pipeline`). Your `done`/`blocked`
-flip trips the stage barrier that wakes leader — do NOT also mention (second wake,
-leader runs twice). A comment with no waking status change stalls unless it carries
-the mention. Before ending turn: moved a status that wakes someone? → no mention.
-No? → mention the one who must act. Agent mention (`[@name](mention://agent/<uuid>)`,
-real UUID — plain name triggers nothing) enqueues a run: only in comments needing
-that agent to act, never in done reports or FYIs; non-acting teammates by plain name.
+**One wake per handoff, and it is your handoff line** (workspace context). After
+your report on your OWN sub-task and your status flip, post ONE line on the cycle
+parent — `<KEY> done — report on <KEY>` or `<KEY> blocked — BLOCKER on <KEY>` —
+with no mention of any kind. The platform routes an agent's plain comment on the
+squad-assigned parent to the leader, in leader role; a mention, `@all` or a
+`/note` prefix in that line stops it. Your status flip wakes nobody (stage
+barriers are switched off). A busy leader is not woken twice: the line is folded
+into its queued run or replayed after the current one.
 
-- Done report on your own sub-task → **no mention**. Status is trigger.
-- Comment that needs your leader to act → on your **OWN** sub-task, with `<@leader>` —
-  never on parent issue: mention wakes leader wherever it is posted, and
-  leader↔member communication stays paired on your sub-task while parent stays
-  clean for leader's own orchestration. **Mentions are NOT deduped — one
-  mention, one run, every time**, even when leader is already `running`. Post
-  ONE comment per turn, last thing you do, with at most one mention in it;
-  a second mention comment in same turn runs that agent twice on same event.
+- Done report, blocker, question, defect report → on your **OWN** sub-task, no
+  mention, then the handoff line. Leader↔member communication stays paired on
+  your sub-task; the handoff line is the only thing you post on the parent.
+- You never agent-mention anyone; name teammates in prose.
 - Human decision required → that hop is your LEADER's, not yours: report it on
-  your OWN sub-task with `<@leader>` and say human decision is needed.
+  your OWN sub-task, say human decision is needed, and post the handoff line.
   Leader escalates per pipeline escalation map (by reassigning ticket to
   human — member mention renders link but delivers nothing).
 
 ## Status discipline
 
-Only `done` and `blocked` wake your leader — through stage barrier, with no
-mention needed. Anything else strands ticket and stalls pipeline.
+Only `done` and `blocked` end a turn, and neither wakes anyone by itself: the
+handoff line after the flip is the wake. Anything else strands ticket and stalls
+pipeline.
 
 | Status | When | Meaning |
 |---|---|---|
-| `done` | your work is complete and green | YOUR work is finished — **not** that leader approved it. Leader review happens after barrier fires. |
+| `done` | your work is complete and green | YOUR work is finished — **not** that leader approved it. Leader review happens after your handoff line wakes them. |
 | `blocked` | you cannot proceed, or your gate is red | cycle is visibly unfinished; leader gates it |
 | `in_review` | **never** | leader-only, for PARENT issue |
 
@@ -46,10 +43,10 @@ Never flip `done` while gate you own is red or fix sub-issue from your own
 work is still open — documenting failures in comment does not make it
 green.
 
-**LAST action of every run on sub-task is status write.** Status
-flip — not your report comment — is what fires barrier and wakes next
-actor; run that ends with sub-task still `todo`/`in_progress` leaves
-pipeline dead until janitor sweep or human notices. Before ending ANY run:
+**LAST actions of every run on sub-task: status write, then handoff line.**
+The flip records the state and the line wakes the leader; a run that ends with
+sub-task still `todo`/`in_progress`, or without the line, leaves pipeline dead
+until a sweep or a human notices. Before ending ANY run:
 re-read your sub-task's current status (`multica issue get <id> --output json`)
 and confirm it says what your report says — finished work reads `done`, parked
 work reads `blocked`. This applies to EVERY completion on a sub-task that has
@@ -58,23 +55,13 @@ nobody — this stranded MXW-562). **Rework on a sub-task that already reached
 `done` comes back to you from the LEADER only:** the leader flips it
 `in_progress` (never you — you never flip your own sub-task out of `done`) and
 posts ONE comment on it with your mention pointing at the gate's findings. Fix,
-report on your own sub-task, flip `done`, no mention: that second `done` is
-expected and wakes the leader, who re-arms the gate. You never post on the
+report on your own sub-task, flip `done`, then your handoff line: it wakes
+the leader, who re-arms the gate. You never post on the
 gate's sub-task and never mention the reviewer or verifier — a member writes
-only on its own ticket and mentions only its leader; anything for another
-member goes on YOUR ticket with `<@leader>`, and the leader routes it. Your
+only on its own ticket plus its handoff line, and mentions nobody; anything for
+another member goes on YOUR ticket, and the leader routes it. Your
 sub-task may carry the `Retrigger on done` property: that is the leader's
-bookkeeping for which gates to re-arm — never set, change or clear it. The same
-applies whenever your `done` closes no barrier: the server closes a stage
-barrier only when every sub-task at that stage and below is terminal, so a NEW
-sub-task the leader files at or above a `blocked` gate (a fix round at stage 4
-while Review sits `blocked` at stage 3) fires nothing — and neither does a
-plain `done` while ANY sibling at your stage or below sits `blocked`. So after
-every `done` flip, check `multica issue children <parent-id>`: a `blocked`
-sibling there means your `done` woke nobody, and a parked sibling never flips
-itself, so nothing else will fire that barrier either. Flip `done` as usual AND
-end your report with the leader's mention. You check this yourself — a brief
-that does not mention it is not a brief saying there is no barrier to close.
+bookkeeping for which gates to re-arm — never set, change or clear it.
 
 Native status semantics (what each status does server-side, PR close-intent
 auto-completion, metadata keys) are documented in platform's built-in
@@ -93,7 +80,7 @@ Eight checks. All cheap, and all of them things the review gate WILL run anyway:
 4. **Re-read the brief's prose**, not just §3 — the contract, the rules, §9, every note. Each edge case named there needs a fact or an explicit "no fact, reason".
 5. **Re-read every comment and doc comment you wrote or touched** against the code beside it. A comment that overstates what the code does is a defect; so is a class remark that lists two of three cases.
 6. **Scope.** `git diff --stat` shows nothing outside §3 and nothing in §4.
-7. **Acceptance-test drift** (Build and Fix sub-tasks). `git diff <at_sha>..HEAD -- <AT paths>` shows no modified or deleted approved scenario; every test you ADDED is listed by file. A frozen AT you had to change is not a self-review row — it is a `blocked` with the leader's mention, before any of this.
+7. **Acceptance-test drift** (Build and Fix sub-tasks). `git diff <at_sha>..HEAD -- <AT paths>` shows no modified or deleted approved scenario; every test you ADDED is listed by file. A frozen AT you had to change is not a self-review row — it is a `blocked` with your handoff line, before any of this.
 8. **Standards** (dev-backend `Build:` and `Fix (review):` sub-tasks; Policy 01 statement 17). Open `dknet-ddd-conventions`, `dotnet10-efcore10-standards` and the repo's own `CLAUDE.md`, and check the diff against their rule-ids — the brief's `Standards` at-risk ones first. Then:
    - **Reuse:** `codegraph explore` for every new public symbol before keeping it — an existing helper, extension, spec or base type that does the job replaces yours.
    - **DRY:** the same non-trivial block in 3+ places, or 2 copies that already drifted, is merged at the newer, tested copy (`CLEAN-DRY-001/002`) — the same `Where` in two handlers becomes one spec, the same guard in every handler an aggregate invariant.
@@ -114,12 +101,12 @@ Then report it. EVIDENCE carries one row per check with its measured result — 
    shape from `blocker-report` skill (RESULT / EVIDENCE / LEFT OPEN) —
    EVIDENCE rows are measured numbers your role owes (coverage %, suite
    status, build status). No agent mention.
-3. Flip YOUR sub-task to `done`. Do not hand off to next stage yourself —
-   routing is leader's job.
+3. Flip YOUR sub-task to `done`, then post your handoff line on the parent. Do
+   not hand off to next stage yourself — routing is leader's job.
 4. On BLOCKED: flip YOUR sub-task to `blocked` **first** — never leave it
-   `in_progress` — then post blocker on YOUR sub-task including
-   `<@leader>`, formatted per `blocker-report` skill (opens with
-   standalone `## BLOCKER` section). Status `blocked` is not optional
+   `in_progress` — then post blocker on YOUR sub-task, no mention,
+   formatted per `blocker-report` skill (opens with standalone
+   `## BLOCKER` section), then your handoff line on the parent. Status `blocked` is not optional
    bookkeeping: `## BLOCKER` written while your sub-task still reads
    `in_progress` is invisible to leader's blocked-child scan, so their
    reliable status-driven re-arm never fires and your resume falls back to
@@ -147,8 +134,8 @@ improvise. Never run a bare `git push` — with no refspec it pushes your
 `agent/...` worktree branch to origin under its own name, which delivers
 nothing — and prove the push with `git ls-remote origin <feature-branch>`,
 quoting that SHA in your report; the local `origin/<feature-branch>` ref
-still looks correct after a bare push, so it proves nothing. Missing feature branch on origin → `blocked` + `<@leader>` on your
-OWN sub-task, asking leader to create it. Never create it yourself.
+still looks correct after a bare push, so it proves nothing. Missing feature branch on origin → `blocked` on your OWN sub-task,
+asking leader to create it, then your handoff line. Never create it yourself.
 
 ## Defect loop — verifier side
 
@@ -164,7 +151,8 @@ verifying. For clear IMPLEMENTATION defect (failing test, spec violation):
    files it. This is what keeps a verification round from turning into a
    sub-issue storm nobody can route.
 3. **Flip YOUR sub-task to `blocked` — never `done`.** Post ONE consolidated
-   defect report on YOUR sub-task including `<@leader>` (never on parent) —
+   defect report on YOUR sub-task, no mention (never on parent), then your
+   handoff line —
    ONE report per round covering every defect found, never one per failing
    test. It must give the leader everything needed to file the fix without
    re-reading your run: per failing scenario, the test name, how to run it,
@@ -191,26 +179,27 @@ Receiving `[D<num>-n] Fix:` sub-issue:
    owner assigns it to you — never adopt one that is still unassigned.) First
    command: `multica issue runs <fix-sub-issue> --siblings` — another run of
    yours already in flight on this cycle means this wake is a duplicate; end
-   with no action, no push, no mention. One fix run per round.
+   with no action, no push, no handoff line. One fix run per round.
 2. **Never edit verifier's tests to make them pass.** If you believe test
    itself is wrong, flip fix sub-issue to `blocked` and raise it on
-   fix sub-issue itself with `<@leader>`.
+   fix sub-issue itself, then your handoff line.
 3. Run listed tests locally until green, push, and post done summary
    naming which scenarios now pass.
-4. Flip fix sub-issue to `done`, AND post ONE comment on fix sub-issue
-   including `<@leader>` asking to re-arm re-verification — that comment needs
-   leader to act, so mention is required. It never goes on parent.
+4. Flip fix sub-issue to `done`, then post your handoff line on the parent
+   (`<KEY> done — fix pushed, re-verify on <KEY>`): it wakes the leader, who
+   re-arms re-verification. Your report stays on the fix sub-issue.
 
 ## Questions that are not defects
 
 Spec ambiguity, scope questions, legitimate coverage or environment blocker:
-no sub-issue. Post comment on your OWN sub-task including `<@leader>` and let
-leader decide.
+no sub-issue. Post comment on your OWN sub-task, flip `blocked`, post your
+handoff line, and let leader decide.
 
 ## Anti-patterns
 
 - Mentioning agent in done report → spurious wake-up, duplicated work.
 - `in_review` on your own sub-task → nothing fires, ticket stranded.
+- Ending a turn without the handoff line → nobody wakes, ticket stranded.
 - `done` with red suite or open fix sub-issue → flow falsely closes.
 - One fix sub-issue per failing test → sub-issue storm, unroutable. This is why members report and only the leader files.
 - A member creating ANY issue → work enters the board unreviewed and unconsolidated; the leader loses the one place duplicate findings get merged.
