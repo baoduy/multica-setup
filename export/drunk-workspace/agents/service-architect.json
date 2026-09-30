@@ -35,7 +35,9 @@
     "service-design-template"
   ],
   "mcp_config": null,
-  "custom_env": null,
+  "custom_env": {
+    "ARCHIFY_CHROME_NO_SANDBOX": "1"
+  },
   "had_secrets": true,
   "instructions_file": "agents/service-architect.md",
   "description_file": "agents/service-architect.description.md"

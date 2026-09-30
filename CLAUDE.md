@@ -81,9 +81,10 @@ does not carry it yet.
   is unset (`findChrome` in `bin/visual-check.mjs`). On macOS it checks
   `/Applications`. On Linux it searches `PATH` for `google-chrome`,
   `google-chrome-stable`, `chromium` and `chromium-browser`, so each Ubuntu
-  host needs one of those on `PATH`. If a host needs
-  `ARCHIFY_CHROME_NO_SANDBOX=1`, set it in that host's daemon environment.
-  Do not set it per agent. Re-check `findChrome` after every sync.
+  host needs one of those on `PATH`. `ARCHIFY_CHROME_NO_SANDBOX=1` stays in
+  `custom_env` on docs-writer and service-architect. It never selects a
+  path, so it is safe on every OS, and it lets Chrome start on an Ubuntu
+  host that cannot run its sandbox. Re-check `findChrome` after every sync.
 - Update the global copy in the same pass:
   `npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --copy --yes`.
 - Push live like any other skill: ask first. Use `multica skill update` for
