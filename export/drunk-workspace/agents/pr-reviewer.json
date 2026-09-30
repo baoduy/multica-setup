@@ -20,7 +20,7 @@
   "source_runtime_provider": "claude",
   "mcp_servers": [],
   "source_id": "74368823-001f-4642-b1e5-d66d02a65da9",
-  "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+  "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
   "skill_names": [
     "blocker-report",
     "codegraph",

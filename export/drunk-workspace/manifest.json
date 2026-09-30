@@ -165,7 +165,7 @@
       "name": "dev-leader",
       "file": "agents/dev-leader.json",
       "source_id": "f11845ad-5f5a-4c0c-850e-d8900c719096",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "blocker-report",
@@ -182,7 +182,7 @@
       "name": "dev-backend",
       "file": "agents/dev-backend.json",
       "source_id": "05b99d40-990b-4a78-9aa5-db60dd59f2f1",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "blocker-report",
@@ -204,7 +204,7 @@
       "name": "default",
       "file": "agents/default.json",
       "source_id": "5bb59f89-c18e-4094-9b90-0de909d537d8",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "blocker-report",
@@ -217,7 +217,7 @@
       "name": "claude_ultra",
       "file": "agents/claude-ultra.json",
       "source_id": "4e429902-8ce5-44b1-85a2-09c3e5c88ee7",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "architecture-review-sweep",
@@ -232,7 +232,7 @@
       "name": "product-owner",
       "file": "agents/product-owner.json",
       "source_id": "1673352f-712c-4872-b565-58105408d2fc",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "blocker-report",
@@ -250,7 +250,7 @@
       "name": "devops",
       "file": "agents/devops.json",
       "source_id": "97ed0f87-978d-4da6-bc73-270f7a6c09db",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "blocker-report",
@@ -266,7 +266,7 @@
       "name": "arch-reviewer",
       "file": "agents/arch-reviewer.json",
       "source_id": "b8b037b4-e542-4bd3-b3e7-3b3bba920b61",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "architecture-review-sweep",
@@ -299,7 +299,7 @@
       "name": "pr-reviewer",
       "file": "agents/pr-reviewer.json",
       "source_id": "74368823-001f-4642-b1e5-d66d02a65da9",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "blocker-report",
@@ -314,7 +314,7 @@
       "name": "release-manager",
       "file": "agents/release-manager.json",
       "source_id": "917f3050-786b-4b9e-8309-5d8415d9835d",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "blocker-report",
@@ -327,7 +327,7 @@
       "name": "spec-reviewer",
       "file": "agents/spec-reviewer.json",
       "source_id": "0cb32640-00a7-4308-972f-2f459f52383a",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "blocker-report",
@@ -355,7 +355,7 @@
       "name": "blog-writer",
       "file": "agents/blog-writer.json",
       "source_id": "8fd8e2cb-863c-400c-88c1-29a9652da8b3",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "astro-paper-blog-conventions",
@@ -370,7 +370,7 @@
       "name": "medium-publisher",
       "file": "agents/medium-publisher.json",
       "source_id": "aada2a10-d43e-4adb-94a9-a6fc8639c1de",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "astro-paper-blog-conventions",
@@ -382,7 +382,7 @@
       "name": "docs-writer",
       "file": "agents/docs-writer.json",
       "source_id": "f3b4c442-b24c-4155-8bad-4e3b895c4d8b",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "api-feature-doc-template",
@@ -400,7 +400,7 @@
       "name": "run-medic",
       "file": "agents/run-medic.json",
       "source_id": "51b773ee-d8de-4f68-b8c9-270bc285294e",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [],
       "had_secrets": false
@@ -409,7 +409,7 @@
       "name": "service-architect",
       "file": "agents/service-architect.json",
       "source_id": "aa879e44-b3ac-4ee6-84c8-1a006bd1a263",
-      "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
         "archify",
