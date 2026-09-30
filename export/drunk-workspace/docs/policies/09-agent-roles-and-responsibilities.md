@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.19 |
+| **Version** | 1.20 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The thirteen chartered factory agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika` |
@@ -187,7 +187,7 @@ or the sub-task description.
 
 **run-medic — Hourly Run Recovery**
 - **Goal.** Put stopped agent runs back on their feet: every hour, wake the agent whose run was killed by a transient infrastructure failure, or whose run ended its turn leaving the ticket unfinished, without ever joining the work itself.
-- Responsibilities: build the stranded set from `multica agent tasks` across every agent, newest task per issue, leaf issues only (issue status cannot reveal a stopped run, and a parent is legitimately `in_progress` while its children work); wake a killed run only when its error is transient — API rate limit / overload, runtime offline, daemon restart — and an abandoned turn (task `completed`, ticket still open 30+ minutes later) always; at most **3 times per issue**, counted on the `Wake count` property; hand an issue that reaches the cap to its human owner in one comment and never wake it again; report permanent failures without retrying them; stop and escalate once when more than 3 issues look stranded in one hour; stay silent on a quiet hour.
+- Responsibilities: build the stranded set from `multica agent tasks` across every agent, newest task per issue, and wake only a leaf issue (no sub-issues) assigned to an agent, at `todo` or `in_progress` (issue status cannot reveal a stopped run, a parent is legitimately `in_progress` while its children work, and an issue assigned to a member, a squad or nobody is waiting on a person, not on a run) — the fixed detection script applies these filters, never the model; wake a killed run only when its error is transient — API rate limit / overload, runtime offline, daemon restart — and an abandoned turn (task `completed`, ticket still open 30+ minutes later) always, within that scope; at most **3 times per issue**, counted on the `Wake count` property; hand an issue that reaches the cap to its human owner in one comment and never wake it again; report permanent failures without retrying them; stop and escalate once when more than 3 issues look stranded in one hour; stay silent on a quiet hour.
 - **Carve-out from the member write rule.** `run-medic` is infrastructure recovery, not a squad member, so it comments on issues it does not own — always as a reply under an existing root it did not author, never as a new thread root, and it unsubscribes after every comment.
 - Never: change a status, assign, create or cancel a ticket, touch code or branches; retry a permanent failure; wake the issue assignee instead of the agent that crashed; mention an agent in a hand-off or permanent-failure report; wake a fourth time; report a partial sweep as clean.
 
