@@ -54,6 +54,37 @@ the workspace context implement it. Two rules follow from that:
   and diff it against the local file. Live and bundle drift is a defect, not a
   pending task.
 
+## Vendored upstream skills — archify
+
+`export/drunk-workspace/skills/archify/` mirrors the `archify/` directory of
+https://github.com/tt-a1i/archify for the Multica platform. The same skill is
+installed globally for Claude Code at `~/.claude/skills/archify`. mx-workspace
+does not carry it yet.
+
+- Check for a new upstream release from time to time, and on every
+  `multica-release-review` run. The bundle version is in
+  `skills/archify/skill-release.json`. The upstream version is
+  `gh api repos/tt-a1i/archify/releases/latest --jq .tag_name`.
+- Sync = replace the bundle dir with upstream `archify/` at the release tag.
+  The bundle intentionally drops `test/` and the rendered `examples/*.html`.
+  It keeps the bundle-only `config.json` (the Multica import origin). Diff
+  first (`diff -rq <clone>/archify export/drunk-workspace/skills/archify`),
+  so the only differences are those three.
+- Read the upstream `CHANGELOG.md` before you sync. A major or minor bump can
+  change the CLI, the schemas or the IR shape. Re-check everything in the
+  bundle that quotes archify commands, types or file names. Find them with
+  `grep -rli archify export/drunk-workspace --exclude-dir=archify`: agents,
+  doc/design templates, both gate skills, the delivery pipeline and Policies
+  05, 06 and 09. Agents that load it need `ARCHIFY_CHROME` in `custom_env`;
+  keep that setting.
+- Update the global copy in the same pass:
+  `npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --copy --yes`.
+- Push live like any other skill: ask first. Use `multica skill update` for
+  `SKILL.md` and `multica skill files upsert` for every changed file. Use
+  `multica skill files delete` for files that upstream removed. Then read the skill back and diff it against
+  the bundle.
+- Commit as `drunk: sync archify to vX.Y.Z`.
+
 <!-- rtk-instructions v2 -->
 # Command output
 
