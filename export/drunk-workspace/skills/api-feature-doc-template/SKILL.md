@@ -211,7 +211,10 @@ one sentence.
 ## Service README
 
 The repo-root `README.md` of an application: Title + one-liner, 📖 Overview
-(one bullet per feature, each linking its page), 🌐 Downstream systems for the
+(one bullet per feature, each linking its page), 🏗️ Runtime architecture (once
+the repo has one: its `docs/diagrams/runtime.svg`, alt text narrating the primary path in one
+sentence — Policy 05 statement 3a; shape and drawing prompt in docs-writer's
+procedure, archify type always `architecture`), 🌐 Downstream systems for the
 whole application, 🚀 Quick Start (run it locally,
 then one call), a link to the configuration reference, then a table of the
 feature pages. No endpoint sections — they drift from the feature page that

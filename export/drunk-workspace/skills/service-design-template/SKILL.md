@@ -146,6 +146,13 @@ Tables, no diagram: archify has no table-schema type, and a Mermaid
 - **Testing approach** — which behaviours need integration tests against real
   infrastructure (Policy 02), and which neighbour is faked.
 
+Diagram: the planned runtime architecture (archify `architecture`,
+`diagrams/runtime.architecture.json` + `runtime.svg`) — the shape every repo
+carries (Policy 05 statement 3a): 8–12 core components, one primary path, the
+external dependencies and the trust boundaries above, with ports, auth and
+config in cards instead of more edges. It is drawn from this design; the first
+docs ticket after the scaffold redraws it from the code at `docs/diagrams/`.
+
 ## adr/NNNN-<slug>.md — one per decision
 
 ```markdown
@@ -167,7 +174,8 @@ old one superseded; it never edits an accepted decision.
 
 Every diagram is drawn with archify, never Mermaid — no fallback, no
 placeholder. Required: the context map and at least one main flow (03), the
-domain model (02), and a lifecycle per stateful aggregate (02). The archify type
+domain model (02), a lifecycle per stateful aggregate (02), and the planned
+runtime architecture (05). The archify type
 for each is your call, using archify's type router. Diagrams show the real names
 from this design — never generic boxes ("Service → Database"). Commit the JSON
 IR and the rendered `.svg` side by side under `docs/architect/diagrams/`, and

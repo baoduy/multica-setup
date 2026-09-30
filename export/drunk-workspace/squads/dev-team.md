@@ -39,7 +39,7 @@ The ⚙ rows are never sub-tasks. Independent surfaces get their own Acceptance-
 
 ## Docs impact (a report line, never a stage)
 
-The cycle writes no docs pages: docs-writer works outside this squad, only when a human asks (Policy 05 statement 3a). In-code API comments, and for a breaking change the `Breaking` changelog entry naming the replacement (Policy 01 statement 12), ship in dev-backend's Build. Before you finalize, grep `README*` and `docs/` for each public symbol, option, config key, endpoint and flow the cycle changed, and put ONE line in your final report: `Docs impact: <page> — <what is now stale>; …`, or `Docs impact: none`. That line is the owner's cue to ask docs-writer; never create a docs sub-task or ticket for it.
+The cycle writes no docs pages: docs-writer works outside this squad, only when a human asks (Policy 05 statement 3a). In-code API comments, and for a breaking change the `Breaking` changelog entry naming the replacement (Policy 01 statement 12), ship in dev-backend's Build. Before you finalize, grep `README*` and `docs/` for each public symbol, option, config key, endpoint and flow the cycle changed, and put ONE line in your final report: `Docs impact: <page> — <what is now stale>; …`, or `Docs impact: none`. A cycle that adds or removes a component, an external dependency or a trust boundary also names the repo's runtime architecture diagram — `docs/diagrams/runtime.svg — <what changed>`, or `runtime architecture diagram missing` where the repo has none (Policy 05 statement 3a). That line is the owner's cue to ask docs-writer; never create a docs sub-task or ticket for it.
 
 ## Rework and gates
 
