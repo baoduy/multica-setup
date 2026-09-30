@@ -1,6 +1,6 @@
 {
   "name": "Mika",
-  "model": "",
+  "model": "claude-haiku-4-5",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a931-ae69-739a-b701-e6cbed200387.png",
   "service_tier": "",
@@ -17,10 +17,10 @@
   "runtime_config": {},
   "custom_args": [],
   "thinking_level": "",
-  "source_runtime_provider": "hermes",
+  "source_runtime_provider": "claude",
   "mcp_servers": [],
   "source_id": "ed486cd5-9d44-4058-89f3-0c92f3d8512f",
-  "source_runtime_id": "8c109428-3093-494f-aad9-856cced56b69",
+  "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
   "skill_names": [
     "codegraph",
     "interview-me",

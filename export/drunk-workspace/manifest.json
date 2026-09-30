@@ -288,8 +288,8 @@
       "name": "issue-janitor",
       "file": "agents/issue-janitor.json",
       "source_id": "30771d34-7ae6-4d84-acb0-5ae1d0f649e9",
-      "source_runtime_id": "8c109428-3093-494f-aad9-856cced56b69",
-      "source_runtime_provider": "hermes",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
+      "source_runtime_provider": "claude",
       "skill_names": [
         "blocker-report"
       ],
@@ -342,8 +342,8 @@
       "name": "Mika",
       "file": "agents/mika.json",
       "source_id": "ed486cd5-9d44-4058-89f3-0c92f3d8512f",
-      "source_runtime_id": "8c109428-3093-494f-aad9-856cced56b69",
-      "source_runtime_provider": "hermes",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
+      "source_runtime_provider": "claude",
       "skill_names": [
         "codegraph",
         "interview-me",
