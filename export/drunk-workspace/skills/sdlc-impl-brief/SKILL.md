@@ -10,7 +10,7 @@ This is not the spec. The business spec lives on the root or phase ticket (`sdlc
 
 **The spec's §3b placement is binding too.** Put the change in the repo and bounded context §3b names as Owner, and add only the dependencies it declares, in the direction it declares. A design that needs a different owner, a new dependency or a public-surface break §3b did not declare goes back to product-owner on the ticket — pr-reviewer blocks a diff that contradicts §3b.
 
-**The repo's approved service design binds the same way.** When `dev` holds `docs/architect/`, read it before the brief: aggregates, entities, events, endpoints and dependencies follow its domain and integration files, and every non-goal stays out. A brief that needs the design changed goes back to product-owner on the ticket — the design changes only through a Workflow F ticket.
+**The repo's approved service design binds the same way.** When `dev` holds `docs/architect/`, read it before the brief: aggregates, entities, events, endpoints and dependencies follow its domain and integration files and its runtime architecture diagram (components, external dependencies, trust boundaries), and every non-goal stays out. A brief that needs the design changed goes back to product-owner on the ticket — the design changes only through a Workflow F ticket.
 
 ## Writing rules (agent reader)
 

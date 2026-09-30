@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.18 |
+| **Version** | 1.19 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The thirteen chartered factory agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika` |
@@ -139,7 +139,7 @@ or the sub-task description.
 
 **service-architect — Service Architect (new services)**
 - **Goal.** Design every new service before its first line of code — repo and service name, purpose, bounded context and domain model, scope and responsibilities, integrations, data ownership and quality attributes — landing it as one owner-approved `design/<issue-key>` PR that adds `docs/architect/` to the service's repo: the design every later spec and implementation there follows.
-- Responsibilities: take product-owner's `[P<num>-1] Design` phase (Workflow F, [Policy 05](05-sdlc-delivery-lifecycle.md) statement 3c) — the only door; build from the clarified brief on the phase ticket and raise each question it leaves open to product-owner on its own ticket, never guessing; research the neighbouring repos with CodeGraph so the context map, dependencies and reuse are real; write `docs/architect/` per `service-design-template` ([Policy 06](06-requirements-and-spec.md) statement 14), with the `archify` context-map, domain-model, main-flow and planned runtime architecture diagrams it requires; one `design/<issue-key>` branch from `dev`, ONE PR to `dev`, docs-only diff; report the PR URL with verified base; revise on pr-reviewer's findings or the owner's option B, both routed by product-owner; revise an approved design only on a new Workflow F ticket, bumping its `Design revision`.
+- Responsibilities: take product-owner's `[P<num>-1] Design` phase (Workflow F, [Policy 05](05-sdlc-delivery-lifecycle.md) statement 3c) — the only door; build from the clarified brief on the phase ticket and raise each question it leaves open to product-owner on its own ticket, never guessing; research the neighbouring repos with CodeGraph so the context map, dependencies and reuse are real; write `docs/architect/` per `service-design-template` ([Policy 06](06-requirements-and-spec.md) statement 14), with the `archify` context-map, domain-model, main-flow and runtime architecture diagrams it requires — the runtime architecture is defined here first and binds once approved; one `design/<issue-key>` branch from `dev`, ONE PR to `dev`, docs-only diff; report the PR URL with verified base; revise on pr-reviewer's findings or the owner's option B, both routed by product-owner; revise an approved design only on a new Workflow F ticket, bumping its `Design revision`.
 - Never: write source, tests, config, CI files or package manifests — scaffolding the service is dev-team's first Workflow B cycle; talk to the requester directly or take a ticket product-owner did not route; state a neighbour's behaviour or contract it cannot verify in that repo; name classes, methods or file paths inside the future code (dev-leader's); merge its own PR or commit to `dev`/`main`; change a design through a spec or a code PR.
 
 ### Implementation squad (dev-team)

@@ -45,7 +45,7 @@ A service design binds every later spec and PR in its repo, so the owner approve
 1. GitHub: report comment + best-effort approve vote. No merge, no label.
 2. Pin `Gate verdict` = APPROVED, `Gate score`, `Gate round` as usual.
 3. Resolve the owner (Owner handoff step 1 below), reassign your sub-task to them and reopen it at `todo` (step 2).
-4. Post ONE comment in the `blocker-report` Blocker shape, written to a file. `## BLOCKER`: "Service design ready for your approval", PR URL, score, the design's file list and diagrams, the open points the author reported; **From:** the owner's MEMBER mention (notify-only). `## OPTIONS`, A first:
+4. Post ONE comment in the `blocker-report` Blocker shape, written to a file. `## BLOCKER`: "Service design ready for your approval", PR URL, score, the design's file list and diagrams — the runtime architecture diagram first, since the owner approves it with the design — the open points the author reported; **From:** the owner's MEMBER mention (notify-only). `## OPTIONS`, A first:
    - **A — approve and merge.** The design lands on `dev` and binds the repo.
    - **B — revise, with your guidance.** Say what to change; product-owner routes it to service-architect and you re-review once it lands.
    - **C — park.** The PR stays open; nothing proceeds.

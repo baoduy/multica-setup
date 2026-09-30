@@ -66,6 +66,9 @@ under 20 words, everyday words, bullets over paragraphs, numbers as digits.
 ## Documents
 <one line per file above: link + what question it answers>
 
+## Runtime architecture
+<`diagrams/runtime.svg` with alt text narrating the primary path in one sentence>
+
 ## Delivery slices
 <Ordered list. Each slice = one future Workflow B ticket: a name, one line of
 what it delivers, and the design sections it realises. Slice 1 is the scaffold
@@ -146,12 +149,23 @@ Tables, no diagram: archify has no table-schema type, and a Mermaid
 - **Testing approach** — which behaviours need integration tests against real
   infrastructure (Policy 02), and which neighbour is faked.
 
-Diagram: the planned runtime architecture (archify `architecture`,
+Diagram: the service's runtime architecture (archify `architecture`,
 `diagrams/runtime.architecture.json` + `runtime.svg`) — the shape every repo
-carries (Policy 05 statement 3a): 8–12 core components, one primary path, the
-external dependencies and the trust boundaries above, with ports, auth and
-config in cards instead of more edges. It is drawn from this design; the first
-docs ticket after the scaffold redraws it from the code at `docs/diagrams/`.
+carries (Policy 05 statement 3a). This is where it is first defined, and once
+approved it binds like the rest of the design. Brief yourself with this prompt,
+verbatim — the design-stage form of docs-writer's, since the repo has no code
+yet:
+
+> Analyze this design and the neighbouring repos it names, then use archify to create a high-level runtime architecture diagram.
+> Show 8–12 core components, one primary path, external dependencies, and trust boundaries.
+> Put supporting detail in cards instead of adding more edges.
+
+Components are the runtime pieces this design names (host, workers, stores,
+queues); external dependencies are the consumed APIs, events and packages from
+03, each verified; trust boundaries are the ones in Security above. Ports,
+auth and config go in cards. Validate with `--quality showcase`. The first docs
+ticket after the scaffold draws the code-derived diagram at `docs/diagrams/`
+and reports any divergence from this one as a design question.
 
 ## adr/NNNN-<slug>.md — one per decision
 
@@ -198,6 +212,8 @@ the PR body. A spec or a code PR never edits `docs/architect/`.
 4. Every dependency points the way the stack allows, with no cycle.
 5. Every entity field has type, required and default; every endpoint has verb,
    path and auth.
-6. All required diagrams exist, both IR and `.svg` committed, and
+6. All required diagrams exist, both IR and `.svg` committed, the runtime
+   architecture passes archify `validate architecture --quality showcase` with
+   8–12 components and is shown in `README.md`, and
    `git diff origin/dev... | grep -c '^+```mermaid'` prints 0.
 7. `git diff --stat` shows `docs/architect/` only.
