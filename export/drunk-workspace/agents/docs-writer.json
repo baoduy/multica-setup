@@ -32,9 +32,7 @@
     "sdlc-gitflow"
   ],
   "mcp_config": null,
-  "custom_env": {
-    "ARCHIFY_CHROME": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-  },
+  "custom_env": null,
   "had_secrets": true,
   "instructions_file": "agents/docs-writer.md",
   "description_file": "agents/docs-writer.description.md",

@@ -35,9 +35,7 @@
     "service-design-template"
   ],
   "mcp_config": null,
-  "custom_env": {
-    "ARCHIFY_CHROME": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-  },
+  "custom_env": null,
   "had_secrets": true,
   "instructions_file": "agents/service-architect.md",
   "description_file": "agents/service-architect.description.md"

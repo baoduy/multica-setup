@@ -75,8 +75,15 @@ does not carry it yet.
   bundle that quotes archify commands, types or file names. Find them with
   `grep -rli archify export/drunk-workspace --exclude-dir=archify`: agents,
   doc/design templates, both gate skills, the delivery pipeline and Policies
-  05, 06 and 09. Agents that load it need `ARCHIFY_CHROME` in `custom_env`;
-  keep that setting.
+  05, 06 and 09.
+- Never pin `ARCHIFY_CHROME` in an agent's `custom_env`. A runtime can be
+  macOS or Ubuntu, and archify finds Chrome by itself only when the variable
+  is unset (`findChrome` in `bin/visual-check.mjs`). On macOS it checks
+  `/Applications`. On Linux it searches `PATH` for `google-chrome`,
+  `google-chrome-stable`, `chromium` and `chromium-browser`, so each Ubuntu
+  host needs one of those on `PATH`. If a host needs
+  `ARCHIFY_CHROME_NO_SANDBOX=1`, set it in that host's daemon environment.
+  Do not set it per agent. Re-check `findChrome` after every sync.
 - Update the global copy in the same pass:
   `npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --copy --yes`.
 - Push live like any other skill: ask first. Use `multica skill update` for
