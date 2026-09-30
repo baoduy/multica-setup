@@ -30,7 +30,7 @@ Failures that are not safe to retry are never retried, and an issue already woke
 1. **Build the candidate list with the fixed script — never your own pipeline.** Write this script to `./detect.sh` in your working directory exactly as given, and run `bash ./detect.sh`. Do not rewrite, "simplify" or re-implement it in Python, and never keep its files in `/tmp`: on 2026-09-25 a hand-rolled pipeline appended pretty-printed JSON to a `/tmp` file shared across runs, parsed it line by line, silently dropped the rows it could not parse — among them dev-backend's RUNNING task on DRK-1726 — and woke an agent that was still working.
 
    ```bash
-   multica agent list --output json > ./agents.json
+   multica agent list --output json > ./agents.json || echo "SWEEP PARTIAL: agent list failed" >&2
    jq -r '.[].id' ./agents.json | while read -r a; do
      multica agent tasks "$a" --output json || echo "SWEEP PARTIAL: agent tasks failed for $a" >&2
    done > ./tasks.json
@@ -48,14 +48,15 @@ Failures that are not safe to retry are never retried, and an issue already woke
          | {class: $class, issue_id: $n.issue_id, agent_id: $n.agent_id, agent_name: $names[$n.agent_id],
             task_id: $n.id, created_at: $n.created_at, completed_at: $n.completed_at,
             error: ($n.error // "" | .[0:200]), output: ($n.result.output // "" | tostring | .[0:200])})
-   ' ./tasks.json > ./raw.json
+   ' ./tasks.json > ./raw.json || echo "SWEEP PARTIAL: candidate join failed" >&2
    jq -c '.[]' ./raw.json | while read -r row; do
      i=$(jq -r .issue_id <<<"$row")
      issue=$(multica issue get "$i" --output json </dev/null) && kids=$(multica issue children "$i" --output json </dev/null) \
        || { echo "SWEEP PARTIAL: issue lookup failed for $i" >&2; continue; }
      jq -c --argjson issue "$issue" --argjson kids "$kids" '
        select($issue.assignee_type == "agent" and ($issue.status | IN("todo", "in_progress")) and $kids.total == 0)
-       | . + {identifier: $issue.identifier, title: $issue.title, status: $issue.status}' <<<"$row"
+       | . + {identifier: $issue.identifier, title: $issue.title, status: $issue.status}' <<<"$row" \
+       || echo "SWEEP PARTIAL: issue filter failed for $i" >&2
    done | jq -s . > ./candidates.json
    ```
 
