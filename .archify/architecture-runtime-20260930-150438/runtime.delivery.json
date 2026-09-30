@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "3bcebdb2-6e81-448e-b8eb-d0c34d56e2fe",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime-20260930-150438/candidate.json",
+  "output": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime-20260930-150438/runtime.html",
+  "specification": {
+    "sha256": "56da94ac7d804ff563e0194e6af34a4390b18eaccb221daf7b4ab438ca4f9b1d",
+    "bytes": 8037
+  },
+  "artifact": {
+    "sha256": "f3475695bb3b810cc8fdfb3f827027cc6baeba7d6fb713d56b82eb5c69881694",
+    "bytes": 776182
+  }
+}

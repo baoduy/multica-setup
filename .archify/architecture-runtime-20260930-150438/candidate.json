@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "multica-setup — runtime architecture (drunk-workspace)",
+    "output": ".archify/architecture-runtime-20260930-150438/runtime.html",
+    "quality_profile": "showcase",
+    "locale": "en",
+    "repository": {
+      "url": "https://github.com/baoduy/multica-setup",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "edecad0f17f4c8f5f02bed14238f45e17d914888"
+    }
+  },
+  "components": [
+    { "id": "owner", "type": "external", "label": "Owner (human)", "sublabel": "files root tickets", "pos": [300, 40], "size": [160, 64],
+      "sources": [{ "path": "export/drunk-workspace/workspace/workspace.context.md", "line": 22, "label": "Owner property resolution" }] },
+    { "id": "server", "type": "cloud", "label": "Multica server", "sublabel": "board · wakes · context", "tag": "drunk-workspace", "pos": [300, 200], "size": [160, 64],
+      "sources": [
+        { "path": "export/drunk-workspace/workspace/workspace.context.md", "line": 10, "end_line": 11, "label": "run enqueue and stage wake rules" },
+        { "path": "export/drunk-workspace/README.md", "line": 17, "end_line": 22, "label": "what an agent run receives" }
+      ] },
+    { "id": "anthropic", "type": "external", "label": "Anthropic API", "sublabel": "opus · sonnet · haiku", "pos": [580, 200], "size": [160, 64],
+      "sources": [
+        { "path": "export/drunk-workspace/README.md", "line": 33, "end_line": 55, "label": "agent to model table" },
+        { "path": "export/drunk-workspace/agents/dev-backend.json", "line": 3, "label": "per-agent model" }
+      ] },
+    { "id": "bundle", "type": "frontend", "label": "Operator bundle", "sublabel": "Claude Code + multica CLI", "tag": "drunk + mx", "pos": [40, 380], "size": [160, 64],
+      "sources": [
+        { "path": "export/drunk-workspace/README.md", "line": 1, "end_line": 3, "label": "bundle contents and push commands" },
+        { "path": "CLAUDE.md", "line": 37, "end_line": 55, "label": "policy first, push and read back" }
+      ] },
+    { "id": "daemon", "type": "backend", "label": "Claude runtime", "sublabel": "Stevens-Mac-mini.local", "pos": [300, 380], "size": [160, 64],
+      "sources": [
+        { "path": "export/drunk-workspace/README.md", "line": 55, "label": "every agent runs on this runtime" },
+        { "path": "export/drunk-workspace/agents/dev-backend.json", "line": 23, "label": "source_runtime_id" }
+      ] },
+    { "id": "product", "type": "backend", "label": "product-team", "sublabel": "product-owner leads", "pos": [300, 560], "size": [160, 64],
+      "sources": [
+        { "path": "export/drunk-workspace/squads/product-team.json", "line": 5, "end_line": 12, "label": "leader and spec-reviewer" },
+        { "path": "export/drunk-workspace/agents/product-owner.md", "line": 3, "end_line": 5, "label": "research, spec, orchestrate" }
+      ] },
+    { "id": "specgate", "type": "security", "label": "spec-reviewer", "sublabel": "spec gate ≥ 8.5", "pos": [580, 560], "size": [160, 64],
+      "sources": [{ "path": "export/drunk-workspace/skills/spec-review-gate/SKILL.md", "line": 99, "label": "APPROVED bar" }] },
+    { "id": "dev", "type": "backend", "label": "dev-team", "sublabel": "dev-leader + dev-backend", "pos": [860, 560], "size": [160, 64],
+      "sources": [
+        { "path": "export/drunk-workspace/squads/dev-team.json", "line": 5, "end_line": 20, "label": "leader, developer, reviewer" },
+        { "path": "export/drunk-workspace/agents/dev-leader.md", "line": 3, "label": "one merged PR into dev" }
+      ] },
+    { "id": "prgate", "type": "security", "label": "pr-reviewer", "sublabel": "PR gate ≥ 8.5 · merges", "pos": [860, 740], "size": [160, 64],
+      "sources": [{ "path": "export/drunk-workspace/skills/pr-review-gate/SKILL.md", "line": 13, "end_line": 14, "label": "merge only what it gated" }] },
+    { "id": "release", "type": "backend", "label": "release-manager", "sublabel": "dev → main PR", "pos": [580, 740], "size": [160, 64],
+      "sources": [{ "path": "export/drunk-workspace/agents/release-manager.md", "line": 1, "end_line": 9, "label": "owns only the release PR" }] },
+    { "id": "github", "type": "external", "label": "GitHub baoduy/*", "sublabel": "repos + Actions CI", "pos": [580, 920], "size": [160, 64],
+      "sources": [{ "path": "export/drunk-workspace/workspace/workspace.context.md", "line": 27, "end_line": 31, "label": "dev, main, publish pipeline" }] },
+    { "id": "registries", "type": "external", "label": "NuGet / npm", "sublabel": "published packages", "pos": [860, 920], "size": [160, 64],
+      "sources": [
+        { "path": "export/drunk-workspace/workspace/workspace.context.md", "line": 3, "label": "publishing is the release" },
+        { "path": "export/drunk-workspace/agents/release-manager.md", "line": 5, "label": "merge triggers CI publish" }
+      ] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Stevens-Mac-mini.local", "wraps": ["bundle", "daemon", "product", "specgate", "dev", "prgate", "release"] },
+    { "kind": "security-group", "label": "Agent runs · agent/… worktree", "wraps": ["product", "specgate", "dev", "prgate", "release"] }
+  ],
+  "connections": [
+    { "id": "file-ticket", "from": "owner", "to": "server", "label": "root ticket", "variant": "emphasis" },
+    { "id": "claim-run", "from": "server", "to": "daemon", "label": "claim run", "variant": "emphasis" },
+    { "id": "wake-leader", "from": "daemon", "to": "product", "label": "wake leader", "variant": "emphasis" },
+    { "id": "spec-review", "from": "product", "to": "specgate", "label": "spec review", "variant": "emphasis" },
+    { "id": "approved-phases", "from": "specgate", "to": "dev", "label": "approved ≥8.5", "variant": "emphasis" },
+    { "id": "open-pr", "from": "dev", "to": "prgate", "label": "PR to dev", "variant": "emphasis" },
+    { "id": "merged-dev", "from": "prgate", "to": "release", "label": "merged to dev", "variant": "emphasis" },
+    { "id": "merge-main", "from": "release", "to": "github", "label": "merge dev→main", "variant": "emphasis" },
+    { "id": "ci-publish", "from": "github", "to": "registries", "label": "CI publish", "variant": "emphasis" },
+    { "id": "push-config", "from": "bundle", "to": "server", "label": "push config", "variant": "dashed" },
+    { "id": "claude-api", "from": "daemon", "to": "anthropic", "label": "Claude API", "variant": "security" }
+  ],
+  "cards": [
+    { "dot": "rose", "title": "Review gates", "items": [
+      "Spec and PR gates approve at ≥ 8.5 with zero blockers",
+      "≥ 2 open majors cap below the bar; spec miss caps 6.9",
+      "pr-reviewer merges what it scores; the owner gets options only when rework rounds run out",
+      "A critical release (breaking change) waits for the owner's reply"
+    ] },
+    { "dot": "violet", "title": "Wakes and ownership", "items": [
+      "A run is enqueued by assignment, a stage-closing done, or a real agent-UUID mention",
+      "Only squad leaders create issues; members report on their own sub-task",
+      "The Owner property names the human for every ticket"
+    ] },
+    { "dot": "amber", "title": "Autopilots (cron inside Multica)", "items": [
+      "run-medic hourly: re-wakes runs killed by transient errors, 3 tries, then the owner",
+      "arch-reviewer monthly on DKNet; issue-janitor weekly",
+      "NuGet / npm upgrade and Pulumi review autopilots are paused"
+    ] },
+    { "dot": "cyan", "title": "Config push", "items": [
+      "docs/policies/ is the source of truth; skills, agents and squads implement it",
+      "Edit the bundle first; pushing live needs the owner's yes",
+      "Byte-exact push flags; read back and diff after every push",
+      "The Multica server URL is per-operator config, not in this repo"
+    ] },
+    { "dot": "emerald", "title": "mx-workspace (same shape)", "items": [
+      "Monxa payment services under github.com/the-wixo, plus a qc-team",
+      "Deployed: dev = INTEGRATION, main = SANDBOX via argoCD"
+    ] }
+  ]
+}
