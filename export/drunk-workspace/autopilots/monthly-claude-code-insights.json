@@ -1,9 +1,9 @@
 {
-  "title": "📊 Monthly Claude Code Insights",
+  "title": "📊 Monthly Insights & Multica Release Review",
   "source_id": "b4e9435e-0c37-450f-b4ca-84f1026df7eb",
   "status": "active",
   "execution_mode": "create_issue",
-  "issue_title_template": "Monthly Claude Code Insights ({{date}})",
+  "issue_title_template": "Monthly Insights & Multica Release Review ({{date}})",
   "project_title": "drunk-others",
   "assignee_type": "agent",
   "assignee_name": "default",
