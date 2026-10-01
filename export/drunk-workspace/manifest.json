@@ -615,6 +615,15 @@
       "assignee_name": "run-medic",
       "project_title": "drunk-others",
       "had_webhook_trigger": false
+    },
+    {
+      "title": "📊 Monthly Claude Code Insights",
+      "file": "autopilots/monthly-claude-code-insights.json",
+      "source_id": "b4e9435e-0c37-450f-b4ca-84f1026df7eb",
+      "assignee_type": "agent",
+      "assignee_name": "default",
+      "project_title": "drunk-others",
+      "had_webhook_trigger": false
     }
   ],
   "labels_file": "labels/labels.json",

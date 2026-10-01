@@ -1,6 +1,6 @@
 # drunk-workspace export
 
-Full-workspace bundle: 30 skills, 16 agents, 3 squads, 4 projects, 7 autopilots (`autopilots/`, prompt in `*.description.md`; push with `multica autopilot update <id> --description "$(cat f)"`), plus `workspace/context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push it with `multica workspace update <id> --context-stdin < workspace/context.md`.
+Full-workspace bundle: 30 skills, 16 agents, 3 squads, 4 projects, 8 autopilots (`autopilots/`, prompt in `*.description.md`; push with `multica autopilot update <id> --description "$(cat f)"`), plus `workspace/context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push it with `multica workspace update <id> --context-stdin < workspace/context.md`.
 
 **Config files.** `properties/properties.json` carries the ACTIVE property definitions only — archived ones are
 dropped on purpose (the CLI has `property archive`/`unarchive` but no delete, so an archived definition lives on
