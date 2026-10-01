@@ -445,10 +445,6 @@
         {
           "agent_name": "pr-reviewer",
           "role": "reviewer"
-        },
-        {
-          "agent_name": "release-manager",
-          "role": "release"
         }
       ],
       "instructions_file": "squads/dev-team.md",

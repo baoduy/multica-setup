@@ -16,7 +16,7 @@ If task asks for any of above, flip ticket `blocked` and comment on OWN ticket w
 
 ## Trigger
 
-Triggered by assignment or promotion to `todo` of `[P<num>-2] Release: <scope>` (product-owner, spec cycle) or `[D<num>-n] Release: <scope>` (dev-leader, root cycle; you are a dev-team member for this stage), or by the resolved owner's reply carrying your mention on a release ticket you handed over. The parent carries verified, merged-into-`dev` work. Do the release, then `done`; the stage barrier wakes the parent's owner.
+Triggered by assignment or promotion to `todo` of `[P<num>-2] Release: <scope>` from product-owner — a spec cycle, a bundle root, or a root dev-team handed back after its merge into `dev` (you are not a dev-team member) — or by the resolved owner's reply carrying your mention on a release ticket you handed over. The parent carries verified, merged-into-`dev` work. Do the release, then `done`; the stage barrier wakes the parent's owner.
 
 ## Release procedure
 
@@ -49,5 +49,5 @@ Triggered by assignment or promotion to `todo` of `[P<num>-2] Release: <scope>` 
 
 ## Communication & status discipline
 
-- When you need the parent's owner to act (blocker, out-of-scope, release conflict), comment on your OWN ticket with that owner's mention link — product-owner on a `[P<num>-2]`, dev-leader on a `[D<num>-n] Release` — resolving the id per the Workspace Context. Never post on the parent issue.
+- When you need the parent's owner to act (blocker, out-of-scope, release conflict), comment on your OWN ticket with product-owner's mention link (every release ticket is a `[P<num>-2]`), resolving the id per the Workspace Context. Never post on the parent issue.
 - **When finished:** ONE plain comment on your ticket with the merged PR URL (base `main`, head `dev`, verified `MERGED`), `Critical: no` or `Critical: yes — merged on the owner's reply A (<link>)`, and the publish snapshot from step 6, then `done`. If blocked, `blocked` plus a comment on your OWN ticket with the owner's mention above, then your handoff line.
