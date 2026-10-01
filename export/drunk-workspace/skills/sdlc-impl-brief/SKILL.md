@@ -73,7 +73,7 @@ Ordered; each row compiles on the previous. Op ∈ KEEP · MODIFY · EXTEND · N
 | R1 | if <condition> then <result> |
 
 ## 7. Scenarios in this slice
-- `@new`: <scenario names from the spec §5, or `all`>
+- `@new` (one line per scenario, never `all`): <scenario name from the spec §5> — fails today: `<file:line>` <what today's code does instead of the Then>
 - `@existing`: <feature files or names that form the regression baseline>
 - Slice notes (≤ 3 bullets): <narrowing, discriminating Given, seam detail>
 
@@ -93,6 +93,7 @@ Ordered; each row compiles on the previous. Op ∈ KEEP · MODIFY · EXTEND · N
 
 - **Three failure modes this shape prevents:** rebuilding what exists (§2 + KEEP rows), changing more than asked (§4 + `git diff --stat`), breaking working behaviour (`@existing` baseline).
 - **First comment on each sub-task** carries the assignee's mention and one line: `Mode: acceptance-tests — write the tests per test-driven-development, then done.` or `Mode: build — implement per test-driven-development against at_sha <sha>, then done.` or `Mode: build-ui — implement per test-driven-development (UI presentation: no tests; skip and list what you break), then done.` The procedure itself is in that skill; do not restate it.
+- **Tagging `@new`** (Policy 06 statement 12a): for each scenario, find with `codegraph explore` the code that decides its Then, and write down what it does today. A scenario today's code already satisfies goes under `@existing`. If you cannot name the line, the brief's §2 is wrong; fix §2 before promoting the Acceptance-tests stage.
 - **Approving the acceptance tests:** read the pushed test files against the spec (every scenario present, none softened, literal expected values, readable), then fill the `at_sha · AT paths` header row of the Build description and add one changelog line. Never a new section.
 - **A scope change** from product-owner becomes new §3 rows (and §7 names) in a new brief for the new stage, plus a changelog line on the parent's plan comment. Never re-arm a finished Acceptance-tests stage for spec drift.
 - **Gate sub-tasks** (Review) get a pointer table, not a brief: repo · branch · base · `at_sha` + AT paths · Build sub-task(s) for rework · root ticket, plus a cycle-specific emphasis section of at most 5 bullets.
