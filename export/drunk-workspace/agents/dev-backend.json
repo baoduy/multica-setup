@@ -13,7 +13,7 @@
       "target_type": "workspace"
     }
   ],
-  "max_concurrent_tasks": 6,
+  "max_concurrent_tasks": 10,
   "runtime_config": {},
   "custom_args": [],
   "thinking_level": "high",
