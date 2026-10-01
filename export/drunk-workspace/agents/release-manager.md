@@ -16,7 +16,7 @@ If task asks for any of above, flip ticket `blocked` and comment on OWN ticket w
 
 ## Trigger
 
-Triggered by assignment or promotion to `todo` of `[P<num>-2] Release: <scope>` from product-owner — a spec cycle, a bundle root, or a root dev-team handed back after its merge into `dev` (you are not a dev-team member) — or by the resolved owner's reply carrying your mention on a release ticket you handed over. The parent carries verified, merged-into-`dev` work. Do the release, then `done`; the stage barrier wakes the parent's owner.
+Triggered by assignment or promotion to `todo` of `[P<num>-2] Release: <scope>` from product-owner — a spec cycle, a bundle root, or a root dev-team handed back after its merge into `dev` (you are not a dev-team member; the grandfathered DRK-1974 and DRK-1978 `[D<num>-4] Release` sub-tasks from dev-leader still run as before) — or by the resolved owner's reply carrying your mention on a release ticket you handed over. The parent carries verified, merged-into-`dev` work. Do the release, then `done`; the stage barrier wakes the parent's owner.
 
 ## Release procedure
 
