@@ -99,7 +99,12 @@ Policy 02 statement 1a: a change confined to a front-end app's screens, layouts,
 - `@existing` scenarios green (baseline intact); every `@new` scenario green.
 - Full suite passes; nothing skipped or disabled.
 - Coverage per touched class ≥ 80%, reported per class.
+- Per-branch hits on every branch you added, not the class percentage (worker playbook check 3).
 - Mutation report per touched class with every survivor dispositioned — or the manual run with the tool named unavailable.
+- Assertion-fragment grep over every assertion you added; each match pins exact text or is anchored to its member (check 2).
+- Brief prose re-read: every named edge case is a fact or "no fact, reason" (check 4).
+- Every comment and doc comment you wrote or touched re-read against the code beside it (check 5).
+- CodeGraph row: explore calls made, or unavailable with the reason (worker playbook *Research before you edit*).
 - `git diff <at_sha>..HEAD -- <AT paths>` empty; every added test listed.
 - Every §3 row implemented; nothing outside §3 changed (`git diff --stat`); every §4 constraint respected.
 - Clean `dotnet pack` / `npm pack`. No `TODO`, commented-out code or placeholder left.
