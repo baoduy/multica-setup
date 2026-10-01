@@ -17,7 +17,7 @@ Every sub-task runs on a fresh checkout, so the repo folder may hold `.codegraph
 Once the code is pushed and the suite is green, read `git diff origin/<base-branch>...HEAD` end to end as if someone else wrote it, then carry the results into the completion report. Eight checks, all of which the review gate will run anyway:
 
 1. **Mutation report on every touched class.** Stryker (`dotnet stryker` / `npx stryker run`) scoped to touched classes; every survivor dispositioned (`killed — added <test>` / `equivalent` / `accepted — <why>`). Tool unavailable → manual: invert each guard you added, run, confirm RED, restore, and say the tool was unavailable.
-2. **Grep your new assertions** for fragment matches (`ShouldContain`, `Contains`, substring asserts); each pins exact expected text or is anchored to its member.
+2. **Grep your new assertions** for fragment matches (`ShouldContain`, `Contains`, substring asserts); each pins exact expected text or is anchored to its member. Every test of a delete, overwrite, move or purge asserts the state before the act and the change after it, and a storage or queue adapter change also runs against the repo's emulator fixture (Policy 02 statement 5a). The `Assertions` row counts both.
 3. **Branch coverage on every branch you added**: per-branch hits, not the class percentage. A 1-of-2 arm is covered or proven unreachable.
 4. **Re-read the brief's prose**, not just §3: contract, rules, §9, every note. Each named edge case has a fact or an explicit "no fact, reason".
 5. **Re-read every comment and doc comment you wrote or touched** against the code beside it.

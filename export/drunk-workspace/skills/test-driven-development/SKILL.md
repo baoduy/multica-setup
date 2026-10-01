@@ -39,7 +39,7 @@ The outer loop at bug scale. The reproduction test IS the acceptance test: autho
 - Drive the **inbound port** (application service, command/query handler, mediator, or the package's public API) — not HTTP, not the UI, not a controller.
 - **Outbound ports** (repositories, clock, message bus, external HTTP clients, secrets) get hand-written in-memory fakes implementing the port interface. Not an in-memory database, not a mocking framework scripting call order.
 - Compose the application for tests from its ports, the way production composes it from adapters — one factory taking the fakes, so the AT harness signature stays stable as handlers multiply.
-- `WebApplicationFactory<T>` / Testcontainers / real adapters only for scenarios tagged `@integration`.
+- ATs use `WebApplicationFactory<T>` / Testcontainers / real adapters only for scenarios tagged `@integration`. Build's own test for a storage or queue adapter change runs against the repo's emulator fixture either way (Policy 02 statement 5a; DKNet: `src/Services/Svc.BlobStorage.Tests/Fixtures`, Azurite and MinIO). Database adapters stay InMemory (Policy 02 statement 2).
 - No port seam where one is needed? That is a §3 row for the leader to add (smallest seam that lets the AT drive the behaviour), reported `blocked` from the `Acceptance tests:` stage — never an ad-hoc refactor made there.
 
 ## Mutation score — the regression sensor
@@ -79,6 +79,7 @@ RED is not just the author stage — it is a property every finished test must s
 
 - **Every guard, normalisation, format rule or ordering rule you add must kill a mutant.** The mutation report above is the proof; a surviving mutant on a guard means the guard is satisfied by the environment, not by the code (a `\r` guard asserted `ShouldNotContain("\r")` on Linux, where `Environment.NewLine` is already `\n` — deleting the normalisation it guarded left 58/58 green).
 - **Assertions pin the exact expected text, never a fragment.** `ShouldContain("typeof(")` plus `ShouldContain("Marker")` passes with the fragments in unrelated positions; `ShouldContain("typeof(global::Probe.Markers.Marker)")` does not. Anchor an annotation assertion to the member it belongs to.
+- **A destructive operation is proven by its effect** (Policy 02 statement 5a). Arrange the state it must change, assert that state is there before the act, then assert the change after it: items gone, count changed, content replaced. A test that would pass on an empty store proves nothing — a folder delete whose prefix matched no blob stayed green on a store the test never filled (DKNet PR #495).
 - **An absence assertion needs a presence sibling.** `dto.Nickname.ShouldBeNull()` for an omitted field also passes when the field is dropped end to end. Pair it with a test that sends a value and asserts it round-trips.
 - **Branch coverage on every branch you added, not line coverage.** A 1-of-2 arm is an untested edge case — report per-branch hits. An arm no input can reach is not a gap: prove it with a probe and say so.
 - **Every edge case the brief names anywhere — §3 row, contract, rules, §9, a prose note — needs a fact or an explicit "no fact, reason".**

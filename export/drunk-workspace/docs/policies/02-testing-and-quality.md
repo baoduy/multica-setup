@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-02 |
-| **Version** | 1.4 |
+| **Version** | 1.5 |
 | **Status** | Active |
 | **Owner** | dev-backend |
 | **Applies to** | Every code or behaviour change in a drunk repo, across every stack |
@@ -105,6 +105,22 @@ statements but follows the runner and structure conventions below.
    Assert on state/outcome. Pulumi tests mock the SDK/cloud-provider calls, never real cloud
    APIs, and cover resource/property mapping, input validation, and error paths — no snapshot
    tests as a behavioural substitute.
+5a. **A side effect is proven by its effect, through the real adapter.** A test of an
+   operation that deletes, overwrites, moves or purges stored state first arranges the state
+   the operation must change and asserts that state is present before the act, so the test
+   cannot pass on an empty store. After the act it asserts the change itself: the items gone,
+   the count changed, the old content replaced. A returned success flag or "no exception
+   thrown" is never that proof. When the change touches an outbound storage or queue adapter
+   (blob, object storage, queue), that test also runs the adapter against the repo's emulator
+   fixture, not only against the in-memory fake: the fake proves the port, the emulator proves
+   the adapter's paths, prefixes and request mapping. In DKNet the fixtures are the
+   Testcontainers ones in `src/Services/Svc.BlobStorage.Tests/Fixtures` (Azurite, MinIO). A
+   repo with no emulator fixture for that vendor says so in the report's LEFT OPEN, and
+   dev-leader decides whether a later cycle adds one. Database adapters stay under statement 2
+   (InMemory, `TEST_DB_PROVIDER` unset). Why: on DKNet PR #495 (DRK-1898) the Azure folder
+   delete matched no blob because of a leading-slash prefix, and the test meant to prove it
+   passed on a store it never filled. The PR gate found the defect by reproducing it against
+   Azurite, which cost a rework round.
 6. **Coverage gate — scoped to the change, both conditions required.** All existing tests
    pass — full suite green, zero errors, zero warnings, and a clean `dotnet pack` (.NET) or
    `npm pack` (TS). Combined unit + BDD-unit coverage of every class/module **touched** in the
@@ -156,6 +172,9 @@ statements but follows the runner and structure conventions below.
 - Full suite green — pre-existing tests plus new ones — zero errors, zero warnings.
 - ≥80% combined coverage on every touched class/module, reported per file, never repo-wide.
 - A mutation report per touched class, every survivor dispositioned (statement 6a).
+- Every test of a destructive operation asserts the state before and the change after; a
+  storage or queue adapter change is also tested against the repo's emulator fixture
+  (statement 5a).
 - No skipped/disabled test introduced to make the suite pass — except a test a UI presentation
   change broke, skipped under statement 1a with its note and listed in its follow-up issue.
 - Clean `dotnet pack` / `npm pack` (or the Python package's equivalent build check).
@@ -165,7 +184,10 @@ statements but follows the runner and structure conventions below.
 `pr-review-gate`'s testing dimension verifies tests exist for changed logic, assert behaviour
 not implementation, cover edge cases, and that changed-line coverage meets the gate (override
 per repo via `.pr-review.json`). A coverage miss or missing tests on touched logic is a
-`blocking`/`important` finding that forces REWORK regardless of the weighted score. UI
+`blocking`/`important` finding that forces REWORK regardless of the weighted score. A test of
+a destructive operation without its before and after assertions, or a storage or queue adapter
+change tested only against a fake while the repo has an emulator fixture, is an `important`
+finding (statement 5a). UI
 presentation files carry no test requirement (statement 1a); a test skipped without its note,
 or a UI presentation cycle without its follow-up issue, is an `important` finding.
 
