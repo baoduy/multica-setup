@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-01 |
-| **Version** | 1.6 |
+| **Version** | 1.7 |
 | **Status** | Active |
 | **Owner** | dev-leader |
 | **Applies to** | Every engineer and agent writing or modifying code in any drunk stack: .NET/DDD NuGet libraries, Pulumi/TypeScript npm packages, Python MCP/FastAPI services, Docker images, Helm charts |
@@ -66,7 +66,11 @@ generic rule here where they differ (see Exceptions).
 5. **No swallowed errors.** A `catch` adds context and rethrows or recovers — it never
    discards silently (`TS-ERR-001`); an `IResultBase` is never discarded unchecked
    (`DKNET-RES-002`); an MCP service logs the exception **type**, never the raw message, and
-   never returns a raw error to the client (`MCP-SEC-001`, `MCP-SEC-002`).
+   never returns a raw error to the client (`MCP-SEC-001`, `MCP-SEC-002`). Two quieter
+   forms count as swallowing too: a fallback that hides a failure — an empty list, `null` or
+   a default returned from a failed call where the caller cannot tell failure from an empty
+   result — and a rethrow that drops the original exception (`throw ex;`, a new exception
+   without the inner one) (`NET10-ERR-001..003`, `TS-ERR-001`).
 6. **No exceptions for expected control flow.** Use typed results / narrowing for expected
    business branches; throw only for exceptional/boundary failures (`TS-ERR-003`,
    `DKNET-RES-001`).

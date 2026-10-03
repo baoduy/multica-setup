@@ -29,6 +29,31 @@ Floor each category at 1.
 
 Severity comes from what a finding DOES, not from whether this PR introduced it. Emitted source that does not compile, wrong behaviour, data exposure or a published-API break is `blocking` — `important` only when it is provably unreachable today — even when it is pre-existing and even when the diff merely walks past it. "Not introduced by this PR" decides WHOSE cycle fixes it (the scope rule in `references/multica-flow.md`), never whether it is a defect. A 9.5 that ships with a known non-compiling emission path in a file the diff touched is a mis-scored review, not a clean one.
 
+## Proof before severity
+
+Policy 04 statement 1a. Before a finding is kept as `blocking` or `important`, answer:
+
+1. Can I cite the exact `file:line`?
+2. **Correctness or security finding:** can I name the input or state that triggers it, the wrong outcome, and why existing guards (a caller's validation, the framework, the type system, an existing test) do not stop it? **Rule finding** (a cap, a stack rule-id, a §3b line, a test-strength rule, statement 5a): can I cite the rule?
+3. Have I read the surrounding code, and walked the callers with CodeGraph?
+
+A "no" demotes the finding to `nit` or drops it. A review with no finding above `nit` is a valid result: never raise a finding, or inflate a severity, to make the review look thorough.
+
+**False positives — do not raise these:**
+
+- "Add error handling" where a caller, middleware or the framework already handles the failure. Trace the caller first.
+- "Missing validation" on input already validated at the trust boundary (model binding, a validator, a guard in the caller). Cite the boundary, or drop it.
+- A null dereference after a null check, on a `required` member, or on a non-nullable reference the compiler already checks.
+- HTTP status codes, well-known ports and framework-named timeouts called magic numbers.
+- "Method too long" on a switch or mapping table, a test data table or generated code.
+- N+1 on a loop over a small fixed set (enum members, configuration entries).
+- Fire-and-forget that a comment says is intentional and that has its own catch-all (`ASYNC-007`).
+- A style point the repo's analyzers or linter already enforce.
+- A pattern the repo does not use elsewhere, offered as "better". Match the repo.
+- Anything a senior engineer on this repo would not change in review.
+
+These never lower a real defect: a finding that passes the proof check keeps its severity, pre-existing or not (Severity is impact, never novelty).
+
 **Self-review rows** (Policy 04 statement 5): a Build EVIDENCE row that is missing or carries no measured value is a `nit` — measure the point yourself and score what you find. A row the diff or CI contradicts is `important`. No mutation evidence at all is the cap below, not a row finding.
 
 ## Hard caps (applied AFTER the weighted average)
@@ -42,6 +67,7 @@ Severity comes from what a finding DOES, not from whether this PR introduced it.
 | ≥ 2 open `important` findings anywhere (any category, any mix) | 8.4 max (forces REWORK — per-category weights must not dilute repeated importants) |
 | Spec-conformance category score ≤ 5, or no traceable spec/cycle-ticket link | 6.9 max (a wrong-thing PR never merges on "built right" points) |
 | No tests for new/changed behavior | 6.5 max |
+| A check loosened without the ticket asking for it: a repo-wide analyzer, lint, type-check, coverage or mutation setting lowered, or a CI step deleted, skipped or made non-failing (Policy 04 statement 5a) | 6.9 max (`blocking`) |
 | Approved acceptance test modified or deleted after `at_sha` (drift check non-empty) without a leader re-pin | 6.9 max (`blocking`; forces REWORK — the fix is to restore the scenario and make it pass, or take it to the leader) |
 | Any `@new` scenario red, skipped or tagged out at HEAD | 6.9 max (`blocking`) |
 | `bug-build` cycle: `at_sha` holds implementation code or follows an implementation commit, or the reproduction is green at `at_sha` (Policy 02 statement 1b) | 6.9 max (`blocking`) |

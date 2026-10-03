@@ -4,7 +4,7 @@
 |                    |                                                                                                                                                                                                        |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Policy ID**      | MX-POL-02                                                                                                                                                                                              |
-| **Version**        | 1.2                                                                                                                                                                                                    |
+| **Version**        | 1.3                                                                                                                                                                                                    |
 | **Status**         | Active                                                                                                                                                                                                 |
 | **Owner**          | dev-leader (in-repo tests) · qc-leader (SANDBOX integration)                                                                                                                                           |
 | **Applies to**     | Every code or behaviour change in Monxa repos                                                                                                                                                          |
@@ -118,7 +118,9 @@ logic is a `blocking`/`important` finding → REWORK.
 
 - The **SANDBOX integration suite** (`[P#-3]`) is waivable by the **requester only**, recorded as `bdd_required=false`. A waiver drops `[P#-2b]` deploy and `[P#-3]` and makes `[P#-2a]` terminal — it never touches the in-repo test obligation, the acceptance criteria, or the merge gate.
 - The in-repo coverage gate has **no** waiver.
-- Coverage override per repo lives in `.pr-review.json`, not per PR.
+- Coverage override per repo lives in `.pr-review.json` as merged on `dev`, not per PR: the
+  gate reads the file from `origin/dev`, and a PR that lowers the threshold is a `blocking`
+  finding unless its ticket asks for it ([Policy 04](04-code-and-spec-review.md) statement 4a).
 
 ## References
 

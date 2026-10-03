@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-02 |
-| **Version** | 1.9 |
+| **Version** | 1.10 |
 | **Status** | Active |
 | **Owner** | dev-backend |
 | **Applies to** | Every code or behaviour change in a drunk repo, across every stack |
@@ -234,7 +234,10 @@ or a UI presentation cycle without its follow-up issue, is an `important` findin
   presentation exception — there is no deployed
   environment or later integration stage to catch what it would have found; this is the
   only proof a published package works.
-- A coverage override lives in a repo's `.pr-review.json`, never granted ad hoc per PR.
+- A coverage override lives in a repo's `.pr-review.json` as merged on `dev`, never granted
+  ad hoc per PR: the gate reads the file from `origin/dev`, and a PR that lowers the threshold
+  is a `blocking` finding unless its ticket asks for it ([Policy 04](04-code-and-spec-review.md)
+  statement 5a).
 - No waiver exists for a bug fix shipped without its reproduction test.
 
 ## References

@@ -20,13 +20,14 @@ Report findings only, one line each: `[blocking|important|nit] file:line — wha
 blocking = wrong behaviour, does not compile, data or secret exposure, a published API break, a contradiction of the brief's §5 contract or §3b placement.
 important = a missing or weak test, a broken standards rule-id, an unhandled input in the brief's §6a, a stale comment.
 nit = anything else worth one line. Never report style that the analyzers or the linter already enforce.
+Proof: a blocking or important correctness or security finding names the input or state that triggers it, the wrong outcome, and why existing guards do not stop it; a rule finding cites its rule. Neither → report it as nit or drop it. No findings is a valid answer; never add one to look thorough.
 
 Passes, in this order. Use `codegraph explore` for callers and existing helpers, not grep.
 1. Brief: every §3 row is done, §6 rules hold, every §6a input row has its proof, every §9 default is applied. Nothing changed outside §3, and nothing in §4 changed.
-2. Correctness: each changed guard, default, mapping and external call is checked against the empty, null, unknown and boundary values and every enum member. Each exception the changed call can raise is handled. Callers of every changed public symbol still hold.
+2. Correctness: each changed guard, default, mapping and external call is checked against the empty, null, unknown and boundary values and every enum member. Each exception the changed call can raise is handled. Callers of every changed public symbol still hold. No silent failure: no empty or log-only catch that carries on, no empty list, null or default returned from a failed call, no rethrow that drops the original exception (`throw ex;`).
 3. Security: no secret or PII in logs, outputs or state. Pulumi: every key-, secret-, password- or token-shaped value that reaches a Resource argument is wrapped in `pulumi.secret()` (`PULUMI-SEC-009`); grep the diff for them. No new trust-boundary input is left unvalidated.
 4. Tests: each test fails if its subject is removed. Assertions pin exact values, never fragments. A destructive operation asserts the state before and after. Every added branch is hit. No setup block of 10 or more lines is copied from another test file (Policy 01 statement 7a).
-5. Standards: the at-risk rule-ids first, then reuse (an existing helper does the job), less code, SRP sizes, layering direction.
+5. Standards: the at-risk rule-ids first, then reuse (an existing helper does the job), less code, SRP sizes, layering direction. No new suppression (`#pragma warning disable`, `NoWarn`, `eslint-disable`, `@ts-ignore`, `# noqa`, `[ExcludeFromCodeCoverage]` and the like) without a reason on its line or the line above. No analyzer, lint, coverage or mutation setting lowered and no CI step removed, skipped or made non-failing unless the brief asks for it (blocking, Policy 04 statement 5a). Every new file under `Migrations/` is checked against `EFC-013..018`.
 6. Comments and doc comments in the diff match the code beside them.
 
 End with three lines: `Brief re-read: <n> edge cases named, each a fact or "no fact, <reason>">`, `Comments: <n> re-read, <n> wrong`, `Standards: rule-ids checked <ids> · reuse <result> · SRP <largest class/method/ctor> · DRY <result>`.

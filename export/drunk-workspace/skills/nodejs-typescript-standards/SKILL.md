@@ -34,7 +34,7 @@ for Pulumi builders (naming, RBAC, Builder pattern, `*Info`/`*Args`) live in
 
 ## Errors & async
 
-- `TS-ERR-001` **Swallowed error / bare `catch {}`.** Catch to add context or recover, then rethrow or fail — never silently discard. In `catch (e)`, `e` is `unknown`: narrow it (`e instanceof Error`) before reading `.message`.
+- `TS-ERR-001` **Swallowed error / bare `catch {}`.** Catch to add context or recover, then rethrow or fail — never silently discard. In `catch (e)`, `e` is `unknown`: narrow it (`e instanceof Error`) before reading `.message`. A fallback that hides a failure is the same defect: `.catch(() => [])`, or a `null`/default returned from a failed call where the caller cannot tell failure from an empty result (Policy 01 statement 5).
 - `TS-ERR-002` **Floating promise.** Every `Promise` is awaited or explicitly handled; no fire-and-forget async in sync path. `async` functions return `Promise<T>` with type stated, not inferred `any`.
 - `TS-ERR-003` **Exceptions for control flow.** Throw for exceptional/boundary failures only; use typed results or narrowing for expected branches. Don't `throw` to break out of a loop.
 

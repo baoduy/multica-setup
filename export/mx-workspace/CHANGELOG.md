@@ -4,6 +4,38 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-10-03 — PR-gate findings prove their failure; a PR never loosens its own checks; silent failures and migration safety (not live)
+
+Owner-approved, from the owner's review of github.com/affaan-m/ECC against this bundle.
+
+**Policy 04 v1.5.** New statement 1a: a `critical`, `blocking` or `important` correctness or
+security finding names the input or state that triggers it, the wrong outcome, and why
+existing guards do not stop it; a rule finding cites its rule; a finding that can do neither
+is demoted to `nit` or dropped. A review with no finding above `nit` is valid, and the rubric
+lists the false positives the gate does not raise. New statement 4a: the gate reads
+`.pr-review.json` from `origin/dev`, never from the PR head; a new suppression with no reason
+beside it is `important`; a repo-wide analyzer, lint, coverage or mutation setting lowered, or
+a CI step deleted, skipped or made non-failing, is `blocking` unless the cycle ticket asks for
+it (a new 6.9 rubric row). Definition of Done adds the check. Cause: the gate collected
+`.pr-review.json` from the PR checkout, so a PR could lower its own bar, and nothing caught a
+PR that changed a check instead of the code. Multica has no hooks, so the gate checks the diff.
+
+**Policy 02 v1.3.** Exceptions: the coverage override is the `.pr-review.json` merged on
+`dev`; a PR that lowers it is `blocking` (Policy 04 statement 4a).
+
+**Policy 01 v1.3.** Statement 8: no silent failure — no discarding `catch`, no empty
+collection, `null` or `default` returned from a failed call, no rethrow that drops the
+original exception (new `NET10-ERR-001..003`). Statement 11: migrations are safe against the
+data the running release still reads (new `EFC-013..018` in `dotnet10-efcore10-standards`:
+rename as drop + add, a drop in the same release as the code change, a new required column on
+a populated table, schema and bulk data in one migration, a blocking index build, an edited
+merged migration).
+
+Cascade: `pr-review-gate` (Non-negotiable rule 5, Phase 1, Phase 2 Correctness, Loosened
+checks, Config), `references/scoring-rubric.md` (Proof before severity, hard-cap row),
+`dotnet10-efcore10-standards`, `sdlc-flow-squad-member-protocol` (self-review check 8), agent
+`pr-reviewer`. Same change in drunk (CHANGELOG 2026-10-03 (l) and (m)).
+
 ## 2026-09-29 (c) — stage barriers are the wake again; the handoff line covers only what they miss (not live)
 
 Owner's decision. **Policy 05 v1.6** (statement 5): Multica's built-in sub-issue rule wakes
