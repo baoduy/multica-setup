@@ -32,7 +32,7 @@ Check out code at PR head: `multica repo checkout <repo-url> --ref <head-branch>
 
 ## Phase 1 — Collect (no judging yet)
 
-Create `.pr-review/<PR>/` in your working directory and collect per `references/github.md`: PR metadata, full diff, changed-file list, existing reviews/comments, commit headlines, CI check status, spec (cycle ticket description is approved spec), and repo conventions (`CLAUDE.md`, `.editorconfig`, `Directory.Build.props`, analyzer configs). Read `.pr-review.json` from the base, never the PR head: `git show origin/dev:.pr-review.json` (absent → defaults; Policy 04 statement 5a).
+Create `.pr-review/<PR>/` in your working directory and collect per `references/github.md`: PR metadata, full diff, changed-file list, existing reviews/comments, commit headlines, CI check status, spec (cycle ticket description is approved spec), and repo conventions (`CLAUDE.md`, `.editorconfig`, `Directory.Build.props`, analyzer configs). Read `.pr-review.json` from the base, never the PR head: `gh api "repos/$R/contents/.pr-review.json?ref=dev" -H 'Accept: application/vnd.github.raw'` (404 → defaults; any other error → retry, never assume defaults; Policy 04 statement 5a).
 
 ## Phase 2 — Analyze (four passes, per the repo's stack)
 
@@ -52,11 +52,11 @@ Record every finding with `file:line`, severity `blocking | important | nit | su
 6. **AI-slop gate.** Redundant comments restating code; defensive try/catch wrapping everything; pointless re-validation; dead branches; reinvented BCL/framework helpers (hand-rolled retry where platform's resilience pipeline exists, custom JSON helpers over `System.Text.Json`); naming inconsistent with surrounding file; TODO stubs.
 7. **Style & conventions.** Only what analyzers wouldn't catch; respect `.editorconfig`. Keep these `nit`/`suggestion`.
 
-**Loosened checks — mechanical, every PR** (Policy 04 statement 5a). Run both from the checkout and score what they show:
+**Loosened checks — mechanical, every PR** (Policy 04 statement 5a). Run both on the files Phase 1 collected from `gh` (never on a local `origin/dev`, which a task-scoped checkout may not have) and score what they show:
 
 ```bash
-git diff origin/dev...HEAD -U0 | grep -nE '^\+.*(#pragma warning disable|SuppressMessage|<NoWarn>|ExcludeFromCodeCoverage|eslint-disable|@ts-ignore|@ts-expect-error|istanbul ignore|c8 ignore|# noqa|# type: ignore|# pragma: no cover)'
-git diff origin/dev...HEAD --name-only | grep -E '(^|/)(\.editorconfig|Directory\.Build\.(props|targets)|\.eslintrc[^/]*|eslint\.config\.[^/]+|tsconfig[^/]*\.json|pyproject\.toml|\.pr-review\.json|stryker-config\.json|codecov\.ya?ml|\.github/workflows/[^/]+)$'
+grep -nE '^\+.*(#pragma warning disable|SuppressMessage|<NoWarn>|ExcludeFromCodeCoverage|eslint-disable|@ts-ignore|@ts-expect-error|istanbul ignore|c8 ignore|# noqa|# type: ignore|# pragma: no cover)' .pr-review/$PR/diff.patch
+grep -E '(^|/)(\.editorconfig|Directory\.Build\.(props|targets)|\.eslintrc[^/]*|eslint\.config\.[^/]+|tsconfig[^/]*\.json|pyproject\.toml|\.pr-review\.json|stryker-config\.json|codecov\.ya?ml|\.github/workflows/[^/]+)$' .pr-review/$PR/files.txt
 ```
 
 A suppression with no reason on its line or the line above → `important`. For each config file listed, read its diff: a rule disabled or lowered in severity, a threshold lowered, or a CI step deleted, skipped (`if: false`) or made non-failing (`continue-on-error: true`) → `blocking` unless the cycle ticket asks for that change (a Workflow D ticket naming it). Tightening a check, or a change that does not touch a rule, threshold or step, is not a finding.
@@ -111,7 +111,7 @@ Before merging, check the four triggers. When any applies, add the label and nam
 
 Commands are in `references/github.md`. A PR with no trigger gets no label. A breaking change needs no label: its `(MINOR)` commit marks the release by itself.
 
-## Config (`.pr-review.json` at repo root, optional; read from `origin/dev`, never the PR head)
+## Config (`.pr-review.json` at repo root, optional; read from `dev` on GitHub, never the PR head)
 
 ```json
 { "approveBar": 8.5, "coverageThresholdPct": 80, "maxReworkRounds": 3 }

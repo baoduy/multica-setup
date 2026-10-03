@@ -13,10 +13,14 @@ security finding names the input or state that triggers it, the wrong outcome, a
 existing guards do not stop it; a rule finding cites its rule; a finding that can do neither
 is demoted to `nit` or dropped. A review with no finding above `nit` is valid, and the rubric
 lists the false positives the gate does not raise. New statement 4a: the gate reads
-`.pr-review.json` from `origin/dev`, never from the PR head; a new suppression with no reason
+`.pr-review.json` from `dev` on GitHub, never from the PR head; a new suppression with no reason
 beside it is `important`; a repo-wide analyzer, lint, coverage or mutation setting lowered, or
 a CI step deleted, skipped or made non-failing, is `blocking` unless the cycle ticket asks for
-it (a new 6.9 rubric row). Definition of Done adds the check. Cause: the gate collected
+it (a new 6.9 rubric row, quoted in the Scoring cap list). Definition of Done adds the check.
+The loosened-check greps run on Phase 1's `gh`-collected `diff.patch` and `files.txt`, and
+`.pr-review.json` is fetched with `gh api ...?ref=dev`, because a task-scoped checkout may have
+no `origin/dev`. The new text uses only defined severities; the older `critical` in the caps
+and auto-merge preconditions is not in the Phase 2 severity list and is left for a separate fix. Cause: the gate collected
 `.pr-review.json` from the PR checkout, so a PR could lower its own bar, and nothing caught a
 PR that changed a check instead of the code. Multica has no hooks, so the gate checks the diff.
 

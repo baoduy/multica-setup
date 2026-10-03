@@ -31,7 +31,7 @@ Severity comes from what a finding DOES, not from whether this PR introduced it.
 
 ## Proof before severity
 
-Policy 04 statement 1a. Before a finding is kept as `critical`, `blocking` or `important`, answer:
+Policy 04 statement 1a. Before a finding is kept as `blocking` or `important`, answer:
 
 1. Can I cite the exact `file:line`?
 2. **Correctness or security finding:** can I name the input or state that triggers it, the wrong outcome, and why existing guards (a caller's validation, the framework, the type system, an existing test) do not stop it? **Rule finding** (a cap, a stack rule-id, a §3b line, a test-strength rule, statement 4a): can I cite the rule?

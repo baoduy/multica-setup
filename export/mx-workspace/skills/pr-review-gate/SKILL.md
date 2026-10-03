@@ -13,7 +13,7 @@ Two operating modes — decide FIRST, before anything else:
 2. **Merge only what you just gated.** ONLY merge you may ever perform is `gh pr merge` on PR you scored APPROVED in THIS run, after every auto-merge precondition passed. Never enable auto-merge, never merge any other PR, never use `--admin`/force, and never push commits to any branch.
 3. **Never merge or vote-approve when any auto-merge precondition fails** — take APPROVAL DEFERRED path (manual handoff to workspace owner) and say exactly which precondition failed.
 4. **Findings become Multica sub-issues, never GitHub issues.**
-5. **Every finding cites `file:line` from actual diff.** If you have not read code, you may not have opinion on it. A `critical`, `blocking` or `important` correctness or security finding also names its trigger (input or state), its wrong outcome, and why existing guards do not stop it; a rule finding cites its rule. Neither → demote to `nit` or drop (Policy 04 statement 1a, `references/scoring-rubric.md` Proof before severity). Zero findings above `nit` is a valid review.
+5. **Every finding cites `file:line` from actual diff.** If you have not read code, you may not have opinion on it. A `blocking` or `important` correctness or security finding also names its trigger (input or state), its wrong outcome, and why existing guards do not stop it; a rule finding cites its rule. Neither → demote to `nit` or drop (Policy 04 statement 1a, `references/scoring-rubric.md` Proof before severity). Zero findings above `nit` is a valid review.
 6. **Self-authored PRs:** GitHub rejects ANY review vote (approve and request-changes alike) when PR author equals your own gh identity (`gh api user -q .login`). Votes are best-effort: fall back to plain PR comments and note skipped vote in report — rejected vote does NOT block merge; Multica review report is audit record. When dedicated `GH_TOKEN` is configured for this agent, votes work normally — always attempt detection, never assume.
 
 ## Wake guard — run before Phase 0, every run
@@ -32,11 +32,11 @@ Check out code at PR head: `multica repo checkout <repo-url> --ref <head-branch>
 
 ## Phase 1 — Collect (no judging yet)
 
-Create `.pr-review/<PR>/` in your working directory and collect per `references/github.md`: PR metadata, full diff, changed-file list, existing reviews/comments, commit headlines, CI check status, spec (cycle ticket description is approved spec; plus any Gherkin `.feature` files touched), and repo conventions (`CLAUDE.md`, `.editorconfig`, `Directory.Build.props`, analyzer configs). Read `.pr-review.json` from the base, never the PR head: `git show origin/dev:.pr-review.json` (absent → defaults; Policy 04 statement 4a).
+Create `.pr-review/<PR>/` in your working directory and collect per `references/github.md`: PR metadata, full diff, changed-file list, existing reviews/comments, commit headlines, CI check status, spec (cycle ticket description is approved spec; plus any Gherkin `.feature` files touched), and repo conventions (`CLAUDE.md`, `.editorconfig`, `Directory.Build.props`, analyzer configs). Read `.pr-review.json` from the base, never the PR head: `gh api "repos/$R/contents/.pr-review.json?ref=dev" -H 'Accept: application/vnd.github.raw'` (404 → defaults; any other error → retry, never assume defaults; Policy 04 statement 4a).
 
 ## Phase 2 — Analyze (four-phase, .NET 10)
 
-Record every finding with `file:line`, severity `blocking | important | nit | suggestion | praise`, and one-line recommendation. Before you keep a `critical`, `blocking` or `important` finding, run the proof check in `references/scoring-rubric.md` (Proof before severity) and skip its listed false positives.
+Record every finding with `file:line`, severity `blocking | important | nit | suggestion | praise`, and one-line recommendation. Before you keep a `blocking` or `important` finding, run the proof check in `references/scoring-rubric.md` (Proof before severity) and skip its listed false positives.
 
 **CodeGraph-first, beyond diff.** Diff shows changed lines, not their blast radius. Before judging, run `codegraph explore "<changed symbol, file, or question>"` from checkout — it returns verbatim line-numbered source of relevant symbols PLUS call paths between them, including dynamic-dispatch hops grep can't follow. Use it to: (a) walk callers/callees of every changed public symbol — change can be locally clean and still break caller diff never shows; (b) trace whether untrusted input reaches changed code (security phase below); (c) search for existing helpers/patterns before accepting new ones (architecture & design and AI-slop phases — duplication findings must cite existing `file:line` to reuse). Fall back to grep/manual reading only for what CodeGraph cannot answer (config files, docs, git history). Record out-of-scope observations — pre-existing defects or debt noticed beyond diff — separately with `file:line`. They NEVER move this PR's score (score judges diff only), and only **high/urgent** ones feed follow-up ticket — security vulnerability, data-loss/integrity risk, correctness defect, or broken production path. Lower-severity out-of-scope debt (style, minor duplication, nits) is noted in report's out-of-scope section but is NOT ticketed (policy `docs/policies/04-code-and-spec-review.md` §7; procedure in `references/multica-flow.md`).
 
@@ -56,11 +56,11 @@ Record every finding with `file:line`, severity `blocking | important | nit | su
 6. **AI-slop gate.** Redundant comments restating code; defensive try/catch wrapping everything; pointless re-validation; dead branches; reinvented BCL/framework helpers (hand-rolled retry where platform's resilience pipeline exists, custom JSON helpers over `System.Text.Json`); naming inconsistent with surrounding file; TODO stubs.
 7. **Style & conventions.** Only what analyzers wouldn't catch; respect `.editorconfig`. Keep these `nit`/`suggestion`.
 
-**Loosened checks — mechanical, every PR** (Policy 04 statement 4a). Run both from the checkout and score what they show:
+**Loosened checks — mechanical, every PR** (Policy 04 statement 4a). Run both on the files Phase 1 collected from `gh` (never on a local `origin/dev`, which a task-scoped checkout may not have) and score what they show:
 
 ```bash
-git diff origin/dev...HEAD -U0 | grep -nE '^\+.*(#pragma warning disable|SuppressMessage|<NoWarn>|ExcludeFromCodeCoverage|eslint-disable|@ts-ignore|@ts-expect-error|istanbul ignore|c8 ignore|# noqa|# type: ignore|# pragma: no cover)'
-git diff origin/dev...HEAD --name-only | grep -E '(^|/)(\.editorconfig|Directory\.Build\.(props|targets)|\.eslintrc[^/]*|eslint\.config\.[^/]+|tsconfig[^/]*\.json|pyproject\.toml|\.pr-review\.json|stryker-config\.json|codecov\.ya?ml|\.github/workflows/[^/]+)$'
+grep -nE '^\+.*(#pragma warning disable|SuppressMessage|<NoWarn>|ExcludeFromCodeCoverage|eslint-disable|@ts-ignore|@ts-expect-error|istanbul ignore|c8 ignore|# noqa|# type: ignore|# pragma: no cover)' .pr-review/$PR/diff.patch
+grep -E '(^|/)(\.editorconfig|Directory\.Build\.(props|targets)|\.eslintrc[^/]*|eslint\.config\.[^/]+|tsconfig[^/]*\.json|pyproject\.toml|\.pr-review\.json|stryker-config\.json|codecov\.ya?ml|\.github/workflows/[^/]+)$' .pr-review/$PR/files.txt
 ```
 
 A suppression with no reason on its line or the line above → `important`. For each config file listed, read its diff: a rule disabled or lowered in severity, a threshold lowered, or a CI step deleted, skipped (`if: false`) or made non-failing (`continue-on-error: true`) → `blocking` unless the cycle ticket asks for that change (a devops ticket naming it). Tightening a check, or a change that does not touch a rule, threshold or step, is not a finding.
@@ -124,7 +124,7 @@ Apply `references/scoring-rubric.md`: category scores → weighted average → h
 - Coverage on changed lines is KNOWN and ≥ threshold (unknown coverage ⇒ DEFERRED, not REWORK). Valid sources in priority order: CI artifact → coverage dev-backend measured and reported per touched class on cycle's Build sub-task → cheap local test run. Diff with no coverable lines (config/docs only) satisfies this vacuously. Exception — `monxa.bdd-integration` (test-code-only repo): line coverage does not apply; require instead per-scenario execution evidence (pass/fail table) in cycle's test sub-task reports
 - CI/CD, IaC, or lockfile changes add no new external sources
 
-## Config (`.pr-review.json` at repo root, optional; read from `origin/dev`, never the PR head)
+## Config (`.pr-review.json` at repo root, optional; read from `dev` on GitHub, never the PR head)
 
 ```json
 { "approveBar": 8.5, "coverageThresholdPct": 80, "maxReworkRounds": 3 }
