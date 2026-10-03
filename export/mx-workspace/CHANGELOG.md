@@ -4,6 +4,31 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-09-29 (c) — stage barriers are the wake again; the handoff line covers only what they miss (not live)
+
+Owner's decision. **Policy 05 v1.6** (statement 5): Multica's built-in sub-issue rule wakes
+the parent's owner when every sub-issue at a stage and below is closed, and once more when all
+are closed, whoever closed them, so a plain `done` posts nothing more. The child posts its
+handoff line only where the rule stays silent: it goes `blocked`, or it goes `done` while a
+sibling at its stage or below sits `blocked` (a Fix at a gate's stage always does; a re-armed
+sub-task below a `blocked` gate closes its own stage and does not). Reversed from the first
+2026-09-29 entry: a human's `done` flip releases the next actor again, the "never create wakeup
+rules" line is gone, staging is the barrier mechanism again, the Barrier frontier bullet is
+back in the leader playbook, and the monthly architecture review rolls up on the all-closed
+wake again (no `[RP#]` handoff lines).
+
+**Not live yet**: the owner asked for bundle and GitHub only. The platform rule still times out
+against the Azure database on this server, so the live workspace keeps the handoff-line setup
+until the move.
+
+Cascade: workspace context, `CLAUDE.md`, `README.md`, `sdlc-flow-squad-member-protocol`,
+`sdlc-flow-squad-leader-playbook`, `sdlc-flow-delivery-pipeline`, `sdlc-flow-po-orchestration`,
+`spec-review-gate`, `pr-review-gate` `references/multica-flow.md`, `sdlc-impl-brief`, agents
+`arch-reviewer`, `dev-backend`, `devops`, `issue-janitor`, `qc-runner`, `qc-tester`,
+`release-manager`, squads `dev-team`, `qc-team`, `product-team`, autopilots
+`monthly-architecture-review-monxa-backend-services`, `weekly-issue-hygiene-cancelled-cleanup`.
+Same change in drunk.
+
 ## 2026-09-29 (b) — workspace context names who prefixes a root product-owner never touches (live)
 
 No policy amended: Policy 05 statement 7a already gives the root type prefix (`[Feature]` ·

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-02 |
-| **Version** | 1.4 |
+| **Version** | 1.9 |
 | **Status** | Active |
 | **Owner** | dev-backend |
 | **Applies to** | Every code or behaviour change in a drunk repo, across every stack |
@@ -22,6 +22,7 @@
                    [leader, inline]       read ATs vs spec ──▶ pin at_sha (frozen)
                    [Build run]            implement ──▶ ATs GREEN · suite green · ≥80% · mutation report · drift check empty
    Bug fix (Prove-It):  reproduction AT authored RED and frozen ──▶ fix in Build ──▶ green ──▶ full suite
+   Parallel surfaces (1c): ATs + shared stubs ──▶ ≤3 Builds at one stage ──▶ last to finish proves the full suite
    UI presentation (1a): no AT stage, no new tests ──▶ Build done on build · typecheck · lint · existing suites green
                          a test the change breaks ──▶ skipped with a note ──▶ ONE follow-up issue (dev-leader)
 
@@ -51,7 +52,7 @@ statements but follows the runner and structure conventions below.
 
 1. **Acceptance-test-first, authored and implemented in separate runs, verified by outcome.**
    Every change is proven by acceptance tests derived from the spec's Gherkin before its PR
-   opens — except a UI presentation change (statement 1a). dev-backend owns both halves but never in one run: the **`Acceptance tests:` stage**
+   opens — except a UI presentation change (statement 1a). dev-backend owns both halves, in separate runs except for a confirmed bug fix (statement 1b): the **`Acceptance tests:` stage**
    turns the brief's §7 into executable, RED tests against the package's public API (plus the
    §5 signature stubs so they compile) and pushes them; dev-leader reads them against the spec
    and pins `at_sha`; the **`Build:` stage** implements against those frozen tests until green.
@@ -63,6 +64,40 @@ statements but follows the runner and structure conventions below.
    attests "it failed first" proves only that it ran; the independent read before implementation
    and the lock afterwards are what make red-then-green evidence. For a defect the acceptance
    test is the Prove-It reproduction — see `test-driven-development`.
+1b. **A confirmed bug fix proves itself in one run.** A root cycle carrying product-owner's
+   root-cause report (Workflow A), whose acceptance tests are only the Prove-It reproductions
+   of the reported defect on one surface and whose brief adds no public signature, gets ONE
+   `Build:` sub-task with `Mode: bug-build` instead of the Acceptance-tests + Build pair. In
+   that run dev-backend first commits and pushes the reproduction tests alone (plus any §5
+   stub), each `@new` scenario red for the reason the report names; that commit is `at_sha`,
+   reported with its per-scenario RED table. Only then does it implement, in the same run,
+   against those frozen tests. dev-leader approves nothing in between. The independent read
+   moves to the PR gate, which checks that `at_sha` holds only tests and stubs, predates every
+   implementation commit, reproduces the defect (red at `at_sha`, from CI or a local run of the
+   AT paths), and matches the root's Gherkin with literal expected values. A failure of any of
+   these is `blocking`. Why: a bug's acceptance test is one reproduction whose expected value
+   the root-cause report already fixes, so the separate run and the leader's read cost a full
+   fresh checkout and a stage hop for little extra assurance; features keep the pair.
+1c. **Independent surfaces build in parallel against one frozen test set.** A cycle whose §3
+   splits into two or more surfaces with disjoint file sets builds them in parallel: the
+   Acceptance-tests stage writes every surface's scenarios and every §5 stub they share
+   (interfaces, DTOs, registration seams) — one Acceptance-tests sub-task when any stub is
+   shared, else one per surface at the same stage — so a surface that depends on another
+   codes against its contract, never its implementation; then one Build per surface, all at
+   the next stage, at most 3 at once (one runtime host). Shared wiring files (DI
+   registration, project and package files, barrel exports) belong to exactly one Build's §3
+   and sit in every other Build's §4. A parallel Build is done when its own `@new`
+   scenarios, every `@existing` one and every pre-existing test are green, and so are the
+   `@new` scenarios of every sibling Build already `done`; a sibling still running may leave
+   its own `@new` scenarios red. A push rejected because a sibling pushed first is rebased on
+   the moved feature branch and the suite re-run, so the last Build to finish proves the
+   whole suite green; the PR gate's CI check is the backstop. Surfaces run in sequence only
+   when one must change a file the other changes, or needs the other's behaviour — not its
+   signature — to turn its tests green and no fake can stand in. A brief over 10 KB splits
+   into parallel surfaces, never into a sequence for size alone. Why: from 2026-09-20 to
+   10-03, 12 cycles had more than one Build and 7 of them ran every Build in sequence
+   (DRK-2013, DRK-2028, DRK-1679), because each Build had to finish on a fully green suite
+   that held its sibling's red tests.
 1a. **UI presentation ships without new tests, for now.** A UI presentation change — the screens
    and layouts, components, styling and copy of a front-end app (in DKNet.Accounts.Api:
    `ui/components/**` and the `page`, `layout` and `.css` files under `ui/app/**`) — has no
@@ -105,13 +140,30 @@ statements but follows the runner and structure conventions below.
    Assert on state/outcome. Pulumi tests mock the SDK/cloud-provider calls, never real cloud
    APIs, and cover resource/property mapping, input validation, and error paths — no snapshot
    tests as a behavioural substitute.
+5a. **A side effect is proven by its effect, through the real adapter.** A test of an
+   operation that deletes, overwrites, moves or purges stored state first arranges the state
+   the operation must change and asserts that state is present before the act, so the test
+   cannot pass on an empty store. After the act it asserts the change itself: the items gone,
+   the count changed, the old content replaced. A returned success flag or "no exception
+   thrown" is never that proof. When the change touches an outbound storage or queue adapter
+   (blob, object storage, queue), that test also runs the adapter against the repo's emulator
+   fixture, not only against the in-memory fake: the fake proves the port, the emulator proves
+   the adapter's paths, prefixes and request mapping. In DKNet the fixtures are the
+   Testcontainers ones in `src/Services/Svc.BlobStorage.Tests/Fixtures` (Azurite, MinIO). A
+   repo with no emulator fixture for that vendor says so in the report's LEFT OPEN, and
+   dev-leader decides whether a later cycle adds one. Database adapters stay under statement 2
+   (InMemory, `TEST_DB_PROVIDER` unset). Why: on DKNet PR #495 (DRK-1898) the Azure folder
+   delete matched no blob because of a leading-slash prefix, and the test meant to prove it
+   passed on a store it never filled. The PR gate found the defect by reproducing it against
+   Azurite, which cost a rework round.
 6. **Coverage gate — scoped to the change, both conditions required.** All existing tests
-   pass — full suite green, zero errors, zero warnings, and a clean `dotnet pack` (.NET) or
+   pass — full suite green (parallel Builds: statement 1c), zero errors, zero warnings, and a clean `dotnet pack` (.NET) or
    `npm pack` (TS). Combined unit + BDD-unit coverage of every class/module **touched** in the
    cycle reaches **≥80%**, measured only over files the feature branch changed
    (`git diff --name-only origin/dev...origin/<feature-branch>`, excluding test files) — never
    a repo-wide figure. UI presentation files (statement 1a) are outside this gate.
-6a. **Mutation report per touched class — coverage's honesty check.** Coverage says a line ran; only mutation says an assertion would have caught it changing. Every Build except a UI presentation one (statement 1a) reports a mutation run scoped to the classes it touched (`dotnet stryker` on .NET, `npx stryker run` on TypeScript) with **every survivor dispositioned** — `killed — added <test>` / `equivalent` / `accepted — <why>`. Tool genuinely unavailable → the manual equivalent: invert each guard the change added, run, confirm RED, restore, and say in the report that the tool was unavailable. A Build reported `done` without a mutation report and its dispositions is incomplete the same way a missing coverage row is; dev-leader sends it back and never promotes past it.
+6a. **Mutation report per touched class — coverage's honesty check.** Coverage says a line ran; only mutation says an assertion would have caught it changing. Every Build except a UI presentation one (statement 1a) reports a mutation run scoped to the lines the cycle changed in the classes it touched — `dotnet stryker --since:origin/dev` on .NET, `npx stryker run --mutate "<file>:<start>-<end>,…"` over the diff's hunks on TypeScript — never the whole class, whose unchanged code the cycle does not own; reported per touched class, with **every survivor dispositioned** — `killed — added <test>` / `equivalent` / `accepted — <why>`. Tool genuinely unavailable → the manual equivalent: invert each guard the change added, run, confirm RED, restore, and say in the report that the tool was unavailable. A Build reported `done` without a mutation report and its dispositions is incomplete the same way a missing coverage row is; dev-leader sends it back and never promotes past it.
+6b. **Nothing is reported skipped, and CI runs locally first.** A Build in any mode, and a Build's rework fix, never reports `done` with a check it was asked to run marked skipped or deferred. A check that cannot run is a `blocked` with the reason, or the manual fallback its own statement names. Before its last push the implementer makes a throwaway local merge of fresh `origin/dev` into its HEAD (a scratch branch it never pushes; the shared feature branch is never rebased) and, from the repo root, runs the repo's `pull_request` workflow steps that run locally (`.github/workflows/*.yml`: build, lint, typecheck, test, pack, compose and image builds), all of them, not only the test project it changed. A step that needs a secret, uploads, publishes or deploys (SonarCloud scan, codecov or snyk upload, image push) is listed as `not local: <step>`, which is a declared boundary, not a skip; where the repo gates on SonarCloud duplication, `jscpd` runs locally in its place (statement 7a of [Policy 01](01-coding-standards.md)). It reports them in a `CI parity` row. A red also present on `origin/dev` is noted with that proof, and so are a still-running parallel sibling's own `@new` scenarios (statement 1c), named by its key; any other red is the implementer's to fix. A merge conflict there is reported in the row, not resolved: conflicts with `dev` are dev-leader's (`leader-gitops`). dev-leader sends back a Build whose report marks any check skipped. Why: DRK-1830 deferred Stryker and two mutants survived to the gate; DRK-1867 was red on the merge head; DRK-1777 broke a compose job no one ran locally.
 7. **Never inflate coverage.** No trivial tests on getters or framework code. If 80% on a
    touched class is genuinely unreachable, flag the untestable paths to dev-leader instead of
    padding; if code is untestable as written, propose the smallest design change rather than
@@ -153,19 +205,26 @@ statements but follows the runner and structure conventions below.
 
 - New/changed logic has a test (UI presentation: statement 1a); every bug fix carries a
   reproduction test that failed before the fix and passes after.
-- Full suite green — pre-existing tests plus new ones — zero errors, zero warnings.
+- Full suite green — pre-existing tests plus new ones — zero errors, zero warnings (parallel Builds: proved by the last one to finish, statement 1c).
 - ≥80% combined coverage on every touched class/module, reported per file, never repo-wide.
 - A mutation report per touched class, every survivor dispositioned (statement 6a).
+- Every test of a destructive operation asserts the state before and the change after; a
+  storage or queue adapter change is also tested against the repo's emulator fixture
+  (statement 5a).
 - No skipped/disabled test introduced to make the suite pass — except a test a UI presentation
   change broke, skipped under statement 1a with its note and listed in its follow-up issue.
 - Clean `dotnet pack` / `npm pack` (or the Python package's equivalent build check).
+- Every `pull_request` workflow command green locally on a throwaway local merge of `origin/dev` into HEAD, and no check reported skipped (statement 6b).
 
 ## Enforcement
 
 `pr-review-gate`'s testing dimension verifies tests exist for changed logic, assert behaviour
 not implementation, cover edge cases, and that changed-line coverage meets the gate (override
 per repo via `.pr-review.json`). A coverage miss or missing tests on touched logic is a
-`blocking`/`important` finding that forces REWORK regardless of the weighted score. UI
+`blocking`/`important` finding that forces REWORK regardless of the weighted score. A test of
+a destructive operation without its before and after assertions, or a storage or queue adapter
+change tested only against a fake while the repo has an emulator fixture, is an `important`
+finding (statement 5a). UI
 presentation files carry no test requirement (statement 1a); a test skipped without its note,
 or a UI presentation cycle without its follow-up issue, is an `important` finding.
 

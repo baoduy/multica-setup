@@ -20,7 +20,7 @@
   "source_runtime_provider": "claude",
   "mcp_servers": [],
   "source_id": "aa879e44-b3ac-4ee6-84c8-1a006bd1a263",
-  "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+  "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
   "skill_names": [
     "archify",
     "blocker-report",
@@ -36,7 +36,6 @@
   ],
   "mcp_config": null,
   "custom_env": {
-    "ARCHIFY_CHROME": "/home/steven/.cache/ms-playwright/chromium-1228/chrome-linux/chrome",
     "ARCHIFY_CHROME_NO_SANDBOX": "1"
   },
   "had_secrets": true,

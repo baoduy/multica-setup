@@ -26,10 +26,19 @@ Deviations from the brief: none | <n>, see below
 | Build | 0 errors, 0 warnings |
 | Tests | <n> passed, 0 failed, 0 skipped |
 | @existing / @new | green / green |
-| AT drift | `git diff <at_sha>..HEAD -- <paths>` empty |
+| AT drift | `git diff <at_sha>..HEAD -- <paths>` empty; added tests: <file>, … |
+| Repro RED | `bug-build` only: `at_sha <sha>` (tests + stubs only, pushed before any fix commit); <scenario> red at `at_sha` — <reason>, … |
 | Coverage (touched classes) | min <n>% (<class>); all ≥ 80% |
+| Branch hits | <n>/<n> new branches hit — or `none added` |
 | Mutation | Stryker <score>%, <n> survivors dispositioned — or — manual: <n> guards, each went red |
+| Assertions | fragment grep over added asserts: <n> matches, each anchored — or `0 matches` |
+| Brief re-read | <n> edge cases named, each a fact or "no fact, <reason>" |
+| Comments | <n> comments re-read against the code; <n> fixed |
+| Standards | <skills opened> · rule-ids: <ids> · reuse: <result> · SRP: <numbers> · DRY: <result> · docs: <n/a / url> |
+| CodeGraph | <n> explore calls — or `unavailable — <why>` |
 | Pack | clean |
+| CI parity | `<workflow>: <step>` ✓, … · not local: <steps> · jscpd <n> clones · on a throwaway merge with `origin/dev` `<sha>` — nothing skipped; a running sibling's `@new` red named by key (Policy 02 statements 6b, 1c) |
+| Pre-review | <b> blocking, <i> important, <n> nit found · fixed <n> · LEFT OPEN <n> · subagent \| inline (<why>) |
 | Diff | <n> files, +<a>/−<b>, inside §3 |
 | Push | `HEAD` == `origin/<branch>` |
 
@@ -38,7 +47,7 @@ Deviations from the brief: none | <n>, see below
 - <one line each> — or `none`
 ```
 
-A `build-ui` Build (UI presentation, Policy 02 §1a) writes `n/a — UI presentation` in the @existing / @new, AT drift, Coverage and Mutation rows, puts typecheck and lint in the Build row, counts its skips in the Tests row, and adds one row: `Skipped tests | <n>: <file> · <test> · <control it drove>, …` — or `none`.
+A `build-ui` Build (UI presentation, Policy 02 §1a) writes `n/a — UI presentation` in the @existing / @new, AT drift, Coverage, Branch hits, Mutation and Assertions rows, puts typecheck and lint in the Build row, counts its skips in the Tests row, and adds one row: `Skipped tests | <n>: <file> · <test> · <control it drove>, …` — or `none`.
 
 Rules:
 

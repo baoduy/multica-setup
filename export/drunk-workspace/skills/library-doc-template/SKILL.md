@@ -117,7 +117,11 @@ Markdown with alt text that narrates the flow in one sentence.
 **Package README** (the repo-root or package-root `README.md`): the same
 skeleton truncated to Title + one-liner, Why use it?, Quick Start, then a link
 table into the full `docs/` pages. No Features section — it drifts from the doc
-page that owns it.
+page that owns it. The repo-root README also carries 🏗️ Runtime architecture
+once the repo has its runtime diagram: `docs/diagrams/runtime.svg` with alt
+text that narrates the primary path in one sentence (Policy 05 statement 3a;
+the shape and the drawing prompt are in docs-writer's procedure, and its
+archify type is always `architecture`).
 
 **Changelog entry**: one line per user-visible change under the version heading,
 imperative mood, linking the doc page the change affects. No internal refactors.

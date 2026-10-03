@@ -11,7 +11,7 @@
 | Member | Receives | Terminal |
 |---|---|---|
 | **spec-reviewer** | `[S<num>] Spec review` — scores 1–10, APPROVED / REWORK / ESCALATED on the `Gate verdict` property | `done` / `blocked` / reassigned to the owner |
-| **release-manager** | `[P<num>-2] Release` on a ROOT spec cycle — ONE `dev`→`main` PR, merged; CI publishes (on a root cycle assigned to dev-team the squad stages the release itself; on a sub-issue nobody releases — the parent does) | `done` / `blocked` |
+| **release-manager** | `[P<num>-2] Release` on a ROOT spec cycle, a bundle root, or a root dev-team handed back after its merge into `dev` — ONE `dev`→`main` PR, merged; CI publishes (dev-team never releases; on a sub-issue nobody releases — the parent does) | `done` / `blocked` |
 | **devops** | `[P<num>-1] CI/CD change` — Workflow D2 only, `chore/<key>` PR to `dev` | `done` with the PR URL |
 | **docs-writer** | `[P<num>-1] Docs: <scope>` — Workflow E only, `docs/<key>` PR to `dev` | `done` with the PR URL |
 | **service-architect** | `[P<num>-1] Design: <service>` — Workflow F only, `design/<key>` PR to `dev` adding `docs/architect/` | `done` with the PR URL |
@@ -26,15 +26,15 @@ Only you create issues in this squad. Members report on their own tickets; you r
 | The work is… | Owner | Ticket |
 |---|---|---|
 | feature from an approved spec | dev-team | `[P<num>-1] Implementation`, `todo`, stage 1, description = the FULL approved spec opening with `Spec revision: <n>`; frozen for the cycle |
-| confirmed bug (≥90% or requester-confirmed) | dev-team | the ROOT ticket reassigned to the dev-team squad at `todo`; the root-cause report is the brief; dev-team stages its own Release; no phases |
+| confirmed bug (≥90% or requester-confirmed) | dev-team | the ROOT ticket reassigned to the dev-team squad at `todo`; the root-cause report is the brief; dev-team stops at the merge into `dev` and hands the root back, then you stage ONE `[P<num>-2]` as for a bundle root |
 | tests | dev-team, inside `[P<num>-1]` | never a separate phase, never waived — except UI presentation, built without tests (Policy 02 §1a) |
-| `dev`→`main` release | release-manager | `[P<num>-2]`, `backlog`, stage 2, promoted after `[P<num>-1]` verifies; only on a root ticket, and only when a package consumer can observe the change |
+| `dev`→`main` release | release-manager | `[P<num>-2]`, `backlog`, stage 2, promoted after `[P<num>-1]` verifies; only on a root ticket (spec root, bundle root, or a root dev-team handed back), and only when a package consumer can observe the change |
 | CI/CD, build/test, package-publish automation | devops | `[P<num>-1] CI/CD change` + `[P<num>-1c]` (Workflow D2); never through the spec gate or release-manager |
 | docs, only when a human asks | docs-writer | `[P<num>-1] Docs: <scope>` + `[P<num>-1c] Review docs PR` (Workflow E); never through the spec gate, dev-team or release-manager. A requester may assign docs-writer directly. dev-team cycles write no docs pages |
 | a new service's design (a repo that does not exist yet), or a change to an approved design | service-architect | `[P<num>-1] Design: <service>` + `[P<num>-1c] Review design PR` (Workflow F), only after the requester settled repo and service names and created the empty repo with `dev`; never through the spec gate, dev-team or release-manager. Delegated door only. An approved design binds every later spec in that repo |
 | blog content | blog-team | not this squad |
 
-Never assign a phase to yourself, never put the root in `in_review`; on a spec or CI/CD root its terminals are `done` or `cancelled` (requester's call). Reassigning the root happens exactly once, to dev-team, on a confirmed bug — after that you are out of the ticket.
+Never assign a phase to yourself, never put the root in `in_review`; on a spec or CI/CD root its terminals are `done` or `cancelled` (requester's call). Reassigning the root happens exactly once, to dev-team, on a confirmed bug — after that you are out of the ticket until dev-leader hands it back for the release.
 
 ## Promotion gates
 
@@ -52,4 +52,4 @@ Escalate instead of spinning when: a business decision was never confirmed, the 
 
 ## Every wake
 
-`multica issue children <root-id> --output json --resolve-properties`, then the bounded comments of any `blocked` child or the child named by the handoff line that woke you. Promote every phase whose gate now verifies; self-heal mis-signals (a completion report parked non-`done` → verify and flip; a `done` phase whose report says failure → leave `done`, comment with the owner's mention). Every wake that finds a stuck child ends in a loop-back, a promotion, or an escalation. Record `multica squad activity <root-id> action|no_action --reason "<why>"`.
+`multica issue children <root-id> --output json --resolve-properties`, then the bounded comments of any `blocked` child or the child that woke you (a stage wake, or its handoff line). Promote every phase whose gate now verifies; self-heal mis-signals (a completion report parked non-`done` → verify and flip; a `done` phase whose report says failure → leave `done`, comment with the owner's mention). Every wake that finds a stuck child ends in a loop-back, a promotion, or an escalation. Record `multica squad activity <root-id> action|no_action --reason "<why>"`.

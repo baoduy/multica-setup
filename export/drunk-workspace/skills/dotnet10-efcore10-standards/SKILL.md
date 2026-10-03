@@ -86,6 +86,7 @@ EF tools need `--framework` on multi-targeted projects · Application Name auto-
 - `ASYNC-004` **Sync-over-async** — `.Result`, `.Wait()`, `.GetAwaiter().GetResult()`.
 - `ASYNC-005` **Missing `ConfigureAwait`** in *library* projects (**CA2007**, Meziantou **MA0004**). Not applicable to ASP.NET Core app code — no `SynchronizationContext`. Do not flag it there. → https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2007
 - `ASYNC-006` **Missing `Async` suffix** on async method.
+- `ASYNC-007` **`async void` event handler without a catch-all** — the whole body sits in `try { … } catch (Exception ex)`, which logs and leaves the operation in a defined state (an intercepted request is continued or aborted). Catching only a library type such as `PuppeteerException` lets any other exception escape and crash the host (Policy 01 statement 14).
 - `LOG-001` **Non-source-generated logging on hot path** (**CA1848**) — use `[LoggerMessage]`. → https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1848
 - `LOG-002` **Sensitive data in logs** — PAN, tokens, full request bodies, secrets.
 

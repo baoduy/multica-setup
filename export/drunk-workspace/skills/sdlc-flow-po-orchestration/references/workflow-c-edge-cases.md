@@ -8,7 +8,7 @@ Two concurrent sessions can both create a phase pair (a gate that both flips `do
 
 ## A human flipped the root `done` early
 
-Their flip is a decision, not a mistake. Never move the root off `done`. Let the open phases finish (their handoff lines still wake you), post the final summary on the root when they do, and leave the status alone.
+Their flip is a decision, not a mistake. Never move the root off `done`. Let the open phases finish on their own barriers, post the final summary on the root when they do, and leave the status alone.
 
 ## Multi-repo scope
 
@@ -16,7 +16,7 @@ A phase ticket names exactly one repository. When the spec's Scope spans two (a 
 
 ## Leftovers-shaped tickets
 
-A review's non-gating findings never reach you as delivery work. In-scope leftovers are cleared by pr-reviewer inside its cycle; out-of-scope ones are dropped unless a defect or security finding with a named reproduction, which dev-leader files as an ordinary `bug-report` ticket assigned to you. `Review follow-ups:` tickets are retired: never file one, never accept one as a root, never decompose one into phases. If a bag of nits reaches you anyway (comment wording, assertion polish, coverage of untouched paths), triage it in place with a one-line disposition per finding and flip it `done`. Out-of-scope debt belongs to the monthly arch-reviewer sweep.
+A review's non-gating findings never reach you as delivery work. In-scope leftovers stay inside their cycle: a rework round below the bar, merged and named under `Merged with:` on a passing PR; out-of-scope ones are dropped unless a defect or security finding with a named reproduction, which dev-leader files as an ordinary `bug-report` ticket assigned to you. `Review follow-ups:` tickets are retired: never file one, never accept one as a root, never decompose one into phases. If a bag of nits reaches you anyway (comment wording, assertion polish, coverage of untouched paths), triage it in place with a one-line disposition per finding and flip it `done`. Out-of-scope debt belongs to the monthly arch-reviewer sweep.
 
 ## Spec drift after delegation
 

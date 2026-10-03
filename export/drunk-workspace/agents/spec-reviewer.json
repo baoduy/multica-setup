@@ -13,14 +13,14 @@
       "target_type": "workspace"
     }
   ],
-  "max_concurrent_tasks": 6,
+  "max_concurrent_tasks": 10,
   "runtime_config": {},
   "custom_args": [],
   "thinking_level": "high",
   "source_runtime_provider": "claude",
   "mcp_servers": [],
   "source_id": "0cb32640-00a7-4308-972f-2f459f52383a",
-  "source_runtime_id": "a0f5dcfb-aaac-46c8-8ebb-b9c0dadae1ed",
+  "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
   "skill_names": [
     "blocker-report",
     "codegraph",

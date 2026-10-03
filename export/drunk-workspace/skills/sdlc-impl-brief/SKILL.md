@@ -1,6 +1,6 @@
 # SDLC Implementation Brief — sub-task contract
 
-What dev-leader writes into a coding sub-task's description. Reader: an agent that can read the repo but not your mind. Content: what exists, what changes, what must not change, how "done" is proven. Target 6–8 KB; **over 10 KB the surface is too large — split it into sequenced stages.**
+What dev-leader writes into a coding sub-task's description. Reader: an agent that can read the repo but not your mind. Content: what exists, what changes, what must not change, how "done" is proven. Target 6–8 KB; **over 10 KB the surface is too large — split it into parallel surfaces** with disjoint §3 files and shared §5 stubs (Policy 02 §1c); sequence surfaces only for a real file overlap or behaviour dependency.
 
 This is not the spec. The business spec lives on the root or phase ticket (`sdlc-spec-template`). The brief is your translation of it into a task list against real code, from CodeGraph research. Never paste the spec into the brief.
 
@@ -10,7 +10,7 @@ This is not the spec. The business spec lives on the root or phase ticket (`sdlc
 
 **The spec's §3b placement is binding too.** Put the change in the repo and bounded context §3b names as Owner, and add only the dependencies it declares, in the direction it declares. A design that needs a different owner, a new dependency or a public-surface break §3b did not declare goes back to product-owner on the ticket — pr-reviewer blocks a diff that contradicts §3b.
 
-**The repo's approved service design binds the same way.** When `dev` holds `docs/architect/`, read it before the brief: aggregates, entities, events, endpoints and dependencies follow its domain and integration files, and every non-goal stays out. A brief that needs the design changed goes back to product-owner on the ticket — the design changes only through a Workflow F ticket.
+**The repo's approved service design binds the same way.** When `dev` holds `docs/architect/`, read it before the brief: aggregates, entities, events, endpoints and dependencies follow its domain and integration files and its runtime architecture diagram (components, external dependencies, trust boundaries), and every non-goal stays out. A brief that needs the design changed goes back to product-owner on the ticket — the design changes only through a Workflow F ticket.
 
 ## Writing rules (agent reader)
 
@@ -19,22 +19,23 @@ This is not the spec. The business spec lives on the root or phase ticket (`sdlc
 3. Delta and guards only. Repeat nothing that lives in a skill the implementer loads: the marker legend, the acceptance-tests and Build procedures, the standard done-list and the report shape are in `test-driven-development` and `blocker-report`.
 4. Reference, do not copy: §7 lists scenario names; the Gherkin stays on the phase ticket.
 5. Amend by editing rows and adding one changelog line. Never append a narrative section.
-6. Every edge case you name anywhere binds as a §3 row with a `Proof` cell, or an explicit `no test — <reason>`. Prose is not binding.
+6. Every edge case you name anywhere binds as a §3 row or a §6a input-domain row with a `Proof` cell, or an explicit `no test — <reason>`. Prose is not binding. §6a is mandatory for every guard, default, mapping or external call §3 changes (Policy 06 statement 12b).
 7. Never dictate a test's shape; name the mutation it must catch (`Proof` column). Never order a change that fails CI by arithmetic (coverage ratchet, moved assemblies) without the config change that absorbs it, as its own row.
 
 ## Template
 
-Copy from `# <KEY>` down and write it with `--description-file`. The same brief is the description of both the `Acceptance tests:` and the `Build:` sub-task for a surface; only the `Mode` row differs. A UI presentation surface has only the Build sub-task: `Mode: build-ui`, `at_sha` row `n/a — UI presentation`, and §7 still names the spec's scenarios for the later UI test pass.
+Copy from `# <KEY>` down and write it with `--description-file`. The same brief is the description of both the `Acceptance tests:` and the `Build:` sub-task for a surface; only the `Mode` row differs. A confirmed bug fix (Policy 02 §1b) has only the Build sub-task too: `Mode: bug-build`, `at_sha` row `set by the Build run`. A UI presentation surface has only the Build sub-task: `Mode: build-ui`, `at_sha` row `n/a — UI presentation`, and §7 still names the spec's scenarios for the later UI test pass.
 
 ```markdown
 # <KEY> — <imperative title>
 
 | | |
 |---|---|
-| **Mode** | `acceptance-tests` \| `build` \| `build-ui` (UI presentation, Policy 02 §1a: no tests) |
+| **Mode** | `acceptance-tests` \| `build` \| `bug-build` (confirmed bug fix, Policy 02 §1b: reproduction pushed first as `at_sha`, then the fix, one run) \| `build-ui` (UI presentation, Policy 02 §1a: no tests) |
 | **Repo · branch · base** | `<url.git>` → `feature/<key>-<slug>` @ `<base sha>` |
 | **Spec** | <phase or root key> §5, revision <n> (frozen) |
 | **at_sha · AT paths** | — until approved · `<tests/…/X.feature>, <tests/…/Steps.cs>` |
+| **Siblings** | parallel Builds at this stage: `<key> — <their §3 files>`; their `@new` scenarios may stay red while they run (Policy 02 §1c) — or `none` |
 | **Projects in scope** | `<src/A>, <src/B>, <tests/C>` |
 | **Standards** | `<stack skill(s)>` · at risk: `<3–5 rule-ids, e.g. DKNET-LAYER-001, CLEAN-SRP-001>` |
 
@@ -72,8 +73,13 @@ Ordered; each row compiles on the previous. Op ∈ KEEP · MODIFY · EXTEND · N
 |---|---|
 | R1 | if <condition> then <result> |
 
+## 6a. Input domain (Policy 06 §12b; one row per input class of every guard, default, mapping or external call §3 changes; delete if §3 changes none)
+| # | Changed at | Input class | Expected | Proof |
+|---|---|---|---|---|
+| D1 | `<symbol>` | empty · null · each enum member · display/code form · unknown · boundary · exception `<Type>` | <result> | `<scenario or test name>` |
+
 ## 7. Scenarios in this slice
-- `@new`: <scenario names from the spec §5, or `all`>
+- `@new` (one line per scenario, never `all`): <scenario name from the spec §5> — fails today: `<file:line>` <what today's code does instead of the Then>
 - `@existing`: <feature files or names that form the regression baseline>
 - Slice notes (≤ 3 bullets): <narrowing, discriminating Given, seam detail>
 
@@ -92,7 +98,8 @@ Ordered; each row compiles on the previous. Op ∈ KEEP · MODIFY · EXTEND · N
 ## Leader notes
 
 - **Three failure modes this shape prevents:** rebuilding what exists (§2 + KEEP rows), changing more than asked (§4 + `git diff --stat`), breaking working behaviour (`@existing` baseline).
-- **First comment on each sub-task** carries the assignee's mention and one line: `Mode: acceptance-tests — write the tests per test-driven-development, then done.` or `Mode: build — implement per test-driven-development against at_sha <sha>, then done.` or `Mode: build-ui — implement per test-driven-development (UI presentation: no tests; skip and list what you break), then done.` The procedure itself is in that skill; do not restate it.
+- **First comment on each sub-task** carries the assignee's mention and one line: `Mode: acceptance-tests — write the tests per test-driven-development, then done.` or `Mode: build — implement per test-driven-development against at_sha <sha>, then done.` or `Mode: bug-build — reproduction first, pushed alone as at_sha, then the fix, per test-driven-development (Prove-It), then done.` or `Mode: build-ui — implement per test-driven-development (UI presentation: no tests; skip and list what you break), then done.` The procedure itself is in that skill; do not restate it.
+- **Tagging `@new`** (Policy 06 statement 12a): for each scenario, find with `codegraph explore` the code that decides its Then, and write down what it does today. A scenario today's code already satisfies goes under `@existing`. If you cannot name the line, the brief's §2 is wrong; fix §2 before promoting the Acceptance-tests stage.
 - **Approving the acceptance tests:** read the pushed test files against the spec (every scenario present, none softened, literal expected values, readable), then fill the `at_sha · AT paths` header row of the Build description and add one changelog line. Never a new section.
 - **A scope change** from product-owner becomes new §3 rows (and §7 names) in a new brief for the new stage, plus a changelog line on the parent's plan comment. Never re-arm a finished Acceptance-tests stage for spec drift.
 - **Gate sub-tasks** (Review) get a pointer table, not a brief: repo · branch · base · `at_sha` + AT paths · Build sub-task(s) for rework · root ticket, plus a cycle-specific emphasis section of at most 5 bullets.

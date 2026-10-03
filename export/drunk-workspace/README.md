@@ -1,6 +1,6 @@
 # drunk-workspace export
 
-Full-workspace bundle: 30 skills, 16 agents, 3 squads, 4 projects, 7 autopilots (`autopilots/`, prompt in `*.description.md`; push with `multica autopilot update <id> --description "$(cat f)"`), plus `workspace/context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push it with `multica workspace update <id> --context-stdin < workspace/context.md`.
+Full-workspace bundle: 30 skills, 16 agents, 3 squads, 4 projects, 8 autopilots (`autopilots/`, prompt in `*.description.md`; push with `multica autopilot update <id> --description "$(cat f)"`), plus `workspace/context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push it with `multica workspace update <id> --context-stdin < workspace/context.md`.
 
 **Config files.** `properties/properties.json` carries the ACTIVE property definitions only — archived ones are
 dropped on purpose (the CLI has `property archive`/`unarchive` but no delete, so an archived definition lives on
@@ -46,10 +46,10 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 | devops           | claude  | claude-sonnet-5     | high     |
 | default          | claude  | claude-sonnet-5     | high     |
 | run-medic        | claude  | claude-haiku-4-5    | low      |
-| issue-janitor    | hermes  | (runtime default)   | —        |
-| Mika             | hermes  | (runtime default)   | —        |
+| issue-janitor    | claude  | claude-haiku-4-5    | (runtime default) |
+| Mika             | claude  | claude-haiku-4-5    | (runtime default) |
 | medium-publisher | claude  | (runtime default)   | —        |
 
 
 Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5-5[1m]`) — arch-reviewer, product-owner, pr-reviewer and the `claude_ultra` assistant at `xhigh`, dev-leader, spec-reviewer and service-architect at `high`; `dev-backend` rides opus on the standard tier (`claude-opus-5-5`) at `high`; devops, release, writing and the `default` assistant ride sonnet. `run-medic` rides haiku at `low`: hourly run recovery is pattern-matching over agent task rows, not judgment.
-`issue-janitor` and `Mika` are the only agents still off the claude runtime (hermes, runtime default model).
+`issue-janitor` and `Mika` ride haiku at the runtime-default thinking level. Every agent runs on the `Claude (Stevens-Mac-mini.local)` runtime.

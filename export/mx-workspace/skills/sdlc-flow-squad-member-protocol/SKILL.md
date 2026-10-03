@@ -2,25 +2,30 @@
 
 You are squad MEMBER (implementer, verifier, tester, runner) working under
 squad leader. This is machinery for waking right actor and closing
-sub-task. Your own instructions name your leader; your handoff line on the parent is
-how you wake them, never a mention. Leader-side machinery lives
+sub-task. Your own instructions name your leader; where the stage barrier stays silent,
+your handoff line on the parent wakes them — never a mention. Leader-side machinery lives
 in `sdlc-flow-squad-leader-playbook`; stage map lives in
 `sdlc-flow-delivery-pipeline`.
 
 ## Handoff rule
 
-**One wake per handoff, and it is your handoff line** (workspace context). After
-your report on your OWN sub-task and your status flip, post ONE line on the cycle
-parent — `<KEY> done — report on <KEY>` or `<KEY> blocked — BLOCKER on <KEY>` —
-with no mention of any kind. The platform routes an agent's plain comment on the
-squad-assigned parent to the leader, in leader role; a mention, `@all` or a
-`/note` prefix in that line stops it. Your status flip wakes nobody (stage
-barriers are switched off). A busy leader is not woken twice: the line is folded
-into its queued run or replayed after the current one.
+**One wake per handoff.** A plain `done` needs nothing more: when your stage
+closes, the platform's sub-issue rule wakes the leader. Your handoff line
+(workspace context) is the wake only where that rule stays silent — you go
+`blocked`, or you go `done` while a sibling at your stage or below sits
+`blocked`. Then, after your report on your OWN sub-task and your status flip,
+post ONE line on the cycle parent — `<KEY> blocked — BLOCKER on <KEY>` or
+`<KEY> done — report on <KEY>` — with no mention of any kind. The platform
+routes an agent's plain comment on the squad-assigned parent to the leader, in
+leader role; a mention, `@all` or a `/note` prefix in that line stops it. A busy
+leader is not woken twice: the line is folded into its queued run or replayed
+after the current one.
 
-- Done report, blocker, question, defect report → on your **OWN** sub-task, no
-  mention, then the handoff line. Leader↔member communication stays paired on
-  your sub-task; the handoff line is the only thing you post on the parent.
+- Done report → on your **OWN** sub-task, no mention; add the handoff line only
+  when a sibling at your stage or below sits `blocked`. Blocker, question, defect
+  report → on your OWN sub-task, no mention, then the handoff line. Leader↔member
+  communication stays paired on your sub-task; the handoff line is the only thing
+  you post on the parent.
 - You never agent-mention anyone; name teammates in prose.
 - Human decision required → that hop is your LEADER's, not yours: report it on
   your OWN sub-task, say human decision is needed, and post the handoff line.
@@ -29,13 +34,14 @@ into its queued run or replayed after the current one.
 
 ## Status discipline
 
-Only `done` and `blocked` end a turn, and neither wakes anyone by itself: the
-handoff line after the flip is the wake. Anything else strands ticket and stalls
-pipeline.
+Only `done` and `blocked` end a turn. A `done` that closes your stage wakes the
+leader through the stage barrier; a `blocked`, or a `done` beside a `blocked`
+sibling, wakes nobody until your handoff line. Anything else strands ticket and
+stalls pipeline.
 
 | Status | When | Meaning |
 |---|---|---|
-| `done` | your work is complete and green | YOUR work is finished — **not** that leader approved it. Leader review happens after your handoff line wakes them. |
+| `done` | your work is complete and green | YOUR work is finished — **not** that leader approved it. Leader review happens after barrier fires (or your handoff line). |
 | `blocked` | you cannot proceed, or your gate is red | cycle is visibly unfinished; leader gates it |
 | `in_review` | **never** | leader-only, for PARENT issue |
 
@@ -43,10 +49,10 @@ Never flip `done` while gate you own is red or fix sub-issue from your own
 work is still open — documenting failures in comment does not make it
 green.
 
-**LAST actions of every run on sub-task: status write, then handoff line.**
-The flip records the state and the line wakes the leader; a run that ends with
-sub-task still `todo`/`in_progress`, or without the line, leaves pipeline dead
-until a sweep or a human notices. Before ending ANY run:
+**LAST action of every run on sub-task is status write** (then the handoff
+line when one is due). A `done` that closes your stage fires the barrier that
+wakes the leader; a run that ends with sub-task still `todo`/`in_progress`
+leaves pipeline dead until janitor sweep or human notices. Before ending ANY run:
 re-read your sub-task's current status (`multica issue get <id> --output json`)
 and confirm it says what your report says — finished work reads `done`, parked
 work reads `blocked`. This applies to EVERY completion on a sub-task that has
@@ -55,13 +61,17 @@ nobody — this stranded MXW-562). **Rework on a sub-task that already reached
 `done` comes back to you from the LEADER only:** the leader flips it
 `in_progress` (never you — you never flip your own sub-task out of `done`) and
 posts ONE comment on it with your mention pointing at the gate's findings. Fix,
-report on your own sub-task, flip `done`, then your handoff line: it wakes
-the leader, who re-arms the gate. You never post on the
+report on your own sub-task, flip `done`: its re-fired barrier wakes the leader,
+who re-arms the gate — or, when a sibling at your stage or below sits `blocked`,
+your handoff line does. You never post on the
 gate's sub-task and never mention the reviewer or verifier — a member writes
 only on its own ticket plus its handoff line, and mentions nobody; anything for
 another member goes on YOUR ticket, and the leader routes it. Your
 sub-task may carry the `Retrigger on done` property: that is the leader's
-bookkeeping for which gates to re-arm — never set, change or clear it.
+bookkeeping for which gates to re-arm — never set, change or clear it. After every
+`done` flip, check `multica issue children <parent-id>`: a `blocked` sibling at your
+stage or below means your `done` closed no stage, so the barrier stays silent —
+post your handoff line (`<KEY> done — report on <KEY>`).
 
 Native status semantics (what each status does server-side, PR close-intent
 auto-completion, metadata keys) are documented in platform's built-in
@@ -101,8 +111,9 @@ Then report it. EVIDENCE carries one row per check with its measured result — 
    shape from `blocker-report` skill (RESULT / EVIDENCE / LEFT OPEN) —
    EVIDENCE rows are measured numbers your role owes (coverage %, suite
    status, build status). No agent mention.
-3. Flip YOUR sub-task to `done`, then post your handoff line on the parent. Do
-   not hand off to next stage yourself — routing is leader's job.
+3. Flip YOUR sub-task to `done`. Do not hand off to next stage yourself —
+   routing is leader's job. Post your handoff line only when a sibling at your
+   stage or below sits `blocked` (check `multica issue children <parent-id>`).
 4. On BLOCKED: flip YOUR sub-task to `blocked` **first** — never leave it
    `in_progress` — then post blocker on YOUR sub-task, no mention,
    formatted per `blocker-report` skill (opens with standalone
@@ -199,7 +210,7 @@ handoff line, and let leader decide.
 
 - Mentioning agent in done report → spurious wake-up, duplicated work.
 - `in_review` on your own sub-task → nothing fires, ticket stranded.
-- Ending a turn without the handoff line → nobody wakes, ticket stranded.
+- Ending a `blocked` turn without the handoff line → nobody wakes, ticket stranded.
 - `done` with red suite or open fix sub-issue → flow falsely closes.
 - One fix sub-issue per failing test → sub-issue storm, unroutable. This is why members report and only the leader files.
 - A member creating ANY issue → work enters the board unreviewed and unconsolidated; the leader loses the one place duplicate findings get merged.

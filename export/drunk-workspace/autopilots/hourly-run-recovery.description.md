@@ -10,7 +10,7 @@ Failures that are not safe to retry are never retried, and an issue already woke
 # Context
 
 - **Audience** — the workspace owner (resolve at runtime: `multica workspace member list --output json`, entry with role `owner`; use its `user_id` and name, never a hardcoded UUID). This autopilot runs in `run_only` mode and creates NO run issue: the wake comment on the affected issue is the audit record. A run that finds nothing stranded must leave no trace at all.
-- **Scope** — every agent in this workspace (the one the run is in). Read the agent list at run time with `multica agent list --output json`; never hardcode it, so a newly created agent is covered automatically. Only issues at `todo` or `in_progress` are eligible for a wake (step 4).
+- **Scope** — every agent in this workspace (the one the run is in). Read the agent list at run time with `multica agent list --output json`; never hardcode it, so a newly created agent is covered automatically. Only a LEAF issue (no sub-issues) that is ASSIGNED TO AN AGENT and sits at `todo` or `in_progress` is eligible for a wake (step 4). An issue assigned to a member is waiting on that person — a release approval, a design review — not on a run; one assigned to a squad or to nobody has no agent run to resume. None of them is ever woken.
 - **Detection signal — read this before writing any filter.** Issue status alone tells you nothing: a run that dies or gives up leaves the issue exactly as it was (`todo`, `in_progress`), so no `multica issue list --status ...` sweep can find either class. The signal is the AGENT TASK joined against the issue. `multica agent tasks <agent-id> --output json` returns rows carrying `status`, `error`, `result`, `issue_id`, `created_at`, `completed_at`, `attempt`. A non-empty `issue_id` means the task was issue work.
   - Class A is `status == "failed"` — the run was killed, and `error` says by what.
   - Class B is `status == "completed"` with `error` null — the run ended cleanly, so nothing looks wrong at the task level; what is wrong is that its ISSUE never reached a terminal state. Class B is the common case by far: in drunk-workspace only 14 of 597 dev-backend tasks ever carried `failed`, while an abandoned turn leaves no failure record at all. **Never filter class B on the wording of `result.output`** — the phrasing varies per run; the structural fact (task completed, leaf issue still open, no newer task) is the signal.
@@ -30,7 +30,7 @@ Failures that are not safe to retry are never retried, and an issue already woke
 1. **Build the candidate list with the fixed script — never your own pipeline.** Write this script to `./detect.sh` in your working directory exactly as given, and run `bash ./detect.sh`. Do not rewrite, "simplify" or re-implement it in Python, and never keep its files in `/tmp`: on 2026-09-25 a hand-rolled pipeline appended pretty-printed JSON to a `/tmp` file shared across runs, parsed it line by line, silently dropped the rows it could not parse — among them dev-backend's RUNNING task on DRK-1726 — and woke an agent that was still working.
 
    ```bash
-   multica agent list --output json > ./agents.json
+   multica agent list --output json > ./agents.json || echo "SWEEP PARTIAL: agent list failed" >&2
    jq -r '.[].id' ./agents.json | while read -r a; do
      multica agent tasks "$a" --output json || echo "SWEEP PARTIAL: agent tasks failed for $a" >&2
    done > ./tasks.json
@@ -48,34 +48,41 @@ Failures that are not safe to retry are never retried, and an issue already woke
          | {class: $class, issue_id: $n.issue_id, agent_id: $n.agent_id, agent_name: $names[$n.agent_id],
             task_id: $n.id, created_at: $n.created_at, completed_at: $n.completed_at,
             error: ($n.error // "" | .[0:200]), output: ($n.result.output // "" | tostring | .[0:200])})
-   ' ./tasks.json > ./candidates.json
+   ' ./tasks.json > ./raw.json || echo "SWEEP PARTIAL: candidate join failed" >&2
+   jq -c '.[]' ./raw.json | while read -r row; do
+     i=$(jq -r .issue_id <<<"$row")
+     issue=$(multica issue get "$i" --output json </dev/null) && kids=$(multica issue children "$i" --output json </dev/null) \
+       || { echo "SWEEP PARTIAL: issue lookup failed for $i" >&2; continue; }
+     jq -c --argjson issue "$issue" --argjson kids "$kids" '
+       select($issue.assignee_type == "agent" and ($issue.status | IN("todo", "in_progress")) and $kids.total == 0)
+       | . + {identifier: $issue.identifier, title: $issue.title, status: $issue.status}' <<<"$row" \
+       || echo "SWEEP PARTIAL: issue filter failed for $i" >&2
+   done | jq -s . > ./candidates.json
    ```
 
-   Any `SWEEP PARTIAL` line on stderr, or a non-zero exit, means the sweep is partial: wake nothing and go to step 9. `./candidates.json` is the ONLY source of stranded issues for the rest of the run; `agent_id` / `agent_name` in each row are the agent to mention.
+   Any `SWEEP PARTIAL` line on stderr, or a non-zero exit, means the sweep is partial: wake nothing and go to step 9. `./candidates.json` is the ONLY source of stranded issues for the rest of the run; `agent_id` / `agent_name` in each row are the agent to mention, and `identifier` / `title` name the ticket. An issue missing from the file is not stranded — never look it up, count it, comment on it or report it.
 
-2. **What the script already decided — do not re-filter it.** It concatenates every agent's full task history (`multica agent tasks` returns all of it in one call, no pagination) and reduces it to the NEWEST task per `issue_id` across all agents — recovery is cross-agent, and any agent's later task on the issue means it recovered. It keeps an issue only when the `issue_id` is non-empty (empty is a chat or `run_only` task), the newest task was created within the last 6 hours, and NO task on that issue is `running`, `pending`, `dispatched` or `queued` — a mention at an agent that already has a task in flight is either dropped or queues a duplicate run behind the live one.
+2. **What the script already decided — do not re-filter it.** It concatenates every agent's recent task history (the first page `multica agent tasks` returns reaches back days, well past the 6-hour lookback; the "More runs available" note on stderr is expected, not a failure) and reduces it to the NEWEST task per `issue_id` across all agents — recovery is cross-agent, and any agent's later task on the issue means it recovered. It keeps an issue only when the `issue_id` is non-empty (empty is a chat or `run_only` task), the newest task was created within the last 6 hours, and NO task on that issue is `running`, `pending`, `dispatched` or `queued` — a mention at an agent that already has a task in flight is either dropped or queues a duplicate run behind the live one. It then reads every remaining issue and its children and keeps it only when it is a LEAF (`total == 0`), ASSIGNED TO AN AGENT (`assignee_type == "agent"`) and at `todo` or `in_progress` (step 4).
 
 3. **The two classes in `class`.**
    - **A — killed run**: the newest task is `failed`. Go on to step 5 to decide whether the error is safe to retry.
    - **B — abandoned turn**: the newest task is `completed` and its `completed_at` is at least **30 minutes** ago. The grace period keeps you from racing a leader who is about to promote the next stage in their own turn. Class B skips step 5 entirely — there is no error to classify.
    - Anything else (`cancelled`, in flight, too recent) is not in the file.
 
-4. **Keep only actively-open LEAF issues.** For each stranded issue: `multica issue get <issue-id> --output json`, and `multica issue children <issue-id> --output json`.
+4. **Only agent-assigned, open LEAF issues — already filtered by the script.** Every row in `./candidates.json` has passed three checks, and you never re-check, widen or override them:
 
-   **An issue with children (`total > 0`) is never stranded — skip it silently.** A parent, phase or any other middle ticket is legitimately `todo`/`in_progress` for as long as its sub-issues work; its own run ended on purpose, without an error, exactly as designed. This is the single biggest source of false positives — it is what keeps class B from firing on every parent in the workspace — so check children for EVERY stranded candidate before anything else, apply it whatever the children's own statuses are, and never drop, weaken or special-case it. A parent with sub-issues still open is a normal cycle in flight: it is not woken, not counted toward the blast-radius guard of step 6, not escalated, and not mentioned in any report.
+   - **No sub-issues.** A parent, phase or any other middle ticket is legitimately `todo`/`in_progress` for as long as its sub-issues work; its own run ended on purpose. Without this filter class B fires on every parent in the workspace.
+   - **Assigned to an agent.** An issue assigned to a member is waiting on that human — a release approval, a design review — and waking the agent whose run last touched it only re-posts the same "waiting on you" turn; on 2026-09-30 four such leaves (DRK-1866, DRK-1872, DRK-1879, DRK-1882) were woken to the cap and handed off every hour, and tripped two escalations. An issue assigned to a squad or to nobody has no agent run to resume either.
+   - **Status `todo` or `in_progress`.** `done`/`cancelled` means the work landed or was dropped; `in_review` is awaiting a human; `blocked` needs an answer, not a retry; `backlog` is not active work.
 
-   Of the leaves, eligible ONLY when status is `todo` or `in_progress`. Skip every other status and record the reason in the tally:
-   - `done` / `cancelled` — the work landed or was dropped; the crash no longer matters.
-   - `in_review` — the deliverable is awaiting a human; waking an agent would talk over the reviewer.
-   - `blocked` — reviving the crashed run will not unblock it; the blocker needs an answer, not a retry.
-   - `backlog` — not active work; it will be picked up when its stage is promoted.
+   Everything the script dropped is an expected outcome: not woken, not counted toward the blast-radius guard of step 6, not commented on, not escalated, not mentioned in any report.
 
 5. **Classify the error — class A only.** From the failed task's `error` string.
    - **TRANSIENT — safe to wake.** API rate limit / overload: `429`, `rate limit`, `rate_limit_error`, `529`, `Overloaded`, `500`, `502`, `504`, `timeout`, `The operation was aborted`, `connection reset by peer`. Background-process / runtime failure: `runtime went offline`, `daemon restarted while task was in flight`, `task expired in queue`, `task cancelled by server`, `terminated`, `hermes process exited`, `agent produced no new messages for`.
    - **PERMANENT — never wake**: `maximum context length`, `monthly spend limit`, `requires more credits`, `fewer max_tokens`, `Key limit exceeded`, `Payment required`, `is not supported`, `executable not found`, `no such file or directory`, `No endpoints available matching your guardrail restrictions`, `AF_UNIX path too long`, `InvalidParam`.
    - Anything you cannot match confidently is PERMANENT. Defaulting to "don't retry" costs a delay; defaulting to "retry" costs a credit-burning crash loop.
 
-6. **Apply the guard and the cap.** The wake list is the class-A transient issues plus every class-B issue **that survived step 4** — an issue filtered out there (has children, or its status is not `todo`/`in_progress`) or classified PERMANENT at step 5 is not stranded, does not count toward the guard, and never appears in a report. If the wake list exceeds 3 issues, wake NOTHING and go to step 9. Otherwise read each remaining issue's counter with `multica issue property list <issue-id> --output json` and take `Wake count` (absent means 0). A value `>= 3` moves that issue off the wake list onto the hand-off list of step 7b.
+6. **Apply the guard and the cap.** The wake list is the class-A transient issues plus every class-B issue **in `./candidates.json`** — an issue the script dropped (has children, not assigned to an agent, or its status is not `todo`/`in_progress`) or classified PERMANENT at step 5 is not stranded, does not count toward the guard, and never appears in a report. If the wake list exceeds 3 issues, wake NOTHING and go to step 9. Otherwise read each remaining issue's counter with `multica issue property list <issue-id> --output json` and take `Wake count` (absent means 0). A value `>= 3` moves that issue off the wake list onto the hand-off list of step 7b.
 
 7. **Wake each surviving issue — as a REPLY, never as a new thread root.** Immediately before each wake, re-run `bash ./detect.sh` and confirm the issue is still listed: `jq -e --arg i <issue-id> 'any(.[]; .issue_id == $i)' ./candidates.json`. A non-zero exit means an agent picked it up while you worked — skip it silently, no comment and no counter bump. Then find where to attach: `multica issue comment list <issue-id> --roots-only --output json`, and take the NEWEST root comment that you did not author. Post the wake as a reply to it: `multica issue comment add <issue-id> --content-file <path> --parent <that-root-comment-id>` (write the content file inside your working directory, never `/tmp`). Only when the issue has no such root — no comments at all, or every root is one of your own — post without `--parent`. The body opens with the crashed agent's mention, written as a `mention://agent/<agent-id>` markdown link using that agent's real id, and reads:
 
@@ -101,22 +108,22 @@ Failures that are not safe to retry are never retried, and an issue already woke
    Woken by the hourly run-recovery autopilot (wake <n> of 3).
    ```
 
-   Mention the agent whose task failed or abandoned the turn, never the issue assignee — a stranded issue frequently has no assignee at all, or an assignee that is not the agent that died. Exactly one mention per comment.
+   Mention the agent whose task failed or abandoned the turn, never the issue assignee — the assigned agent is often not the one whose run stopped (a leader's run on a member's sub-issue, a gate's run on a leader's ticket). Exactly one mention per comment.
 
    Then bump the counter: `multica issue property set <issue-id> --name "Wake count" --value <n>`.
 
    **7b. Issues at the cap get a hand-off, not a wake.** For an issue whose `Wake count` is already `>= 3`, post ONE comment — same `--parent` rule — that mentions the issue's human owner (its `Owner` property, else the nearest ancestor's, else the workspace owner) and states plainly: the run has now stopped short 4 times, it was woken 3 times, it will NOT be woken again, and the last error or last run output. Do NOT mention any agent in this comment — that would wake it straight back into the same crash. Leave the status, the assignee and the judgment to that member. Post this once and never again for that issue; on later runs it is already at the cap and already handed off, so skip it silently.
 
-8. **Report, don't retry, the permanent failures.** For each PERMANENT failure, post ONE comment on that issue mentioning the workspace owner (resolved at runtime), naming the failed agent, quoting the error, and stating plainly that it was NOT retried and why. Do NOT mention the agent. Same `--parent` rule as step 7. Issues skipped at step 4 on status grounds get no comment at all.
+8. **Report, don't retry, the permanent failures.** For each PERMANENT failure, post ONE comment on that issue mentioning the workspace owner (resolved at runtime), naming the failed agent, quoting the error, and stating plainly that it was NOT retried and why. Do NOT mention the agent. Same `--parent` rule as step 7. Issues the script dropped at step 4 get no comment at all.
 
 9. **Escalate only when a human is actually needed.** Escalate only when the blast-radius guard tripped at step 6, or when a CLI step failed in a way that left the sweep partial.
 
-   **The escalation reports the wake list and nothing else.** Every issue it names is one that qualified for a wake: it survived the step-4 leaf/status filter and, for class A, the step-5 transient classification. Issues that were skipped — parents with children, `done`/`cancelled`/`in_review`/`blocked`/`backlog` leaves, permanent errors, issues with a task already in flight — are expected outcomes, not findings; they are never listed, never counted, and never explained. If nothing qualified for a wake, there is nothing to escalate: create no issue at all and end the run silently, however many raw candidates the sweep started from.
+   **The escalation reports the wake list and nothing else.** Every issue it names is one that qualified for a wake: it is in `./candidates.json` and, for class A, passed the step-5 transient classification. Issues that were skipped — parents with children, issues assigned to a member, a squad or nobody, `done`/`cancelled`/`in_review`/`blocked`/`backlog` leaves, permanent errors, issues with a task already in flight — are expected outcomes, not findings; they are never listed, never counted, and never explained. If nothing qualified for a wake, there is nothing to escalate: create no issue at all and end the run silently, however many raw candidates the sweep started from.
 
    Then create ONE issue: `multica issue create --title "Run recovery needs attention (<UTC date>)" --description-file ./escalation.md --assignee-id <owner user_id> --priority high --project <drunk-others id>` (id from `multica project list --output json`). The description carries exactly three things:
 
    - one line naming the reason — the guard tripping with its count, or which step left the sweep partial;
-   - one table, one row per wake-list issue. **Identify each issue by its ticket identifier (`DRK-1673`), never by its UUID** — `multica issue get` returns it as `identifier`, and step 4 already fetched every one of them. Name the agent by its `agent_name` from step 1, never its id:
+   - one table, one row per wake-list issue. **Identify each issue by its ticket identifier (`DRK-1673`), never by its UUID** — the script already put it in each row as `identifier`. Name the agent by its `agent_name` from step 1, never its id:
 
      | Ticket | Title | Class | Agent | Stopped at (UTC) | Wake count | Error / last output |
      |---|---|---|---|---|---|---|

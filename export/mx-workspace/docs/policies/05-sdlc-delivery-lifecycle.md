@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | MX-POL-05 |
-| **Version** | 1.5 |
+| **Version** | 1.6 |
 | **Status** | Active |
 | **Owner** | product-owner (product-team) |
 | **Applies to** | Every ticket that flows through the mx software factory |
@@ -34,7 +34,7 @@
    BUG (A): research ─▶ root-cause + confidence  ≥90% auto-delegate C · <90% requester confirms
    CI/CD (D): devops only — no spec gate; helm PR scored, never gate-merged (human merges = deploy)
 
-   Handoffs: done/blocked on the child + ONE handoff line on the parent = the wake · barriers wake nobody · mentions ARE actions (assign a human a ticket)
+   Barriers: done = fires the stage · blocked, or done beside a blocked sibling = ONE handoff line on the parent · mentions ARE actions (assign a human a ticket)
 ```
 
 ## Purpose
@@ -68,7 +68,7 @@ workspace owner (escalation valve).
 2. **Bug flow (A):** intake → research → root-cause report with a calibrated **confidence 0–100%**. Confidence **≥ 90%** auto-delegates Workflow C immediately (FYI to requester, "reply to halt"); **< 90%** waits for the requester to confirm; a pure question with no change wanted ends with the report as the deliverable. See [Policy 07](07-bug-and-defect-management.md).
 3. **CI/CD flow (D):** pipelines and helm are `devops` work — never enter dev/qc cycles, never open a spec gate. Two doors: **direct** (requester assigns devops; product-team stays out) or **delegated** `[P#-1b]`/`[P#-1c]` phases of a feature. A standalone devops PR to `dev` gets a PR gate; a helm PR to `main` is scored but **never merged by the gate**. See [Policy 08](08-release-management.md).
 4. **Gates front-load quality** — spec gate before implementation, PR gate before merge (see [Policy 04](04-code-and-spec-review.md)).
-5. **A child reports on its own ticket and wakes its parent's owner with one handoff line.** Completion = `done`; `blocked` = needs help. The report, the `## BLOCKER` and every question or defect report stay on the child's OWN ticket, so assigner↔assignee communication stays paired there. The turn then ends with ONE line on the parent — `<KEY> done — report on <KEY>` or `<KEY> blocked — BLOCKER on <KEY>` (`<KEY> — <what> on <KEY>` for anything else the parent's owner must read now) — and that line is the wake: on a squad-assigned parent (every main and phase ticket here) it carries no mention of any kind (the platform routes an agent's plain comment there to the squad leader; any mention, `@all` or a `/note` prefix stops that), on an agent-assigned parent it ends with that agent's mention, on a member-assigned parent none is posted. The line is the only thing a child posts on the parent; the parent's other comments remain its owner's orchestration space. Stage barriers wake nobody: the platform's sub-issue-done wakeup is switched off in this workspace, because on this server its dispatcher times out and the wake never arrives (DRK-1796, 2026-09-29). A human who finishes or answers a ticket for an agent replies with that agent's mention; their status flip alone wakes nobody. `in_review` is leader-only for root parents awaiting a human; on a phase ticket it deadlocks the pipeline — use `done`.
+5. **Stage barriers fire on `done`; a handoff line covers what they miss.** Completion = `done`; `blocked` = needs help. The report, the `## BLOCKER` and every question or defect report stay on the child's OWN ticket, so assigner↔assignee communication stays paired there. The platform's sub-issue rule wakes the parent's owner when every sub-issue at a stage and below is closed (`done`/`cancelled`) while a later stage waits, and once more when every sub-issue is closed — whoever closed them — so a plain `done` needs nothing more. It never fires for a `blocked` child, nor for a `done` while a sibling at its stage or below sits `blocked`; in those two cases the child's turn ends with ONE line on the parent — `<KEY> blocked — BLOCKER on <KEY>` or `<KEY> done — report on <KEY>` (`<KEY> — <what> on <KEY>` for anything else the parent's owner must read now) — and that line is the wake: on a squad-assigned parent (every main and phase ticket here) it carries no mention of any kind (the platform routes an agent's plain comment there to the squad leader; any mention, `@all` or a `/note` prefix stops that), on an agent-assigned parent it ends with that agent's mention, on a member-assigned parent none is posted. The line is the only thing a child posts on the parent; the parent's other comments remain its owner's orchestration space. `in_review` is leader-only for root parents awaiting a human; on a phase ticket it deadlocks the pipeline — use `done`.
 6. **Mentions are actions.** An agent/squad mention (real UUID, resolved at runtime) enqueues a run; a member (human) mention only renders a link and delivers nothing. To make a human act, **assign them a ticket at `todo`** — never rely on a mention. Never agent-mention in FYI/ack comments.
 7. **Titles, projects, labels:** **every ROOT main ticket title carries one type prefix** — `[Feature]` · `[Enhance]` · `[Bug]` · `[Question]` · `[CICD]` — followed by the plain title; children carry `[S#]`/`[P#-n]`/`[D#-n]`/`[T#-n]` keyed to the root ticket number. Labels on main tickets **only** (`main` + `feature`/`bug`/`question`/`cicd`). Every sub-task parents directly to its cycle parent.
 

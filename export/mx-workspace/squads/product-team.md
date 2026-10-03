@@ -41,7 +41,7 @@ EXIT ⚠   >5 spec rework rounds, a product call never confirmed, a squad blocke
 EXIT ⛔  requester cancels → main ticket cancelled (their call, never yours)
 ```
 
-The common feature is `[P<num>-1] → [P<num>-2a] → [P<num>-2b] → [P<num>-3]` and nothing else — on a sub-issue it is `[P<num>-1]` alone. Every branch above is conditional: never create a stage to keep the shape symmetric — an empty stage is a promotion that wastes a run.
+The common feature is `[P<num>-1] → [P<num>-2a] → [P<num>-2b] → [P<num>-3]` and nothing else — on a sub-issue it is `[P<num>-1]` alone. Every branch above is conditional: never create a stage to keep the shape symmetric — an empty stage is a wake-up that wastes a run and a barrier nobody can fire.
 
 ## Members
 
@@ -139,7 +139,7 @@ Deliver the escalation by ASSIGNMENT, not mention — a member mention renders a
 
 ## Status & stage management (leader-owned, every wake)
 
-**`--stage <n>` on EVERY sub-issue — it is the order you promote in.** The stage number in the title is decoration; the `--stage` field is the mechanism. An unstaged child (`stage: null`) sits outside every stage group in `multica issue children`, so a promotion pass misses it — no error, and the board still looks healthy. MXW-1187 died exactly this way.
+**`--stage <n>` on EVERY sub-issue — this is what wakes you.** The stage number in the title is decoration; the `--stage` field is the mechanism. An unstaged child (`stage: null`) is in no barrier group, so its `done` fires NOTHING — no wake, no error, and the board still looks healthy. MXW-1187 died exactly this way.
 
 ```bash
 multica issue create --parent <parent-id> --project <project-id> \
@@ -148,11 +148,11 @@ multica issue create --parent <parent-id> --project <project-id> \
 
 Then verify: `multica issue children <parent-id> --output json` — every sub-issue YOU created must sit inside a `stages` group. One of yours in `unstaged`? `multica issue update <id> --stage <n>` immediately. Re-check on every wake.
 
-**This applies to sub-issues you create, and stops there.** Your own ticket's `stage` field places it in ITS parent's stage group — owned by whoever works that level, not you. `stage: null` on the ticket you were assigned is NORMAL, not a defect: never read it, set it, or report it. Never walk UP the parent chain for staging (the only upward walk is to read the ROOT key number for your titles), and never touch a sibling or any issue you did not create.
+**This applies to sub-issues you create, and stops there.** Your own ticket's `stage` field places it in ITS parent's barrier group — owned by whoever works that level, not you. `stage: null` on the ticket you were assigned is NORMAL, not a defect: never read it, set it, or report it. Never walk UP the parent chain for staging (the only upward walk is to read the ROOT key number for your titles), and never touch a sibling or any issue you did not create.
 
 **This section is last in the document and FIRST in execution.** Run steps 1–4 before creating, promoting or answering anything on any wake — including a wake you are sure is routine.
 
-1. `multica issue children <main-id> --output json` + the main ticket's latest comments AND the latest comments on any child that is `blocked` or that your wake names (gate verdicts, leader questions, and squad escalations live on the child tickets — the main carries only their handoff lines) + `multica issue metadata list <main-id> --output json`. Establish the real state; never re-decompose covered work.
+1. `multica issue children <main-id> --output json` + the main ticket's latest comments AND the latest comments on any child that is `blocked` or that woke you (gate verdicts, leader questions, and squad escalations live on the child tickets — the main carries only their handoff lines) + `multica issue metadata list <main-id> --output json`. Establish the real state; never re-decompose covered work.
 2. Reconcile against the current `bdd_required`: a waiver that arrived after the phases were created retires `[P<num>-2b]` and `[P<num>-3]` — cancel them and say so in one plain comment.
 3. Promote every `backlog` phase whose gate now verifies. A completed stage waiting for a human nudge is a flow defect.
 4. Self-heal mis-signals: a phase carrying a completion report but parked in `in_review` or another non-`done` status → verify and flip it `done`. A phase sitting `done` whose report says failure → flip it `blocked` and run the loop.
