@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: Acceptance-test-first delivery for agent-run builds. Use when implementing any logic, fixing any bug, or changing any behavior. The acceptance tests are the spec made executable — authored in their own run, approved and frozen before implementation starts, and verified by outcome (frozen ATs green, mutation score, coverage) rather than by a narrated red/green.
+description: Acceptance-test-first delivery for agent-run builds. Use when implementing any logic, fixing any bug, or changing any behavior. The acceptance tests are the spec made executable — authored in their own run (a confirmed bug's reproduction: pushed alone first, in the same run as the fix), frozen before implementation starts, and verified by outcome (frozen ATs green, mutation score, coverage) rather than by a narrated red/green.
 ---
 
 # Test-Driven Development — agent edition
@@ -13,7 +13,7 @@ Why this shape and not "write the test first, watch it fail": when one run write
 
 ## Reading the brief
 
-Your sub-task description is an `sdlc-impl-brief`. Its header row **Mode** tells you which run this is. Section numbers below refer to it: §2 current code, §3 change set, §4 do-not-touch, §5 contract, §6 rules, §7 scenarios in this slice, §8 extra done checks, §9 questions. The spec's Gherkin is NOT in the brief: §7 names the scenarios; read them from the ticket the header's **Spec** row names (`multica issue get <key> --output json`).
+Your sub-task description is an `sdlc-impl-brief`. Its header row **Mode** tells you which run this is (`acceptance-tests`, `build`, `bug-build` — Prove-It below — or `build-ui`). Section numbers below refer to it: §2 current code, §3 change set, §4 do-not-touch, §5 contract, §6 rules, §7 scenarios in this slice, §8 extra done checks, §9 questions. The spec's Gherkin is NOT in the brief: §7 names the scenarios; read them from the ticket the header's **Spec** row names (`multica issue get <key> --output json`).
 
 **Change-set markers (§3 Op):** `KEEP` exists and is correct, do not modify, behaviour must still hold · `MODIFY` exists, change as described, preserve everything else · `EXTEND` exists, add without altering current behaviour · `NEW` does not exist, create it · `REMOVE` exists, delete it with its tests and dead references.
 
@@ -32,13 +32,21 @@ Write unit tests where they help you design or pin a detail the ATs do not reach
 
 ## Prove-It (bug fixes)
 
-The outer loop at bug scale. The reproduction test IS the acceptance test: authored in the `Acceptance tests:` stage from the bug's Gherkin, red for the reason the bug report describes, approved, frozen; the fix lands in Build and turns it green; the full suite proves no regression. A fix with no frozen reproduction test is unverified. In a review REWORK round the same rule applies inside the fix run: add the reproduction test first, list it as an addition, then fix.
+The outer loop at bug scale. The reproduction test IS the acceptance test, written from the bug's Gherkin, red for the reason the bug report describes, frozen; the fix turns it green; the full suite proves no regression. A confirmed bug fix runs both halves in ONE run (`Mode: bug-build`, Policy 02 statement 1b):
+
+1. Author the reproduction exactly as an `acceptance-tests` run would (step 1 of the outer loop): §7 scenarios, literal expected values, at most the §5 stubs. Run it: `@existing` green, every `@new` red for the reason the root-cause report names.
+2. Commit the tests and stubs ALONE and push (`sdlc-gitflow`); that commit is `at_sha`. Nothing of the fix may be in it or before it.
+3. Implement in the same run against the now-frozen reproduction, exactly as `Mode: build`.
+4. Report as a Build, plus one `Repro RED` row: `at_sha <sha>` and the per-scenario table (`scenario | status at at_sha | failure reason`).
+
+The gate, not the leader, checks the reproduction: `at_sha` holds only tests and stubs, predates every fix commit, and is red. A reproduction that needs a new seam, a second surface or a new public signature is `blocked` to the leader: that cycle needs the normal pair. A fix with no frozen reproduction test is unverified. In a review REWORK round the same rule applies inside the fix run: add the reproduction test first, list it as an addition, then fix.
 
 ## Ports-and-adapters — what makes ATs fast and honest
 
 - Drive the **inbound port** (application service, command/query handler, mediator, or the package's public API) — not HTTP, not the UI, not a controller.
 - **Outbound ports** (repositories, clock, message bus, external HTTP clients, secrets) get hand-written in-memory fakes implementing the port interface. Not an in-memory database, not a mocking framework scripting call order.
 - Compose the application for tests from its ports, the way production composes it from adapters — one factory taking the fakes, so the AT harness signature stays stable as handlers multiply.
+- **Reuse the harness, never copy it** (Policy 01 statement 7a). A Build's own tests extend the AT harness or the shared fixture; a copied setup block turns the repo's SonarCloud duplication gate red and costs a rework round (DRK-1854, DRK-1860, DRK-1981). DAMP applies inside a test body, not to its setup.
 - ATs use `WebApplicationFactory<T>` / Testcontainers / real adapters only for scenarios tagged `@integration`. Build's own test for a storage or queue adapter change runs against the repo's emulator fixture either way (Policy 02 statement 5a; DKNet: `src/Services/Svc.BlobStorage.Tests/Fixtures`, Azurite and MinIO). Database adapters stay InMemory (Policy 02 statement 2).
 - No port seam where one is needed? That is a §3 row for the leader to add (smallest seam that lets the AT drive the behaviour), reported `blocked` from the `Acceptance tests:` stage — never an ad-hoc refactor made there.
 
@@ -46,7 +54,8 @@ The outer loop at bug scale. The reproduction test IS the acceptance test: autho
 
 Run mutation testing on the touched classes and report it; it replaces hand-narrated "I deleted the guard and it went red" wherever the tool runs.
 
-- .NET: `dotnet stryker --mutate "**/<TouchedClass>.cs"` (install once: `dotnet tool install -g dotnet-stryker`). TypeScript: `npx stryker run --mutate "src/<file>.ts"` (`@stryker-mutator/core` + the repo's runner plugin).
+- **Scope: the lines this cycle changed** (Policy 02 statement 6a), never whole classes — a whole-class run re-tests code the cycle does not own and is what makes a Build slow.
+- .NET: `git fetch origin dev` then `dotnet stryker --since:origin/dev` — Stryker mutates and reports only the code changed since `origin/dev` (install once: `dotnet tool install -g dotnet-stryker`). TypeScript: take the hunks from `git diff -U0 origin/dev...HEAD -- src/`, then `npx stryker run --mutate "src/a.ts:10-42,src/b.ts:5-9"` (`@stryker-mutator/core` + the repo's runner plugin). A rework run re-runs the same scope.
 - Report per touched class: mutation score, and **every surviving mutant** with a disposition — `killed — added <test>`, `equivalent — <why no test can tell>`, or `accepted — <reason>`. An undispositioned survivor in code you added is an open finding.
 - Tool cannot run (no network, unsupported runner): fall back to the manual mutation check per guard — delete or invert it, run, confirm RED, restore — and state in the report that the tool was unavailable.
 

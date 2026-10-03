@@ -27,6 +27,7 @@ Deviations from the brief: none | <n>, see below
 | Tests | <n> passed, 0 failed, 0 skipped |
 | @existing / @new | green / green |
 | AT drift | `git diff <at_sha>..HEAD -- <paths>` empty; added tests: <file>, … |
+| Repro RED | `bug-build` only: `at_sha <sha>` (tests + stubs only, pushed before any fix commit); <scenario> red at `at_sha` — <reason>, … |
 | Coverage (touched classes) | min <n>% (<class>); all ≥ 80% |
 | Branch hits | <n>/<n> new branches hit — or `none added` |
 | Mutation | Stryker <score>%, <n> survivors dispositioned — or — manual: <n> guards, each went red |

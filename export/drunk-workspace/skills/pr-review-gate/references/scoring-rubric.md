@@ -29,6 +29,8 @@ Floor each category at 1.
 
 Severity comes from what a finding DOES, not from whether this PR introduced it. Emitted source that does not compile, wrong behaviour, data exposure or a published-API break is `blocking` — `important` only when it is provably unreachable today — even when it is pre-existing and even when the diff merely walks past it. "Not introduced by this PR" decides WHOSE cycle fixes it (the scope rule in `references/multica-flow.md`), never whether it is a defect. A 9.5 that ships with a known non-compiling emission path in a file the diff touched is a mis-scored review, not a clean one.
 
+**Self-review rows** (Policy 04 statement 5): a Build EVIDENCE row that is missing or carries no measured value is a `nit` — measure the point yourself and score what you find. A row the diff or CI contradicts is `important`. No mutation evidence at all is the cap below, not a row finding.
+
 ## Hard caps (applied AFTER the weighted average)
 
 `critical` is not a fifth severity — it is the subtype of `blocking` that is security-exploitable (exploitable issue, secret in diff, authz bypass). Label such findings `blocking (critical)`; they trigger the 3.0 cap below.
@@ -42,6 +44,7 @@ Severity comes from what a finding DOES, not from whether this PR introduced it.
 | No tests for new/changed behavior | 6.5 max |
 | Approved acceptance test modified or deleted after `at_sha` (drift check non-empty) without a leader re-pin | 6.9 max (`blocking`; forces REWORK — the fix is to restore the scenario and make it pass, or take it to the leader) |
 | Any `@new` scenario red, skipped or tagged out at HEAD | 6.9 max (`blocking`) |
+| `bug-build` cycle: `at_sha` holds implementation code or follows an implementation commit, or the reproduction is green at `at_sha` (Policy 02 statement 1b) | 6.9 max (`blocking`) |
 | No mutation evidence on touched classes with new logic (neither tool report nor manual run stated) | 7.9 max |
 | CI failing, caused by this PR | 6.9 max (three exceptions below) |
 | Coverage on changed lines measured BELOW threshold (default 80%) | 7.9 max (forces REWORK: dev-backend's bar is measurable and fixable) |
@@ -67,7 +70,7 @@ There is no human-review middle band and no deferred verdict: **≥ 8.5 → APPR
 
 Worked from the weights above: one `important` costs 2 × weight (0.1–0.5 points), one `blocking` costs 4 × weight (0.2–1.0 points) before its cap.
 
-- **9.5–10** — Small, focused, spec-linked change; tests included; zero findings above `nit`, and every in-scope `nit` already cleared by a polish round before merge (an open in-scope `nit` at merge time is not a 9.5, it is an unfinished cycle).
+- **9.5–10** — Small, focused, spec-linked change; tests included; zero findings above `nit`. Its open `nit`s merge with it, named under `Merged with:` (there is no polish round, Policy 04 statement 13).
 - **8.5–9.9** — Correct, safe, covered; exactly one `important` finding. Alone it scores 9.5–9.9; `nit`s can pull it lower, and below 8.5 it is REWORK.
 - **8.4** — Two or more `important` findings and no `blocking`: the cap sets the score. The arithmetic alone would give 9.0–9.8.
 - **6.9 / 6.5** — Any `blocking` finding, or CI failing because of this PR: 6.9. New logic with no tests: 6.5. The cap sets the score; one `blocking` alone would compute to 9.0–9.8.

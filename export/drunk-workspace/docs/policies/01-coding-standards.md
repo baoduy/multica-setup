@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-01 |
-| **Version** | 1.3 |
+| **Version** | 1.5 |
 | **Status** | Active |
 | **Owner** | dev-leader |
 | **Applies to** | Every engineer and agent writing or modifying code in any drunk stack: .NET/DDD NuGet libraries, Pulumi/TypeScript npm packages, Python MCP/FastAPI services, Docker images, Helm charts |
@@ -73,6 +73,15 @@ generic rule here where they differ (see Exceptions).
 7. **DRY thresholds are a trigger to look, not an automatic defect.** Same non-trivial block
    in 3+ places, or 2 places already drifted, gets named and fixed at the newer/tested
    instance — never averaged across both (`CLEAN-DRY-001`, `CLEAN-DRY-002`, `CLEAN-ORG-003`).
+7a. **Test code reuses its harness; two copies of a setup block are already too many.** A new
+   test extends the acceptance-test harness or the repo's shared fixture (a builder, a
+   factory taking the fakes, a parameterised case) instead of copying its setup. A copied
+   setup or arrange block of ~10 lines or more is a DRY defect at the second copy, because
+   the repos' CI duplication gate (SonarCloud, new-code duplication over 3%) counts test
+   code and fails the PR. DAMP still holds inside a test body: the rule targets copied
+   setup, not readable assertions. Where the repo runs a duplication gate, the implementer
+   checks the changed test files locally before pushing (`npx jscpd --min-lines 10
+   --reporters console <changed test dirs>`).
 8. **Less code, no speculative abstraction.** No dead code, no interface with one
    implementation and no test-double need, no redundant forwarding wrapper, no reinvented
    BCL/framework/stdlib behaviour (`CLEAN-LESS-001..004`). SRP size triggers: class >~300
@@ -121,8 +130,9 @@ generic rule here where they differ (see Exceptions).
     official documentation and cites it in the row. A violation found is fixed inside the
     brief's §3, or listed in LEFT OPEN with `file:line`. dev-leader's implementation brief
     names the governing skill(s) and the 3–5 rule-ids most at risk for its surface
-    (`Standards` row). A missing Standards row, or one the diff contradicts, is an
-    `important` PR-gate finding.
+    (`Standards` row). A Standards row the diff contradicts is an `important` PR-gate
+    finding; a missing one is a `nit`, because the gate runs the standards check itself
+    ([Policy 04](04-code-and-spec-review.md) statement 5).
 
 ## Roles & responsibilities
 
@@ -152,7 +162,8 @@ generic rule here where they differ (see Exceptions).
 ## Enforcement
 
 - **dev-backend's Standards self-review** (statement 15) is the first check, before the PR
-  exists; pr-reviewer treats a missing or contradicted row as an `important` finding.
+  exists; pr-reviewer treats a contradicted row as an `important` finding and a
+  missing one as a `nit` it checks itself.
 - **`pr-review-gate`** scores every PR against the governing skill's rule-ids (security →
   correctness → testing → architecture & design → AI-slop); a `blocking` finding overrides the
   weighted average.

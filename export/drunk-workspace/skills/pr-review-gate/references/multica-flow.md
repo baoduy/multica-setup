@@ -12,12 +12,12 @@ A `[P<num>-1c] Review CI/CD PR`, `Review docs PR` or `Review design PR` gates de
 
 ## Round tracking (before anything else in pipeline mode)
 
-Read your review sub-task's properties: `multica issue property list <own-subtask-id> --output json`. `Gate round` (unset = 0) = REWORK verdicts already issued this cycle — a POLISH round does NOT count and is at most one per cycle (`Gate verdict` = POLISH marks that it was spent). After every verdict, pin state:
+Read your review sub-task's properties: `multica issue property list <own-subtask-id> --output json`. `Gate round` (unset = 0) = REWORK verdicts already issued this cycle. (`Gate verdict` = POLISH on an older ticket is a retired polish round; never pin it.) After every verdict, pin state:
 
 ```bash
 multica issue property set <own-subtask-id> --name "Gate round" --value <N>
 multica issue property set <own-subtask-id> --name "Gate score" --value <X.X>
-multica issue property set <own-subtask-id> --name "Gate verdict" --value <APPROVED|REWORK|POLISH|ESCALATED|MERGE_FAILED|ALREADY_MERGED|OWNER_MERGED>
+multica issue property set <own-subtask-id> --name "Gate verdict" --value <APPROVED|REWORK|ESCALATED|MERGE_FAILED|ALREADY_MERGED|OWNER_MERGED>
 ```
 
 Properties show on the board and in `multica issue children --resolve-properties`, which is how the leader and the human see a parked gate without opening threads.
@@ -113,13 +113,12 @@ Classify every finding by SCOPE first, and never by "did this PR introduce it":
 - **in-scope** — its `file:line` is in a file this cycle's diff touched, OR in a code path the diff newly reaches, OR a missing fact for behaviour the diff added or changed. Pre-existing age is irrelevant: the cycle touched it, the cycle owns it.
 - **out-of-scope** — a file this diff never touched.
 
-### In-scope leftovers — fix inside the cycle, file nothing
+### In-scope leftovers — the score decides, file nothing
 
-You never merge with an open in-scope finding above `suggestion`, and you never ask for a ticket for one.
+You never ask for a ticket for one.
 
-- `blocking` / `important` → REWORK (Verdict actions above). Unchanged.
-- `nit`-only → ONE **polish round**. Same mechanics as REWORK — consolidated findings comment on your own review sub-task (no mention), your own review sub-task `blocked`, your handoff line, leader routes and re-arms — with two differences: pin `Gate verdict` = POLISH and do **not** increment `Gate round` (a polish round must not spend the rework budget), and take at most ONE per cycle. Say in the comment that these are non-gating nits being cleared before merge. The implementer pushes onto the SAME feature branch; the leader re-arms you; you re-review, and if nothing new gates it, merge.
-- If a leftover is genuinely not worth a polish round, drop it in the report. Dropping is a legal outcome; filing is not.
+- Score below 8.5 or any `blocking` → REWORK (Verdict actions above): every open in-scope finding, `nit`s included, goes in the one findings comment.
+- Score ≥ 8.5 with zero `blocking` → merge. The open `nit`s and the one `important` the caps allow go in your report under `Merged with:` (`file:line` each) and are dropped. No polish round: it is retired (Policy 04 statement 13), and `Gate verdict` = POLISH is never pinned.
 
 ### Out-of-scope leftovers — drop by default
 
@@ -134,7 +133,7 @@ Everything that does not clear the bar — comment wording, loose assertions, al
 
 `Review follow-ups:` tickets are **retired**.
 
-State the outcome in your score announcement: `Leftovers: polish round N | none | out-of-scope defect reported to dev-leader`.
+State the outcome in your score announcement: `Merged with: none | <file:line list>` and `Leftovers: none | out-of-scope defect reported to dev-leader`.
 
 ## Blocked path (cannot review at all)
 

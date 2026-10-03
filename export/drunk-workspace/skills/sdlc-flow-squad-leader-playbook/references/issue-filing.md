@@ -4,7 +4,7 @@ You are the only agent in dev-team that runs `multica issue create`. Members rep
 
 ## When to file
 
-Only when pr-reviewer's terminal report carries an `## OUT-OF-SCOPE DEFECT (file separately)` section, or a member's report names a defect (wrong behaviour, emitted source that does not compile, data exposure, crash, published-API break) or a security finding in a file this cycle did not touch, with the observable failure and its reproduction named. Everything else — nits, wording, loose assertions, coverage of untouched paths, debt — is dropped; the monthly arch-reviewer sweep owns it. `Review follow-ups:` tickets are retired; never file one. In-scope leftovers never leave the cycle: pr-reviewer clears them in a polish round.
+Only when pr-reviewer's terminal report carries an `## OUT-OF-SCOPE DEFECT (file separately)` section, or a member's report names a defect (wrong behaviour, emitted source that does not compile, data exposure, crash, published-API break) or a security finding in a file this cycle did not touch, with the observable failure and its reproduction named. Everything else — nits, wording, loose assertions, coverage of untouched paths, debt — is dropped; the monthly arch-reviewer sweep owns it. `Review follow-ups:` tickets are retired; never file one. In-scope leftovers never leave the cycle: a rework round below the bar, or merged with a passing PR under `Merged with:`.
 
 ## How to file
 

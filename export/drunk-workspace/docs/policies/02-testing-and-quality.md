@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-02 |
-| **Version** | 1.5 |
+| **Version** | 1.7 |
 | **Status** | Active |
 | **Owner** | dev-backend |
 | **Applies to** | Every code or behaviour change in a drunk repo, across every stack |
@@ -51,7 +51,7 @@ statements but follows the runner and structure conventions below.
 
 1. **Acceptance-test-first, authored and implemented in separate runs, verified by outcome.**
    Every change is proven by acceptance tests derived from the spec's Gherkin before its PR
-   opens — except a UI presentation change (statement 1a). dev-backend owns both halves but never in one run: the **`Acceptance tests:` stage**
+   opens — except a UI presentation change (statement 1a). dev-backend owns both halves, in separate runs except for a confirmed bug fix (statement 1b): the **`Acceptance tests:` stage**
    turns the brief's §7 into executable, RED tests against the package's public API (plus the
    §5 signature stubs so they compile) and pushes them; dev-leader reads them against the spec
    and pins `at_sha`; the **`Build:` stage** implements against those frozen tests until green.
@@ -63,6 +63,20 @@ statements but follows the runner and structure conventions below.
    attests "it failed first" proves only that it ran; the independent read before implementation
    and the lock afterwards are what make red-then-green evidence. For a defect the acceptance
    test is the Prove-It reproduction — see `test-driven-development`.
+1b. **A confirmed bug fix proves itself in one run.** A root cycle carrying product-owner's
+   root-cause report (Workflow A), whose acceptance tests are only the Prove-It reproductions
+   of the reported defect on one surface and whose brief adds no public signature, gets ONE
+   `Build:` sub-task with `Mode: bug-build` instead of the Acceptance-tests + Build pair. In
+   that run dev-backend first commits and pushes the reproduction tests alone (plus any §5
+   stub), each `@new` scenario red for the reason the report names; that commit is `at_sha`,
+   reported with its per-scenario RED table. Only then does it implement, in the same run,
+   against those frozen tests. dev-leader approves nothing in between. The independent read
+   moves to the PR gate, which checks that `at_sha` holds only tests and stubs, predates every
+   implementation commit, reproduces the defect (red at `at_sha`, from CI or a local run of the
+   AT paths), and matches the root's Gherkin with literal expected values. A failure of any of
+   these is `blocking`. Why: a bug's acceptance test is one reproduction whose expected value
+   the root-cause report already fixes, so the separate run and the leader's read cost a full
+   fresh checkout and a stage hop for little extra assurance; features keep the pair.
 1a. **UI presentation ships without new tests, for now.** A UI presentation change — the screens
    and layouts, components, styling and copy of a front-end app (in DKNet.Accounts.Api:
    `ui/components/**` and the `page`, `layout` and `.css` files under `ui/app/**`) — has no
@@ -127,7 +141,7 @@ statements but follows the runner and structure conventions below.
    cycle reaches **≥80%**, measured only over files the feature branch changed
    (`git diff --name-only origin/dev...origin/<feature-branch>`, excluding test files) — never
    a repo-wide figure. UI presentation files (statement 1a) are outside this gate.
-6a. **Mutation report per touched class — coverage's honesty check.** Coverage says a line ran; only mutation says an assertion would have caught it changing. Every Build except a UI presentation one (statement 1a) reports a mutation run scoped to the classes it touched (`dotnet stryker` on .NET, `npx stryker run` on TypeScript) with **every survivor dispositioned** — `killed — added <test>` / `equivalent` / `accepted — <why>`. Tool genuinely unavailable → the manual equivalent: invert each guard the change added, run, confirm RED, restore, and say in the report that the tool was unavailable. A Build reported `done` without a mutation report and its dispositions is incomplete the same way a missing coverage row is; dev-leader sends it back and never promotes past it.
+6a. **Mutation report per touched class — coverage's honesty check.** Coverage says a line ran; only mutation says an assertion would have caught it changing. Every Build except a UI presentation one (statement 1a) reports a mutation run scoped to the lines the cycle changed in the classes it touched — `dotnet stryker --since:origin/dev` on .NET, `npx stryker run --mutate "<file>:<start>-<end>,…"` over the diff's hunks on TypeScript — never the whole class, whose unchanged code the cycle does not own; reported per touched class, with **every survivor dispositioned** — `killed — added <test>` / `equivalent` / `accepted — <why>`. Tool genuinely unavailable → the manual equivalent: invert each guard the change added, run, confirm RED, restore, and say in the report that the tool was unavailable. A Build reported `done` without a mutation report and its dispositions is incomplete the same way a missing coverage row is; dev-leader sends it back and never promotes past it.
 7. **Never inflate coverage.** No trivial tests on getters or framework code. If 80% on a
    touched class is genuinely unreachable, flag the untestable paths to dev-leader instead of
    padding; if code is untestable as written, propose the smallest design change rather than
