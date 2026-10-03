@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-03 |
-| **Version** | 1.5 |
+| **Version** | 1.6 |
 | **Status** | Active |
 | **Owner** | release-manager (`dev`→`main`) · dev-leader (cycle git-flow) |
 | **Applies to** | Every agent that branches, commits, pushes, or opens a PR in a drunk repo |
@@ -65,12 +65,12 @@ no separate branch strategy for a different repo class.
 8. **Devops CI/CD changes follow the same `dev` rule — there is no separate track.** `devops` branches `chore/<issue-key>` from freshly fetched `origin/dev`, opens exactly one PR to `dev`, and `pr-reviewer` scores and merges it on APPROVED — identical mechanics to a feature cycle. There is no Helm/GitOps exception in drunk: a Helm chart repo is just another repo in scope, released the same `dev`→`main` way (merge triggers the chart/image publish, not a deploy).
 8a. **docs-writer's docs changes follow the same rule.** `docs-writer` branches `docs/<issue-key>` from freshly fetched `origin/dev` (or the repo's default branch where it has no `dev`), opens exactly one PR to it, and `pr-reviewer` scores and merges it on APPROVED. It never commits to a squad cycle's feature branch — dev-team cycles carry no docs stage ([Policy 05](05-sdlc-delivery-lifecycle.md) statement 3a).
 8b. **service-architect's design follows the same rule, except the merge.** `service-architect` branches `design/<issue-key>` from freshly fetched `origin/dev` of the new service's repo, which the requester created empty with a `dev` branch before the phase started, and opens exactly one PR to it. `pr-reviewer` scores it but merges it only on the owner's reply A ([Policy 04](04-code-and-spec-review.md) statement 9a). The diff touches `docs/architect/` only.
-9. **Merge conflicts:** resolve mechanical ones (whitespace, import order, trivial renames) on a *detached* checkout of the feature branch (`git checkout --detach origin/<branch>` takes no lock), commit, push by refspec, re-check `mergeable`. Escalate **substantive** conflicts (overlapping logic, deleted code) to the code's owner (dev-backend, via dev-leader) — never guess.
+9. **Merge conflicts:** resolve mechanical ones (whitespace, import order, trivial renames) on a *detached* checkout of the feature branch (`git checkout --detach origin/<branch>` takes no lock), commit, push by refspec, re-check `mergeable`. Escalate **substantive** conflicts (overlapping logic, deleted code) to the code's owner (dev-backend, via dev-leader) — never guess. **One exception:** when the conflict is an older duplicate root's fix already merged into `dev`, dev-leader closes the PR as superseded instead of resolving it, on the evidence [Policy 07](07-bug-and-defect-management.md) statement 8a requires.
 10. **Release-manager's three acts and nothing else:** open `gh pr create --base main --head dev`; check whether the release is critical ([Policy 08](08-container-build-and-release.md) statement 2a) from commit subjects and PR labels alone; and merge it (`--merge`, no squash/rebase, preserving `dev` history) — a critical release only after the resolved owner replies. Never run, read, or wait on application code, tests, builds, or the CI publish itself — that is CI's job, out of scope even for the custodian of the branch it publishes from.
 
 ## Roles & responsibilities
 
-- **dev-leader** — cuts the cycle's feature branch, opens the single `feature`→`dev` PR after its own gate passes, resolves mechanical conflicts, never merges (pr-reviewer owns the merge), never targets `main`.
+- **dev-leader** — cuts the cycle's feature branch, opens the single `feature`→`dev` PR after its own gate passes, resolves mechanical conflicts, closes a duplicate root's PR as superseded (statement 9), never merges (pr-reviewer owns the merge), never targets `main`.
 - **devops** — cuts `chore/<issue-key>` from `dev`, opens one PR to `dev`, never merges its own PR, never targets `main`.
 - **docs-writer** — cuts `docs/<issue-key>` from `dev`, opens one PR to `dev`, never merges its own PR, never targets `main`.
 - **service-architect** — cuts `design/<issue-key>` from `dev`, opens one PR to `dev`, never merges its own PR, never targets `main`.

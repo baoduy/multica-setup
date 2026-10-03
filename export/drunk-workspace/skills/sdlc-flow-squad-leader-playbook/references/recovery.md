@@ -21,6 +21,22 @@ Stage N's barrier fires only when every sub-task at stage ≤ N is terminal. Whi
 
 Two decomposition chains, or two sub-tasks with the same purpose at the same stage: keep the older by `created_at`, cancel the rest (`multica issue cancel-task <run-id> --issue <dup-id>` for any live run first, then `multica issue update <dup-id> --status cancelled`), and pin the correct branch and artifacts on the canonical chain. Oldest wins because two concurrent sessions reach the same answer only from `created_at`.
 
+## Duplicate roots
+
+Two root tickets share a root cause when their root-cause reports name the same mechanism at the same `file:line`. The older one by `created_at` is canonical (Policy 07 statement 8a). A root a human holds is not yours to cancel (Loop step 4).
+
+**Before decomposing a root:** `multica issue search "<root-cause file or symbol>" --output json` (open issues only: a closed older root is a regression, not a duplicate), then read the root-cause report of every root it returns for the same repo.
+- An older duplicate exists: cut no branch. Post ONE comment on this root: "Duplicate of <older key>, filed earlier with the same root cause; its cycle carries the fix." Then `multica issue update <root-id> --status cancelled`. No mention.
+- Only newer ones exist: carry on. Their own sessions cancel them.
+
+**After a failed merge:** Review is `blocked` with `Gate verdict` = MERGE_FAILED, and pr-reviewer's comment carries a `Duplicate probe` naming the older root and its merged PR.
+- The scenarios that reproduce this root's observable failure are green on `dev`:
+  1. `gh pr close <PR#> -R baoduy/<repo> --comment "Superseded by #<older PR> (<older key>): same root cause, already merged into dev."`
+  2. Cancel every open sub-task, Review and Release included: `multica issue cancel-task <run-id> --issue <id>` for any live run first, then `multica issue update <id> --status cancelled`.
+  3. Any `@new` scenario still red on `dev` → ONE defect per `references/issue-filing.md`. It names those scenarios, the behaviour they assert, and the older fix's contract that contradicts it (its CHANGELOG line or `<remarks>`). product-owner triages whether the behaviour is wanted. None red → nothing to file.
+  4. ONE completion comment on the root (`blocker-report`). RESULT: duplicate of <older key>, PR closed. EVIDENCE: the probe table. LEFT OPEN: the filed defect key, or `none`. Then `multica issue update <root-id> --status cancelled`. No mention.
+- Anything else is a substantive conflict, escalated per Loop step 4: no probe, a probe that did not compile or run, failure scenarios red on `dev`, or a root cause you cannot match. Never rebase it, and never edit an approved acceptance test.
+
 ## Substantive merge conflicts
 
 Mechanical conflicts are yours (`leader-gitops`). Overlapping logic or deleted code is feature code: ONE comment on dev-backend's Build sub-task listing the conflicted paths with dev-backend's mention, asking it to report on that sub-task and post its handoff line when pushed; re-verify `MERGEABLE` when it lands. No fix sub-task.

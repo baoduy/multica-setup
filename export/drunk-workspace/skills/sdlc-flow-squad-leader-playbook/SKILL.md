@@ -1,6 +1,6 @@
 # Squad-Leader Playbook
 
-Machinery for dev-leader on every wake. Your squad briefing (delivered with each leader task) carries the roster with mention markdown, the stage table and the routing rules; `sdlc-flow-delivery-pipeline` carries the shared contract; the Workspace Context carries statuses, wakes and ticket conventions. You analyze and orchestrate. Your only hands-on work is the cycle's git-flow (`leader-gitops`): branch cut, one PR, mechanical conflict resolution, plus read-only `git ls-remote`. Never write code, run tests, or assign issues to yourself.
+Machinery for dev-leader on every wake. Your squad briefing (delivered with each leader task) carries the roster with mention markdown, the stage table and the routing rules; `sdlc-flow-delivery-pipeline` carries the shared contract; the Workspace Context carries statuses, wakes and ticket conventions. You analyze and orchestrate. Your only hands-on work is the cycle's git-flow (`leader-gitops`): branch cut, one PR, mechanical conflict resolution, closing a duplicate root's PR as superseded, plus read-only `git ls-remote`. Never write code, run tests, or assign issues to yourself.
 
 Rare paths live in `references/`: `references/recovery.md` (stuck, stalled, duplicated or mis-signalled children) and `references/issue-filing.md` (filing a defect from a member's report). Open them when the wake-up checklist finds that situation.
 
@@ -18,6 +18,7 @@ Rare paths live in `references/`: `references/recovery.md` (stuck, stalled, dupl
 
 ## Decomposition rules
 
+- **Duplicate root first.** On a root ticket's first pickup, before anything else, run the duplicate check in `references/recovery.md` (**Duplicate roots**). An older duplicate ends the cycle there.
 - **One repo per cycle.** Read the phase ticket's Scope first. Two repos → do not decompose, do not cut a branch: flip the phase ticket `blocked`, post ONE comment on it asking for a split, one phase per repo, sequenced by dependency, then your handoff line on the root with product-owner's mention. A root ticket spanning repos goes back to its requester the same way (member mention, reassignment at `todo`).
 - **Clarify before decomposing.** Phase ticket questions go on your own phase ticket, then your handoff line on the root with product-owner's mention; root ticket questions go to the requester (member mention) — or to product-owner (agent mention) when the root carries its root-cause report or `## Brief`, since product-owner handed it to you.
 - **The brief is frozen once stage 1 is dispatched.** Judge Acceptance tests against the spec revision named in the phase description (or the root as it was when handed to you), never against a later edit. A scope change arrives as a comment from product-owner: add ONE scope stage (a new Acceptance-tests + Build pair) after the current Build; never re-arm a finished Acceptance-tests stage for drift.
@@ -52,7 +53,7 @@ A Review sub-task `blocked` with a recent REWORK or POLISH comment, and the impl
 
 ## Failed merge and the owner's choice
 
-**MERGE_FAILED lands on you** — pr-reviewer scored the PR ≥ 8.5 but could not merge it, and parks Review `blocked` with the error on it, then wakes you with its handoff line. PR mechanics are yours (`leader-gitops`): a draft → `gh pr ready`; a conflict because `dev` moved → bring the branch up to date per the conflict procedure (mechanical yourself, substantive to dev-backend's Build via Rework step 1). Then re-arm Review (`in_progress --no-start` + pr-reviewer's mention). A failure you cannot fix (permission, branch protection, auth) → `references/recovery.md`, escalate. Never send a failed merge to the owner yourself when you can fix it.
+**MERGE_FAILED lands on you** — pr-reviewer scored the PR ≥ 8.5 but could not merge it, and parks Review `blocked` with the error on it, then wakes you with its handoff line. PR mechanics are yours (`leader-gitops`): a draft → `gh pr ready`; a conflict because `dev` moved → bring the branch up to date per the conflict procedure (mechanical yourself, substantive to dev-backend's Build via Rework step 1); a conflict with an older duplicate root's merged fix, which pr-reviewer reports as a `Duplicate probe` → `references/recovery.md` (**Duplicate roots**), never a rebase. Then re-arm Review (`in_progress --no-start` + pr-reviewer's mention). A failure you cannot fix (permission, branch protection, auth) → `references/recovery.md`, escalate. Never send a failed merge to the owner yourself when you can fix it.
 
 **ESCALATED waits for the owner.** Review sits with the resolved owner at `todo` with options. Do nothing — no promotion past the gate, no finalize, no nudge — until the owner replies on the Review sub-task with a letter and your mention. Then:
 

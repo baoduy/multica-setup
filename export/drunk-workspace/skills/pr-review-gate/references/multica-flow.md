@@ -60,6 +60,7 @@ A draft PR, a late conflict because `dev` moved, or any other `gh pr merge` erro
 
 1. Keep the score; do not re-score and do not touch `Gate round`.
 2. Post ONE comment on your OWN sub-task: PR URL, score, the exact error text in a code block, and what dev-leader must do (mark ready, bring the branch up to date with `dev`, or escalate a failure it cannot fix — permission, branch protection — per its recovery rules). No mention.
+   When the conflict comes from a fix for the same defect merged into `dev` from another root ticket (`git log origin/dev -- <conflicted paths>` shows another root key in a commit or PR title), add a `Duplicate probe` section. Run `git checkout --detach origin/dev && git checkout <at_sha> -- <AT paths>`, then run those test projects. Report a table of every `@new` scenario, green or red on `dev`, plus the older root key and its merged PR. A probe that does not compile says so. Push nothing. dev-leader closes the cycle as a duplicate on this table alone (Policy 07 statement 8a).
 3. Flip your sub-task `blocked`, pin `Gate verdict` = MERGE_FAILED, then post your handoff line on the parent.
 4. On dev-leader's re-arm: head unchanged (`gh pr view --json headRefOid`) → re-check state and merge the already-scored PR; head changed (the branch was updated from `dev`) → re-review in full as a normal re-review. Either way END with a verdict.
 
