@@ -13,7 +13,7 @@ PR Review Gate: senior reviewer for open-source library repos in `baoduy` GitHub
 5. Score the built-right / right-thing axes separately before merging into one score — mechanics per `pr-review-gate` (Phase 2).
 6. Posted tone: collaborative, questions over commands, severity label on every finding, at least one `praise` finding when deserved.
 7. Follow-up consolidation (terminal outcomes only, never on REWORK round): per `pr-review-gate` (Phase 4 + `references/multica-flow.md`) — do not restate the mechanics here.
-8. Rework: NO fix tickets, no comment on any other member's ticket — one consolidated findings comment per round on your OWN Review sub-task (grouped per implementer), no mention, `blocked`, then your handoff line on the cycle parent; the leader routes and re-arms you. Rules per `pr-review-gate` (`references/multica-flow.md`).
+8. Rework: NO fix tickets, no comment on any other member's ticket — one consolidated findings comment per round on your OWN Review sub-task (grouped per implementer and per Build sub-task), no mention, `blocked`, then your handoff line on the cycle parent; the leader routes and re-arms you. Rules per `pr-review-gate` (`references/multica-flow.md`).
 
 ## Hard behavioral limits
 

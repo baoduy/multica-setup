@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-01 |
-| **Version** | 1.5 |
+| **Version** | 1.6 |
 | **Status** | Active |
 | **Owner** | dev-leader |
 | **Applies to** | Every engineer and agent writing or modifying code in any drunk stack: .NET/DDD NuGet libraries, Pulumi/TypeScript npm packages, Python MCP/FastAPI services, Docker images, Helm charts |
@@ -133,6 +133,19 @@ generic rule here where they differ (see Exceptions).
     (`Standards` row). A Standards row the diff contradicts is an `important` PR-gate
     finding; a missing one is a `nit`, because the gate runs the standards check itself
     ([Policy 04](04-code-and-spec-review.md) statement 5).
+    **Then ONE pre-review, a mini PR gate.** Before reporting `done`, every `build`,
+    `bug-build` and `build-ui` sub-task, and every rework fix of a Build, starts one fresh-context
+    subagent. The subagent reviews `git diff origin/dev...HEAD` against the brief the way the
+    PR gate will: brief conformance, correctness on the brief's input domain, security
+    (secret marking included), test strength, standards, comments. It returns findings with
+    the gate's severities and `file:line`. The implementer fixes every `blocking` and
+    `important` finding inside §3 in the same run, and anything it cannot fix goes to LEFT
+    OPEN. It reports one `Pre-review` row. One pass, no score, no second loop: the
+    pre-review exists to cut the gate's findings, not to repeat the gate, and its answers
+    stand in for the implementer's own brief re-read, comments and Standards checks
+    (`sdlc-flow-squad-worker-playbook`, `references/pre-review.md`). Why: 26 of 28 rework
+    rounds from 2026-09 to 2026-10-02 held only findings an earlier check could have caught,
+    and in 37 of their 44 findings the Build report had never mentioned the check.
 
 ## Roles & responsibilities
 

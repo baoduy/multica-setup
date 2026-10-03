@@ -13,7 +13,7 @@ Why this shape and not "write the test first, watch it fail": when one run write
 
 ## Reading the brief
 
-Your sub-task description is an `sdlc-impl-brief`. Its header row **Mode** tells you which run this is (`acceptance-tests`, `build`, `bug-build` — Prove-It below — or `build-ui`). Section numbers below refer to it: §2 current code, §3 change set, §4 do-not-touch, §5 contract, §6 rules, §7 scenarios in this slice, §8 extra done checks, §9 questions. The spec's Gherkin is NOT in the brief: §7 names the scenarios; read them from the ticket the header's **Spec** row names (`multica issue get <key> --output json`).
+Your sub-task description is an `sdlc-impl-brief`. Its header row **Mode** tells you which run this is (`acceptance-tests`, `build`, `bug-build` — Prove-It below — or `build-ui`). Section numbers below refer to it: §2 current code, §3 change set, §4 do-not-touch, §5 contract, §6 rules, §6a input domain (each row needs its proof), §7 scenarios in this slice, §8 extra done checks, §9 questions. The spec's Gherkin is NOT in the brief: §7 names the scenarios; read them from the ticket the header's **Spec** row names (`multica issue get <key> --output json`).
 
 **Change-set markers (§3 Op):** `KEEP` exists and is correct, do not modify, behaviour must still hold · `MODIFY` exists, change as described, preserve everything else · `EXTEND` exists, add without altering current behaviour · `NEW` does not exist, create it · `REMOVE` exists, delete it with its tests and dead references.
 
@@ -24,7 +24,7 @@ Your sub-task description is an `sdlc-impl-brief`. Its header row **Mode** tells
 1. **Author** (`Mode: acceptance-tests`, fresh run, no implementation in context). Read the §7 scenario names, fetch their Gherkin from the Spec ticket, and read §5 and §6. One executable AT per scenario: the feature file is the spec's Gherkin verbatim for the §7 scenarios (library repos without a BDD harness: one public-API test per scenario, named after it). Step definitions drive the application through its inbound port; outbound ports are replaced by hand-written in-memory fakes (see Ports-and-adapters below). **Expected values are literals copied from the spec — never computed by calling production code.** The only production code allowed is the signatures §5 names, with bodies that `throw new NotImplementedException()` (or the stack's equivalent), so the suite compiles. Run it: every `@existing` scenario green, every `@new` scenario red with a reason you can name (not-implemented, assertion), one row per scenario — a `@new` scenario that is already green means the scenario is wrong or the brief's §2 is. Commit tests + stubs, push. Report the RED commit SHA, the AT file paths, and the per-scenario table (`scenario | status | failure reason`), then `done`. Do not implement anything.
 2. **Approve** (leader, no execution). Reads the ATs against the spec: every scenario present, none softened, expected values literal and traceable to the spec, business-readable. Pins `at_sha` and the AT paths into the Build sub-task. A rejected AT set goes back to the author with the scenario named — never to the Build run.
 3. **Implement** (`Mode: build`, fresh run; `at_sha` and AT paths are in the brief header). The approved ATs are **frozen**: at done, `git diff <at_sha>..HEAD -- <AT paths>` shows no modified or deleted scenario. You may ADD tests — list every addition in the report. An approved AT that is wrong, or unreachable without changing §4 code → `blocked` with your handoff line (Workspace Context). Never edit, skip, tag out, or weaken one to reach green. Implement until the ATs are green, with whatever inner loop you like.
-4. **Verify by outcome.** ATs green, full suite green (zero errors, zero warnings, nothing skipped), coverage per touched class ≥80%, mutation report on touched classes, AT-drift check empty. These artefacts are the evidence; a sentence saying you did TDD is not.
+4. **Verify by outcome.** ATs green, full suite green (zero errors, zero warnings, nothing skipped; a parallel Build — the brief's `Siblings` row — may leave the `@new` scenarios of a sibling still running red, never one whose Build is `done`, Policy 02 statement 1c), coverage per touched class ≥80%, mutation report on touched classes, AT-drift check empty. These artefacts are the evidence; a sentence saying you did TDD is not.
 
 ## Inner loop — programmer tests (yours)
 
@@ -119,6 +119,9 @@ Policy 02 statement 1a: a change confined to a front-end app's screens, layouts,
 - Every §3 row implemented; nothing outside §3 changed (`git diff --stat`); every §4 constraint respected.
 - Clean `dotnet pack` / `npm pack`. No `TODO`, commented-out code or placeholder left.
 - Standards row: stack skill opened, rule-ids checked, reuse search per new public symbol, SRP and DRY measured (worker playbook check 8, Policy 01 statement 15).
+- Every §6a input-domain row has its proof: an AT scenario or a named test (Policy 06 statement 12b).
+- CI parity: every `pull_request` workflow command green on a throwaway local merge of `origin/dev` into HEAD; no check reported skipped or deferred (Policy 02 statement 6b).
+- Pre-review run once, every `blocking`/`important` finding fixed or in LEFT OPEN (worker playbook, `references/pre-review.md`).
 - Plus the brief's §8 extra checks.
 - Pushed to the cycle's feature branch (`HEAD` == `origin/<branch>`), completion report posted (`blocker-report` shape, DEVIATIONS listed), sub-task `done`.
 

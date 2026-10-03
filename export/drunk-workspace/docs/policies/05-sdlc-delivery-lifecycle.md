@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-05 |
-| **Version** | 1.21 |
+| **Version** | 1.22 |
 | **Status** | Active |
 | **Owner** | product-owner |
 | **Applies to** | Every ticket that flows through the drunk software factory |
@@ -61,7 +61,7 @@ on code. **spec-reviewer** — the automated spec-review gate (Workflow B only).
 the leader runs cycle git-flow itself) — implementation, acceptance-test-first in two runs:
 dev-backend writes the spec's scenarios as RED acceptance tests, dev-leader reads and freezes
 them (`at_sha`), dev-backend implements against them in Build at ≥80% coverage plus a mutation
-report per touched class with a clean pack ([Policy 02](02-testing-and-quality.md) §1/§4); a confirmed bug fix runs both halves in one `bug-build` run, the gate checking the reproduction instead of the leader (Policy 02 §1b); a UI presentation change is built without tests (Policy 02 §1a). No QC squad or QC role exists —
+report per touched class with a clean pack ([Policy 02](02-testing-and-quality.md) §1/§4); independent surfaces build in parallel, at most 3 at once (Policy 02 §1c); a confirmed bug fix runs both halves in one `bug-build` run, the gate checking the reproduction instead of the leader (Policy 02 §1b); a UI presentation change is built without tests (Policy 02 §1a). No QC squad or QC role exists —
 dev-team self-verifies; there is no SANDBOX to deploy to and no BDD integration stage. A
 dev-team cycle writes no docs pages (statement 3a).
 **pr-reviewer** — the automated PR review + merge gate for every `dev`-bound PR (dev-team's

@@ -37,6 +37,8 @@ Deviations from the brief: none | <n>, see below
 | Standards | <skills opened> · rule-ids: <ids> · reuse: <result> · SRP: <numbers> · DRY: <result> · docs: <n/a / url> |
 | CodeGraph | <n> explore calls — or `unavailable — <why>` |
 | Pack | clean |
+| CI parity | `<workflow>: <step>` ✓, … · not local: <steps> · jscpd <n> clones · on a throwaway merge with `origin/dev` `<sha>` — nothing skipped; a running sibling's `@new` red named by key (Policy 02 statements 6b, 1c) |
+| Pre-review | <b> blocking, <i> important, <n> nit found · fixed <n> · LEFT OPEN <n> · subagent \| inline (<why>) |
 | Diff | <n> files, +<a>/−<b>, inside §3 |
 | Push | `HEAD` == `origin/<branch>` |
 

@@ -1,6 +1,6 @@
 # SDLC Implementation Brief — sub-task contract
 
-What dev-leader writes into a coding sub-task's description. Reader: an agent that can read the repo but not your mind. Content: what exists, what changes, what must not change, how "done" is proven. Target 6–8 KB; **over 10 KB the surface is too large — split it into sequenced stages.**
+What dev-leader writes into a coding sub-task's description. Reader: an agent that can read the repo but not your mind. Content: what exists, what changes, what must not change, how "done" is proven. Target 6–8 KB; **over 10 KB the surface is too large — split it into parallel surfaces** with disjoint §3 files and shared §5 stubs (Policy 02 §1c); sequence surfaces only for a real file overlap or behaviour dependency.
 
 This is not the spec. The business spec lives on the root or phase ticket (`sdlc-spec-template`). The brief is your translation of it into a task list against real code, from CodeGraph research. Never paste the spec into the brief.
 
@@ -19,7 +19,7 @@ This is not the spec. The business spec lives on the root or phase ticket (`sdlc
 3. Delta and guards only. Repeat nothing that lives in a skill the implementer loads: the marker legend, the acceptance-tests and Build procedures, the standard done-list and the report shape are in `test-driven-development` and `blocker-report`.
 4. Reference, do not copy: §7 lists scenario names; the Gherkin stays on the phase ticket.
 5. Amend by editing rows and adding one changelog line. Never append a narrative section.
-6. Every edge case you name anywhere binds as a §3 row with a `Proof` cell, or an explicit `no test — <reason>`. Prose is not binding.
+6. Every edge case you name anywhere binds as a §3 row or a §6a input-domain row with a `Proof` cell, or an explicit `no test — <reason>`. Prose is not binding. §6a is mandatory for every guard, default, mapping or external call §3 changes (Policy 06 statement 12b).
 7. Never dictate a test's shape; name the mutation it must catch (`Proof` column). Never order a change that fails CI by arithmetic (coverage ratchet, moved assemblies) without the config change that absorbs it, as its own row.
 
 ## Template
@@ -35,6 +35,7 @@ Copy from `# <KEY>` down and write it with `--description-file`. The same brief 
 | **Repo · branch · base** | `<url.git>` → `feature/<key>-<slug>` @ `<base sha>` |
 | **Spec** | <phase or root key> §5, revision <n> (frozen) |
 | **at_sha · AT paths** | — until approved · `<tests/…/X.feature>, <tests/…/Steps.cs>` |
+| **Siblings** | parallel Builds at this stage: `<key> — <their §3 files>`; their `@new` scenarios may stay red while they run (Policy 02 §1c) — or `none` |
 | **Projects in scope** | `<src/A>, <src/B>, <tests/C>` |
 | **Standards** | `<stack skill(s)>` · at risk: `<3–5 rule-ids, e.g. DKNET-LAYER-001, CLEAN-SRP-001>` |
 
@@ -71,6 +72,11 @@ Ordered; each row compiles on the previous. Op ∈ KEEP · MODIFY · EXTEND · N
 | ID | Rule |
 |---|---|
 | R1 | if <condition> then <result> |
+
+## 6a. Input domain (Policy 06 §12b; one row per input class of every guard, default, mapping or external call §3 changes; delete if §3 changes none)
+| # | Changed at | Input class | Expected | Proof |
+|---|---|---|---|---|
+| D1 | `<symbol>` | empty · null · each enum member · display/code form · unknown · boundary · exception `<Type>` | <result> | `<scenario or test name>` |
 
 ## 7. Scenarios in this slice
 - `@new` (one line per scenario, never `all`): <scenario name from the spec §5> — fails today: `<file:line>` <what today's code does instead of the Then>

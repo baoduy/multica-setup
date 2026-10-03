@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-02 |
-| **Version** | 1.7 |
+| **Version** | 1.9 |
 | **Status** | Active |
 | **Owner** | dev-backend |
 | **Applies to** | Every code or behaviour change in a drunk repo, across every stack |
@@ -22,6 +22,7 @@
                    [leader, inline]       read ATs vs spec ──▶ pin at_sha (frozen)
                    [Build run]            implement ──▶ ATs GREEN · suite green · ≥80% · mutation report · drift check empty
    Bug fix (Prove-It):  reproduction AT authored RED and frozen ──▶ fix in Build ──▶ green ──▶ full suite
+   Parallel surfaces (1c): ATs + shared stubs ──▶ ≤3 Builds at one stage ──▶ last to finish proves the full suite
    UI presentation (1a): no AT stage, no new tests ──▶ Build done on build · typecheck · lint · existing suites green
                          a test the change breaks ──▶ skipped with a note ──▶ ONE follow-up issue (dev-leader)
 
@@ -77,6 +78,26 @@ statements but follows the runner and structure conventions below.
    these is `blocking`. Why: a bug's acceptance test is one reproduction whose expected value
    the root-cause report already fixes, so the separate run and the leader's read cost a full
    fresh checkout and a stage hop for little extra assurance; features keep the pair.
+1c. **Independent surfaces build in parallel against one frozen test set.** A cycle whose §3
+   splits into two or more surfaces with disjoint file sets builds them in parallel: the
+   Acceptance-tests stage writes every surface's scenarios and every §5 stub they share
+   (interfaces, DTOs, registration seams) — one Acceptance-tests sub-task when any stub is
+   shared, else one per surface at the same stage — so a surface that depends on another
+   codes against its contract, never its implementation; then one Build per surface, all at
+   the next stage, at most 3 at once (one runtime host). Shared wiring files (DI
+   registration, project and package files, barrel exports) belong to exactly one Build's §3
+   and sit in every other Build's §4. A parallel Build is done when its own `@new`
+   scenarios, every `@existing` one and every pre-existing test are green, and so are the
+   `@new` scenarios of every sibling Build already `done`; a sibling still running may leave
+   its own `@new` scenarios red. A push rejected because a sibling pushed first is rebased on
+   the moved feature branch and the suite re-run, so the last Build to finish proves the
+   whole suite green; the PR gate's CI check is the backstop. Surfaces run in sequence only
+   when one must change a file the other changes, or needs the other's behaviour — not its
+   signature — to turn its tests green and no fake can stand in. A brief over 10 KB splits
+   into parallel surfaces, never into a sequence for size alone. Why: from 2026-09-20 to
+   10-03, 12 cycles had more than one Build and 7 of them ran every Build in sequence
+   (DRK-2013, DRK-2028, DRK-1679), because each Build had to finish on a fully green suite
+   that held its sibling's red tests.
 1a. **UI presentation ships without new tests, for now.** A UI presentation change — the screens
    and layouts, components, styling and copy of a front-end app (in DKNet.Accounts.Api:
    `ui/components/**` and the `page`, `layout` and `.css` files under `ui/app/**`) — has no
@@ -136,12 +157,13 @@ statements but follows the runner and structure conventions below.
    passed on a store it never filled. The PR gate found the defect by reproducing it against
    Azurite, which cost a rework round.
 6. **Coverage gate — scoped to the change, both conditions required.** All existing tests
-   pass — full suite green, zero errors, zero warnings, and a clean `dotnet pack` (.NET) or
+   pass — full suite green (parallel Builds: statement 1c), zero errors, zero warnings, and a clean `dotnet pack` (.NET) or
    `npm pack` (TS). Combined unit + BDD-unit coverage of every class/module **touched** in the
    cycle reaches **≥80%**, measured only over files the feature branch changed
    (`git diff --name-only origin/dev...origin/<feature-branch>`, excluding test files) — never
    a repo-wide figure. UI presentation files (statement 1a) are outside this gate.
 6a. **Mutation report per touched class — coverage's honesty check.** Coverage says a line ran; only mutation says an assertion would have caught it changing. Every Build except a UI presentation one (statement 1a) reports a mutation run scoped to the lines the cycle changed in the classes it touched — `dotnet stryker --since:origin/dev` on .NET, `npx stryker run --mutate "<file>:<start>-<end>,…"` over the diff's hunks on TypeScript — never the whole class, whose unchanged code the cycle does not own; reported per touched class, with **every survivor dispositioned** — `killed — added <test>` / `equivalent` / `accepted — <why>`. Tool genuinely unavailable → the manual equivalent: invert each guard the change added, run, confirm RED, restore, and say in the report that the tool was unavailable. A Build reported `done` without a mutation report and its dispositions is incomplete the same way a missing coverage row is; dev-leader sends it back and never promotes past it.
+6b. **Nothing is reported skipped, and CI runs locally first.** A Build in any mode, and a Build's rework fix, never reports `done` with a check it was asked to run marked skipped or deferred. A check that cannot run is a `blocked` with the reason, or the manual fallback its own statement names. Before its last push the implementer makes a throwaway local merge of fresh `origin/dev` into its HEAD (a scratch branch it never pushes; the shared feature branch is never rebased) and, from the repo root, runs the repo's `pull_request` workflow steps that run locally (`.github/workflows/*.yml`: build, lint, typecheck, test, pack, compose and image builds), all of them, not only the test project it changed. A step that needs a secret, uploads, publishes or deploys (SonarCloud scan, codecov or snyk upload, image push) is listed as `not local: <step>`, which is a declared boundary, not a skip; where the repo gates on SonarCloud duplication, `jscpd` runs locally in its place (statement 7a of [Policy 01](01-coding-standards.md)). It reports them in a `CI parity` row. A red also present on `origin/dev` is noted with that proof, and so are a still-running parallel sibling's own `@new` scenarios (statement 1c), named by its key; any other red is the implementer's to fix. A merge conflict there is reported in the row, not resolved: conflicts with `dev` are dev-leader's (`leader-gitops`). dev-leader sends back a Build whose report marks any check skipped. Why: DRK-1830 deferred Stryker and two mutants survived to the gate; DRK-1867 was red on the merge head; DRK-1777 broke a compose job no one ran locally.
 7. **Never inflate coverage.** No trivial tests on getters or framework code. If 80% on a
    touched class is genuinely unreachable, flag the untestable paths to dev-leader instead of
    padding; if code is untestable as written, propose the smallest design change rather than
@@ -183,7 +205,7 @@ statements but follows the runner and structure conventions below.
 
 - New/changed logic has a test (UI presentation: statement 1a); every bug fix carries a
   reproduction test that failed before the fix and passes after.
-- Full suite green — pre-existing tests plus new ones — zero errors, zero warnings.
+- Full suite green — pre-existing tests plus new ones — zero errors, zero warnings (parallel Builds: proved by the last one to finish, statement 1c).
 - ≥80% combined coverage on every touched class/module, reported per file, never repo-wide.
 - A mutation report per touched class, every survivor dispositioned (statement 6a).
 - Every test of a destructive operation asserts the state before and the change after; a
@@ -192,6 +214,7 @@ statements but follows the runner and structure conventions below.
 - No skipped/disabled test introduced to make the suite pass — except a test a UI presentation
   change broke, skipped under statement 1a with its note and listed in its follow-up issue.
 - Clean `dotnet pack` / `npm pack` (or the Python package's equivalent build check).
+- Every `pull_request` workflow command green locally on a throwaway local merge of `origin/dev` into HEAD, and no check reported skipped (statement 6b).
 
 ## Enforcement
 
