@@ -67,6 +67,7 @@ These never lower a real defect: a finding that passes the proof check keeps its
 | A check loosened without the ticket asking for it: a repo-wide analyzer, lint, coverage or mutation setting lowered, or a CI step deleted, skipped or made non-failing (Policy 04 statement 4a) | 6.9 max (`blocking`) |
 | Approved acceptance test modified or deleted after `at_sha` (drift check non-empty) without a leader re-pin | 6.9 max (`blocking`; forces REWORK — the fix is to restore the scenario and make it pass, or take it to the leader) |
 | Any `@new` scenario red, skipped or tagged out at HEAD | 6.9 max (`blocking`) |
+| `bug-build` `at_sha` holds more than the reproduction + stubs, is green, postdates a fix commit, or does not match the root-cause report's reproduction conditions (Policy 02 statement 1a) | 6.9 max (`blocking`) |
 | No mutation evidence on touched classes with new logic (neither tool report nor manual run stated) | 7.9 max |
 | CI failing | 6.9 max (coverage-ratchet exception below) |
 | Coverage on changed lines measured BELOW threshold (default 80%) | 7.9 max (forces REWORK: dev-backend's bar is measurable and fixable) |
@@ -88,7 +89,7 @@ Worked from the weights above: one `important` costs 2 × weight (0.1–0.5 poin
 - **8.5–9.9** — Correct, safe, covered; exactly one `important` finding. Alone it scores 9.5 (Correctness) to 9.9 (Style or AI-slop); `nit`s elsewhere can pull it down, and below 8.5 it is REWORK. At or above 8.5 it merges, named under `Merged with:`.
 - **8.4** — Two or more `important` findings and no `blocking`: the cap sets the score. The arithmetic alone would give 9.0 (both in Correctness) to 9.8 (one each in the two 5% categories) — above the approve bar, which is why the cap exists: without it a PR carrying two or three importants would merge on score alone.
 - **7.9** — Coverage on changed lines below threshold, or no mutation evidence on touched classes with new logic: the cap sets the score.
-- **6.9 / 6.5** — Any `blocking` finding, CI failing, or approved-AT drift: 6.9. No tests for new or changed behaviour: 6.5. The cap sets the score; one `blocking` alone would compute to 9.0–9.8.
+- **6.9 / 6.5** — Any `blocking` finding, CI failing, approved-AT drift, or a `bug-build` `at_sha` that doesn't hold up: 6.9. No tests for new or changed behaviour: 6.5. The cap sets the score; one `blocking` alone would compute to 9.0–9.8.
 - **≤ 6.0** — Several categories collapsed, e.g. Correctness 2 (−2.0), Security 2 (−1.6), Testing 8 (−0.4) → 6.0.
 - **3.0** — A `critical` security finding (the 3.0 cap), or a fundamentally wrong approach that leaves most categories near their floor.
 

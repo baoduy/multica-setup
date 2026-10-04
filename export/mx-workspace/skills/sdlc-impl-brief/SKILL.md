@@ -27,6 +27,7 @@ Copy from `# <TICKET-ID>` down, fill it in, delete guidance blockquotes, and wri
 | **Projects in scope** | `<src/Foo.Api, src/Foo.Domain, tests/Foo.Specs>` |
 | **Main ticket** | `<MXW-nnn>` — approved spec (business-level; no Change Map) |
 | **Standards** | `dknet-ddd-conventions` · `dotnet10-efcore10-standards` · at risk: `<3–5 rule-ids, e.g. DKNET-LAYER-001, DKNET-REPO-006, CLEAN-SRP-001>` |
+| **Mode** | `acceptance-tests` \| `build` \| `bug-build` — which sub-task this description is for (Policy 02 statement 1a) |
 
 **Delta markers**
 
@@ -207,7 +208,7 @@ Feature: <name>
 
 ## Notes for dev-leader
 
-Keep whole brief under two pages. If it grows past that, sub-task is too large — split it into sequenced stages that each compile and pass tests on their own.
+Keep whole brief under two pages. If it grows past that, split it into parallel surfaces over disjoint files (same stage, at most 3 Builds at once, Policy 02 statement 1b) — never into sequenced stages; sequence only a surface with a real file overlap or behaviour dependency on another.
 
 Three failure modes this format exists to prevent:
 

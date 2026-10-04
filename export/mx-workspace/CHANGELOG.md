@@ -4,6 +4,95 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-10-04 (k) — independent surfaces build in parallel against one frozen test set (not live)
+
+Owner-approved, ported from drunk-workspace's 2026-10-03 (k), adapted to mx: mx already ran
+Acceptance-tests + Build pairs per surface in parallel (`squads/dev-team.md`), so the port adds
+what was missing — a concurrency cap and a finish condition, not the shape itself.
+**Policy 02 v1.8**, new statement 1b: Builds for independent surfaces (disjoint file sets,
+inside one cycle's one repo) run at the same stage, **at most 3 at once**; a Build is `done`
+only when its own `@new` scenarios and every already-`done` sibling Build's `@new` scenarios
+are green (a still-running sibling's may stay red); a push rejected by a sibling's push is
+rebased onto the updated branch and the suite re-run, so the last Build to finish proves the
+whole surface set green. `sdlc-impl-brief`'s "split an oversize brief into sequenced stages"
+line — the wording drunk's cause section blamed for forcing parallel cycles to run
+sequentially — now says parallel surfaces (same stage, cap 3), never sequenced, unless a real
+file overlap or behaviour dependency exists.
+
+**Excluded, owner-confirmed conflict**: drunk's "pr-reviewer groups REWORK findings per Build
+sub-task so the leader re-arms them in parallel" is NOT ported. It contradicts mx
+**Policy 04 statement 6**, which requires the leader to consolidate every round's findings,
+across members and rounds sharing a root cause, into ONE fix sub-issue — porting the grouping
+would mean amending that statement, and this bundle's change-control rule puts a policy
+conflict to the owner first. REWORK stays ONE consolidated `Fix (review):` sub-task per round
+regardless of how many Builds ran this cycle; drunk's `pr-review-gate` and
+`references/multica-flow.md` grouping changes have no mx counterpart.
+
+mx's one-repo-per-cycle rule (`sdlc-flow-squad-leader-playbook`, Decomposition rules) already
+rejects any phase ticket spanning two repos before decomposition, so "independent surfaces"
+here is always within one repo — cross-repo work is already split into separate cycles
+upstream and needed no cascade. Evidence (12 of 20 cycles with more than one Build ran every
+Build in sequence) is drunk-workspace's 2026-09-20–10-03 measurement; mx has not independently
+measured this. Cascade: `squads/dev-team.md` (Stages closing paragraph),
+`sdlc-flow-squad-leader-playbook` (Same-stage-parallel cap), `sdlc-impl-brief` (split rule),
+`docs/policies/09-agent-roles-and-responsibilities.md` (dev-leader charter, max-3 mention),
+`agents/dev-leader.md`.
+
+## 2026-10-04 (j) — a confirmed bug fix proves itself in one bug-build run (not live)
+
+Owner-approved, ported from drunk-workspace's 2026-10-03 (g), adapted: mx bug tickets carry no
+Gherkin (`bug-report` skill: Scope / Root cause / Suggested owner only), so pr-reviewer matches
+`at_sha` against product-owner's root-cause report's reproduction conditions instead of
+Gherkin — the owner confirmed this substitution. **Policy 02 v1.7**, new statement 1a: a phase
+ticket whose root is a confirmed Workflow A bug, one surface, no new public signature, gets ONE
+`Build:` sub-task (`Mode: bug-build`) instead of the Acceptance-tests + Build pair — dev-backend
+commits and pushes the reproduction alone first (that commit is `at_sha`, red for the reason
+the root-cause report names), then fixes in the same run; dev-leader approves nothing in
+between; pr-reviewer checks that `at_sha` holds only the reproduction and stubs, predates every
+fix commit, is red, and matches the root-cause report's reproduction conditions — a mismatch is
+`blocking`. **Policy 04 v1.9** (PR gate statement 4 names the `at_sha` check;
+`references/scoring-rubric.md` gets its 6.9 cap and calibration-anchor line), **Policy 05 v1.8**
+(Actors paragraph), **Policy 07 v1.2** (statement 1: reproduction conditions concrete enough to
+stand in for Gherkin as the frozen test description), **Policy 09 v1.9** (dev-leader,
+dev-backend and pr-reviewer charters — these version numbers are shared with entry (k) above,
+both landing in the same pass).
+
+Evidence (the Acceptance-tests stage running ~a third of dev-backend's tokens, plus a leader
+approval run and a stage hop, per bug cycle) is drunk-workspace's 2026-09-28–10-03 measurement;
+mx has not independently measured its own bug-cycle cost. Cascade: `squads/dev-team.md`
+(Route C paragraph, Members table, Stages table, Gates paragraph), `sdlc-flow-squad-leader-playbook`
+(hard-gate send-back list), `sdlc-impl-brief` (`Mode` row), `test-driven-development`
+(Prove-It), `pr-review-gate` (Testing phase, Phase 2 point 4), `references/scoring-rubric.md`
+(cap + calibration anchor), `agents/dev-leader.md`, `agents/dev-backend.md` +
+`agents/dev-backend.description.md`, `agents/pr-reviewer.md`.
+
+## 2026-10-04 (i) — dev-leader ignores the echo of a member's sub-task comment (not live)
+
+Owner-approved, ported from drunk-workspace's 2026-10-03 (e). **Policy 05 v1.7**, new statement
+5a: the platform also routes an agent's plain comment on a sub-task of a squad-assigned parent
+to the squad leader, so a member's report or a gate's score comment wakes the leader in the
+same second as the barrier or handoff line for that event (statement 5); the leader ends a run
+started by such a comment at once when the author's run is still active or the sub-task is
+already `done`/`blocked`, else treats it as a mis-signal the wake-up checklist handles. Written
+to hold under both of mx's current wake descriptions — the bundle's reinstated stage-barrier
+wake (2026-09-29 (c), not live) and the live handoff-line-only wake (same date, live) — since
+the guard's trigger condition (an active author run, or a sub-task already closed) does not
+depend on which mechanism produces the second wake. Evidence (98 of 422 dev-leader runs, 13%
+of its tokens, 2026-09-28–10-03) is drunk-workspace's measurement on the same Multica platform
+version; mx has not independently measured its own echo rate. Cascade:
+`workspace/workspace.context.md` (wake list), `sdlc-flow-squad-leader-playbook` (new Wake guard
+section, before the wake-up checklist), `sdlc-flow-delivery-pipeline` (trigger line),
+`README.md` (Trigger mechanics).
+
+**Not resolved, flagged only, left for the owner**: `squads/product-team.md:132` and two lines
+in `sdlc-flow-po-orchestration` still cite `MXW-454` ("a plain comment is an unreliable wake"),
+which contradicts both this entry and the 2026-09-29 entries asserting a plain comment on a
+squad-assigned ticket does wake the leader — a pre-existing split in the bundle, not introduced
+or resolved here. `squads/dev-team.md`'s rework-loop step 1 ("dev-backend... ends its report
+with your mention") also looks stale against `agents/dev-backend.md` and
+`sdlc-flow-squad-member-protocol`'s "handoff line, never a mention" rule — likewise pre-existing
+and left as-is.
+
 ## 2026-10-04 (h) — nothing is reported skipped, and CI runs locally first (not live)
 
 Owner-approved, ported from drunk's 2026-10-03 (i). **Policy 02 v1.6**, new statement 10;

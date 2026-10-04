@@ -24,7 +24,7 @@ Write unit tests where they help you design or pin a detail the ATs do not reach
 
 ## Prove-It (bug fixes)
 
-The outer loop at bug scale. The reproduction test IS the acceptance test: authored in the `Acceptance tests:` stage from the bug's Gherkin, red for the reason the bug report describes, approved, frozen; the fix lands in Build and turns it green; the full suite proves no regression. A fix with no frozen reproduction test is unverified. In a review REWORK round the same rule applies inside the fix run: add the reproduction test first, list it as an addition, then fix.
+The outer loop at bug scale. The reproduction test IS the acceptance test: red for the reason the root-cause report describes, frozen the moment it is committed, the fix lands after it and turns it green; the full suite proves no regression. A fix with no frozen reproduction test is unverified. For a confirmed bug on one surface with no new public signature (Policy 02 statement 1a), the reproduction is authored and frozen inside the single `bug-build` Build run — its own first commit is `at_sha` — instead of a separate `Acceptance tests:` stage; otherwise (a surface in doubt, or a defect surfaced mid-cycle) it is authored in the `Acceptance tests:` stage as usual, approved, frozen. In a review REWORK round the same rule applies inside the fix run: add the reproduction test first, list it as an addition, then fix.
 
 ## Ports-and-adapters — what makes ATs fast and honest
 

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | MX-POL-07 |
-| **Version** | 1.1 |
+| **Version** | 1.2 |
 | **Status** | Active |
 | **Owner** | product-owner (triage & root cause) · qc-team (defect discovery) |
 | **Applies to** | Every reported bug, discovered defect, and escalation |
@@ -46,7 +46,7 @@ policy's report shape.
 
 ## Policy statements
 
-1. **Bug flow (Workflow A):** intake → research → a root-cause report comment (evidence, repro, fix direction targeting the layer all callers route through) with a **calibrated confidence (0–100%)** that this is a genuine platform defect with the identified root cause.
+1. **Bug flow (Workflow A):** intake → research → a root-cause report comment (evidence, repro, fix direction targeting the layer all callers route through) with a **calibrated confidence (0–100%)** that this is a genuine platform defect with the identified root cause. The reproduction conditions are concrete enough to become a failing test verbatim — exact inputs, exact observed vs. expected outcome — since a confirmed bug carries no Gherkin and this is the only frozen description of what the fix must make pass ([Policy 02](02-testing-and-quality.md) statement 1a).
 2. **Confidence gates delegation:**
    - **≥ 90%** (confirmed) → auto-delegate Workflow C immediately, FYI to the requester ("fix delegated — reply to halt").
    - **< 90%** (possibly by-design/config/user error) → the requester reviews and explicitly confirms before any delegation.
