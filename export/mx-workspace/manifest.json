@@ -566,7 +566,7 @@
     {
       "title": "📊 Monthly Gate Digest",
       "file": "autopilots/monthly-gate-digest.json",
-      "source_id": null,
+      "source_id": "3d4ea210-8ead-449c-828b-b1d45d4945fd",
       "assignee_type": "agent",
       "assignee_name": "default",
       "project_title": "mx-jobs",

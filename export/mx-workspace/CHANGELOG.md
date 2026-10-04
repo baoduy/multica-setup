@@ -4,7 +4,23 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
-## 2026-10-04 (n) — conditional skill sections move into references/, verbatim (not live)
+## 2026-10-04 (o) — the 2026-10-03 and 2026-10-04 changes are live, minus 2026-09-29 (c)
+
+**Live note (2026-10-04).** Pushed live on top of the pre-2026-09-29 (c) text: live still
+carries the handoff-line wake model, because 2026-09-29 (c) stays withheld until the platform's
+sub-issue wake works on this server. For `agents/dev-backend.md`, `squads/dev-team.md`,
+`workspace/workspace.context.md` and the skills `pr-review-gate` (`references/multica-flow.md`),
+`sdlc-flow-delivery-pipeline`, `sdlc-flow-po-orchestration`, `sdlc-flow-squad-leader-playbook`,
+`sdlc-flow-squad-member-protocol`, `sdlc-impl-brief` and `spec-review-gate`, live = this bundle
+minus 2026-09-29 (c) (a 3-way merge; the live wake guard names only the handoff line). Every other
+resource is byte-identical to the bundle.
+
+`📊 Monthly Gate Digest` was created live (`3d4ea210-8ead-449c-828b-b1d45d4945fd`, schedule
+`0 9 1 * *` Asia/Singapore, next run 2026-11-01). `agents/dev-backend.description.md` was cut to
+245 characters (the platform caps a description at 255). The hourly stuck-run recovery prompt is
+live; its status stays `paused` for the owner to flip.
+
+## 2026-10-04 (n) — conditional skill sections move into references/, verbatim (not live: live keeps the full text until 2026-09-29 (c) ships)
 
 Owner's request; no policy amended. A SKILL.md loads on every run, a reference file only when
 its pointer's condition holds (github.com/affaan-m/ECC's context-budget rule). Only blocks
@@ -17,7 +33,7 @@ swapped back. `sdlc-flow-squad-leader-playbook` 36,144 → 29,117 bytes
 `sdlc-flow-delivery-pipeline` 27,707 → 25,313 (`references/workflow-d-cicd-infra.md`).
 `pr-review-gate` had no conditional block worth moving. Files: those three skills.
 
-## 2026-10-04 (m) — dev-backend pre-review before done (not live)
+## 2026-10-04 (m) — dev-backend pre-review before done (live)
 
 Owner-approved, ported from drunk-workspace's 2026-10-03 (h). **Policy 01 v1.5**, statement
 17 gains ONE fresh-context subagent — a mini PR gate — before every `Build:` sub-task (any
@@ -39,7 +55,7 @@ line, new `references/pre-review.md`), `pr-review-gate` (pass 5 Standards bullet
 `agents/dev-backend.md` (Build step 7, Done means, Rework from review),
 `test-driven-development` (Verification list).
 
-## 2026-10-04 (l) — brief §6a input-domain table (not live)
+## 2026-10-04 (l) — brief §6a input-domain table (live)
 
 Owner-approved, ported from drunk-workspace's 2026-10-03 (j). **Policy 06 v2.4**, new
 statement 10a: every changed guard, default, mapping and external call gets a §6a table
@@ -53,7 +69,7 @@ Done-when checkbox), `sdlc-flow-squad-leader-playbook` (Decomposition rules, new
 (DRK-1842, DRK-1834, DRK-1985, DRK-1851, DRK-1934, each an input the brief never named,
 costing a rework round) is drunk-workspace's; mx has not independently measured this gap.
 
-## 2026-10-04 (k) — independent surfaces build in parallel against one frozen test set (not live)
+## 2026-10-04 (k) — independent surfaces build in parallel against one frozen test set (live)
 
 Owner-approved, ported from drunk-workspace's 2026-10-03 (k), adapted to mx: mx already ran
 Acceptance-tests + Build pairs per surface in parallel (`squads/dev-team.md`), so the port adds
@@ -87,7 +103,7 @@ measured this. Cascade: `squads/dev-team.md` (Stages closing paragraph),
 `docs/policies/09-agent-roles-and-responsibilities.md` (dev-leader charter, max-3 mention),
 `agents/dev-leader.md`.
 
-## 2026-10-04 (j) — a confirmed bug fix proves itself in one bug-build run (not live)
+## 2026-10-04 (j) — a confirmed bug fix proves itself in one bug-build run (live)
 
 Owner-approved, ported from drunk-workspace's 2026-10-03 (g), adapted: mx bug tickets carry no
 Gherkin (`bug-report` skill: Scope / Root cause / Suggested owner only), so pr-reviewer matches
@@ -115,7 +131,7 @@ mx has not independently measured its own bug-cycle cost. Cascade: `squads/dev-t
 (cap + calibration anchor), `agents/dev-leader.md`, `agents/dev-backend.md` +
 `agents/dev-backend.description.md`, `agents/pr-reviewer.md`.
 
-## 2026-10-04 (i) — dev-leader ignores the echo of a member's sub-task comment (not live)
+## 2026-10-04 (i) — dev-leader ignores the echo of a member's sub-task comment (live)
 
 Owner-approved, ported from drunk-workspace's 2026-10-03 (e). **Policy 05 v1.7**, new statement
 5a: the platform also routes an agent's plain comment on a sub-task of a squad-assigned parent
@@ -142,7 +158,7 @@ with your mention") also looks stale against `agents/dev-backend.md` and
 `sdlc-flow-squad-member-protocol`'s "handoff line, never a mention" rule — likewise pre-existing
 and left as-is.
 
-## 2026-10-04 (h) — nothing is reported skipped, and CI runs locally first (not live)
+## 2026-10-04 (h) — nothing is reported skipped, and CI runs locally first (live)
 
 Owner-approved, ported from drunk's 2026-10-03 (i). **Policy 02 v1.6**, new statement 10;
 **Policy 07 v1.1**, statement 9 carve-out; **Policy 09 v1.7**. A dev-team `Build:` or
@@ -172,7 +188,7 @@ fix), `skills/blocker-report/SKILL.md` (skipped-row carve-out),
 (Done-means, rework), `squads/dev-team.md` (Build row), `skills/test-driven-development/SKILL.md`
 (Verification list).
 
-## 2026-10-04 (g) — mutation runs are scoped to the lines changed, not the whole class (not live)
+## 2026-10-04 (g) — mutation runs are scoped to the lines changed, not the whole class (live)
 
 Owner-approved, ported from drunk's 2026-10-03 (f). **Policy 02 v1.5**, new statement 3a;
 **Policy 09 v1.6**. The mutation run targets each touched class's changed hunks —
@@ -188,7 +204,7 @@ is left as-is, dead either way. Cascade: `docs/policies/02-testing-and-quality.m
 (Mutation report), `skills/sdlc-flow-squad-member-protocol/SKILL.md` (check 1),
 `agents/dev-backend.md` (Build step 4), `squads/dev-team.md` (dev-backend row).
 
-## 2026-10-04 (f) — test code reuses its harness; a copied setup block is a DRY defect (not live)
+## 2026-10-04 (f) — test code reuses its harness; a copied setup block is a DRY defect (live)
 
 Owner-approved, ported from drunk's 2026-10-03 (d). **Policy 02 v1.4**, amended statement 7
 (DAMP carve-out) and new statement 7a. A new test extends the AT harness or the repo's shared
@@ -205,7 +221,7 @@ DAMP-over-DRY in tests, so the rule amends statement 7 there instead. Cascade:
 `skills/sdlc-flow-squad-member-protocol/SKILL.md` (check 8 DRY bullet),
 `skills/test-driven-development/SKILL.md` (Ports-and-adapters).
 
-## 2026-10-04 (e) — a missing self-review row is a `nit`, not a rework round (not live)
+## 2026-10-04 (e) — a missing self-review row is a `nit`, not a rework round (live)
 
 Owner-approved, ported from drunk's 2026-10-03 (c). **Policy 04 v1.8**, statement 4; **Policy
 01 v1.4**, statement 17: a Build EVIDENCE row — the mutation report, per-branch hits, the
@@ -229,7 +245,7 @@ Cascaded to `docs/policies/04-code-and-spec-review.md` (statement 4),
 `agents/dev-backend.md`, `agents/pr-reviewer.md`. Same change as drunk 2026-10-03 (c), plus the
 mx-only coverage/BDD carve-outs. mx-workspace only.
 
-## 2026-10-04 (d) — a passing PR merges; the polish round is retired; a new cap holds two-plus `important`s to 8.4 (not live)
+## 2026-10-04 (d) — a passing PR merges; the polish round is retired; a new cap holds two-plus `important`s to 8.4 (live)
 
 Owner-approved, ported from drunk's 2026-10-03 (b). **Policy 04 v1.7**, statement 7: the score
 alone decides what in-scope findings cost — below 8.5 or any `blocking` → a rework round; at
@@ -262,7 +278,7 @@ tickets pinned before this version. Same change as drunk 2026-10-03 (b), plus th
 cap and the DEFERRED extension (owner-approved; drunk's rubric has no DEFERRED verdict to
 extend). mx-workspace only.
 
-## 2026-10-04 (c) — hourly stuck-run recovery wakes only agent-assigned issues; still paused (not live)
+## 2026-10-04 (c) — hourly stuck-run recovery wakes only agent-assigned issues; prompt live, still paused
 
 Owner's request to resume it; no policy amended. Before resuming, its crash sweep got drunk's
 2026-10-01 fix: step 4 (and the Scope line) wakes only an issue assigned to an agent; an issue
@@ -272,7 +288,7 @@ four drunk tickets were on 2026-09-30. Pass B already filtered to agent assignee
 stays `paused`; the flip to `active` is left to the owner. Files:
 `autopilots/hourly-stuck-run-recovery-wake-agents-killed-by-transient-errors.description.md`.
 
-## 2026-10-04 (b) — new monthly gate digest autopilot (not live)
+## 2026-10-04 (b) — new monthly gate digest autopilot (live)
 
 Owner's request; no policy amended. `📊 Monthly Gate Digest` (1st of the month, 09:00 SGT,
 `mx-jobs`, create_issue, `default`) runs a fixed `gate-digest.sh` over every review sub-task
@@ -283,7 +299,7 @@ reworked sub-tasks. Report only: it proposes nothing. First run, 2026-09-04 to 1
 35 of 51 first-pass (13 DEFERRED to a human), spec gate 12 of 14. Same digest in drunk, as part
 3 of its monthly insights autopilot. Files: `autopilots/monthly-gate-digest.*`, `manifest.json`.
 
-## 2026-10-04 — a spec-gate finding names its consequence (not live)
+## 2026-10-04 — a spec-gate finding names its consequence (live)
 
 Owner-approved. **Policy 04 v1.6**, new statement 3a: a `blocker` or `major` finding names its
 section and what goes wrong downstream (what dev-team would build wrong, which §5 scenario
@@ -295,7 +311,7 @@ still holds for a proven finding. A spec with no finding above `minor` is valid,
 `spec-review-gate` lists the false positives the gate does not raise. The 9.0 / 8.0–8.9 spec
 bars are unchanged. Cascade: `spec-review-gate`, agent `spec-reviewer`. Same change in drunk.
 
-## 2026-10-03 — PR-gate findings prove their failure; a PR never loosens its own checks; silent failures and migration safety (not live)
+## 2026-10-03 — PR-gate findings prove their failure; a PR never loosens its own checks; silent failures and migration safety (live)
 
 Owner-approved, from the owner's review of github.com/affaan-m/ECC against this bundle.
 
