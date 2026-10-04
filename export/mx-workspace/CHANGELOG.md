@@ -4,6 +4,69 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-10-04 (h) — nothing is reported skipped, and CI runs locally first (not live)
+
+Owner-approved, ported from drunk's 2026-10-03 (i). **Policy 02 v1.6**, new statement 10;
+**Policy 07 v1.1**, statement 9 carve-out; **Policy 09 v1.7**. A dev-team `Build:` or
+`Fix (review):` sub-task never reports a check skipped or deferred — a check that cannot run
+is `blocked` with the reason, or its own named fallback. Before the last push the implementer
+makes a throwaway local merge of fresh `origin/dev` into HEAD (scratch branch, never pushed)
+and runs every `pull_request` workflow step that runs locally from the repo root, reported in
+a `CI parity` row; a step needing a secret, upload, publish or deploy is `not local: <step>`.
+dev-leader sends back a Build/Fix whose report marks any check skipped (hard-gate,
+`sdlc-flow-squad-leader-playbook`); a row that is merely absent stays a `nit` the gate measures
+itself (Policy 04 statement 4, unchanged by this port). Adaptations from drunk: no
+SonarCloud/jscpd stand-in — confirmed no `the-wixo` repo runs SonarCloud or has a jscpd step
+(checked `dev` check-runs across email-service, auth-api, payment-gateway,
+web-hook-deliverer and monxa.bdd-integration, plus a `sonar-project.properties` probe, all
+negative); mx's `pull_request` CI is plain `dotnet restore/build/test` or a no-push
+`docker build`, so the local step list is restore/build/test/docker-build-no-push, and a
+container-build step is `not local` when the runtime has no Docker daemon (unconfirmed either
+way — flagged for the owner). Scoped to dev-team only: `monxa.bdd-integration` showed no
+check-runs on `dev` at all, so qc-team's SANDBOX suite is left untouched pending its own
+decision. Cascade: `docs/policies/02-testing-and-quality.md` (statement 10, Definition of
+Done), `docs/policies/07-bug-and-defect-management.md` (statement 9),
+`docs/policies/09-agent-roles-and-responsibilities.md` (dev-leader Never list, dev-backend
+responsibilities), `skills/sdlc-flow-squad-member-protocol/SKILL.md` (new check 9, check-count
+fix), `skills/blocker-report/SKILL.md` (skipped-row carve-out),
+`skills/sdlc-flow-squad-leader-playbook/SKILL.md` (hard-gate send-back list),
+`skills/pr-review-gate/SKILL.md` (CI parity row in the EVIDENCE list), `agents/dev-backend.md`
+(Done-means, rework), `squads/dev-team.md` (Build row), `skills/test-driven-development/SKILL.md`
+(Verification list).
+
+## 2026-10-04 (g) — mutation runs are scoped to the lines changed, not the whole class (not live)
+
+Owner-approved, ported from drunk's 2026-10-03 (f). **Policy 02 v1.5**, new statement 3a;
+**Policy 09 v1.6**. The mutation run targets each touched class's changed hunks —
+`git fetch origin dev` then `dotnet stryker --since:origin/dev` — never a whole-class run,
+which re-tests code the cycle does not own; still reported per touched class with every
+survivor dispositioned. The speed-up is unmeasured here, same as in drunk: compare mutant
+count and wall time on the next Build, and widen to `-m` touched-class globs if `--since`
+doesn't narrow the run. mx is .NET-only (confirmed: no TypeScript repo in `the-wixo`), so only
+the `.NET` command changed; the inherited TypeScript example line in `test-driven-development`
+is left as-is, dead either way. Cascade: `docs/policies/02-testing-and-quality.md` (statement
+3a), `docs/policies/09-agent-roles-and-responsibilities.md` (dev-backend responsibilities),
+`skills/test-driven-development/SKILL.md` (Mutation score), `skills/testing-standards/SKILL.md`
+(Mutation report), `skills/sdlc-flow-squad-member-protocol/SKILL.md` (check 1),
+`agents/dev-backend.md` (Build step 4), `squads/dev-team.md` (dev-backend row).
+
+## 2026-10-04 (f) — test code reuses its harness; a copied setup block is a DRY defect (not live)
+
+Owner-approved, ported from drunk's 2026-10-03 (d). **Policy 02 v1.4**, amended statement 7
+(DAMP carve-out) and new statement 7a. A new test extends the AT harness or the repo's shared
+fixture instead of copying its setup; a copied setup or arrange block of ~10 lines or more is
+a DRY defect at the second copy — tighter than Policy 01 statement 13's 3-occurrence
+threshold, because test setup drifts faster. DAMP still holds inside the test body: the rule
+targets copied setup, not readable assertions. Adaptation from drunk: dropped the
+`npx jscpd --min-lines 10` / SonarCloud duplication-gate clause — confirmed no `the-wixo` repo
+gates on SonarCloud or jscpd (same check-runs/`sonar-project.properties` probe as (h) above).
+Placement differs from drunk too: drunk put this in Policy 01 (coding standards); mx's own
+Policy 01 Scope says test code follows Policy 02, and Policy 02 statement 7 already owns
+DAMP-over-DRY in tests, so the rule amends statement 7 there instead. Cascade:
+`docs/policies/02-testing-and-quality.md` (statements 7, 7a),
+`skills/sdlc-flow-squad-member-protocol/SKILL.md` (check 8 DRY bullet),
+`skills/test-driven-development/SKILL.md` (Ports-and-adapters).
+
 ## 2026-10-04 (e) — a missing self-review row is a `nit`, not a rework round (not live)
 
 Owner-approved, ported from drunk's 2026-10-03 (c). **Policy 04 v1.8**, statement 4; **Policy

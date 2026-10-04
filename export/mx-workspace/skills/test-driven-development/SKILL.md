@@ -30,7 +30,7 @@ The outer loop at bug scale. The reproduction test IS the acceptance test: autho
 
 - Drive the **inbound port** (application service, command/query handler, mediator, or the package's public API) — not HTTP, not the UI, not a controller.
 - **Outbound ports** (repositories, clock, message bus, external HTTP clients, secrets) get hand-written in-memory fakes implementing the port interface. Not an in-memory database, not a mocking framework scripting call order.
-- Compose the application for tests from its ports, the way production composes it from adapters — one factory taking the fakes, so the AT harness signature stays stable as handlers multiply.
+- Compose the application for tests from its ports, the way production composes it from adapters — one factory taking the fakes, so the AT harness signature stays stable as handlers multiply. A second test that needs the same setup extends this factory instead of pasting it — a copied setup block of ~10+ lines is a DRY defect at the second copy (Policy 02 statement 7a).
 - `WebApplicationFactory<T>` / Testcontainers / real adapters only for scenarios tagged `@integration`.
 - No port seam where one is needed? That is a §3 row for the leader to add (smallest seam that lets the AT drive the behaviour), reported `blocked` from the `Acceptance tests:` stage — never an ad-hoc refactor made there.
 
@@ -38,7 +38,7 @@ The outer loop at bug scale. The reproduction test IS the acceptance test: autho
 
 Run mutation testing on the touched classes and report it; it replaces hand-narrated "I deleted the guard and it went red" wherever the tool runs.
 
-- .NET: `dotnet stryker --mutate "**/<TouchedClass>.cs"` (install once: `dotnet tool install -g dotnet-stryker`). TypeScript: `npx stryker run --mutate "src/<file>.ts"` (`@stryker-mutator/core` + the repo's runner plugin).
+- .NET: `git fetch origin dev` then `dotnet stryker --since:origin/dev` (install once: `dotnet tool install -g dotnet-stryker`), scoped to the lines this cycle changed — never the whole class (Policy 02 statement 3a). TypeScript: `npx stryker run --mutate "src/<file>.ts"` (`@stryker-mutator/core` + the repo's runner plugin).
 - Report per touched class: mutation score, and **every surviving mutant** with a disposition — `killed — added <test>`, `equivalent — <why no test can tell>`, or `accepted — <reason>`. An undispositioned survivor in code you added is an open finding.
 - Tool cannot run (no network, unsupported runner): fall back to the manual mutation check per guard — delete or invert it, run, confirm RED, restore — and state in the report that the tool was unavailable.
 
@@ -78,4 +78,5 @@ RED is not just the author stage — it is a property every finished test must s
 - Every `@new` scenario green, every `@existing` scenario still green; bug fixes carry the reproduction AT that was red at `at_sha`.
 - Full suite passes; nothing skipped or disabled; per-touched-class coverage reported; mutation report with survivor dispositions.
 - Standards row: `dknet-ddd-conventions` + `dotnet10-efcore10-standards` opened, rule-ids checked, a CodeGraph reuse search per new public symbol, SRP and DRY measured (member-protocol check 8, Policy 01 statement 17).
+- CI parity row: every `pull_request` workflow step run locally on a throwaway merge of `origin/dev`, nothing reported skipped (member-protocol check 9, Policy 02 statement 10).
 - Run each test command after a change that could affect its result — never re-run an unchanged suite for reassurance.
