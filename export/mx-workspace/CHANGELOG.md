@@ -4,6 +4,16 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-10-04 (c) — hourly stuck-run recovery wakes only agent-assigned issues; still paused (not live)
+
+Owner's request to resume it; no policy amended. Before resuming, its crash sweep got drunk's
+2026-10-01 fix: step 4 (and the Scope line) wakes only an issue assigned to an agent; an issue
+assigned to a member, a squad or nobody is skipped silently. Without it a crashed run on a
+ticket waiting for a human (a release approval, a deploy) is woken to the cap and escalated, as
+four drunk tickets were on 2026-09-30. Pass B already filtered to agent assignees. The status
+stays `paused`; the flip to `active` is left to the owner. Files:
+`autopilots/hourly-stuck-run-recovery-wake-agents-killed-by-transient-errors.description.md`.
+
 ## 2026-10-04 (b) — new monthly gate digest autopilot (not live)
 
 Owner's request; no policy amended. `📊 Monthly Gate Digest` (1st of the month, 09:00 SGT,

@@ -17,7 +17,7 @@ A ticket is stalled when one of these holds and it has had no run in the last 24
 3. **Finished but open** — a root or phase ticket whose children are all terminal, whose release PR (if any) is merged, and which still sits `in_progress` or `blocked` for more than 12h. Nudge: comment on it with its assignee's mention: "Every child is terminal; finalize."
 4. **Parked with a human** — a ticket assigned to a member at `todo` for more than 48h (an ESCALATED PR gate waiting for the owner's option, a critical release waiting for the owner's reply, a spec handoff, an unassigned defect). No nudge; digest only.
 5. **Unassigned** — an open ticket with no assignee for more than 24h. No nudge; digest only.
-6. **Silent in_progress** — `in_progress` with no active run and no comment for more than 24h, not covered above. Nudge: comment with the assignee's mention: "No run for 24h; resume or set `blocked` with a `## BLOCKER`."
+6. **Silent in_progress** — `in_progress` with no active run and no comment for more than 24h, not covered above. Nudge: comment with the assignee's mention: "No run for 24h; resume or set `blocked` with a `## BLOCKER`." Two exceptions, digest only: a ticket assigned to a member (never mention a human), and a ticket whose `Wake count` is 3 or more — hourly-run-recovery already handed it to its human owner. Skip a ticket hourly-run-recovery woke in the last 24h: its wake is already the nudge.
 
 Exempt: issues titled `^\[A\d+-\d+\]` (architecture findings), autopilot run issues, and anything `done`/`cancelled`.
 
@@ -26,6 +26,8 @@ Exempt: issues titled `^\[A\d+-\d+\]` (architecture findings), autopilot run iss
 - One nudge per stalled ticket per day; before posting, scan its roots for a nudge from you in the last 24h and skip if found.
 - A nudge carries exactly ONE agent (or squad) mention, the current assignee or leader of that ticket, and states the observed stall in one line. Never mention a human; never mention an agent that is not the ticket's owner.
 - The mention is the wake. Do not change statuses.
+- **Reply, never a new thread root.** Post each nudge as a reply to the newest root comment on that ticket you did not author (`multica issue comment list <id> --roots-only --output json`, then `multica issue comment add <id> --content-file <path> --parent <root-id>`, the file inside your working directory). Only a ticket with no such root gets a new root. When a human later replies inside a thread, the backend wakes the thread root's author; a root of yours would route that reply to you instead of to the ticket's owner.
+- After each nudge, `multica issue subscriber remove <id>` (it defaults to you; "nothing to remove" is success).
 
 # Digest
 
