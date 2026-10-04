@@ -4,6 +4,18 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-10-04 — a spec-gate finding names its consequence (not live)
+
+Owner-approved. **Policy 04 v1.6**, new statement 3a: a `blocker` or `major` finding names its
+section and what goes wrong downstream (what dev-team would build wrong, which §5 scenario
+cannot be written or checked, which question the implementer is left to guess); a claim the
+code contradicts cites the CodeGraph `file:line` in the finding; a format-gate finding cites its
+rule. A finding that can do neither is `minor`, `nit` or dropped. The proof decides whether a
+finding exists, never which of two severities it takes, so "when uncertain, it is a `blocker`"
+still holds for a proven finding. A spec with no finding above `minor` is valid, and
+`spec-review-gate` lists the false positives the gate does not raise. The 9.0 / 8.0–8.9 spec
+bars are unchanged. Cascade: `spec-review-gate`, agent `spec-reviewer`. Same change in drunk.
+
 ## 2026-10-03 — PR-gate findings prove their failure; a PR never loosens its own checks; silent failures and migration safety (not live)
 
 Owner-approved, from the owner's review of github.com/affaan-m/ECC against this bundle.
