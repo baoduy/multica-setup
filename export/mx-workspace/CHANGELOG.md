@@ -4,6 +4,19 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-10-04 (n) — conditional skill sections move into references/, verbatim (not live)
+
+Owner's request; no policy amended. A SKILL.md loads on every run, a reference file only when
+its pointer's condition holds (github.com/affaan-m/ECC's context-budget rule). Only blocks
+needed in one situation moved, byte-identical, each replaced by one `Read references/<file>.md
+when <condition>` line; a script confirmed old SKILL.md = new SKILL.md with each pointer
+swapped back. `sdlc-flow-squad-leader-playbook` 36,144 → 29,117 bytes
+(`references/fix-loop-pattern.md`, `references/recovery-loop.md`);
+`sdlc-flow-po-orchestration` 43,950 → 39,347 (`references/workflow-d-standalone-infra.md`,
+`references/workflow-b-spec-drafting.md`, `references/infra-phase-creation.md`);
+`sdlc-flow-delivery-pipeline` 27,707 → 25,313 (`references/workflow-d-cicd-infra.md`).
+`pr-review-gate` had no conditional block worth moving. Files: those three skills.
+
 ## 2026-10-04 (m) — dev-backend pre-review before done (not live)
 
 Owner-approved, ported from drunk-workspace's 2026-10-03 (h). **Policy 01 v1.5**, statement

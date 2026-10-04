@@ -88,11 +88,7 @@ Apply `references/scoring-rubric.md`: category scores → weighted average → h
 A PR merges when the score is ≥ 8.5 with zero `blocking` findings. The caps already guarantee what that means — no `blocking` finding (a secret, a `critical` security finding, a base other than `dev` are all `blocking`), at most one open `important`, tests present. Nothing else holds a passing PR back, and nothing sends it to a human.
 
 - **CI still running.** Poll `gh pr checks` in the foreground every ~2 minutes, each call short, for up to 30 minutes in total. Still running after that → merge on score and state `CI: pending at merge (<check>)`. Never background the wait.
-- **CI red.** First re-run the failed jobs once (`references/github.md`) and wait for them the same way. Still red → decide who caused it:
-  - **Not caused by this PR** — you can show the same check red on `dev`'s head, the failure in a project or test the diff does not touch and does not reach (CodeGraph), or an infrastructure error (runner, checkout, network, cancelled run, a restore advisory on a package the diff does not change). No CI cap; merge on score; state `CI: red, not caused by this PR (<check>, <evidence>)`.
-  - **Coverage ratchet** — every red check is a coverage-ratchet check and the diff's own bar is met: no cap, no round spent, merge on score (rubric, coverage-ratchet exception).
-  - **Workflow fix** — the PR changes the workflow file(s) that produce the red check (a Workflow D CI/CD PR): state `CI: red by design (<check>)` and merge on score plus devops' `gh run` evidence on the branch.
-  - **Caused by this PR** — anything else: the rubric's CI cap applies and the verdict is REWORK. No evidence either way counts as caused.
+- Read `references/ci-red.md` when any CI check on the PR head is still red after the first re-run.
 - **CI absent** — merge on review score + cycle evidence; state `CI: none`.
 - **Coverage on changed lines.** Sources in priority order: CI artifact or `checks_conclusion` from `multica issue pull-requests <cycle-id> --output json` → coverage dev-backend measured and reported per touched class on the cycle's Build sub-task → a local test run. Measured below threshold → the rubric's cap. Unknown after all three → merge on score and state `Coverage: unknown (<why>)`. A diff with no coverable lines (config/docs, workflow YAML) is fine as it is.
 - **Draft PR or a failed `gh pr merge`** (late conflict, `dev` moved) → MERGE_FAILED to dev-leader, who owns PR mechanics; your score stands.
