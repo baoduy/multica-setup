@@ -4,6 +4,17 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-10-04 (b) — new monthly gate digest autopilot (not live)
+
+Owner's request; no policy amended. `📊 Monthly Gate Digest` (1st of the month, 09:00 SGT,
+`mx-jobs`, create_issue, `default`) runs a fixed `gate-digest.sh` over every review sub-task
+created in the last 30 days and reports, per gate, reviews, first-pass rate, reworked, mean
+rework rounds, escalated, median score and verdict counts from the `review_*` and
+`spec_review_*` metadata, plus the rule-ids and severity tags most cited in the comments of
+reworked sub-tasks. Report only: it proposes nothing. First run, 2026-09-04 to 10-04: PR gate
+35 of 51 first-pass (13 DEFERRED to a human), spec gate 12 of 14. Same digest in drunk, as part
+3 of its monthly insights autopilot. Files: `autopilots/monthly-gate-digest.*`, `manifest.json`.
+
 ## 2026-10-04 — a spec-gate finding names its consequence (not live)
 
 Owner-approved. **Policy 04 v1.6**, new statement 3a: a `blocker` or `major` finding names its
