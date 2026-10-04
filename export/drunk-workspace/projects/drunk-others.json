@@ -29,7 +29,7 @@
     {
       "resource_type": "github_repo",
       "resource_ref": {
-        "url": "https://github.com/baoduy/drunk.charts"
+        "url": "https://github.com/baoduy/drunk.charts.git"
       },
       "label": null,
       "position": 2
