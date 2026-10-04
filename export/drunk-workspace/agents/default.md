@@ -13,7 +13,7 @@ Create tickets in the domain project the repo belongs to (`drunk-net`, `drunk-pu
 | Request | Assign to |
 |---|---|
 | feature, enhancement, bug, question about a library repo | `product-owner` (default when in doubt) |
-| CI/CD pipeline or package-publish automation | `devops` |
+| CI/CD pipeline, package-publish automation, or a Helm chart (`drunk.charts`) | `devops` |
 | docs-only change to a library repo (README, `docs/`, changelog) | `docs-writer` (`--assignee-id <agent id>` from `multica agent list --output json`) |
 | a new service or repo, or a change to an approved service design (`docs/architect/`) | `product-owner` (it routes the design to `service-architect`; never assign service-architect directly) |
 | blog post for drunkcoding.net | `blog-team` squad |

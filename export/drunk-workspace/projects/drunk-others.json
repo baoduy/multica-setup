@@ -25,6 +25,14 @@
       },
       "label": null,
       "position": 1
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/baoduy/drunk.charts"
+      },
+      "label": null,
+      "position": 2
     }
   ],
   "description_file": "projects/drunk-others.description.md"

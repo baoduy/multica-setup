@@ -190,7 +190,6 @@
         "dknet-ddd-conventions",
         "docker-image-standards",
         "dotnet10-efcore10-standards",
-        "helm-k8s-conventions",
         "nodejs-typescript-standards",
         "pulumi-azure-iac-standards",
         "python-mcp-standards",
@@ -256,6 +255,7 @@
         "blocker-report",
         "codegraph",
         "compose-delivery",
+        "helm-k8s-conventions",
         "sdlc-flow-delivery-pipeline",
         "sdlc-flow-squad-worker-playbook",
         "sdlc-gitflow"

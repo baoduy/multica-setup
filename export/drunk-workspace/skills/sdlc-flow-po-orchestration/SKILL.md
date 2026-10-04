@@ -11,7 +11,7 @@ Classify on what the request asks you to CHANGE, not on its label, and reclassif
 | question about the platform, or a defect to root-cause | **A** → confirmed bug: root handed to dev-team |
 | feature or enhancement to a library repo | **B** → C |
 | docs a human asked for (README, `docs/`, guides, changelog; no source, no test surface) | **E** → `[P<num>-1] Docs` to docs-writer + `[P<num>-1c]` to pr-reviewer |
-| CI/CD pipeline or build/publish automation | **D** |
+| CI/CD pipeline, build/publish automation, or any Helm chart change (`drunk.charts`), feature or bug — label `cicd`, prefix `[CICD]` | **D** |
 | a service or repo that does not exist yet, or a change to an approved service design (`docs/architect/`) | **F** → `[P<num>-1] Design` to service-architect + `[P<num>-1c]` to pr-reviewer |
 | delivery of an approved SPEC (Workflow B only) | **C** |
 
@@ -48,7 +48,7 @@ No deliverable while any open question remains. Load `interview-me` and `multica
 1. Research and reproduce. Find the root cause at the layer all callers route through, never the symptom path the ticket names. A ticket that already carries `bug-report` sections is a hypothesis to confirm or refute, not a diagnosis.
 2. Post the root-cause report in the `blocker-report` skill's root-cause shape (RESULT with confidence first, EVIDENCE table with `file:line`, AFFECTED, LEFT OPEN), written for the requester: short sentences, everyday words, the answer before the reasoning. The **confidence 0–100%** is calibrated: reproduced plus code-level cause is high; unreproduced or possibly by design is low. Never inflate to skip the human.
 3. Gate: pure question → the report ends the workflow. **≥90%** → hand the ROOT ticket to dev-team: `multica issue update <root-id> --assignee-id <dev-team squad id> --status todo` (the root-cause report is the brief; dev-leader runs the cycle up to the merge into `dev`, then hands the root back to you for the release as a bundle root, or finalizes it `in_review` when nothing republishes), plus ONE FYI comment to the requester (member mention: root cause, confidence, "fix delegated, reply to halt"). No `[P<num>-1]` for a bug; its only phase is the `[P<num>-2]` you stage when it comes back. **<90%** → ask the requester to confirm; delegate nothing until they do; on confirmation hand the root to dev-team the same way.
-4. A root cause in a pipeline or build script is Workflow D, whatever the confidence.
+4. A root cause in a pipeline, a build script or a Helm chart is Workflow D, whatever the confidence.
 5. A spec is written only if the requester asks for one; it then passes the gate like any Workflow B spec.
 
 ## Workflow B — feature spec
@@ -75,7 +75,7 @@ After the spec gate passed. Bugs never come here: they are handed to dev-team as
    - A phase `blocked` or reporting failure → never promote past it; resolve on that phase ticket with its owner's mention, or escalate to the requester on the root.
 3. Anything unusual (a duplicate phase, the root flipped `done` by a human, a leftovers-shaped ticket, a squad rejecting a multi-repo phase) → `references/workflow-c-edge-cases.md`.
 
-## Workflow D — CI/CD and build automation
+## Workflow D — CI/CD, build automation and Helm charts
 
 `devops` owns this end to end; you never spec it, never route it through dev-team or release-manager, and never open a spec gate. Two exits, chosen by what the requester asked for:
 

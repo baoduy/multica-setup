@@ -25,6 +25,7 @@
     "blocker-report",
     "codegraph",
     "compose-delivery",
+    "helm-k8s-conventions",
     "sdlc-flow-delivery-pipeline",
     "sdlc-flow-squad-worker-playbook",
     "sdlc-gitflow"

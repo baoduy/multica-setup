@@ -169,7 +169,7 @@ Description template — implements shared `bug-report` contract (that skill's t
 <smallest change that resolves it — you read code, so state it plainly; prefix `HYPOTHESIS:` only when unverified>
 
 ## Suggested owner
-<dev-team (library/test code, default) · devops (workflow/pipeline/publish) — one line of reasoning derived from Scope; triager decides, this is routing hint>
+<dev-team (library/test code, default) · devops (workflow/pipeline/publish, Helm chart) — one line of reasoning derived from Scope; triager decides, this is routing hint>
 
 ## Enforcement
 <one of: architecture test added in PR #N | baseline test added, this file is on allow-list | judgement call, not mechanically checkable>

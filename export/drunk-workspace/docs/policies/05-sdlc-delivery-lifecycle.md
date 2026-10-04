@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-05 |
-| **Version** | 1.22 |
+| **Version** | 1.23 |
 | **Status** | Active |
 | **Owner** | product-owner |
 | **Applies to** | Every ticket that flows through the drunk software factory |
@@ -31,7 +31,7 @@
    MAIN TICKET done — TERMINAL. No SANDBOX, no BDD stage, no deploy: publishing IS release.
 
    BUG (A): research ─▶ root-cause + confidence  ≥90% auto-delegate C · <90% requester confirms
-   CI/CD (D): devops only — no spec gate, but still 🦅 PR GATE on the standalone chore/<key> PR
+   CI/CD + HELM (D): devops only — no spec gate, but still 🦅 PR GATE on the standalone chore/<key> PR
    DOCS (E):  docs-writer only, and only when a human asks — no spec gate, 🦅 PR GATE on the standalone docs/<key> PR
    DESIGN (F): new service only — 🦊 clarify → empty repo → service-architect's design/<key> PR → 🦅 PR GATE → 👤 owner approves → merge
 
@@ -49,8 +49,8 @@ image IS the release. There is no SANDBOX, no PRD, no promotion beyond `main`.
 ## Scope
 
 All six workflows: **A** bug/question, **B** feature/enhancement spec, **C**
-orchestrated delivery (the shared implementation → release tail), **D** CI/CD & build
-automation, **E** docs on request, **F** new-service design. All drunk repos: `DKNet` family, `DKNet.Templates`, `drunk-pulumi-*`,
+orchestrated delivery (the shared implementation → release tail), **D** CI/CD, build
+automation & Helm charts, **E** docs on request, **F** new-service design. All drunk repos: `DKNet` family, `DKNet.Templates`, `drunk-pulumi-*`,
 `drunk-others` (Python MCP, Docker, Helm).
 
 ## Actors
@@ -67,7 +67,7 @@ dev-team cycle writes no docs pages (statement 3a).
 **pr-reviewer** — the automated PR review + merge gate for every `dev`-bound PR (dev-team's
 cycle PR and the standalone PRs of devops, docs-writer and service-architect). **release-manager** — owns the single
 `dev`→`main` release PR and its merge; the only agent that ever targets `main`. **devops**
-— CI/CD pipelines and build/publish automation, outside the squad flow, no spec gate.
+— CI/CD pipelines, build/publish automation and Helm charts, outside the squad flow, no spec gate.
 **docs-writer** — library and API feature docs, written only when a human asks for them,
 outside the squad flow, no spec gate.
 **service-architect** — the design of a new service, before its first code (Workflow F),
@@ -84,7 +84,7 @@ delegated by product-owner only, no spec gate; its PR merges only on the owner's
 
 2a. **dev-team's delivery ends at the merge into `dev`.** dev-team never stages a release and never opens or merges a `dev`→`main` PR, on any cycle shape; release-manager is not a dev-team member. On a phase cycle the release is product-owner's `[P<num>-2]`. On a root cycle (a bug from statement 2 or a requester's direct ticket) whose change a package consumer can observe, dev-leader posts its completion report once the PR is merged into `dev` and reassigns the root to product-owner at `todo`. product-owner runs the release as for a bundle root — ONE `[P<num>-2] Release` for release-manager — and flips the root `done`. A root cycle with nothing to republish, or a cycle whose ticket has a parent, ends with dev-leader's finalize and no release; the root's report says `no republish: <reason>`. A duplicate root ends `cancelled`, closed by dev-leader in favour of the older ticket ([Policy 07](07-bug-and-defect-management.md) statement 8a). Prompted by DRK-1951 (2026-10-01), whose bug cycle shipped its own release (`[D1951-4]`, release PR #508) inside dev-team.
 
-3. **CI/CD flow (D):** pipelines and build/publish automation are `devops` work — never enter the dev-team cycle, never open a spec gate, and never trigger a `[P<num>-2]` release phase on their own. Two doors: **direct** (requester assigns devops; product-owner stays out) or **delegated**, classified into **D1** analysis-only (report + STOP, requester decides) or **D2** change-requested (`[P<num>-1]` to devops → `[P<num>-1c]` PR review to pr-reviewer). Unlike a sibling factory's Helm/GitOps carve-out, a **standalone devops PR to `dev` gets the same `pr-review-gate` merge, not a human-only merge** — there is no deploy act to reserve for a human here.
+3. **CI/CD flow (D):** pipelines, build/publish automation and Helm chart changes (`drunk.charts`: templates, values, `helm-unittest` tests and the `Chart.yaml` version bump, proven per [Policy 02](02-testing-and-quality.md) statement 1d) are `devops` work — never enter the dev-team cycle, never open a spec gate, and never trigger a `[P<num>-2]` release phase on their own. Two doors: **direct** (requester assigns devops; product-owner stays out) or **delegated**, classified into **D1** analysis-only (report + STOP, requester decides) or **D2** change-requested (`[P<num>-1]` to devops → `[P<num>-1c]` PR review to pr-reviewer). Unlike a sibling factory's Helm/GitOps carve-out, a **standalone devops PR to `dev` gets the same `pr-review-gate` merge, not a human-only merge** — there is no deploy act to reserve for a human here. devops validates a chart locally only (`helm lint`, `helm template`, `helm unittest`, the repo's verify scripts); it never runs `helm install`, `helm upgrade` or `helm push` and never deploys.
 
 3a. **Docs flow (E): docs are written when a human asks, never every cycle.** A docs-only change to a library repo (README, `docs/`, guides, changelog; no source, no test surface) is `docs-writer` work — it never enters the dev-team cycle, never opens a spec gate and never triggers a release. Two doors, like Workflow D: **direct** (the requester or Mika assigns `docs-writer` straight away; product-owner stays out) or **delegated** (product-owner clarifies, then creates `[P<num>-1] Docs: <scope>` to docs-writer and `[P<num>-1c] Review docs PR: <scope>` to pr-reviewer). docs-writer lands ONE `docs/<issue-key>` PR to `dev`, which pr-reviewer scores and merges like devops' PR. The moment the change touches source or tests it is Workflow B. **A dev-team cycle writes no docs pages:** in-code API comments and, for a breaking change, the `Breaking` changelog entry naming the replacement ([Policy 01](01-coding-standards.md) statement 12) ship in dev-backend's Build; dev-leader's final report lists every doc page the change made stale under `Docs impact:` (or `Docs impact: none`), so the owner can ask for them. **Every repo carries one runtime architecture diagram.** It lives at `docs/diagrams/runtime.architecture.json` plus its render `docs/diagrams/runtime.svg`, linked from the repo-root README: an archify `architecture` diagram of 8–12 core components, one primary path, the external dependencies and the trust boundaries, with supporting detail in cards instead of more edges (docs-writer's procedure holds the drawing prompt). The owner's standing order (2026-09-30) is the human ask for it: the owner or Mika files a `[Docs]` root ticket for a repo that lacks one, and a dev-team cycle that adds or removes a component, an external dependency or a trust boundary names the diagram under `Docs impact:`. docs-writer never adds it to a ticket that did not ask for it. A new service's runtime architecture is defined in its design (statement 3c, [Policy 06](06-requirements-and-spec.md) statement 14) and binds like the rest of it; the first docs ticket after the scaffold draws the code-derived diagram at `docs/diagrams/` and reports every divergence from the design's as a design question, never a silent redraw.
 
@@ -112,7 +112,7 @@ delegated by product-owner only, no spec gate; its PR merges only on the owner's
 | `[Enhance]` | `feature` | a change to behaviour that already exists |
 | `[Bug]` | `bug` | a reported defect |
 | `[Question]` | `question` | a question with no change wanted |
-| `[CICD]` | `cicd` | a pipeline or build-script change |
+| `[CICD]` | `cicd` | a pipeline, build-script or Helm chart change |
 | `[Docs]` | `docs` | a docs-only change |
 | `[Design]` | `design` | a new service's design, before its first code |
 
@@ -148,7 +148,7 @@ The label stays the source of truth — `[Feature]` and `[Enhance]` both carry t
 - Feature: spec approved → PR merged into `dev` with a pr-reviewer score → `dev`→`main` release PR merged → package/image published by CI → main ticket `done` with a final summary. No SANDBOX/BDD stage is ever inserted.
 - Feature delivered as a sub-issue: spec approved → PR merged into `dev` with a pr-reviewer score → sub-issue `done` with a final summary naming the parent as release owner. No release PR, no publish — both belong to the parent.
 - Bug: root-cause report posted with a calibrated confidence; delegation (or requester confirmation) recorded before any Workflow C work starts; dev-team's PR merged into `dev`; then either the root handed back to product-owner, `[P<num>-2]` merged and the root `done`, or the root `in_review` with `no republish: <reason>`. No `[D<num>-n] Release` sub-task exists.
-- CI/CD: devops' PR merged into `dev`; main ticket `done` with a plain summary; no `[S#]` and no `[P<num>-2]` ever created for this flow.
+- CI/CD and Helm chart: devops' PR merged into `dev`; main ticket `done` with a plain summary; no `[S#]` and no `[P<num>-2]` ever created for this flow.
 - Docs: docs-writer's PR merged into `dev`; main ticket `done` with a plain summary; no `[S#]`, no `[P<num>-2]`, and no Docs sub-task in any dev-team cycle.
 - Service design: service-architect's PR merged into `dev` on the owner's reply A; main ticket `done` with a plain summary linking the design; no `[S#]` and no `[P<num>-2]`.
 - Every stage transition leaves exactly one promotion comment in the completion shape; no stranded children (every `blocked` child has a dispatched `## BLOCKER` comment).
@@ -172,7 +172,7 @@ playbook; squad members follow the worker playbook. Branch authority is enforced
 - A sub-issue never gets a `[P<num>-2]` release phase, whatever a package consumer can
   observe — the parent releases its children together.
 - Workflow D never gets a `[P<num>-2]` release phase — a CI/CD change to build/publish
-  workflows never triggers a package release on its own; if one is warranted, the
+  workflows or a Helm chart change never triggers a package release on its own; if one is warranted, the
   requester files it separately.
 
 ## References

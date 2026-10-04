@@ -118,8 +118,8 @@ Re-read it with fresh eyes and fix inline — one pass, no loop:
 
 The approved design is input to the delivery pipeline, never a licence to implement. Shared contract: `sdlc-flow-delivery-pipeline`. Your terminal step depends on your role:
 
-- **product-owner** — the design becomes the main-ticket spec. Feature or enhancement → spec-review gate, then Workflow C once APPROVED. CI/CD → Workflow D, straight to `devops`, no spec gate. A new service → Workflow F: the settled brief goes to `service-architect` as `[P<num>-1] Design`, no spec gate. You stay read-only on code throughout.
-- **platform assistants (`default`, `claude_ultra`) and Mika** — you never spec or implement. Stop at the confirmed intent (`interview-me` step 4), write it into the ticket you file, and route per your own routing rules: product work to `product-owner` (a new service's design included), CI/CD to `devops`, docs to `docs-writer`.
+- **product-owner** — the design becomes the main-ticket spec. Feature or enhancement → spec-review gate, then Workflow C once APPROVED. CI/CD or a Helm chart → Workflow D, straight to `devops`, no spec gate. A new service → Workflow F: the settled brief goes to `service-architect` as `[P<num>-1] Design`, no spec gate. You stay read-only on code throughout.
+- **platform assistants (`default`, `claude_ultra`) and Mika** — you never spec or implement. Stop at the confirmed intent (`interview-me` step 4), write it into the ticket you file, and route per your own routing rules: product work to `product-owner` (a new service's design included), CI/CD and Helm charts to `devops`, docs to `docs-writer`.
 
 Mention only the requester in a dialogue comment. Never mention another agent there: every agent mention link enqueues a run, even a quoted one.
 
