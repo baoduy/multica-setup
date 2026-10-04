@@ -65,7 +65,7 @@ Copy from `# <TICKET-ID>` down, fill it in, delete guidance blockquotes, and wri
 
 > Delta and nothing but delta. One row per unit of work, ordered so each row compiles on top of previous one. This is agent's task list, and the reuse/modify/add decision itself — made from CodeGraph research, see the delta markers above.
 
-**Every edge case you name anywhere in this brief must bind as a §3 row.** A `[Flags]` combination, a non-finite value, an out-of-range input, a null element, a platform difference, an ordering requirement — if you mention it in §5, §6, §9 or a prose note, then §3 carries a row requiring a fact for it, or an explicit `no fact — reason: <why>`. Prose is not binding and the implementer is not wrong to skip it: DRK-1211 §6 named the `[Flags]` combination, §3 did not require a test, it shipped untested and came back as DRK-1213.
+**Every edge case you name anywhere in this brief must bind as a §3 row or a §6a input-domain row.** A `[Flags]` combination, a non-finite value, an out-of-range input, a null element, a platform difference, an ordering requirement — if you mention it in §5, §6, §9 or a prose note, then §3 carries a row requiring a fact for it, or an explicit `no fact — reason: <why>`. Prose is not binding and the implementer is not wrong to skip it: DRK-1211 §6 named the `[Flags]` combination, §3 did not require a test, it shipped untested and came back as DRK-1213. §6a is mandatory for every guard, default, mapping or external call §3 changes (Policy 06 statement 10a) — delete the section only when §3 changes none of those.
 
 **Never prescribe a test's shape without naming the mutation it must catch.** A §3 row that dictates how a guard is written owns that guard's defects. Write it as "assert X such that deleting Y turns the suite red", never as a literal assertion to copy: DRK-1214 §3 row 6 prescribed a `\r` guard the CI host satisfied by itself, so deleting the normalisation it guarded left the suite green — the reviewer traced that defect to the brief, not the implementer (DRK-1223).
 
@@ -128,7 +128,13 @@ Copy from `# <TICKET-ID>` down, fill it in, delete guidance blockquotes, and wri
 |---|---|
 | R1 | `<if … then …>` |
 
-**Edge cases to handle explicitly:** `<null / empty / boundary / concurrent / already-in-that-state>`
+**Edge cases:** see §6a for every guard/default/mapping/external-call input class; name here only what §6a's columns don't cover (`<concurrent / already-in-that-state>`).
+
+## 6a. Input domain (Policy 06 statement 10a; one row per input class of every guard, default, mapping or external call §3 changes; delete if §3 changes none)
+
+| # | Changed at | Input class | Expected | Proof |
+|---|---|---|---|---|
+| D1 | `<symbol>` | empty · null · each enum/option member · display/code form · unknown · boundary · failure `<exception / IResultBase error>` | `<result>` | `<scenario or test name>` |
 
 ## 7. Acceptance criteria
 
@@ -194,6 +200,7 @@ Feature: <name>
 - [ ] `<migration applied and reversible / OpenAPI regenerated / docs updated>`
 - [ ] Every §4 constraint respected
 - [ ] Standards row: stack skills opened, rule-ids checked (the header's at-risk ones first), reuse search per new public symbol, SRP and DRY measured, SOLID at the boundaries crossed, vendor docs cited for a new framework API (member-protocol check 8, Policy 01 statement 17)
+- [ ] Every §6a input-domain row has its proof: an acceptance scenario or a named test (Policy 06 statement 10a)
 - [ ] Pushed to cycle's feature branch (not an `agent/...` branch), sub-task set `done`
 
 ## 9. Ask, do not assume

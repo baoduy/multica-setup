@@ -4,6 +4,42 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-10-04 (m) — dev-backend pre-review before done (not live)
+
+Owner-approved, ported from drunk-workspace's 2026-10-03 (h). **Policy 01 v1.5**, statement
+17 gains ONE fresh-context subagent — a mini PR gate — before every `Build:` sub-task (any
+mode) and every `Fix (review):` sub-task reports done: it reviews the diff against the
+brief the way the PR gate will (brief conformance, correctness on the §6a input domain,
+security, test strength, standards, comments), the implementer fixes every
+`blocking`/`important` finding in the same run or declares it LEFT OPEN, and reports one
+`Pre-review` row that stands in for self-review checks 4, 5 and 8. A missing `Pre-review`
+row is a `nit` at the gate (Policy 04 statement 4), same treatment as a missing Standards
+row; only a row claiming a fix the diff does not hold is `important`. mx has no
+`build-ui`/Pulumi surface and no separate CI-parity change to port (mx already shipped its
+own in 2026-10-03, entry (i) upstream/88289c0 here) — this port is pre-review only.
+**Policy 09 v1.10**: dev-backend's charter responsibilities gain the pre-review clause.
+Evidence (26 of 28 rework rounds held only findings an earlier check could have caught) is
+drunk-workspace's 2026-09–10-02 measurement; mx has not independently measured its own
+rate. Cascade: `sdlc-flow-squad-member-protocol` (self-review intro/outro, checks-per-type
+line, new `references/pre-review.md`), `pr-review-gate` (pass 5 Standards bullet),
+`sdlc-flow-squad-leader-playbook` (Review & verification send-back list),
+`agents/dev-backend.md` (Build step 7, Done means, Rework from review),
+`test-driven-development` (Verification list).
+
+## 2026-10-04 (l) — brief §6a input-domain table (not live)
+
+Owner-approved, ported from drunk-workspace's 2026-10-03 (j). **Policy 06 v2.4**, new
+statement 10a: every changed guard, default, mapping and external call gets a §6a table
+row for each input class it must handle — empty/null collections, every enum/option
+member, both forms of a two-form value, the unknown value, range boundaries, and every
+failure (exception or `IResultBase`) the call can raise — each with its expected result and
+proof (an acceptance scenario or a named test). Prose elsewhere in the brief does not bind.
+Cascade: `sdlc-impl-brief` (new §6a section, §6 pointer, §3 writing-rule sentence, §8
+Done-when checkbox), `sdlc-flow-squad-leader-playbook` (Decomposition rules, new bullet),
+`test-driven-development` (Author step, "cannot fail" bullet, Verification list). Evidence
+(DRK-1842, DRK-1834, DRK-1985, DRK-1851, DRK-1934, each an input the brief never named,
+costing a rework round) is drunk-workspace's; mx has not independently measured this gap.
+
 ## 2026-10-04 (k) — independent surfaces build in parallel against one frozen test set (not live)
 
 Owner-approved, ported from drunk-workspace's 2026-10-03 (k), adapted to mx: mx already ran

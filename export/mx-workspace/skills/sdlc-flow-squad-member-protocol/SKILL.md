@@ -80,7 +80,7 @@ layers squad conventions on top of it and never contradicts it.
 
 ## Self-review before you report done
 
-The review gate is not where your own defects should surface. Once the code is pushed and the suite is green, review your own diff as if someone else wrote it — read `git diff origin/<base-branch>...HEAD` end to end, not your memory of what you changed — then carry the result into the completion report.
+The review gate is not where your own defects should surface. Once the code is pushed and the suite is green, review your own diff as if someone else wrote it — read `git diff origin/<base-branch>...HEAD` end to end, not your memory of what you changed — then carry the result into the completion report. The review gate runs all of this again, so each finding you fix here is a rework round you do not spend. On a `Build:` sub-task (any mode) or a `Fix (review):` sub-task, checks 4, 5 and 8 run inside ONE fresh-context subagent instead of inline — the **pre-review**, a mini PR gate (`references/pre-review.md`, Policy 01 statement 17). qc-team's own sub-tasks carry no `Build`/`Fix (review)` of this shape and never run it.
 
 Nine checks. All cheap, and all of them things the review gate WILL run anyway:
 
@@ -104,9 +104,9 @@ Nine checks. All cheap, and all of them things the review gate WILL run anyway:
    The row: `Standards | <skills opened> | rule-ids checked: <ids> | reuse: <symbol → reused X / none found> | SRP: largest class <n> lines, method <n> lines / complexity <n>, ctor <n> deps | DRY: <none / merged file:line> | docs: <n/a / url>`.
 9. **CI parity** (Build and `Fix (review):` sub-tasks only; Policy 02 statement 10). Before your last push: `git fetch origin dev`, then `git switch -C parity-check && git merge --no-edit origin/dev` (a scratch branch — never push it, never rebase the shared feature branch). A merge conflict → `git merge --abort`, report it in the row, leave it to the leader (`leader-gitops`). From the repo root, run every `pull_request` workflow step that runs locally (`.github/workflows/*.yml`): restore, build, test, and — where the workflow builds a container on `pull_request` — `docker build` with no push. A step that needs a secret, upload, publish or deploy, or a Docker daemon your runtime does not have, is `not local: <step>` — a declared boundary, not a skip. A red you caused is yours to fix; a red also red on `origin/dev` is noted with that proof. Then `git switch -` back to your branch and `git branch -D parity-check`. The row: `CI parity | <workflow>: <step> ✓, … · not local: <steps> | merged with origin/dev <sha>`. Never report any check as skipped or deferred — a check that cannot run is `blocked` with the reason, or the manual fallback its own rule names.
 
-Then report it. EVIDENCE carries one row per check with its measured result — the mutation you ran and what went red, the per-branch numbers, the grep outcome. Anything a check found that you could NOT fix inside §3 goes in LEFT OPEN with `file:line`: that is the line the reviewer reads, and a self-review finding declared there is never held against the cycle. A completion report with no self-review rows is an unfinished turn.
+Then report it. EVIDENCE carries one row per check with its measured result — the mutation you ran and what went red, the per-branch numbers, the grep outcome — plus the `Pre-review` row on a `Build:`/`Fix (review):` sub-task. Anything a check or the pre-review found that you could NOT fix inside §3 goes in LEFT OPEN with `file:line`: that is the line the reviewer reads, and a self-review finding declared there is never held against the cycle. A completion report with no self-review rows is an unfinished turn.
 
-**Docs and config sub-tasks run checks 4–6 only; Acceptance-tests sub-tasks run 2, 4–6; Build and `Fix (review):` sub-tasks run all nine.** There is nothing to mutate in a README.
+**Docs and config sub-tasks run checks 4–6 only; Acceptance-tests sub-tasks run 2, 4–6; Build (any mode) and `Fix (review):` sub-tasks run all nine, with 4, 5 and 8 folded into the pre-review.** There is nothing to mutate in a README.
 
 ## Finishing task
 

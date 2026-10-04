@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | MX-POL-06 |
-| **Version** | 2.3 |
+| **Version** | 2.4 |
 | **Status** | Active |
 | **Owner** | product-owner (spec) · dev-leader (implementation brief) |
 | **Applies to** | Every feature spec and every dev sub-task brief |
@@ -67,6 +67,8 @@ report instead of a spec unless the requester asks for one (see [Policy 07](07-b
 8. **QC Scope (§5 preamble)** is exactly one `Ships this cycle:` line and one `BDD integration tests: required` / `... : waived — <reason> (basis: <requester | product-owner judgment | repo note>, <date>)` line, agreeing with the `ship_required`/`bdd_required` metadata and with each other. The BDD-integration waiver, and any SANDBOX-suite waiver on the money/identity path (`monxa.payment-gateway`, `monxa.auth-api`), is the requester's decision — product-owner may never waive those on its own judgment.
 9. **Clarify to zero open questions before writing** — never ask what the code answers; run the dialogue with [`interview-me`](../../skills/interview-me/SKILL.md) and [`multica-brainstorming`](../../skills/multica-brainstorming/SKILL.md). Each round is ONE numbered comment mentioning the requester, every question carrying product-owner's best guess. Before any spec, ONE spec-preview comment (summary, done means, rules with examples, contract, placement, not in this change, decisions) waits for the requester's written approval. Only a written reply answers: a status move, a resolved thread or silence confirms no guess — the requester is interviewed, never guessed at. The role skill's procedure still owns the spec's shape and location. §4 Scope carries zero unresolved questions.
 10. **Implementation brief (`sdlc-impl-brief`) is the layer below the spec** — dev-leader's translation into a task list against real code (Goal · Current state · Change set · delta markers KEEP/MODIFY/EXTEND/NEW/REMOVE). Every §3a row is covered by a Change set row, and the Change set honours every §3b line; a field or endpoint needed beyond §3a is dev-leader's own row, and one that would change what §3a agreed, or the §3b placement, goes back to product-owner on the ticket instead of landing quietly. It carries the code-level detail the spec omits, never restates the business spec, and owns the reuse/modify/add decision end to end (`REUSE`/`KEEP` grounded in CodeGraph, `NEW` a ceiling, `REMOVE` the only authority to delete a public member, endpoint, config key, column or table).
+
+10a. **Every changed guard, default, mapping and external call names its input domain.** For each one the brief's §3 changes, its §6a table lists every class of input it must handle, with the expected result and its proof (an acceptance scenario, or a named test added in Build). The classes: empty and null collections; every enum or option member, including one the spec never mentions; both forms of a value that has two (display/code, cased/normalised); an unknown or unlisted value and what happens to it; the boundary values of a range; and every failure the changed external call can raise or return (a thrown exception, or a failed `IResultBase`). Prose does not bind this — a case named only in §6 or §9 and not carried into a §6a row is not proven.
 
 ## Definition of Done / compliance
 
