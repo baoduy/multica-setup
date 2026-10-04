@@ -54,12 +54,15 @@ A "no" demotes the finding to `nit` or drops it. A review with no finding above 
 
 These never lower a real defect: a finding that passes the proof check keeps its severity, pre-existing or not (Severity is impact, never novelty).
 
+**Self-review rows** (Policy 04 statement 4): a Build EVIDENCE row that is missing or carries no measured value is a `nit` — measure the point yourself and score what you find. A row the diff or CI contradicts is `important`. No mutation evidence at all is the cap below, not a row finding; the coverage number and, on `monxa.bdd-integration`, the per-scenario pass/fail table are unaffected — an unknown coverage figure is the auto-merge precondition failing (APPROVAL DEFERRED), never a nit.
+
 ## Hard caps (applied AFTER the weighted average)
 
 | Condition | Cap |
 | --- | --- |
 | Any `blocking` finding anywhere | 6.9 max (forces REWORK) |
 | Any `critical` security finding (exploitable, secret, authz bypass) | 3.0 max |
+| Two or more open `important` findings anywhere, no `blocking` | 8.4 max |
 | No tests for new/changed behavior | 6.5 max |
 | A check loosened without the ticket asking for it: a repo-wide analyzer, lint, coverage or mutation setting lowered, or a CI step deleted, skipped or made non-failing (Policy 04 statement 4a) | 6.9 max (`blocking`) |
 | Approved acceptance test modified or deleted after `at_sha` (drift check non-empty) without a leader re-pin | 6.9 max (`blocking`; forces REWORK — the fix is to restore the scenario and make it pass, or take it to the leader) |
@@ -67,7 +70,7 @@ These never lower a real defect: a finding that passes the proof check keeps its
 | No mutation evidence on touched classes with new logic (neither tool report nor manual run stated) | 7.9 max |
 | CI failing | 6.9 max (coverage-ratchet exception below) |
 | Coverage on changed lines measured BELOW threshold (default 80%) | 7.9 max (forces REWORK: dev-backend's bar is measurable and fixable) |
-| Docs-only / comment-only / typo-fix PR with green CI | floor of 9.0 (fast-path; preconditions still apply) |
+| Docs-only / comment-only / typo-fix PR with green CI | floor of 9.0 (fast-path; preconditions still apply; caps beat the floor) |
 
 Coverage UNKNOWN (no artifact, tests not cheaply runnable) is NOT a cap — it fails the auto-approve precondition instead, so a ≥ 8.5 PR lands on APPROVAL DEFERRED and a human decides.
 
@@ -79,11 +82,11 @@ There is no human-review middle band: **≥ 8.5 → APPROVED** (or APPROVAL DEFE
 
 ## Calibration anchors
 
-Worked from the weights above: one `important` costs 2 × weight (0.1–0.5 points), one `blocking` costs 4 × weight (0.2–1.0 points) before its cap. There is no cap on the count of `important` findings, so the score alone stays at or above 8.5 until the `important` findings cost more than 1.5 points — at least four of them. What keeps an in-scope `important` from merging is the scope rule, not the score: in-scope findings are never merged past (Policy 04 statement 7), so each one takes a rework round.
+Worked from the weights above: one `important` costs 2 × weight (0.1–0.5 points), one `blocking` costs 4 × weight (0.2–1.0 points) before its cap. Nits alone, maxed at −1.5 in every one of the seven categories at once, bottom out at exactly 8.5 — still a pass.
 
-- **9.5–10** — Small, focused, spec-linked change; tests included; zero findings above `nit`, and every in-scope `nit` already cleared by a polish round before merge (an open in-scope `nit` at merge time is not a 9.5, it is an unfinished cycle).
-- **9.5–9.9** — Correct, safe, covered; exactly one `important` finding (Correctness 9.5 · Security or Testing 9.6 · Architecture & design 9.7 · Spec conformance 9.8 · Style or AI-slop 9.9). Above the bar on arithmetic; in-scope, it still takes a rework round before merge.
-- **9.0–9.8** — Two `important` findings and no `blocking`: 9.0 when both land in Correctness (10 → 6, −1.0), 9.8 when they land in the two 5% categories (−0.2). Same rule: they are closed in a rework round before merge.
+- **9.5–10** — Small, focused, spec-linked change; tests included; zero findings above `nit`. Its open `nit`s merge with it, named under `Merged with:` (there is no polish round, Policy 04 statement 7).
+- **8.5–9.9** — Correct, safe, covered; exactly one `important` finding. Alone it scores 9.5 (Correctness) to 9.9 (Style or AI-slop); `nit`s elsewhere can pull it down, and below 8.5 it is REWORK. At or above 8.5 it merges, named under `Merged with:`.
+- **8.4** — Two or more `important` findings and no `blocking`: the cap sets the score. The arithmetic alone would give 9.0 (both in Correctness) to 9.8 (one each in the two 5% categories) — above the approve bar, which is why the cap exists: without it a PR carrying two or three importants would merge on score alone.
 - **7.9** — Coverage on changed lines below threshold, or no mutation evidence on touched classes with new logic: the cap sets the score.
 - **6.9 / 6.5** — Any `blocking` finding, CI failing, or approved-AT drift: 6.9. No tests for new or changed behaviour: 6.5. The cap sets the score; one `blocking` alone would compute to 9.0–9.8.
 - **≤ 6.0** — Several categories collapsed, e.g. Correctness 2 (−2.0), Security 2 (−1.6), Testing 8 (−0.4) → 6.0.

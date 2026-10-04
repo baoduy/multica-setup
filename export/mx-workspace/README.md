@@ -380,7 +380,7 @@ big picture.*
   │   ├── loops     rework, max 3 rounds
   │   │   ├── ⟲ AT rejected / wrong ─▶ re-arm [D#-1] ─▶ 🔨 (never edited in build)
   │   │   └── ⟲ [D#-3] rework    ─▶ ONE Fix ─▶ 🔨   ⛔ 3 rounds ─▶ 👤 owner
-  │   ├── done      ✅ 🦅 merges into dev · leftovers ─▶ ONE follow-ups ─▶ 🦊
+  │   ├── done      ✅ 🦅 merges into dev · in-scope leftovers ─▶ Merged with: (no ticket) ─▶ 🦊
   │   └── ═══ barrier · wakes 🦊 — verifies the merged PR + review score ═══
   │
   ├── ⑤  RELEASE — 🐳 release-manager

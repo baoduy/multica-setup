@@ -4,6 +4,63 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-10-04 (e) — a missing self-review row is a `nit`, not a rework round (not live)
+
+Owner-approved, ported from drunk's 2026-10-03 (c). **Policy 04 v1.8**, statement 4; **Policy
+01 v1.4**, statement 17: a Build EVIDENCE row — the mutation report, per-branch hits, the
+assertion-fragment grep, the drift-check output, the added-tests list, or the Standards
+self-review row — that is missing or carries no measured value is a `nit`: the gate measures
+that point itself and scores what it finds. A row the diff or CI contradicts stays `important`;
+no mutation evidence at all keeps its own 7.9 cap. Two carve-outs this port adds that drunk did
+not need to state: the coverage number itself stays governed by the auto-merge coverage
+precondition (unknown coverage → APPROVAL DEFERRED, never a nit) and its own 7.9 cap; on
+`monxa.bdd-integration` the per-scenario pass/fail table plays that role instead of coverage and
+is likewise unaffected. The squad-leader playbook's send-back rule is narrowed to match: a Build
+goes back only for a missing or failing hard-gate result (green suite, coverage, mutation
+report, AT drift, pushed SHA) — any other missing self-review row rides to the gate instead.
+Cause: drunk's own data (DRK-1938, DRK-1943, DRK-1871 — a correct, CI-green Build capped at 8.4
+and sent back a full round for two missing report rows); not independently measured in mx.
+Cascaded to `docs/policies/04-code-and-spec-review.md` (statement 4),
+`docs/policies/01-coding-standards-dotnet.md` (statement 17, Enforcement),
+`skills/pr-review-gate/SKILL.md` (Phase 2 pass 4 Testing, pass 5 Architecture),
+`skills/pr-review-gate/references/scoring-rubric.md` (Self-review rows),
+`skills/sdlc-flow-squad-leader-playbook/SKILL.md` (Review & verification of member work),
+`agents/dev-backend.md`, `agents/pr-reviewer.md`. Same change as drunk 2026-10-03 (c), plus the
+mx-only coverage/BDD carve-outs. mx-workspace only.
+
+## 2026-10-04 (d) — a passing PR merges; the polish round is retired; a new cap holds two-plus `important`s to 8.4 (not live)
+
+Owner-approved, ported from drunk's 2026-10-03 (b). **Policy 04 v1.7**, statement 7: the score
+alone decides what in-scope findings cost — below 8.5 or any `blocking` → a rework round; at
+8.5 or above the PR merges, its open `nit`s and its one permitted `important` named under
+`Merged with:` and dropped. No more polish round; `review_verdict=POLISH` is retired (survives
+only on tickets pinned before this version — the gate never pins it again). mx-only addition
+this port requires: mx's rubric carried no cap on the count of open `important` findings (today,
+any in-scope `important` always forces a rework round — "never merged past"), so retiring
+polish without a cap would let a PR carrying two or three importants merge under the one
+permitted slot. New hard cap in `references/scoring-rubric.md`: **two or more open `important`
+findings anywhere, no `blocking` → 8.4 max.** Calibration anchors recomputed arithmetically
+(mx's PR-rubric weights are identical to drunk's — 25/20/20/15/10/5/5 — so the numbers match
+exactly): one `important` alone scores 9.5–9.9; two score 9.0–9.8 before the new cap sets it to
+8.4; nits alone, maxed in every category, bottom out at exactly 8.5. The docs-only floor row now
+says caps beat it. mx-only addition: mx has an APPROVAL DEFERRED verdict drunk's rubric has no
+analogue for (score ≥ 8.5, an auto-merge precondition fails, a human merges manually) — extended
+`Merged with:` to that path too, so the human merging the PR sees the same open nits/one-important
+the gate would have let ride. Cause: drunk's own data (8 of 59 REWORK/POLISH comments sent back
+PRs scoring 9.4–9.8, each costing a fix run, a full re-review, and ~25 minutes); not
+independently measured in mx. Cascaded to `docs/policies/04-code-and-spec-review.md` (statement
+7), `skills/pr-review-gate/SKILL.md` (Leftover findings, Phase 4 gate table, output contract),
+`skills/pr-review-gate/references/multica-flow.md` (round tracking, Verdict actions
+APPROVED/APPROVAL DEFERRED, in-scope leftovers, score announcement),
+`skills/pr-review-gate/references/scoring-rubric.md` (hard caps, calibration anchors),
+`skills/sdlc-flow-delivery-pipeline/SKILL.md` (Review leftovers row),
+`skills/sdlc-flow-po-orchestration/SKILL.md` (statement 4), `agents/pr-reviewer.md`,
+`README.md` (DEV CYCLE diagram). `autopilots/monthly-gate-digest.description.md` keeps `POLISH`
+in its verdict enumeration on purpose — it reads the last 30 days of history, which still holds
+tickets pinned before this version. Same change as drunk 2026-10-03 (b), plus the mx-only 8.4
+cap and the DEFERRED extension (owner-approved; drunk's rubric has no DEFERRED verdict to
+extend). mx-workspace only.
+
 ## 2026-10-04 (c) — hourly stuck-run recovery wakes only agent-assigned issues; still paused (not live)
 
 Owner's request to resume it; no policy amended. Before resuming, its crash sweep got drunk's
