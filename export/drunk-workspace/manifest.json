@@ -203,8 +203,8 @@
       "name": "default",
       "file": "agents/default.json",
       "source_id": "5bb59f89-c18e-4094-9b90-0de909d537d8",
-      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
-      "source_runtime_provider": "claude",
+      "source_runtime_id": "9d566bf1-b859-4fd3-8eba-ca5b59d19eb4",
+      "source_runtime_provider": "codex",
       "skill_names": [
         "blocker-report",
         "interview-me",
@@ -249,8 +249,8 @@
       "name": "devops",
       "file": "agents/devops.json",
       "source_id": "97ed0f87-978d-4da6-bc73-270f7a6c09db",
-      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
-      "source_runtime_provider": "claude",
+      "source_runtime_id": "9d566bf1-b859-4fd3-8eba-ca5b59d19eb4",
+      "source_runtime_provider": "codex",
       "skill_names": [
         "blocker-report",
         "codegraph",
@@ -288,8 +288,8 @@
       "name": "issue-janitor",
       "file": "agents/issue-janitor.json",
       "source_id": "30771d34-7ae6-4d84-acb0-5ae1d0f649e9",
-      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
-      "source_runtime_provider": "claude",
+      "source_runtime_id": "9d566bf1-b859-4fd3-8eba-ca5b59d19eb4",
+      "source_runtime_provider": "codex",
       "skill_names": [
         "blocker-report"
       ],
@@ -342,8 +342,8 @@
       "name": "Mika",
       "file": "agents/mika.json",
       "source_id": "ed486cd5-9d44-4058-89f3-0c92f3d8512f",
-      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
-      "source_runtime_provider": "claude",
+      "source_runtime_id": "9d566bf1-b859-4fd3-8eba-ca5b59d19eb4",
+      "source_runtime_provider": "codex",
       "skill_names": [
         "codegraph",
         "interview-me",
@@ -382,8 +382,8 @@
       "name": "docs-writer",
       "file": "agents/docs-writer.json",
       "source_id": "f3b4c442-b24c-4155-8bad-4e3b895c4d8b",
-      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
-      "source_runtime_provider": "claude",
+      "source_runtime_id": "9d566bf1-b859-4fd3-8eba-ca5b59d19eb4",
+      "source_runtime_provider": "codex",
       "skill_names": [
         "api-feature-doc-template",
         "archify",
@@ -400,8 +400,8 @@
       "name": "run-medic",
       "file": "agents/run-medic.json",
       "source_id": "51b773ee-d8de-4f68-b8c9-270bc285294e",
-      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
-      "source_runtime_provider": "claude",
+      "source_runtime_id": "9d566bf1-b859-4fd3-8eba-ca5b59d19eb4",
+      "source_runtime_provider": "codex",
       "skill_names": [],
       "had_secrets": false
     },

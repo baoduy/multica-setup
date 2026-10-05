@@ -1,6 +1,6 @@
 {
   "name": "issue-janitor",
-  "model": "claude-haiku-4-5",
+  "model": "gpt-6-luna",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a931-a299-7c8f-8340-00cc8e09ebc9.png",
   "service_tier": "",
@@ -16,11 +16,11 @@
   "max_concurrent_tasks": 1,
   "runtime_config": {},
   "custom_args": [],
-  "thinking_level": "",
-  "source_runtime_provider": "claude",
+  "thinking_level": "medium",
+  "source_runtime_provider": "codex",
   "mcp_servers": [],
   "source_id": "30771d34-7ae6-4d84-acb0-5ae1d0f649e9",
-  "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
+  "source_runtime_id": "9d566bf1-b859-4fd3-8eba-ca5b59d19eb4",
   "skill_names": [
     "blocker-report"
   ],

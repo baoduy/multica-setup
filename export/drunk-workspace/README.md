@@ -42,14 +42,14 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 | claude_ultra     | claude  | claude-opus-5-5[1m] | xhigh    |
 | dev-backend      | claude  | claude-opus-5-5     | high     |
 | release-manager  | claude  | claude-sonnet-5     | high     |
-| docs-writer      | claude  | claude-sonnet-5     | high     |
-| devops           | claude  | claude-sonnet-5     | high     |
-| default          | claude  | claude-sonnet-5     | high     |
-| run-medic        | claude  | claude-haiku-4-5    | low      |
-| issue-janitor    | claude  | claude-haiku-4-5    | (runtime default) |
-| Mika             | claude  | claude-haiku-4-5    | (runtime default) |
 | medium-publisher | claude  | (runtime default)   | —        |
+| docs-writer      | codex   | gpt-6-sol           | high     |
+| devops           | codex   | gpt-6-sol           | high     |
+| default          | codex   | gpt-6-sol           | high     |
+| run-medic        | codex   | gpt-6-luna          | low      |
+| issue-janitor    | codex   | gpt-6-luna          | medium   |
+| Mika             | codex   | gpt-6-luna          | medium   |
 
 
-Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5-5[1m]`) — arch-reviewer, product-owner, pr-reviewer and the `claude_ultra` assistant at `xhigh`, dev-leader, spec-reviewer and service-architect at `high`; `dev-backend` rides opus on the standard tier (`claude-opus-5-5`) at `high`; devops, release, writing and the `default` assistant ride sonnet. `run-medic` rides haiku at `low`: hourly run recovery is pattern-matching over agent task rows, not judgment.
-`issue-janitor` and `Mika` ride haiku at the runtime-default thinking level. Every agent runs on the `Claude (Stevens-Mac-mini.local)` runtime.
+Main development stays on Claude; the work around it rides Codex. Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5-5[1m]`) — arch-reviewer, product-owner, pr-reviewer and the `claude_ultra` assistant at `xhigh`, dev-leader, spec-reviewer and service-architect at `high`; `dev-backend` rides opus on the standard tier (`claude-opus-5-5`) at `high`; release-manager and blog-writer ride sonnet. These run on the `Claude (Stevens-Mac-mini.local)` runtime.
+docs-writer, devops and the `default` assistant ride `gpt-6-sol` at `high`; `run-medic`, `issue-janitor` and `Mika` ride `gpt-6-luna` (`low` for run-medic — hourly run recovery is pattern-matching over agent task rows, not judgment — `medium` for the other two). These run on the `Codex (Stevens-Mac-mini.local)` runtime: the same host as Claude, because `default`'s monthly insights autopilot shells out to `claude -p "/insights"` and docs-writer renders archify diagrams with the host's Chrome. Thinking is always set explicitly on a Codex agent; left empty, it inherits the host's `~/.codex/config.toml`.
