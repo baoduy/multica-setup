@@ -1,6 +1,6 @@
 {
   "name": "devops",
-  "model": "gpt-6-sol",
+  "model": "gpt-6.1-sol",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a931-9735-78c0-a8c9-8c471ed4f1ab.png",
   "service_tier": "",

@@ -44,7 +44,7 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 | release-manager  | claude  | claude-sonnet-5     | high     |
 | medium-publisher | claude  | (runtime default)   | —        |
 | docs-writer      | codex   | gpt-6-sol           | high     |
-| devops           | codex   | gpt-6-sol           | high     |
+| devops           | codex   | gpt-6.1-sol         | high     |
 | default          | codex   | gpt-6-sol           | high     |
 | run-medic        | codex   | gpt-6-luna          | low      |
 | issue-janitor    | codex   | gpt-6-luna          | medium   |
@@ -52,4 +52,4 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 
 
 Main development stays on Claude; the work around it rides Codex. Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5-5[1m]`) — arch-reviewer, product-owner, pr-reviewer and the `claude_ultra` assistant at `xhigh`, dev-leader, spec-reviewer and service-architect at `high`; `dev-backend` rides opus on the standard tier (`claude-opus-5-5`) at `high`; release-manager and blog-writer ride sonnet. These run on the `Claude (Stevens-Mac-mini.local)` runtime.
-docs-writer, devops and the `default` assistant ride `gpt-6-sol` at `high`; `run-medic`, `issue-janitor` and `Mika` ride `gpt-6-luna` (`low` for run-medic — hourly run recovery is pattern-matching over agent task rows, not judgment — `medium` for the other two). These run on the `Codex (Stevens-Mac-mini.local)` runtime: the same host as Claude, because `default`'s monthly insights autopilot shells out to `claude -p "/insights"` and docs-writer renders archify diagrams with the host's Chrome. Thinking is always set explicitly on a Codex agent; left empty, it inherits the host's `~/.codex/config.toml`.
+docs-writer and the `default` assistant ride `gpt-6-sol` at `high`; devops rides `gpt-6.1-sol` at `high` (moved off `gpt-6-sol` after OpenAI returned "Selected model is at capacity" mid-run); `run-medic`, `issue-janitor` and `Mika` ride `gpt-6-luna` (`low` for run-medic — hourly run recovery is pattern-matching over agent task rows, not judgment — `medium` for the other two). These run on the `Codex (Stevens-Mac-mini.local)` runtime: the same host as Claude, because `default`'s monthly insights autopilot shells out to `claude -p "/insights"` and docs-writer renders archify diagrams with the host's Chrome. Thinking is always set explicitly on a Codex agent; left empty, it inherits the host's `~/.codex/config.toml`.
