@@ -50,6 +50,14 @@ placeholder text under it.
   message-bus publishers and consumers, and the configuration keys holding
   their addresses. A partner no code calls is not a dependency.
 
+**Point at code by name, never by line.** Name the class or type (`AuthConfig`),
+or the folder that holds it (`ApiEndpoints/DKNet.Notification.Api/Configs/Auth/`).
+A file path is fine when the file itself is the subject (`appsettings.json`,
+`Program.cs`). Never a line number or line range (`AuthConfig.cs:28-29`,
+`#L28`): every edit to the file moves its lines, and the page goes stale with
+nobody noticing. Line-level evidence belongs in the archify IR's `evidence` and
+in your completion report, never on the page.
+
 ## The skeleton
 
 ```markdown
@@ -246,4 +254,6 @@ delivered: link it from the service README's feature table and from the
    what enforces it.
 8. 🌐 Downstream systems lists every registered client and bus endpoint the
    feature touches, each with its "when it is down" behaviour.
-9. `git diff --stat` shows documentation and diagram files only.
+9. No line references on the page: `git diff origin/dev... -- '*.md' | grep -E '^\+.*\.(cs|ts|tsx|js|py|json|ya?ml|csproj|props|targets|sh|bicep|tf)(:[0-9]+|#L[0-9]+)'`
+   prints nothing.
+10. `git diff --stat` shows documentation and diagram files only.

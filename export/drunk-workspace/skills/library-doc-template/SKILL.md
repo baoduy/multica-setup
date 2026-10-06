@@ -89,6 +89,14 @@ what this deliberately does NOT do. Never empty on a non-trivial package.>
 
 Emoji headings are house style on these pages — keep them, exactly as above.
 
+**Point at code by name, never by line.** Name the class or type (`AuthConfig`),
+or the folder that holds it (`ApiEndpoints/DKNet.Notification.Api/Configs/Auth/`).
+A file path is fine when the file itself is the subject (`appsettings.json`,
+`Program.cs`). Never a line number or line range (`AuthConfig.cs:28-29`,
+`#L28`): every edit to the file moves its lines, and the page goes stale with
+nobody noticing. Line-level evidence belongs in the archify IR's `evidence` and
+in your completion report, never on the page.
+
 ## Diagrams
 
 Every page carries at least one flow or steps diagram, in 🔄 How it works
@@ -154,4 +162,6 @@ in your report so it can be scheduled as its own change.
 5. 🔄 How it works has its flow diagram, drawn from the call path you traced in
    the code; every diagram's JSON IR and rendered `.svg` are both committed, and
    the `.svg` renders in the Markdown preview.
-6. `git diff --stat` shows documentation and diagram files only.
+6. No line references on the page: `git diff origin/dev... -- '*.md' | grep -E '^\+.*\.(cs|ts|tsx|js|py|json|ya?ml|csproj|props|targets|sh|bicep|tf)(:[0-9]+|#L[0-9]+)'`
+   prints nothing.
+7. `git diff --stat` shows documentation and diagram files only.
