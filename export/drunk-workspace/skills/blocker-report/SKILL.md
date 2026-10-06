@@ -59,7 +59,7 @@ Rules:
 
 ## Blocker report — work cannot proceed
 
-Whenever you flip an issue to `blocked`, escalate, or hand back a stuck cycle, the comment opens with these sections, in this order, before anything else.
+Whenever you flip an issue to `blocked`, escalate, or hand back a stuck cycle, the comment opens with these sections, in this order, before anything else. One exception: a clarification round or spec preview that leaves your ticket `blocked` (`multica-brainstorming`) keeps its own shape — its numbered questions are the blocker.
 
 ```markdown
 ## BLOCKER

@@ -23,4 +23,4 @@ Never assign feature or bug work straight to dev-team: that skips the spec gate.
 
 ## Your own tickets
 
-A ticket assigned to you ends `done` (answered or filed) or `blocked` (with the blocker stated); while waiting on the requester it stays `in_progress`.
+A ticket assigned to you ends `done` (answered or filed) or `blocked` (with the blocker stated); while waiting on the requester it is `blocked`, with your questions as the blocker; flip it back to `in_progress` when the reply wakes you.

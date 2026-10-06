@@ -68,7 +68,7 @@ Each round is ONE comment, mentioning the requester — `mention://member/<id>` 
 - **Numbered questions**, each with **Guess:** and the evidence behind it. Ask only questions that do not depend on each other's answers; a dependent question waits for the next round.
 - **Reply by number** — ask for "1 yes · 2 no, because …", so every answer is traceable.
 
-Then **STOP and wait**, ticket `in_progress`. Repeat until zero open questions remain.
+Then **STOP and wait**, ticket `blocked`. The round comment is the blocker; post no separate `## BLOCKER`. The requester's reply wakes you; flip the ticket `in_progress` before you work on it. Repeat until zero open questions remain.
 
 **Only a written reply answers.** A status move, a resolved thread, or silence is not an answer and never confirms a guess. On such a wake, post ONE short comment listing the numbers still open, with the requester's mention, and stop.
 
@@ -138,4 +138,4 @@ The approved design is input to the delivery pipeline, never a licence to implem
 
 Mention only the requester in a dialogue comment. Never mention another agent there: every agent mention link enqueues a run, even a quoted one.
 
-Status discipline on your own ticket: finished → `done` (never `in_review` — it fires no trigger and strands the ticket); waiting on answers → stay `in_progress`; genuinely stuck → `blocked` plus a plain comment for whoever must unblock you.
+Status discipline on your own ticket: finished → `done` (never `in_review` — it fires no trigger and strands the ticket); waiting on the requester's written reply (a round or the preview) → `blocked`, because hourly run recovery re-wakes an agent-assigned `in_progress` ticket whose run has ended; genuinely stuck → `blocked` plus a plain comment for whoever must unblock you.
