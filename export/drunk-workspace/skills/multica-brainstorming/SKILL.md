@@ -9,6 +9,8 @@ Turn an idea into an agreed design through dialogue with the requester, record i
 
 <HARD-GATE>
 Write no spec, design or code, scaffold nothing, and take no implementation action until the requester has approved the spec preview (step 4) in writing. This applies to EVERY change regardless of perceived simplicity.
+
+A reply approves only the stage actually presented. Answers to a round, or a pick between options, do not approve a preview that has not been posted yet.
 </HARD-GATE>
 
 ## Precedence
@@ -20,6 +22,15 @@ Where your role skill already defines the procedure — product-owner's Workflow
 ## Anti-Pattern: "This Is Too Simple To Need A Design"
 
 "Simple" work is where unexamined assumptions waste most effort. The preview may be five lines, but you MUST present it and get approval.
+
+## Red Flags
+
+| Thought | Reality |
+|---------|---------|
+| "They answered every question, so the preview is approved" | Answers release the preview, not the spec. Post it and wait for `approved`. |
+| "The requester decided it, so the spec can say it" | A decision that waives a gate rule fails the gate. Raise it in the round (step 4). |
+| "I'll fold this new finding into the spec quietly" | Something new after approval re-opens step 2 with a short round. |
+| "One more question round is cheap" | Every round costs the requester a reply round-trip. Ask everything independent now. |
 
 ## Checklist
 
@@ -53,7 +64,7 @@ Ask ONLY what research cannot answer: business rules, scope, priorities, trade-o
 
 Each round is ONE comment, mentioning the requester — `mention://member/<id>` for a human, `mention://agent/<id>` for an agent creator (`creator_type`/`creator_id` from `multica issue get`):
 
-- **My read:** your one-line hypothesis of what the requester wants, with a confidence number.
+- **My read:** your one-line hypothesis of what the requester wants, with a confidence number. Keep what the requester said apart from what you assumed.
 - **Numbered questions**, each with **Guess:** and the evidence behind it. Ask only questions that do not depend on each other's answers; a dependent question waits for the next round.
 - **Reply by number** — ask for "1 yes · 2 no, because …", so every answer is traceable.
 
@@ -91,7 +102,11 @@ ONE comment, mentioning the requester, before any spec is written:
 
 Before posting, check the rules against each other. Two rules that cannot both hold ("an empty group can be moved" and "no group is its own parent") are a question for the requester, not a spec.
 
+Then check each rule and decision against what the spec gate never accepts. The one requesters hit most: testing is never optional (`sdlc-spec-template`), so any answer that waives, defers or skips a test is a gate `blocker`, whoever decided it. Never carry such a rule into the preview. Ask about it in the next round: quote the gate rule, and offer options that can pass. A change to the rule itself is a policy change for the workspace owner, never a spec decision.
+
 End with: "Reply `approved`, or name the lines to change." Then **STOP**. A written approval releases step 5; anything else starts a new round.
+
+The approval covers only what the preview said. If you find something new after it (a rule conflict, a hidden caller, a second repo), stop, post a short round about that point only, and get a new written approval.
 
 ## 5. Record the design on the issue
 
