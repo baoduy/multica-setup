@@ -4,6 +4,21 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-10-06 — brainstorming catches gate conflicts before the preview (no policy amended)
+
+Owner-approved, ported from drunk-workspace. `multica-brainstorming` was reviewed against
+obra/superpowers `brainstorming` v6.4.2 (`8ca22db`), the upstream baseline for the next
+comparison. The HARD-GATE adds that a reply approves only the stage actually presented. A short
+Red Flags table is added. "My read" keeps what the requester said apart from what the agent
+assumed. Step 4 checks each rule and decision against what the spec gate never accepts: an answer
+that waives dev-team's in-repo tests goes back to the requester as a question with the rule
+quoted; a waiver the template allows (BDD integration suite, no ship) is recorded with its reason
+and basis. Anything new found after approval re-opens step 2 with a short round. Cause: in
+drunk-workspace 10 of 18 brainstormed tickets met spec-gate REWORK, and one failed three times on
+a requester's test waiver the dialogue had accepted. The drunk change that parks a waiting ticket
+at `blocked` is not ported: mx's hourly recovery wakes only killed runs, so an `in_progress` wait
+is never nudged. Files: `skills/multica-brainstorming/SKILL.md`.
+
 ## 2026-10-06 — every PR body has one shape: Summary, Evidence, Merge danger (Policy 03 v1.3)
 
 Owner-approved. New Policy 03 statement 7a. Summary is one or two sentences plus the smallest
