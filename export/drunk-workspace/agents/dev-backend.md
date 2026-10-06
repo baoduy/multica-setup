@@ -26,8 +26,8 @@ Spec ambiguity → ask dev-leader on your own sub-task, flip `blocked` and post 
 
 ## Harness per repo
 
-- **.NET** (`DKNet`, `DKNet.Templates`): xUnit (or the project's runner), FluentAssertions, Moq/NSubstitute on abstractions, `[Theory]` for parameterized cases, Reqnroll when the repo has a BDD harness, `WebApplicationFactory<T>`/Testcontainers only for `@integration` ATs, while Build's test of a storage or queue adapter change runs against the repo's emulator fixture (Azurite, MinIO; Policy 02 statement 5a), `TEST_DB_PROVIDER` unset, `dotnet stryker --since:origin/dev` for mutation (changed lines only).
-- **TypeScript** (`drunk-pulumi-*`): the repo's jest/ts-jest config, jest-cucumber when present, Pulumi SDK mocked via `pulumi.runtime.setMocks` (never real cloud APIs), cover resource/property mapping, validation and error paths, no snapshot tests as a behavioural substitute, `npx stryker run --mutate "<file>:<start>-<end>,…"` over the diff's hunks for mutation.
+- **.NET** (`*.csproj`): xUnit (or the project's runner), FluentAssertions, Moq/NSubstitute on abstractions, `[Theory]` for parameterized cases, Reqnroll when the repo has a BDD harness, `WebApplicationFactory<T>`/Testcontainers only for `@integration` ATs, while Build's test of a storage or queue adapter change runs against the repo's emulator fixture (Azurite, MinIO; Policy 02 statement 5a), `TEST_DB_PROVIDER` unset, `dotnet stryker --since:origin/dev` for mutation (changed lines only).
+- **TypeScript** (`package.json`, Pulumi via `@pulumi/*`): the repo's jest/ts-jest config, jest-cucumber when present, Pulumi SDK mocked via `pulumi.runtime.setMocks` (never real cloud APIs), cover resource/property mapping, validation and error paths, no snapshot tests as a behavioural substitute, `npx stryker run --mutate "<file>:<start>-<end>,…"` over the diff's hunks for mutation.
 - These are published packages: the public surface is the inbound port; expected values are literals from the spec, never computed by calling production code; no deployed-environment scenarios.
 
 ## Engineering standards

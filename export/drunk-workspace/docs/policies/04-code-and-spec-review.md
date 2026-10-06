@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-04 |
-| **Version** | 1.23 |
+| **Version** | 1.24 |
 | **Status** | Active |
 | **Owner** | pr-reviewer (code) · spec-reviewer (spec) · arch-reviewer (architecture sweeps) |
 | **Applies to** | Every Workflow B spec before implementation, every squad, devops, docs-writer and service-architect PR into `dev`, every scheduled architecture sweep |
@@ -105,7 +105,7 @@ The gates are the enforcement, fully autonomous in pipeline mode. Only exhausted
 - Round caps are fixed by policy, not by request: PR review 3 rounds, spec review 5 rounds — then the human decides via a reassigned sub-task. Only the resolved owner's option B adds a PR round; no requester shortcut extends them.
 - Self-authored PRs: a rejected vote never blocks an otherwise-APPROVED merge; the Multica report stands as the audit record.
 - UI presentation files ([Policy 02](02-testing-and-quality.md) statement 1a) carry no test, coverage or mutation requirement at the PR gate; the CI cap still applies.
-- A Helm chart PR ([Policy 02](02-testing-and-quality.md) statement 1d) carries no coverage or mutation requirement; it is judged on its `helm-unittest` assertions and clean `helm lint`, `helm template` and verify scripts. The CI cap still applies.
+- A Helm chart PR ([Policy 02](02-testing-and-quality.md) statement 1d) carries no coverage or mutation requirement; it is judged on its `helm-unittest` assertions (or, in a repo without a suite, the before-and-after `helm template` output in the PR body) and clean `helm lint`, `helm template` and verify scripts where the repo has them. The CI cap still applies.
 - Coverage genuinely unknown (no CI artifact, no per-class numbers on the Build sub-task, not cheaply runnable) is not a hard cap and does not block the merge — the report states `Coverage: unknown (<why>)`, never a silent pass.
 
 ## References

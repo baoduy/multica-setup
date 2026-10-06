@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-06 |
-| **Version** | 2.14 |
+| **Version** | 2.15 |
 | **Status** | Active |
 | **Owner** | product-owner (spec author) · spec-reviewer (gate) |
 | **Applies to** | Every Workflow B feature/enhancement spec, every dev-team implementation brief, and every new-service design (Workflow F) |
@@ -48,8 +48,8 @@ silently.
 
 ## Scope
 
-Feature/enhancement specs on main tickets for drunk library and infra repos (`DKNet`
-family, `drunk-pulumi-*`, `drunk-others`) — the requester-facing, gate-scored artifact —
+Feature/enhancement specs on main tickets for every repo in the factory's scope
+([Policy 05](05-sdlc-delivery-lifecycle.md) statement 7c) — the requester-facing, gate-scored artifact —
 and the implementation briefs dev-leader writes into `[D<num>-n]` coding sub-tasks. Bugs
 use a root-cause report instead of a spec unless the requester explicitly asks for one
 (see [Policy 07](07-bug-and-defect-management.md)); a requested bug spec then passes this

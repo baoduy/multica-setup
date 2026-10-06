@@ -1,6 +1,6 @@
 # drunk-workspace — factory constants
 
-The open source projects of drunkcoding.net (github.com/baoduy): .NET/NuGet libraries (`DKNet`, `DKNet.Templates`), Pulumi/npm packages (`drunk-pulumi-*`), Python MCP services, Docker images, Helm charts. There is no deployed environment: publishing the package IS the release. Governance lives in the repo's `docs/policies/`; role procedure lives in your skills. The rules below hold for every agent on every run and are not repeated in skills or instructions.
+The open source repos of drunkcoding.net (github.com/baoduy) attached to this workspace's projects: .NET/NuGet libraries and services, Pulumi/npm packages, Python MCP services, Docker images, Helm charts. There is no deployed environment: publishing the package IS the release. Governance lives in the repo's `docs/policies/`; role procedure lives in your skills. The rules below hold for every agent on every run and are not repeated in skills or instructions.
 
 ## Status and wakes
 
@@ -16,6 +16,7 @@ The open source projects of drunkcoding.net (github.com/baoduy): .NET/NuGet libr
 
 ## Tickets
 
+- **Projects own repos.** A project's repos are the `github_repo` resources attached to it (`multica project resource list <project-id> --output json`; project ids from `multica project list --output json`). Match a repo by `owner/name`, case-insensitive, ignoring a trailing `.git` or `/`. A root ticket lives in the project whose repos include the repo it changes. Several projects match: keep the ticket where it is when its project is one of them, else ask its human owner. No project matches: the repo is outside the factory's scope; leave the ticket where it is, flip it `blocked` and ask its human owner. A ticket that changes no repo stays in the project it was filed in. No skill, instruction or squad briefing lists projects or repos; the attached repos are the list. (Policy 05 statement 7c.)
 - Every child lives in the same project as its root. Titles: **root tickets carry one type prefix** — `[Feature]` · `[Enhance]` · `[Bug]` · `[Question]` · `[CICD]` · `[Docs]` · `[Design]` — matching the type label, set by product-owner at intake (or by the first agent to pick the ticket up where product-owner never does); create with a plain title and let it prefix. Children carry `[S<num>]` spec review, `[P<num>-n]` phase tickets (`<num>` = root key number), `[D<num>-n]` dev sub-tasks (`<num>` = phase key number, `n` = stage) — never a type prefix, and the `<num>` keying is off the root's key NUMBER, never its title. Labels on root tickets only.
 - Every sub-issue is created with `--stage <n>` and an explicit `--status` (`todo` for the active stage, `backlog` for later ones), parented directly to its cycle parent. Verify with `multica issue children <parent> --output json` after creating.
 - Only squad leaders run `multica issue create` (product-owner in product-team, dev-leader in dev-team). Members report on their own sub-task in filable shape.

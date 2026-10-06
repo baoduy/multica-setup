@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.28 |
+| **Version** | 1.29 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The thirteen chartered factory agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika` |
@@ -163,7 +163,7 @@ or the sub-task description.
 
 **devops — CI/CD, Compose & Helm Charts**
 - **Goal.** Keep the repos' CI/CD pipelines, package-publish automation, docker-compose files and Helm charts correct — landing every change as one reviewed `chore/<issue-key>` PR to `dev`.
-- Responsibilities: GitHub Actions build/test workflows and the NuGet/npm publish automation that runs off `main` ([Policy 08](08-container-build-and-release.md)); docker-compose deployment files, validated with `docker compose config` (`compose-delivery`); the Helm charts in `drunk.charts` — templates, values, the chart README, their `helm-unittest` tests and the `Chart.yaml` version bump, validated locally with `helm lint`, `helm template`, `helm unittest` and the repo's verify scripts (`helm-k8s-conventions`, [Policy 02](02-testing-and-quality.md) statement 1d); serve both doors — direct requester tickets and product-owner's D1 (analysis + STOP) / D2 (change) flows; report the PR URL with verified base and non-empty diff.
+- Responsibilities: GitHub Actions build/test workflows and the NuGet/npm publish automation that runs off `main` ([Policy 08](08-container-build-and-release.md)); docker-compose deployment files, validated with `docker compose config` (`compose-delivery`); the Helm charts in every factory repo — templates, values, the chart README, their `helm-unittest` tests and the `Chart.yaml` version bump, validated locally with `helm lint`, `helm template`, plus `helm unittest` and the repo's verify scripts where the repo has them (`helm-k8s-conventions`, [Policy 02](02-testing-and-quality.md) statement 1d); serve both doors — direct requester tickets and product-owner's D1 (analysis + STOP) / D2 (change) flows; report the PR URL with verified base and non-empty diff.
 - Never: touch application/library code, their tests, or docs other than a chart's README; merge its own PR (pr-reviewer's), commit to `dev`/`main`, or deploy or publish anything — no `helm install`/`upgrade`/`push`, no `kubectl`, no image builds, no waiting on CI.
 
 ### Documentation

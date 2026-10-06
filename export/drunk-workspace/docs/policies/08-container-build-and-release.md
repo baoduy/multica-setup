@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-08 |
-| **Version** | 1.3 |
+| **Version** | 1.4 |
 | **Status** | Active |
 | **Owner** | devops (build/publish automation) · release-manager (the `dev`→`main` release) |
 | **Applies to** | Every drunk repo that publishes a NuGet/npm package, a container image, or a Helm chart |
@@ -22,18 +22,17 @@
    drunk has NO deployed environment. Publishing the artifact IS the release. There is no
    SANDBOX, no PRD, no k8s promotion to gate on top of what's below.
 
-   (a) LIBRARY REPOS (DKNet, DKNet.Templates, drunk-pulumi-*)
+   (a) LIBRARY REPOS (a repo that publishes NuGet or npm packages)
        dev ──[devops CI: build+test]──▶ PR to dev, reviewed by pr-reviewer, merged
         │
         └──[release-manager: ONE PR, dev──▶main]── merge triggers CI ──▶ NuGet `dotnet pack`/
            `nuget push`  OR  npm `npm pack`/`npm publish`.  No deploy step after this.
 
-   (b) CONTAINER-IMAGE REPOS (drunk-mcp-proxy, dev-environments, drunk-action-runners,
-       HBD.YarpProxy, per-service Dockerfiles)
+   (b) CONTAINER-IMAGE REPOS (a repo whose CI publishes a container image)
        CI builds + publishes a MULTI-ARCH image (linux/amd64 + linux/arm64) off `main`.
        Publishing the manifest IS the release — no environment to promote it to.
 
-   (c) HELM CHART REPOS (drunk.charts)
+   (c) HELM CHART REPOS (a repo whose CI publishes its Helm charts)
        dev ──[devops: chart change + version bump]──▶ PR to dev, reviewed by pr-reviewer, merged
         │
         └──[release-manager: ONE PR, dev──▶main]── merge triggers CI ──▶ OCI registry + npm,
@@ -84,7 +83,7 @@ covers everything CI does to produce a published artifact.
    unknown coverage and CI exceptions do not make a release critical.
 3. **`devops` owns CI and Helm charts, never app code, and never `main`.** `devops` writes and
    maintains pipeline configs (GitHub Actions), build/test workflows, the package-publish
-   automation that runs off `main`, and the Helm charts in `drunk.charts` (templates, values,
+   automation that runs off `main`, and the Helm charts in every factory repo (templates, values,
    chart README, their `helm-unittest` tests, the `Chart.yaml` version) — it does not touch
    application/library code, their tests, or any other documentation,
    and it never commits to or merges `dev` or `main` directly. Its own changes land via a
@@ -105,7 +104,8 @@ covers everything CI does to produce a published artifact.
    never a manual `helm push` (`HELM-DEL-003`). Any
    template/values change bumps the chart's `Chart.yaml` `version`; `appVersion` tracks the
    shipped image separately (`HELM-DEL-002`). New conditional rendering in a template ships
-   with a `helm-unittest` assertion, and `helm lint`/`helm template` must run clean
+   with a `helm-unittest` assertion where the repo has a suite (else the before-and-after
+   `helm template` output in the PR body), and `helm lint`/`helm template` must run clean
    (`HELM-DEL-001`).
 7. **Multi-stage builds — no build tooling in the runtime layer.** A Dockerfile uses a
    `builder` stage (compiles/packages: wheel, `dotnet publish`, `npm run build`) and a minimal
@@ -161,7 +161,7 @@ covers everything CI does to produce a published artifact.
 ## Roles & responsibilities
 
 - **devops** — owns CI/CD pipeline configs, the package-publish/image-publish automation
-  that runs off `main`, and the Helm charts in `drunk.charts`; opens PRs to `dev` only, never merges them, never touches app code,
+  that runs off `main`, and the Helm charts in every factory repo; opens PRs to `dev` only, never merges them, never touches app code,
   never touches `main`.
 - **release-manager** — the sole owner of the `dev`→`main` PR for library, image and chart repos;
   three acts only (open the PR, check whether it is critical from commit subjects and PR labels,

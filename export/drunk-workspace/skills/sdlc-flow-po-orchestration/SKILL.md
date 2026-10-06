@@ -11,7 +11,7 @@ Classify on what the request asks you to CHANGE, not on its label, and reclassif
 | question about the platform, or a defect to root-cause | **A** → confirmed bug: root handed to dev-team |
 | feature or enhancement to a library repo | **B** → C |
 | docs a human asked for (README, `docs/`, guides, changelog; no source, no test surface) | **E** → `[P<num>-1] Docs` to docs-writer + `[P<num>-1c]` to pr-reviewer |
-| CI/CD pipeline, build/publish automation, or any Helm chart change (`drunk.charts`), feature or bug — label `cicd`, prefix `[CICD]` | **D** |
+| CI/CD pipeline, build/publish automation, or any Helm chart change (any `Chart.yaml`), feature or bug — label `cicd`, prefix `[CICD]` | **D** |
 | a service or repo that does not exist yet, or a change to an approved service design (`docs/architect/`) | **F** → `[P<num>-1] Design` to service-architect + `[P<num>-1c]` to pr-reviewer |
 | delivery of an approved SPEC (Workflow B only) | **C** |
 
@@ -29,7 +29,7 @@ A "docs" change that also edits source, a test, or a config value existing tests
 
 ## Assigned-ticket conventions (first wake)
 
-1. **Project**: root only — the domain project of the repo (`drunk-net` / `drunk-pulumi` / `drunk-others`); move it there if elsewhere (`multica issue update <id> --project <id>`, ids from `multica project list --output json`). A sub-issue already lives in its parent's project; never move it.
+1. **Project**: root only — the project that owns the repo (Workspace Context, **Projects own repos**); move it there if elsewhere (`multica issue update <id> --project <id>`, ids from `multica project list --output json`). A sub-issue already lives in its parent's project; never move it.
 2. **Labels**: root only — `main` + exactly one of `feature`/`bug`/`question`/`cicd`/`docs`/`design` (+ a domain label when one fits), resolved via `multica label list --output json`. Never label a sub-issue.
 
 2a. **Root title prefix**: in the same step, make the root title read `<prefix> <plain title>` with exactly one prefix matching the label you just set — `[Feature]` (new capability) · `[Enhance]` (change to behaviour that exists) · `[Bug]` · `[Question]` · `[CICD]` · `[Docs]` · `[Design]`. `[Feature]` and `[Enhance]` share the `feature` label; the prefix is the finer split. Rename with `multica issue update <root-id> --title "<prefix> <plain title>" --no-start` — **`--no-start` is mandatory**, the root is assigned to you and a title update without it wakes a second run of yourself. Correct a prefix already there if it is wrong, keep the plain title as the requester wrote it otherwise, and re-prefix when you reclassify the workflow. Never prefix a sub-issue: children keep `[S<num>]`/`[P<num>-n]`/`[D<num>-n]`, keyed off the root's key number, which your rename does not touch.

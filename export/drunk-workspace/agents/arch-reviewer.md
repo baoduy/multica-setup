@@ -15,24 +15,16 @@ Invoke them — never work from memory. **Match the skill to the repo's stack**:
 | `architecture-review-sweep` | **The workflow. Read first, every run.** Steps, scope file set per stack, dedupe protocol, issue format, enforcement tiers. Its examples are .NET-flavored — apply the same finding/dedupe/cap/Tier discipline to every stack, using that stack's native check. |
 | `sdlc-gitflow` | Branch and PR mechanics. Every PR targets `dev` with **both** `--head` and `--base` explicit. |
 | `dknet-ddd-conventions` + `dotnet10-efcore10-standards` | **.NET only.** |
-| `pulumi-azure-iac-standards` | **Pulumi/TS IaC** (`drunk-pulumi-*`). |
+| `pulumi-azure-iac-standards` | **Pulumi/TS IaC** (`@pulumi/*` in `package.json`). |
 | `docker-image-standards` | **Dockerfiles / image repos.** |
-| `helm-k8s-conventions` | **Helm charts** (`drunk.charts`). |
-| `python-mcp-standards` | **Python MCP/FastAPI** (`drunk-mcp-proxy`, `entraid-mcp-server`). |
+| `helm-k8s-conventions` | **Helm charts** (`Chart.yaml`). |
+| `python-mcp-standards` | **Python MCP/FastAPI** (`pyproject.toml`). |
 
 ## Targets & routing
 
-A triggering issue naming a specific repo → review **only** that one with its stack's skill. Otherwise sweep the repos below **in this stack order**, one repo fully before the next.
+A triggering issue naming a specific repo → review **only** that one. Otherwise sweep every repo attached to a workspace project (Workspace Context, **Projects own repos**), one repo fully before the next, in this stack order: .NET, Pulumi/TS IaC, Docker images, Helm charts, Python MCP. A repo's stacks come from its files (Policy 01's stack table): a `*.csproj` → .NET; a `package.json` with an `@pulumi/*` dependency → Pulumi/TS IaC; a `Dockerfile` → Docker; a `Chart.yaml` → Helm; a `pyproject.toml` with an `mcp` or `fastapi` dependency → Python MCP. One repo can carry several (an API, its Dockerfile and its chart); review each part with that stack's skill.
 
-| Stack | Repos | Standard skill | Domain project for findings |
-|---|---|---|---|
-| .NET / DDD | `DKNet`, `DKNet.Templates` | `dknet-ddd-conventions` + `dotnet10-efcore10-standards` | `drunk-net` |
-| Pulumi / TS IaC | `drunk-pulumi-azure`, `drunk-pulumi-azure-components`, `drunk-pulumi-azure-providers`, `drunk-pulumi-cloudflare-components`, `drunk-pulumi-intune-components` | `pulumi-azure-iac-standards` | `drunk-pulumi` |
-| Docker images | `dev-environments`, `drunk-action-runners`, `HBD.YarpProxy` | `docker-image-standards` | `drunk-others` |
-| Helm charts | `drunk.charts` | `helm-k8s-conventions` | `drunk-others` |
-| Python MCP | `drunk-mcp-proxy`, `entraid-mcp-server` | `python-mcp-standards` | `drunk-others` |
-
-**Findings go in the repo's OWN domain project** — the triggering issue's `project_id` when the run is scoped, else the table above, with ids from `multica project list --output json` (an autopilot prompt that pins the project for its own run is authoritative for that run). **Never cross-file** (a Pulumi finding never lands on `drunk-net`). The run issue and the issues it files live in the same domain project — there is no separate jobs board.
+**Findings go in the project that owns the repo** — the triggering issue's `project_id` when the run is scoped, else the project whose repos include it, with ids from `multica project list --output json` (an autopilot prompt that pins the project for its own run is authoritative for that run). **Never cross-file** (a finding never lands in another repo's project). The run issue and the issues it files live in the same domain project — there is no separate jobs board.
 
 If one scheduled run cannot cover every repo, review in stack order and **report which repos were deferred** — never let a truncated run read as "clean".
 

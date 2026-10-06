@@ -5,6 +5,27 @@ policy and version, what the new rule says, the cause, and every file the change
 into. The catalog, the authority hierarchy and the change-control procedure live in
 [`00-policies-index.md`](00-policies-index.md).
 
+- 2026-10-06 (h) — Policies 01 v1.8, 02 v1.12, 03 v1.9, 04 v1.24, 05 v1.24, 06 v2.15, 07 v1.12, 08 v1.4, 09 v1.29. **Rules no longer name projects or repos: a project owns the repos attached to it.** Owner-approved. New Policy 05 statement 7c, **Projects own repos**:
+  - A project's repos are its attached `github_repo` resources, matched by `owner/name` (case-insensitive, ignoring `.git` and a trailing `/`).
+  - A root ticket lives in the project whose repos include the repo it changes. Several projects match: the ticket stays put if its project is one of them, else the agent asks. No project matches: the repo is outside the factory's scope; the ticket goes `blocked` and the agent asks its human owner. A ticket that changes no repo stays where it was filed.
+  - No skill, instruction or squad briefing lists projects or repos.
+
+  The stack, and so the standards skill, now comes from the files a change touches, never from the repo name: `*.csproj` (.NET, plus `dknet-ddd-conventions` when a `DKNet.*` package or project is referenced), `@pulumi/*` in `package.json`, `Dockerfile`, `Chart.yaml`, `pyproject.toml` with `mcp`/`fastapi`. A Helm chart is any `Chart.yaml`, not only `drunk.charts`. Its proof is a `helm-unittest` assertion where the repo has a suite, else the `helm template` output before and after in the PR body; verify scripts and the version bump apply where the repo has them.
+
+  Statements changed:
+  - Policy 01: Standards at a glance (a Detected-by column instead of repo names); Roles, dev-backend.
+  - Policy 02: 1a (the DKNet.Accounts.Api paths are now an example); 1d; the at-a-glance diagram; Roles, devops; Definition of Done.
+  - Policy 03 and Policy 06: Scope.
+  - Policy 04: Exceptions & waivers, the Helm chart PR.
+  - Policy 05: Scope; statement 3; new statement 7c.
+  - Policy 07: statement 5.
+  - Policy 08: the release-model classes (a), (b) and (c), now defined by what the repo publishes; statements 3 and 6; Roles, devops.
+  - Policy 09: the devops charter.
+
+  Repos named before but attached to no project (`dev-environments`, `drunk-action-runners`, `HBD.YarpProxy`, `drunk-mcp-proxy`, `entraid-mcp-server`) are out of scope by the owner's choice. The autopilots keep their own target repos and projects, because those are job configuration rather than rules. Only the hourly run recovery changed: it now escalates into its run issue's own project. Repo facts still inside stack skills (`helm-k8s-conventions`, `docker-image-standards`, `python-mcp-standards`, `pulumi-azure-iac-standards`, `nodejs-typescript-standards`) move to each repo's `CLAUDE.md` in a later pass. Cause: the owner asked for rules that work for any project; `drunk-banking` showed every hardcoded list going stale.
+
+  Cascaded into: `workspace/workspace.context.md` (intro, Tickets); `skills/sdlc-flow-po-orchestration`, `skills/sdlc-flow-delivery-pipeline`, `skills/pr-review-gate` (SKILL.md and the scoring rubric's Helm exception); `squads/dev-team.md`, `squads/product-team.md`; the agents `default`, `claude-ultra`, `mika`, `product-owner`, `blog-writer`, `dev-backend`, `devops` (instructions and description) and `arch-reviewer` (targets and routing); `autopilots/hourly-run-recovery.description.md`.
+
 - 2026-10-06 (g) — No policy amended. **The bundle records the live workspace again, and the live workspace is synced to the bundle.** Owner's request ("do once for all"). Live to bundle: a new `projects/drunk-banking` (DKNet.Accounts.Api and DKNet.Notification.Api, lead product-owner), and the `in_progress` status of `drunk-net`, `drunk-pulumi` and `drunk-others`. Bundle to live: `architecture-review-sweep`, `compose-delivery`, `leader-gitops`, `sdlc-flow-po-orchestration`, `sdlc-gitflow`, `sdlc-spec-template`, `spec-review-gate`, and the `devops` and `service-architect` instructions. Before any push, each live copy was matched byte for byte to an earlier bundle revision, so no live-only edit was overwritten. The README now gives the right counts and the byte-exact push recipes: `workspace/workspace.context.md`, raw argv instead of `"$(cat f)"` or `--context-stdin`. Cascaded into: `projects/`, `manifest.json` (projects, `properties_count`), `README.md`.
 
 - 2026-10-06 (f) — No policy amended (no policy names the list). **The Azure retirement list leaves the Pulumi skill; it belongs to the repository.** Owner's request. Removed: `azure-retirements.md`, rules `PULUMI-DEP-001` (wrapper for a retired service) and `PULUMI-DEP-002` (API version past its window), and the list-update issue process. All of them depended on that list. Dimension 3 is now **Deprecation path** and holds only `PULUMI-DEP-003`, whose id stays stable. Cause: the workspace setup carries no per-repo data. The live companion file had moved ahead of the bundle (the row confirmed by an agent under DRK-1824), and it is deleted too. The pulumi review autopilot also restated `PULUMI-DEP-003` step 2 as a "major-release ticket", although the skill and `PULUMI-TEST-003` say a minor release, never a major. That wording now matches. Cascaded into: `skills/pulumi-azure-iac-standards` (description, SEC-010, Dimension 3, Enforcement), `autopilots/monthly-architecture-review-pulumi-repos.description.md` (Goal, Context item 3, Hard constraints, Report).

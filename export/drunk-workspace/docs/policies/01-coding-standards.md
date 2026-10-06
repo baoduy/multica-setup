@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-01 |
-| **Version** | 1.7 |
+| **Version** | 1.8 |
 | **Status** | Active |
 | **Owner** | dev-leader |
 | **Applies to** | Every engineer and agent writing or modifying code in any drunk stack: .NET/DDD NuGet libraries, Pulumi/TypeScript npm packages, Python MCP/FastAPI services, Docker images, Helm charts |
@@ -23,13 +23,17 @@ stacks for `github.com/baoduy`, each with its own toolchain. This policy states 
 language-agnostic intent once; each stack's skill is the authoritative implementer of the
 letter of the rule.
 
-| Stack | Repos (examples) | Governing skill(s) | Rule-id prefix |
+Pick the stack from the files a change touches, never from the repo's name: one repo can hold
+several stacks (an API, its Dockerfile and its Helm chart). A path no row matches has no stack
+skill; the brief says so.
+
+| Stack | Detected by (in the changed paths) | Governing skill(s) | Rule-id prefix |
 |---|---|---|---|
-| TypeScript / Pulumi IaC | `drunk-pulumi-azure*`, `-cloudflare-components`, `-intune-components` | `nodejs-typescript-standards` (language/tooling) + `pulumi-azure-iac-standards` (IaC domain) | `TS-*`, `PULUMI-*` |
-| Python MCP/FastAPI | `drunk-mcp-proxy`, `entraid-mcp-server` | `python-mcp-standards` | `MCP-*` |
-| .NET / C# DDD libraries | `DKNet`, `DKNet.Templates` | `dotnet10-efcore10-standards` (language/EF) + `dknet-ddd-conventions` (DDD domain) | `NET10-*`, `EFC-*`, `ASP-*`, `ASYNC-*`, `LOG-*`, `CLEAN-*`, `DKNET-*` |
-| Helm charts | `drunk.charts` | `helm-k8s-conventions` | `HELM-*` |
-| Docker images | `dev-environments`, `drunk-action-runners`, `HBD.YarpProxy`, service Dockerfiles | (build-quality intent is in [Policy 08](08-container-build-and-release.md); layout/style N/A here) | `DOCKER-*` |
+| TypeScript / Pulumi IaC | a `package.json` with an `@pulumi/*` dependency | `nodejs-typescript-standards` (language/tooling) + `pulumi-azure-iac-standards` (IaC domain) | `TS-*`, `PULUMI-*` |
+| Python MCP/FastAPI | a `pyproject.toml` with an `mcp` or `fastapi` dependency | `python-mcp-standards` | `MCP-*` |
+| .NET / C# | a `*.csproj` | `dotnet10-efcore10-standards` (language/EF), + `dknet-ddd-conventions` (DDD domain) when the project references a `DKNet.*` package or project | `NET10-*`, `EFC-*`, `ASP-*`, `ASYNC-*`, `LOG-*`, `CLEAN-*`, `DKNET-*` |
+| Helm charts | a `Chart.yaml` | `helm-k8s-conventions` | `HELM-*` |
+| Docker images | a `Dockerfile` | (build-quality intent is in [Policy 08](08-container-build-and-release.md); layout/style N/A here) | `DOCKER-*` |
 
 ## Purpose
 
@@ -155,8 +159,8 @@ generic rule here where they differ (see Exceptions).
 
 - **dev-leader** — owns this policy; decomposes work so it lands under the right skill per
   stack; never writes code itself.
-- **dev-backend** — implements against these standards inside the domain project the ticket
-  resolves to (`drunk-net` / `drunk-pulumi` / `drunk-others`); applies SOLID/KISS/YAGNI and the
+- **dev-backend** — implements against these standards inside the project that owns the ticket's repo
+  ([Policy 05](05-sdlc-delivery-lifecycle.md) statement 7c); applies SOLID/KISS/YAGNI and the
   stack's own skill, and proves it in the Standards self-review row (statement 15).
 - **dev-leader** also names the governing skill(s) and the rule-ids most at risk in every
   implementation brief's `Standards` row.

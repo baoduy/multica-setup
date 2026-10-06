@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-03 |
-| **Version** | 1.8 |
+| **Version** | 1.9 |
 | **Status** | Active |
 | **Owner** | release-manager (`dev`→`main`) · dev-leader (cycle git-flow) |
 | **Applies to** | Every agent that branches, commits, pushes, or opens a PR in a drunk repo |
@@ -41,9 +41,8 @@ policy fixes a branch/PR discipline that is safe under multi-agent concurrency a
 
 ## Scope
 
-Every drunk repo in scope of the factory: the `DKNet` family, `DKNet.Templates`, the
-`drunk-pulumi-*` packages, and any repo under `drunk-others` (Python MCP services, Docker
-images, Helm charts). All of them follow the same `feature → dev → main` model — there is
+Every repo in scope of the factory: every repo attached to a workspace project
+([Policy 05](05-sdlc-delivery-lifecycle.md) statement 7c), whatever its stack. All of them follow the same `feature → dev → main` model — there is
 no separate branch strategy for a different repo class.
 
 ## Policy statements

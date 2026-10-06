@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-02 |
-| **Version** | 1.11 |
+| **Version** | 1.12 |
 | **Status** | Active |
 | **Owner** | dev-backend |
 | **Applies to** | Every code or behaviour change in a drunk repo, across every stack |
@@ -25,7 +25,7 @@
    Parallel surfaces (1c): ATs + shared stubs ──▶ ≤3 Builds at one stage ──▶ last to finish proves the full suite
    UI presentation (1a): no AT stage, no new tests ──▶ Build done on build · typecheck · lint · existing suites green
                          a test the change breaks ──▶ skipped with a note ──▶ ONE follow-up issue (dev-leader)
-   Helm chart (1d, devops): one chore/<key> PR ──▶ helm-unittest assertions · helm lint · helm template · verify scripts clean
+   Helm chart (1d, devops): one chore/<key> PR ──▶ helm-unittest assertions (or before/after render) · helm lint · helm template · verify scripts clean
 
    No deployed environment to test against — these are published packages.
    Coverage is measured on the feature branch, per TOUCHED class/module, never repo-wide:
@@ -100,7 +100,7 @@ statements but follows the runner and structure conventions below.
    (DRK-2013, DRK-2028, DRK-1679), because each Build had to finish on a fully green suite
    that held its sibling's red tests.
 1a. **UI presentation ships without new tests, for now.** A UI presentation change — the screens
-   and layouts, components, styling and copy of a front-end app (in DKNet.Accounts.Api:
+   and layouts, components, styling and copy of a front-end app (for example, in DKNet.Accounts.Api:
    `ui/components/**` and the `page`, `layout` and `.css` files under `ui/app/**`) — has no
    Acceptance-tests stage, no `at_sha`, no new tests, no coverage figure and no mutation report.
    Its Build is done when the app's build, typecheck and lint pass and its existing test suites
@@ -114,12 +114,13 @@ statements but follows the runner and structure conventions below.
    ([Policy 07](07-bug-and-defect-management.md)). Why: drunk has no UI test standard yet, and the
    owner chose to build the console's presentation first and test it in its own pass (DRK-1745,
    2026-09-25).
-1d. **A Helm chart change is proven inside devops' one PR.** A change to a chart in
-   `drunk.charts` is Workflow D ([Policy 05](05-sdlc-delivery-lifecycle.md) statement 3): it
+1d. **A Helm chart change is proven inside devops' one PR.** A change to a Helm chart (any
+   `Chart.yaml`) is Workflow D ([Policy 05](05-sdlc-delivery-lifecycle.md) statement 3): it
    has no spec, no Acceptance-tests stage, no `at_sha`, no coverage figure and no mutation
    report. `devops` proves it in the same `chore/<issue-key>` PR: a `helm-unittest` assertion
-   for every new or changed conditional render (`HELM-DEL-001`); `helm lint`, `helm template`
-   and the repo's own verify scripts clean; and every existing consumer chart rendering
+   for every new or changed conditional render (`HELM-DEL-001`) where the repo has a
+   `helm-unittest` suite, else the `helm template` output before and after in the PR body;
+   `helm lint`, `helm template` and the repo's own verify scripts, where it has them, clean; and every existing consumer chart rendering
    unchanged unless it opts into the new behaviour. Why: a chart has no public API to freeze
    tests against, and the owner moved chart work to devops (2026-10-04).
 2. **Correct runner per stack — no substitutions.** TypeScript repos run **jest via ts-jest**
@@ -210,12 +211,13 @@ statements but follows the runner and structure conventions below.
   gate as an independent pass over the same diff — the only pair of eyes on the tests that did
   not write the code, so a coverage miss or an implementation-shaped test here is REWORK.
 - **devops** — proves a Helm chart change in its own PR (statement 1d): `helm-unittest`
-  assertions, `helm lint`/`helm template` and the repo's verify scripts clean.
+  assertions where the repo has a suite (else the before-and-after render), `helm lint`/`helm template`
+  and the repo's verify scripts, where it has them, clean.
 
 ## Definition of Done / compliance
 
 - New/changed logic has a test (UI presentation: statement 1a; Helm chart: a `helm-unittest`
-  assertion, statement 1d); every bug fix carries a
+  assertion, or the before-and-after render in a repo without a suite, statement 1d); every bug fix carries a
   reproduction test that failed before the fix and passes after.
 - Full suite green — pre-existing tests plus new ones — zero errors, zero warnings (parallel Builds: proved by the last one to finish, statement 1c).
 - ≥80% combined coverage on every touched class/module, reported per file, never repo-wide.
