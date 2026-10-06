@@ -71,6 +71,16 @@ what this deliberately does NOT do. Never empty on a non-trivial package.>
 ## 🔗 Related packages
 
 <Sibling packages, with one line on when to reach for each instead.>
+
+## ❓ Open questions
+
+| Question | Why it matters | Checked | Who can answer |
+|---|---|---|---|
+
+<One row per fact the page needs and the repo cannot prove: a supported
+version range, an intended behaviour the code contradicts, an owner. Checked:
+what you read before giving up. The rest of the page never states a guess as
+fact.>
 ```
 
 ## Section rules
@@ -86,6 +96,7 @@ what this deliberately does NOT do. Never empty on a non-trivial package.>
 | 🧱 Where it fits | When the package works across more than one component, service, or package | Prose that a diagram would say better, or a diagram with no prose around it |
 | ⚠️ Gotchas & limits | Always, unless the package is genuinely one behaviour with no edges | Empty, or only restates the happy path |
 | 🔗 Related packages | When siblings exist | Bare links with no "reach for this when" line |
+| ❓ Open questions | When the page needs a fact the repo cannot prove | A guess stated as fact elsewhere on the page; a row with no "Checked" |
 
 Emoji headings are house style on these pages — keep them, exactly as above.
 

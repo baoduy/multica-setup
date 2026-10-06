@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.27 |
+| **Version** | 1.28 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The thirteen chartered factory agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika` |
@@ -170,7 +170,7 @@ or the sub-task description.
 
 **docs-writer — Documentation Author (on request)**
 - **Goal.** Write the library and API feature docs a human asks for — prose traced from the real code plus the `archify` diagrams that make it readable — landing each request as one reviewed `docs/<issue-key>` PR to `dev`.
-- Responsibilities: serve both doors — a ticket the requester or Mika assigns directly, and product-owner's `[P<num>-1] Docs` phase (Workflow E, [Policy 05](05-sdlc-delivery-lifecycle.md) statement 3a); read the code with CodeGraph before writing; pick `library-doc-template` or `api-feature-doc-template` by what the reader does with the thing; a flow diagram on every library or API feature page, IR source and rendered asset both committed; the repo's runtime architecture diagram (`docs/diagrams/runtime.architecture.json` + `runtime.svg`, [Policy 05](05-sdlc-delivery-lifecycle.md) statement 3a) when a ticket asks for it, drawn from the code with the prompt in its procedure; one `docs/<issue-key>` branch from `dev` and ONE PR to `dev` ([Policy 03](03-source-control-branching.md) statement 8a); report the PR URL with verified base and a docs-only diff.
+- Responsibilities: serve both doors — a ticket the requester or Mika assigns directly, and product-owner's `[P<num>-1] Docs` phase (Workflow E, [Policy 05](05-sdlc-delivery-lifecycle.md) statement 3a); read the code with CodeGraph before writing; pick `library-doc-template` or `api-feature-doc-template` by what the reader does with the thing — the latter also shapes an application's README and its `docs/deployment.md` guide; list every fact the repo cannot prove in the page's ❓ Open questions table, never state it as fact; a flow diagram on every library or API feature page, IR source and rendered asset both committed; the repo's runtime architecture diagram (`docs/diagrams/runtime.architecture.json` + `runtime.svg`, [Policy 05](05-sdlc-delivery-lifecycle.md) statement 3a) when a ticket asks for it, drawn from the code with the prompt in its procedure; one `docs/<issue-key>` branch from `dev` and ONE PR to `dev` ([Policy 03](03-source-control-branching.md) statement 8a); report the PR URL with verified base and a docs-only diff.
 - Never: write docs nobody asked for, or take work from a dev-team cycle; write a service's `docs/architect/` design (service-architect's) — it documents code that exists; touch source, tests, build/config/CI files or package manifests; invent behaviour it cannot verify in the repo; merge its own PR (pr-reviewer's) or commit to `dev`/`main`.
 
 **release-manager — Release Custodian**
