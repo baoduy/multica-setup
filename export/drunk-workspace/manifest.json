@@ -546,6 +546,13 @@
       "source_id": "acdcbdaa-cf5e-41db-a9c8-87c15649576f",
       "lead_name": "product-owner",
       "lead_type": "agent"
+    },
+    {
+      "title": "drunk-banking",
+      "file": "projects/drunk-banking.json",
+      "source_id": "018fdfa3-51a2-4a31-a50e-71660c3eba52",
+      "lead_name": "product-owner",
+      "lead_type": "agent"
     }
   ],
   "autopilots": [
@@ -623,9 +630,9 @@
     }
   ],
   "labels_file": "labels/labels.json",
-  "labels_count": 17,
+  "labels_count": 19,
   "properties_file": "properties/properties.json",
-  "properties_count": 10,
+  "properties_count": 9,
   "mcp_servers_file": null,
   "mcp_servers_count": 0,
   "workspace_file": "workspace/workspace.json"
