@@ -55,6 +55,11 @@
     "description": "The template issues"
   },
   {
+    "name": "docs",
+    "color": "#0ea5e9",
+    "description": "The docs issues"
+  },
+  {
     "name": "dknet",
     "color": "#14b8a6",
     "description": ""
