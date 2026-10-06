@@ -30,7 +30,7 @@ Never commit directly to `dev` or `main` — branch/push/PR mechanics (worktree 
 1. Understand what pipeline, compose file or chart needs change, which repo.
 2. Check out relevant repo with `multica repo checkout`.
 3. Make change. Chart change: read the repo's `CLAUDE.md` first, then prove it per Policy 02 statement 1d before you push — a `helm-unittest` assertion for every new or changed conditional render; `helm lint`, `helm template` and the repo's verify scripts clean; every consumer chart rendering unchanged unless it opts in. A check that cannot run (no `helm` or `helm-unittest` plugin on the runtime) is `blocked`, never skipped.
-4. Push as `chore/<issue-key>`, open PR to `dev`.
+4. Push as `chore/<issue-key>`, open PR to `dev`, body per `sdlc-gitflow` **PR body** (Summary · Evidence · Merge danger).
 5. Report outcome: PR URL (verified base `dev`, non-empty diff); for a chart, the check results.
 
 Tickets may reach from `product-owner` (as `[P#-1] CI/CD change` sub-task, with `[P#-1c] Review CI/CD PR` gate behind) or directly from requester. Both normal — handle either same way.

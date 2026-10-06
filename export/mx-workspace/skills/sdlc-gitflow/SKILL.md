@@ -59,7 +59,7 @@ These are not hypothetical — each has broken a real delivery.
 **Therefore: never omit either flag. Always both, always explicit.**
 
 ```bash
-gh pr create --head <feature-branch> --base dev --title "[ABC-123] ..." --body "..."
+gh pr create --head <feature-branch> --base dev --title "[ABC-123] ..." --body-file <path>
 ```
 
 ### 3. `git checkout` of a shared branch locks it against every other agent
@@ -110,7 +110,7 @@ Never check feature branch out to push to it.
 
 1. **Know exact head branch.** Never infer or guess it. If you were not told which branch, or `git ls-remote origin <branch>` is empty, stop and ask — do **not** fall back to `dev`, `main`, or your own `agent/...` branch.
 2. **Check for an existing PR first.** `gh pr list --head <branch> --base dev --state open`. If one exists, update its title/body instead of opening a second.
-3. **Create with both refs explicit** (see above).
+3. **Create with both refs explicit** (see above), the body from a file per **PR body** below.
 4. **Verify both refs afterwards:**
 
 ```bash
@@ -121,6 +121,51 @@ gh pr view <PR#> --json baseRefName,headRefName
 - Wrong head → **not editable on GitHub.** Close it (`gh pr close <PR#>`) and re-create with correct `--head`. Note close-and-recreate when you report.
 
 5. **Diff sanity check:** `gh pr diff <PR#> --stat` must be non-empty and contain work you expect. An empty diff means head is wrong. Never report done on an empty PR.
+
+## PR body
+
+Every PR you open uses this body (Policy 03 statement 7a). The release PRs keep the format their own skill sets: release-manager's `dev`→`main` PR and prd-release's `release/prd-*` PR (`prd-release-runbook`). Two readers use the body: a human and the review gate. Write it by the spec writing rules — one idea per sentence, everyday words, numbers as digits.
+
+Write the body to a file inside your working directory and pass `--body-file <path>`. An inline `--body "..."` breaks on backticks and newlines. On a reused PR, run `gh pr edit <PR#> --body-file <path>`.
+
+````markdown
+## Summary
+
+<1–2 sentences: what changes, for whom. Spec: <ROOT-KEY> revision <n>.>
+
+<ONE visual, the smallest that shows the change — see below>
+
+## Evidence
+
+- **Before:** `<scenario or test>` red at `<at_sha>` — <why it failed, one line>
+- **After:** green at `<head sha>` — <n> passed, 0 failed, 0 skipped · coverage min <n>% · mutation <score>
+- **Not verified:** <a check that could not run, and why> — or `none`
+
+## Merge danger
+
+**Door:** two-way | one-way — <why>
+**Blast radius:** none | repo | consumers | data | deploy — <who or what could break>
+````
+
+Rules:
+
+- **Summary visual.** Pick the smallest view that makes the point: a call tree for runtime flow, a shallow file tree for a layout change or a broad refactor, pseudocode for logic. When the shape already exists and the point is what changes, use a `diff` block over one of those. One visual, rarely two. Keep only the calls, files and states the change touches. Text blocks only, never a ` ```mermaid ` block.
+
+  ```diff
+   submitPayout
+     validateBeneficiary
+  +  checkDailyLimit
+     postLedgerEntry
+  ```
+
+- **Evidence quotes the stage reports.** Before comes from the Acceptance-tests report (`at_sha`) or a `bug-build`'s `Repro RED` row. After comes from the Build's EVIDENCE rows. A PR with no red-first test (docs, design, chart, CI, UI presentation) drops Before and lists the checks that ran instead, one per line: `helm template` showing the new value, `helm-unittest`, a link check, typecheck and lint.
+- **Not verified** names every check that could not run, so no reader assumes it passed. A dev-team Build never reports a check skipped, so on a cycle PR this line is `none`.
+- **Door.** Two-way: reverting the merge commit undoes the change. One-way: a field is removed, renamed or changes type; data is migrated or deleted; or a published package or consumed contract breaks (the spec's §3b says `breaking`). Say which.
+- **Blast radius.** One word, then who or what could break. Take it from the spec's §3b Public surface and Integration lines. A chart PR whose merge deploys writes `deploy — merging deploys to <environment>`.
+- No `Closes`/`Fixes`/`Resolves` next to an issue key, here or in the title (statement 7).
+- Summary, Evidence and Merge danger fit in about 30 lines. A large table (routes, endpoints, per-file numbers) goes after Merge danger, under `## Details`.
+
+Shape adapted from the `pr` skill in mattpocock/skills v1.3 (MIT). The visual menu comes from Dex Horthy's `show-me` skill.
 
 ## Conflict protocol
 
@@ -201,3 +246,4 @@ One mechanic, several destinations. There is never a reason to check out a share
 - [ ] `gh pr diff --stat` non-empty and contains expected work
 - [ ] `mergeable` == `MERGEABLE`
 - [ ] PR title carries issue key prefix
+- [ ] PR body follows **PR body** (Summary · Evidence · Merge danger), passed with `--body-file`

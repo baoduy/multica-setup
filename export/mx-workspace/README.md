@@ -509,6 +509,10 @@ touches nothing else.
 - **Both refs explicit, every PR** — `gh pr create --head <branch> --base dev …`. A missing
 `--base` silently targets `main`; a missing `--head` yields an empty or wrong diff that
 still reports success.
+- **One PR body shape** — Summary (a text visual of the change) · Evidence (red before,
+green after, every check that could not run) · Merge danger (one-way or two-way door, blast
+radius), passed with `--body-file` (Policy 03 statement 7a, `sdlc-gitflow`). Release PRs keep
+their own format.
 - **Remote-only branch ops** — never `git checkout` `dev`, `main`, or a shared feature
 branch; a checkout locks it against every other agent, potentially past the end of the task.
 - **Branch from freshly fetched `origin/dev`** — never a stale local ref. Conventional
@@ -942,7 +946,7 @@ agent, was retired when the squad leaders took over its git-flow duties (see `CH
 
 | Skill           | Governs                                                                                                              | Bound to              |
 | --------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `sdlc-gitflow`  | feature→dev→main branch/PR discipline: remote-only ops, explicit `--head/--base`, post-create verification           | 🐺 🔨 🧪 🐳 🏛️ 🌙 🐙 |
+| `sdlc-gitflow`  | feature→dev→main branch/PR discipline: remote-only ops, explicit `--head/--base`, post-create verification, PR body shape | 🐺 🔨 🧪 🐳 🏛️ 🌙 🐙 |
 | `leader-gitops` | the squad leaders' inline git-flow runbook — branch cut, the ONE cycle PR, conflict handling, worktree-lock recovery | 🐺 🐝                 |
 
 

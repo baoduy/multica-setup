@@ -59,13 +59,13 @@ Create branch on remote without checking it out (see `sdlc-gitflow` for why):
 ```bash
 git push origin origin/<tracked-branch>:refs/heads/chore/<issue-key>
 git push origin HEAD:refs/heads/chore/<issue-key>
-gh pr create --head chore/<issue-key> --base <tracked-branch> --title "[<ISSUE-KEY>] ..." --body "..."
+gh pr create --head chore/<issue-key> --base <tracked-branch> --title "[<ISSUE-KEY>] ..." --body-file <path>
 ```
-The PR body must contain:
+Write the PR body per `sdlc-gitflow` **PR body**:
 
-1. What changed and why
-2. The `helm template` evidence — or explicit statement that render could not be verified
-3. A plain sentence that **merging this deploys**, naming target environment
+1. **Summary** — what changed and why, with a `diff` sketch of the values that change
+2. **Evidence** — the `helm lint` and `helm template` results showing the NEW value, or `Not verified: helm template — <why>`
+3. **Merge danger** — Blast radius `deploy — merging this deploys to <environment>`
 
 Then **stop**. Report PR link. A human reviews and merges.
 

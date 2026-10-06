@@ -4,6 +4,22 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-10-06 — every PR body has one shape: Summary, Evidence, Merge danger (Policy 03 v1.3)
+
+Owner-approved. New Policy 03 statement 7a. Summary is one or two sentences plus the smallest
+text visual that shows the change (call tree, file tree, pseudocode or a `diff` sketch; never
+Mermaid). Evidence shows the test red before and green after, or the checks that ran, plus
+every check that could not run. Merge danger names the door (two-way: reverting the merge undoes
+it; one-way: a field removed, renamed or retyped, data migrated or deleted, or a §3b `breaking`
+contract) and the blast radius from §3b; a chart PR writes `deploy — merging this deploys to
+<environment>`. The body goes in with `--body-file`. dev-leader's Evidence quotes the members'
+reports. Release PRs (`dev`→`main`, `release/prd-*`) keep their own format. pr-reviewer does not
+score the body (Policy 04 unchanged). Cause: a review against mattpocock/skills v1.3 `pr` (MIT;
+credited in the skill); drunk-workspace's agent PR bodies had no shared shape and no risk
+statement. `helm-chart-delivery`'s three required body items fold into the shared shape. Files:
+`docs/policies/03-source-control-branching.md`, skills `sdlc-gitflow`, `leader-gitops`,
+`helm-chart-delivery`, `compose-delivery`, `architecture-review-sweep`, `README.md`.
+
 ## 2026-10-04 (o) — the 2026-10-03 and 2026-10-04 changes are live, minus 2026-09-29 (c)
 
 **Live note (2026-10-04).** Pushed live on top of the pre-2026-09-29 (c) text: live still
