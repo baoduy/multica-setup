@@ -208,7 +208,7 @@ Test-only. **Never** touch production code in this PR.
 cd src && dotnet build <Solution>.slnx -c Release              # analyzers are errors
 dotnet test <path/to/Project.Tests.csproj>                      # must be green
 git push origin HEAD:refs/heads/<feature-branch>
-gh pr create --head <feature-branch> --base dev --title "[<ISSUE-KEY>] ..." --body-file <path>   # body: sdlc-gitflow **PR body**
+gh pr create --head <feature-branch> --base dev --title "[<ISSUE-KEY>] ..." --body-file <path>   # body: Summary · Evidence · Merge danger (sdlc-gitflow **PR body**)
 ```
 
 Branch and PR mechanics follow `sdlc-gitflow` skill — **always pass both `--head` and `--base dev` explicitly**; without `--base`, `gh` silently targets production branch. Verify `baseRefName`/`headRefName` and non-empty diff before reporting done.

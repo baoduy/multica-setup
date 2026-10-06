@@ -124,7 +124,7 @@ gh pr view <PR#> --json baseRefName,headRefName
 
 ## PR body
 
-Every PR you open uses this body (Policy 03 statement 7a). The release PRs keep the format their own skill sets: release-manager's `dev`→`main` PR and prd-release's `release/prd-*` PR (`prd-release-runbook`). Two readers use the body: a human and the review gate. Write it by the spec writing rules — one idea per sentence, everyday words, numbers as digits.
+Every PR you open uses this body (Policy 03 statement 7a). The release PRs keep the format their own skill sets: release-manager's `dev`→`main` PR and prd-release's PRs into `main` (`release/prd-*` and the BDD repo's `dev`→`main`), both in `prd-release-runbook`. Two readers use the body: a human and the review gate. Write it by the spec writing rules — one idea per sentence, everyday words, numbers as digits.
 
 Write the body to a file inside your working directory and pass `--body-file <path>`. An inline `--body "..."` breaks on backticks and newlines. On a reused PR, run `gh pr edit <PR#> --body-file <path>`.
 

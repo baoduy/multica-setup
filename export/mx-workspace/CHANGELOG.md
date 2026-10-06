@@ -13,7 +13,8 @@ every check that could not run. Merge danger names the door (two-way: reverting 
 it; one-way: a field removed, renamed or retyped, data migrated or deleted, or a §3b `breaking`
 contract) and the blast radius from §3b; a chart PR writes `deploy — merging this deploys to
 <environment>`. The body goes in with `--body-file`. dev-leader's Evidence quotes the members'
-reports. Release PRs (`dev`→`main`, `release/prd-*`) keep their own format. pr-reviewer does not
+reports. Release PRs into `main` (release-manager's `dev`→`main`, prd-release's `release/prd-*` and
+the BDD repo's `dev`→`main`) keep their own format. pr-reviewer does not
 score the body (Policy 04 unchanged). Cause: a review against mattpocock/skills v1.3 `pr` (MIT;
 credited in the skill); drunk-workspace's agent PR bodies had no shared shape and no risk
 statement. `helm-chart-delivery`'s three required body items fold into the shared shape. Files:
