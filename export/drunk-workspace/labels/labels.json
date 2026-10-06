@@ -1,6 +1,6 @@
 [
   {
-    "name": "🧩",
+    "name": "feature",
     "color": "#8b5cf6",
     "description": "The new feature issues"
   },
@@ -10,7 +10,7 @@
     "description": "The web-hook issues"
   },
   {
-    "name": "🪲",
+    "name": "bug",
     "color": "#ef4444",
     "description": "The bug issues"
   },
@@ -25,7 +25,7 @@
     "description": "The UI issues"
   },
   {
-    "name": "❓",
+    "name": "question",
     "color": "#ef4444",
     "description": "The question issues"
   },
@@ -40,7 +40,7 @@
     "description": "The issues for drunkcoding blog."
   },
   {
-    "name": "🔁",
+    "name": "cicd",
     "color": "#f59e0b",
     "description": "CICD issues"
   },
