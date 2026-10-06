@@ -60,6 +60,11 @@
     "description": "The docs issues"
   },
   {
+    "name": "design",
+    "color": "#a855f7",
+    "description": "The service design issues"
+  },
+  {
     "name": "dknet",
     "color": "#14b8a6",
     "description": ""
