@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-02 |
-| **Version** | 1.13 |
+| **Version** | 1.14 |
 | **Status** | Active |
 | **Owner** | dev-backend |
 | **Applies to** | Every code or behaviour change in a drunk repo, across every stack |
@@ -28,6 +28,8 @@
    Coverage-excluded (1e): repo coverage config on dev (or a §4 Test scope decision) ──▶ `build-excluded`
                          @unit/@integration scenarios ──▶ ATs as usual · @stack ──▶ literal output on the running stack
                          build · existing suites · CI parity green ──▶ no coverage figure, no mutation report
+   Owner test waiver (1f): owner's own reply ──▶ §4 Test waiver ──▶ `build-waived` (code no shipped artifact uses)
+                         no AT stage, no new tests, no coverage, no mutation ──▶ build · existing suites · CI parity green
    Helm chart (1d, devops): one chore/<key> PR ──▶ helm-unittest assertions (or before/after render) · helm lint · helm template · verify scripts clean
 
    No deployed environment to test against — these are published packages.
@@ -146,12 +148,38 @@ statements but follows the runner and structure conventions below.
    the build, every existing suite and `CI parity` are green, its own ATs (if any) are green,
    and every `@stack` scenario has its literal output. A covered file in the same cycle keeps
    the full bar in its own Build. New branching or decision logic in a coverage-excluded file
-   is an `important` finding: it belongs in a covered project. A PR that adds or widens a
+   is an `important` finding: it belongs in a covered project, unless the owner waived the
+   surface's tests (statement 1f). A PR that adds or widens a
    coverage exclusion is `blocking` unless its ticket asks for it ([Policy 04](04-code-and-spec-review.md)
    statement 5a). Why: DKNet.Accounts.Api's `coverage.runsettings` says of its AppHost "do not
    write tests to cover them", yet statements 4, 6 and 6a asked DRK-2135's AppHost Build
    (DRK-2159) for coverage and a mutation report; and DRK-2098 failed the spec gate three
    times on a requester's "no test for AppHost" that no rule could honour.
+1f. **The ticket's owner can waive tests for code that never ships.** A surface can be waived
+   only when no shipped artifact uses it: no project that is deployed to production or
+   published as a package references it, and no released image or package contains it. For
+   example: an Aspire AppHost and the console or demo apps only the AppHost starts, test
+   projects, and test helpers. Never waivable: code a shipped project uses, security or
+   authorization code (authentication, token validation, permission checks), the public API
+   of a published package, and a bug fix's reproduction test (statement 1b,
+   [Policy 07](07-bug-and-defect-management.md)). Only the ticket's human owner, resolved by
+   [Policy 10](10-ticket-ownership-and-owner-pickup.md) statement 2, grants the waiver, in a
+   reply of their own in the ticket thread, to a question or request that names the
+   surface. A requester who is not the owner, product-owner's guess and any agent cannot grant it. product-owner records the reply
+   in §4 as `<date> · <owner> · Test waiver: <surface> — <reason>`
+   ([Policy 06](06-requirements-and-spec.md) statement 10); it holds for that cycle only. A
+   waived surface is built with `Mode: build-waived`, even when the coverage config also
+   leaves it out: the waiver takes precedence over statement 1e for the surface it names. That
+   Build has no Acceptance-tests stage, no `at_sha`,
+   no new tests, no coverage figure, coverage review or mutation report, and no `@stack`
+   evidence. Its §5 scenarios are still written and tagged. The Build is done when the build,
+   every existing suite and `CI parity` are green. An existing test the change breaks is
+   fixed, never skipped; a test is removed only together with the code it covers. Branching
+   or decision logic in a waived file is not a finding. A covered file in the same cycle keeps
+   the full bar in its own Build. Why: on DRK-2163 the owner chose no tests at all for
+   `DKNet.Accounts.EmailProcessor`, a console app only the Accounts AppHost starts. No rule
+   could honour that, so the spec gate would have rejected it, and the owner's only way
+   through was to approve an ESCALATED gate by hand after three rework rounds.
 2. **Correct runner per stack — no substitutions.** TypeScript repos run **jest via ts-jest**
    (`jest.config.js`, `preset: ts-jest`); do not add mocha/vitest (`TS-TEST-001` — note this
    supersedes the stale `PULUMI-TEST-001` mocha reference, which is not the real runner).
@@ -173,7 +201,8 @@ statements but follows the runner and structure conventions below.
    dev-backend measures coverage per touched class and reads each class against its tests —
    every public behaviour, branch, and error path the change added must be exercised; gaps are
    closed with behaviour tests before sign-off, never left for review to find. UI presentation
-   files are exempt under statement 1a, coverage-excluded files under statement 1e.
+   files are exempt under statement 1a, coverage-excluded files under statement 1e, and
+   owner-waived files under statement 1f.
 5. **Test behaviour and contracts, not implementation.** Tests survive behaviour-preserving
    refactors: no asserting on private members, internal call order, or brittle selectors.
    Assert on state/outcome. Pulumi tests mock the SDK/cloud-provider calls, never real cloud
@@ -200,9 +229,9 @@ statements but follows the runner and structure conventions below.
    `npm pack` (TS). Combined unit + BDD-unit coverage of every class/module **touched** in the
    cycle reaches **≥80%**, measured only over files the feature branch changed
    (`git diff --name-only origin/dev...origin/<feature-branch>`, excluding test files) — never
-   a repo-wide figure. UI presentation files (statement 1a) and coverage-excluded files
-   (statement 1e) are outside this gate.
-6a. **Mutation report per touched class — coverage's honesty check.** Coverage says a line ran; only mutation says an assertion would have caught it changing. Every Build except a UI presentation one (statement 1a) and a `build-excluded` one (statement 1e) reports a mutation run scoped to the lines the cycle changed in the classes it touched — `dotnet stryker --since:origin/dev` on .NET, `npx stryker run --mutate "<file>:<start>-<end>,…"` over the diff's hunks on TypeScript — never the whole class, whose unchanged code the cycle does not own; reported per touched class, with **every survivor dispositioned** — `killed — added <test>` / `equivalent` / `accepted — <why>`. Tool genuinely unavailable → the manual equivalent: invert each guard the change added, run, confirm RED, restore, and say in the report that the tool was unavailable. A Build reported `done` without a mutation report and its dispositions is incomplete the same way a missing coverage row is; dev-leader sends it back and never promotes past it.
+   a repo-wide figure. UI presentation files (statement 1a), coverage-excluded files
+   (statement 1e) and owner-waived files (statement 1f) are outside this gate.
+6a. **Mutation report per touched class — coverage's honesty check.** Coverage says a line ran; only mutation says an assertion would have caught it changing. Every Build except a UI presentation one (statement 1a), a `build-excluded` one (statement 1e) and a `build-waived` one (statement 1f) reports a mutation run scoped to the lines the cycle changed in the classes it touched — `dotnet stryker --since:origin/dev` on .NET, `npx stryker run --mutate "<file>:<start>-<end>,…"` over the diff's hunks on TypeScript — never the whole class, whose unchanged code the cycle does not own; reported per touched class, with **every survivor dispositioned** — `killed — added <test>` / `equivalent` / `accepted — <why>`. Tool genuinely unavailable → the manual equivalent: invert each guard the change added, run, confirm RED, restore, and say in the report that the tool was unavailable. A Build reported `done` without a mutation report and its dispositions is incomplete the same way a missing coverage row is; dev-leader sends it back and never promotes past it.
 6b. **Nothing is reported skipped, and CI runs locally first.** A Build in any mode, and a Build's rework fix, never reports `done` with a check it was asked to run marked skipped or deferred. A check that cannot run is a `blocked` with the reason, or the manual fallback its own statement names. Before its last push the implementer makes a throwaway local merge of fresh `origin/dev` into its HEAD (a scratch branch it never pushes; the shared feature branch is never rebased) and, from the repo root, runs the repo's `pull_request` workflow steps that run locally (`.github/workflows/*.yml`: build, lint, typecheck, test, pack, compose and image builds), all of them, not only the test project it changed. A step that needs a secret, uploads, publishes or deploys (SonarCloud scan, codecov or snyk upload, image push) is listed as `not local: <step>`, which is a declared boundary, not a skip; where the repo gates on SonarCloud duplication, `jscpd` runs locally in its place (statement 7a of [Policy 01](01-coding-standards.md)). It reports them in a `CI parity` row. A red also present on `origin/dev` is noted with that proof, and so are a still-running parallel sibling's own `@new` scenarios (statement 1c), named by its key; any other red is the implementer's to fix. A merge conflict there is reported in the row, not resolved: conflicts with `dev` are dev-leader's (`leader-gitops`). dev-leader sends back a Build whose report marks any check skipped. Why: DRK-1830 deferred Stryker and two mutants survived to the gate; DRK-1867 was red on the merge head; DRK-1777 broke a compose job no one ran locally.
 7. **Never inflate coverage.** No trivial tests on getters or framework code. If 80% on a
    touched class is genuinely unreachable, flag the untestable paths to dev-leader instead of
@@ -237,13 +266,16 @@ statements but follows the runner and structure conventions below.
   `blocked` mid-rework. Never runs tests itself — reads the evidence and trusts the PR gate's
   independent re-check. On a UI presentation Build (statement 1a) there is no coverage evidence
   to read; dev-leader files the follow-up issue (§5 scenarios and skipped tests) before the PR opens.
-  dev-leader classifies every §3 file against the repo's coverage config on `origin/dev`, or
+  dev-leader checks the spec's §4 `Test waiver` first, then classifies every other §3 file against the repo's coverage config on `origin/dev`, or
   the spec's §4 `Test scope` decision, and routes a coverage-excluded surface to a
   `build-excluded` Build (statement 1e); on it dev-leader reads the `Stack evidence` row
-  instead of coverage.
+  instead of coverage. A surface the spec's §4 `Test waiver` names goes to a `build-waived`
+  Build (statement 1f), with no coverage or stack evidence to read.
 - **product-owner** — when the repo's coverage config is silent on a touched project, asks
   the requester once per surface whether it is proven by automated tests or on the running
   stack, and records a "running stack" answer as a §4 `Test scope` decision (statement 1e).
+  Records a §4 `Test waiver` only from the resolved owner's own reply, and only for a surface
+  statement 1f allows; any other request to skip tests is raised as a gate conflict.
 - **pr-reviewer** — re-checks coverage and behaviour-vs-implementation assertions at the PR
   gate as an independent pass over the same diff — the only pair of eyes on the tests that did
   not write the code, so a coverage miss or an implementation-shaped test here is REWORK.
@@ -255,13 +287,14 @@ statements but follows the runner and structure conventions below.
 
 - New/changed logic has a test (UI presentation: statement 1a; Helm chart: a `helm-unittest`
   assertion, or the before-and-after render in a repo without a suite, statement 1d;
-  coverage-excluded wiring: its `@stack` scenarios' literal output, statement 1e); every bug fix carries a
+  coverage-excluded wiring: its `@stack` scenarios' literal output, statement 1e; an
+  owner-waived surface: build, existing suites and `CI parity` green, statement 1f); every bug fix carries a
   reproduction test that failed before the fix and passes after.
 - Full suite green — pre-existing tests plus new ones — zero errors, zero warnings (parallel Builds: proved by the last one to finish, statement 1c).
 - ≥80% combined coverage on every touched class/module, reported per file, never repo-wide
-  (coverage-excluded files: statement 1e).
+  (coverage-excluded files: statement 1e; owner-waived files: statement 1f).
 - A mutation report per touched class, every survivor dispositioned (statement 6a; none on
-  a `build-excluded` Build, statement 1e).
+  a `build-excluded` or `build-waived` Build, statements 1e and 1f).
 - Every test of a destructive operation asserts the state before and the change after; a
   storage or queue adapter change is also tested against the repo's emulator fixture
   (statement 5a).
@@ -282,15 +315,19 @@ finding (statement 5a). UI
 presentation files carry no test requirement (statement 1a); a test skipped without its note,
 or a UI presentation cycle without its follow-up issue, is an `important` finding.
 Coverage-excluded files (statement 1e) carry no coverage or mutation requirement; new
-branching or decision logic in one is an `important` finding, a `@stack` scenario without its
+branching or decision logic in one is an `important` finding (not in an owner-waived one, statement 1f), a `@stack` scenario without its
 literal output in the Build report is an `important` finding, and a PR that adds or widens a
-coverage exclusion without its ticket asking is `blocking`.
+coverage exclusion without its ticket asking is `blocking`. Owner-waived files (statement
+1f) carry no test, coverage or mutation requirement. A waived file that a shipped project
+references or a released image or package contains, a waived file holding security or
+authorization code, or a waiver with no §4 `Test waiver` line from the resolved owner is
+`blocking`.
 
 ## Exceptions & waivers
 
 - The in-repo coverage gate (statement 6) has **no** waiver beyond statement 1a's UI
-  presentation exception, statement 1d's Helm chart proof and statement 1e's coverage-excluded
-  wiring — there is no deployed environment or later integration stage to catch what it would
+  presentation exception, statement 1d's Helm chart proof, statement 1e's coverage-excluded
+  wiring and statement 1f's owner test waiver for code that never ships — there is no deployed environment or later integration stage to catch what it would
   have found; this is the only proof a published package works.
 - A coverage override lives in a repo's `.pr-review.json` as merged on `dev`, never granted
   ad hoc per PR: the gate reads the file from `dev` on GitHub, and a PR that lowers the threshold

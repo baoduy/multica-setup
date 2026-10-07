@@ -51,6 +51,8 @@ A `build-ui` Build (UI presentation, Policy 02 §1a) writes `n/a — UI presenta
 
 A `build-excluded` Build (coverage-excluded wiring, Policy 02 §1e) writes `n/a — coverage-excluded (<Coverage scope row>)` in the Coverage, Branch hits and Mutation rows (and in @new, AT drift and Assertions when it has no `at_sha`), and adds one row: `Stack evidence | <scenario>: <literal output>; …` — one entry per `@stack` scenario.
 
+A `build-waived` Build (owner test waiver, Policy 02 §1f) writes `n/a — waived by <owner> (§4 Test waiver)` in the Coverage, Branch hits, Mutation, @new, AT drift and Assertions rows. It adds no `Stack evidence` row.
+
 Rules:
 
 - **RESULT is one line plus the deviation count.** A deviation is anything the brief said that you did differently. It goes in the DEVIATIONS table with its reason, never in prose. Delete the DEVIATIONS section when there are none.

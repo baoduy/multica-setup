@@ -158,7 +158,7 @@ Rules:
      postLedgerEntry
   ```
 
-- **Evidence quotes the stage reports.** Before comes from the Acceptance-tests report (`at_sha`) or a `bug-build`'s `Repro RED` row. After comes from the Build's EVIDENCE rows. A PR with no red-first test (docs, design, chart, CI, UI presentation, a `build-excluded` Build with no `at_sha`) drops Before and lists the checks that ran instead, one per line: `helm template` showing the new value, `helm-unittest`, a link check, typecheck and lint, each `@stack` scenario's literal output from the Build's `Stack evidence` row.
+- **Evidence quotes the stage reports.** Before comes from the Acceptance-tests report (`at_sha`) or a `bug-build`'s `Repro RED` row. After comes from the Build's EVIDENCE rows. A PR with no red-first test (docs, design, chart, CI, UI presentation, a `build-excluded` Build with no `at_sha`, a `build-waived` Build) drops Before and lists the checks that ran instead, one per line: `helm template` showing the new value, `helm-unittest`, a link check, typecheck and lint, each `@stack` scenario's literal output from the Build's `Stack evidence` row.
 - **Not verified** names every check that could not run, so no reader assumes it passed. A dev-team Build never reports a check skipped, so on a cycle PR this line is `none`.
 - **Door.** Two-way: reverting the merge commit undoes the change. One-way: a field is removed, renamed or changes type; data is migrated or deleted; or a published package or consumed contract breaks (the spec's §3b says `breaking`). Say which.
 - **Blast radius.** One word, then who or what could break. Take it from the spec's §3b Public surface and Integration lines. Name a `release-review` trigger (security-sensitive, supply chain) when one applies.
