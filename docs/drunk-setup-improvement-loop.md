@@ -6,7 +6,11 @@ The rule behind it is drunk Policy 03 statement 11
 (`export/drunk-workspace/docs/policies/03-source-control-branching.md`); the
 charter is in Policy 09 (**setup-steward**).
 
-Diagram: `.archify/workflow-setup-improvement-loop/setup-improvement-loop.html`
+<a href="../.archify/workflow-setup-improvement-loop/setup-improvement-loop.html">
+  <img alt="multica-setup improvement loop (drunk-workspace)" src="../output/improvement-loop-presentation/improvement-loop-animation.gif">
+</a>
+
+Interactive diagram: `.archify/workflow-setup-improvement-loop/setup-improvement-loop.html`
 (open it in a browser).
 
 ## The flow at a glance
@@ -29,6 +33,12 @@ Diagram: `.archify/workflow-setup-improvement-loop/setup-improvement-loop.html`
 `main` is what the live drunk workspace runs. The tag `live/drunk` marks the
 `main` commit that live matches. Nothing reaches live without the owner
 merging `main`.
+
+<a href="../.archify/workflow-setup-gitflow/setup-gitflow.html">
+  <img alt="multica-setup improvement loop git flow (drunk-workspace)" src="../output/gitflow-presentation/gitflow-archify-animation.gif">
+</a>
+
+Interactive diagram: `.archify/workflow-setup-gitflow/setup-gitflow.html`.
 
 ## Parts
 
