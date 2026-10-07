@@ -8,6 +8,38 @@ pushed, and always confirm before pushing to a live workspace (see `../CLAUDE.md
 The drunk bundle improves itself weekly and syncs live when `main` is merged:
 see [`docs/drunk-setup-improvement-loop.md`](docs/drunk-setup-improvement-loop.md).
 
+## Diagrams (drunk-workspace)
+
+Rendered with [archify](https://github.com/tt-a1i/archify). Each image links to
+its interactive HTML source in `.archify/`.
+
+### Runtime architecture
+
+<a href=".archify/architecture-runtime/runtime.html">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".archify/architecture-runtime/visual-check/runtime.visual-check.2048x1320.dark.png">
+    <img alt="multica-setup runtime architecture (drunk-workspace)" src=".archify/architecture-runtime/visual-check/runtime.visual-check.2048x1320.light.png">
+  </picture>
+</a>
+
+### Setup improvement loop
+
+<a href=".archify/workflow-setup-improvement-loop/setup-improvement-loop.html">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".archify/workflow-setup-improvement-loop/visual-check/setup-improvement-loop.visual-check.2048x1320.dark.png">
+    <img alt="multica-setup improvement loop (drunk-workspace)" src=".archify/workflow-setup-improvement-loop/visual-check/setup-improvement-loop.visual-check.2048x1320.light.png">
+  </picture>
+</a>
+
+### Setup git flow
+
+<a href=".archify/workflow-setup-gitflow/setup-gitflow.html">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".archify/workflow-setup-gitflow/visual-check/setup-gitflow.visual-check.2048x1320.dark.png">
+    <img alt="multica-setup improvement loop git flow (drunk-workspace)" src=".archify/workflow-setup-gitflow/visual-check/setup-gitflow.visual-check.2048x1320.light.png">
+  </picture>
+</a>
+
 ## Review-gate scoring — design lessons (2026-08)
 
 Learned from auditing `pr-review-gate` and `spec-review-gate`. Apply these to any
