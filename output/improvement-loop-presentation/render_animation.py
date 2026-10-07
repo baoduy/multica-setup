@@ -47,7 +47,7 @@ html=SOURCE.read_text()
 svg=re.search(r'<svg viewBox="0 0 1081 660".*?</svg>',html,re.S).group(0)
 # Generic presentation labels; original SVG geometry is preserved.
 REPLACEMENTS={
-    'multica-setup Improvement Loop (proposed, drunk-workspace)': 'Multica setup - Improvement loop',
+    'multica-setup Improvement Loop (drunk-workspace)': 'Multica setup - Improvement loop',
     'GitHub baoduy/multica-setup': 'GitHub setup repository',
     'Agents on this PC runtime': 'Agent runtime',
     'drunk-setup project': 'Workspace setup project',

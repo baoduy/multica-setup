@@ -80,7 +80,7 @@ svg=re.sub(r'<pattern id="grid".*?</pattern>',
 BASE=Image.open(io.BytesIO(resvg_py.svg_to_bytes(svg_string=svg,width=1760,height=836,background='white'))).convert('RGB')
 
 SCENES=[
- (3,None,None,'Proposed Git flow','Follow the original Archify layout: commit → review → release → sync to live.'),
+ (3,None,None,'Git flow','Follow the original Archify layout: commit → review → release → sync to live.'),
  (4,'commit',None,'1  Fix Commit','The steward creates one focused commit per Fix Issue, scoped to the drunk bundle.'),
  (4,'devtip','commit-push','2  Push to dev','Push HEAD:refs/heads/dev, then verify the remote tip with git ls-remote.'),
  (4,'pr','dev-pr','3  Open or update the PR','Reuse one open dev → main pull request and wait for the owner.'),
@@ -108,7 +108,7 @@ def frame(t,still=False):
     if still:
         node=edge=None
         title='Owner approval. Verified sync. A traceable live state.'
-        caption='The proposed workflow preserves human merge control and moves the live tag only after verification.'
+        caption='The workflow preserves human merge control and moves the live tag only after verification.'
     im=Image.new('RGB',(W,H),'#f4f5f7')
     d=ImageDraw.Draw(im)
     text(d,(80,29),'Multica setup - git flow',30,NAVY,True)
