@@ -1,0 +1,232 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "multica-setup Improvement Loop: Git Flow (proposed, drunk-workspace)",
+    "quality_profile": "showcase",
+    "output": ".archify/workflow-setup-gitflow-20261007-084711/setup-gitflow.html",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "owner",
+      "label": "Owner (you)",
+      "variant": "exception"
+    },
+    {
+      "id": "dev",
+      "label": "dev branch (via agent/setup-steward worktree)"
+    },
+    {
+      "id": "main",
+      "label": "main branch"
+    },
+    {
+      "id": "tag",
+      "label": "tag live/drunk"
+    }
+  ],
+  "phases": [
+    {
+      "id": "commit",
+      "label": "Commit",
+      "fromCol": 0,
+      "toCol": 0
+    },
+    {
+      "id": "integrate",
+      "label": "Integrate",
+      "fromCol": 1,
+      "toCol": 2,
+      "variant": "emphasis"
+    },
+    {
+      "id": "release",
+      "label": "Release",
+      "fromCol": 3,
+      "toCol": 3,
+      "variant": "security"
+    },
+    {
+      "id": "sync",
+      "label": "Sync to live",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "commit",
+    "devtip",
+    "pr",
+    "review",
+    "merge",
+    "diff",
+    "moved"
+  ],
+  "nodes": [
+    {
+      "id": "commit",
+      "lane": "dev",
+      "col": 0,
+      "type": "backend",
+      "label": "Fix Commit",
+      "sublabel": "1 per Fix Issue",
+      "tag": "drunk bundle only",
+      "width": 140
+    },
+    {
+      "id": "devtip",
+      "lane": "dev",
+      "col": 1,
+      "type": "backend",
+      "label": "dev tip",
+      "sublabel": "push HEAD:refs/heads/dev",
+      "tag": "verify git ls-remote",
+      "width": 140
+    },
+    {
+      "id": "pr",
+      "lane": "dev",
+      "col": 2,
+      "type": "backend",
+      "label": "PR dev → main",
+      "sublabel": "one open PR, reused",
+      "width": 140
+    },
+    {
+      "id": "review",
+      "lane": "owner",
+      "col": 2,
+      "type": "security",
+      "label": "Owner Review",
+      "sublabel": "approve or reject",
+      "tag": "only human merge",
+      "width": 140
+    },
+    {
+      "id": "merge",
+      "lane": "main",
+      "col": 3,
+      "type": "cloud",
+      "label": "Merge to main",
+      "sublabel": "GH Action on push",
+      "width": 140
+    },
+    {
+      "id": "diff",
+      "lane": "tag",
+      "col": 4,
+      "type": "backend",
+      "label": "drunk-live-sync.py",
+      "sublabel": "diff tag..origin/main",
+      "tag": "lock + read-back",
+      "width": 140
+    },
+    {
+      "id": "moved",
+      "lane": "tag",
+      "col": 5,
+      "type": "database",
+      "label": "live/drunk = main",
+      "sublabel": "tag -f, push tag",
+      "width": 140
+    },
+    {
+      "id": "manual",
+      "lane": "owner",
+      "col": 5,
+      "type": "security",
+      "label": "Sync blocked",
+      "sublabel": "apply manual steps",
+      "tag": "tag not moved",
+      "width": 140
+    }
+  ],
+  "edges": [
+    {
+      "id": "commit-push",
+      "from": "commit",
+      "to": "devtip",
+      "label": "refspec push"
+    },
+    {
+      "id": "dev-pr",
+      "from": "devtip",
+      "to": "pr",
+      "label": "open / update"
+    },
+    {
+      "id": "pr-review",
+      "from": "pr",
+      "to": "review",
+      "label": "issue waits"
+    },
+    {
+      "id": "review-merge",
+      "from": "review",
+      "to": "merge",
+      "label": "approve + merge",
+      "variant": "emphasis"
+    },
+    {
+      "id": "review-reject",
+      "from": "review",
+      "to": "commit",
+      "label": "reject: fix again",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "merge-sync",
+      "from": "merge",
+      "to": "diff",
+      "label": "webhook → sync run",
+      "variant": "emphasis"
+    },
+    {
+      "id": "diff-move",
+      "from": "diff",
+      "to": "moved",
+      "label": "all read back equal",
+      "variant": "emphasis"
+    },
+    {
+      "id": "diff-blocked",
+      "from": "diff",
+      "to": "manual",
+      "label": "unsupported (exit 2)",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "manual-accept",
+      "from": "manual",
+      "to": "moved",
+      "label": "rerun --accept",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Branch rules",
+      "items": [
+        "No feature branch: steward commits straight onto dev by refspec",
+        "Never a bare git push; no agent merges main, only the owner",
+        "Never force-push dev; only the live/drunk tag is force-moved"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Tag contract",
+      "items": [
+        "live/drunk marks the main commit that matches the live workspace",
+        "Next sync diffs live/drunk..origin/main, so skipped commits still sync",
+        "Tag stays put on any failure; the next run retries the same range"
+      ]
+    }
+  ]
+}

@@ -3,10 +3,10 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.29 |
+| **Version** | 1.30 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
-| **Applies to** | The thirteen chartered factory agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika` |
+| **Applies to** | The fourteen chartered agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika`, `setup-steward` |
 | **Related skills** | none directly — this policy governs `agents/**` instructions and `squads/**` briefings; each charter names the skills its agent loads |
 | **Enforced at** | agent instructions (must open with the charter Goal) + every gate an agent operates |
 
@@ -27,7 +27,7 @@ themselves.
 
 ## Scope
 
-The thirteen agents named above — everything they are woken for inside drunk-workspace.
+The fourteen agents named above — everything they are woken for inside drunk-workspace.
 
 **Explicitly out of scope: `default` and `claude_ultra`.** They are general Multica
 platform assistants (workspace management, CLI help, ad-hoc questions) sharing one
@@ -35,7 +35,10 @@ instruction text. They hold **no SDLC authority**: no charter here, no stage own
 gate, no git/branch authority under [Policy 03](03-source-control-branching.md). They may
 file and route tickets (product work to `product-owner`, CI/CD and Helm charts to `devops`, docs to
 `docs-writer`, blog content to `blog-team`) but never execute them; factory work that lands on
-them is declined with a pointer to the owning agent.
+them is declined with a pointer to the owning agent. **One carve-out:** the `🔄 Drunk Live Sync`
+autopilot assigns `claude_ultra` to run the setup repo's live sync script after the owner merges
+`main` ([Policy 03](03-source-control-branching.md) statement 11). The procedure lives in that
+autopilot's description, never in the assistant's instructions.
 
 **Workspace Context.** The workspace system prompt (`workspace/context.md` in the bundle) is
 injected into every agent run and carries the platform-wide constants — statuses and wakes,
@@ -56,7 +59,7 @@ or the sub-task description.
    on a green suite at ≥80% per-touched-class coverage (a UI presentation Build: green build,
    typecheck, lint and existing suites, [Policy 02](02-testing-and-quality.md) statement 1a) — there is no separate QC role, the
    PR gate is the independent second pass; only `pr-reviewer` merges
-   into `dev`; only `release-manager` targets or merges `main`; only `devops` edits pipelines,
+   into `dev`; only `release-manager` targets or merges `main` (the setup repo follows [Policy 03](03-source-control-branching.md) statement 11); only `devops` edits pipelines,
    compose files and Helm charts; only `service-architect` authors a new service's design (`docs/architect/`), and only
    the workspace owner approves it; only `arch-reviewer` files new backlog findings from review sweeps;
    only `issue-janitor` deletes issues; only `run-medic` wakes an agent whose run was killed
@@ -78,7 +81,7 @@ or the sub-task description.
    No ticket is left unassigned waiting for a human click, and none is assigned to the workspace
    owner. Routine decomposition sub-issues a leader creates at the start of a cycle (`[S#]`,
    `[P#-n]`, `[D#-n]`) stay assigned as before. Off-pipeline agents outside every squad
-   (`arch-reviewer`, `Mika`) file under their own charters below.
+   (`arch-reviewer`, `Mika`, `setup-steward`) file under their own charters below.
 
 2. **Asked to do another agent's job → decline and name the owner.** An agent never
    performs an act another charter owns, even when directly requested, mentioned, or
@@ -115,6 +118,7 @@ or the sub-task description.
 | arch-reviewer | — | ✅ (enforcement-only) | lint/CI checks in its PR | enforcement branch | ✅ (test/config-only) | — | — | backlog findings → workspace owner (triager) |
 | issue-janitor | — | — | — | — | — | — | — | none (status + deletion only) |
 | run-medic | — | — | — | — | — | — | — | none (one escalation issue when a sweep trips its guard) |
+| setup-steward | — | — | — | `dev` of the setup repo only, by refspec | — | — | opens/updates the setup repo's one PR; never merges | fix issues in the setup repo's project, ≤3 per weekly retro |
 
 ## Roles & responsibilities — the charters
 
@@ -196,6 +200,11 @@ or the sub-task description.
 - Responsibilities: paginated full sweeps (100-row pages, abort on exactly-100 totals); rewrite only OPEN statuses under terminal parents; delete only `cancelled` + ≥7 days untouched, children before parents, via the authorized DELETE exception; report partial success as partial.
 - Never: touch `done`/`cancelled` records otherwise; delete to unblock another deletion; print the bearer token; accept non-hygiene work — decline to the workspace owner.
 
+**setup-steward — Setup Improvement**
+- **Goal.** Make the drunk agents better week by week: turn the mistakes the workspace records into small, evidenced changes to the drunk setup in the setup repo ([Policy 03](03-source-control-branching.md) statement 11), delivered on `dev` for the owner to review in the one `dev`→`main` PR, without ever pushing anything live itself.
+- Responsibilities: the weekly retro (`🔁 Weekly Setup Retro`) reads 7 days of gate verdicts, rounds, scores and rework findings, plus failed runs and run-recovery escalations; a problem qualifies only when the same cause recurs at least twice and a bundle file should have prevented it; it files at most 3 fix issues per week in the setup repo's project, assigned to itself, each with Problem, Evidence, Where and Watch, and dedupes against open ones; it checks whether last weeks' fixes moved their Watch metric. On a fix issue it edits `export/drunk-workspace/` only, follows the repo's `CLAUDE.md` (cascade everywhere a rule is quoted, one changelog entry), commits `drunk: … [<key>]` onto `dev` by refspec, adds one entry to the open `dev`→`main` PR, and leaves the issue `blocked` on the owner's review. A rejected change is reverted on `dev` and the issue cancelled.
+- Never: change a gate bar, cap, weight or severity deduction (it proposes those to the owner); push anything live or move the `live/drunk` tag; merge or approve the PR or open any other; touch `export/mx-workspace/`, `scripts/`, `.github/` or the root `CLAUDE.md`; fix a problem the evidence does not show.
+
 ## Definition of Done / compliance
 
 - Every in-scope agent's instructions open with its charter **Goal**, and its description
@@ -205,7 +214,7 @@ or the sub-task description.
   responsibility column matches each member's charter here — same owner, same boundary,
   same numbers (e.g. the ≥80% per-touched-class coverage bar from [Policy 02](02-testing-and-quality.md)).
 - No agent instruction grants an authority its matrix row forbids.
-- `default` and `claude_ultra` instructions contain no factory-role duties.
+- `default` and `claude_ultra` instructions contain no factory-role duties (the live sync runs from its autopilot's description).
 - Each charter's Never list is enforceable verbatim: a violated Never in a run report is
   a defect against this policy, handled per [Policy 07](07-bug-and-defect-management.md).
 

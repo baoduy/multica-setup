@@ -12,6 +12,21 @@ analyse first, local bundle first, ask before pushing live).
 - One commit per accepted change, message prefixed with the bundle
   (`drunk:`, `mx:`, or `drunk+mx:`).
 
+## Live sync (drunk)
+
+- `main` is what the live drunk workspace runs. The tag `live/drunk` marks the
+  `main` commit live matches. A merge to `main` that touches
+  `export/drunk-workspace/` syncs live automatically (drunk Policy 03
+  statement 11): GitHub Action, then the `🔄 Drunk Live Sync` autopilot, then
+  `scripts/drunk-live-sync.py`. Merging is the owner's approval to push live.
+- Pushing live by hand from `dev` still needs the owner's yes first. Anything
+  pushed that way must reach `main` in the next PR, or the next sync puts the
+  `main` version back.
+- `python3 scripts/drunk-live-sync.py --check` reports drift between `main`
+  and live without pushing. Run it after a manual push.
+- `setup-steward` commits fixes to `dev` and maintains the one open
+  `dev`→`main` PR. Owner-session commits to `dev` ride the same PR.
+
 ## Scoring rubrics (review gates)
 
 When creating or editing any scoring rubric (pr-review-gate, spec-review-gate,

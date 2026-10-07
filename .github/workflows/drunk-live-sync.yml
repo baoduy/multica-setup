@@ -1,0 +1,26 @@
+# Policy 03 statement 11: a merge to main that touches the drunk bundle wakes the
+# "🔄 Drunk Live Sync" autopilot, whose claude_ultra run executes scripts/drunk-live-sync.py.
+name: drunk live sync
+
+on:
+  push:
+    branches: [main]
+    paths: ['export/drunk-workspace/**']
+  workflow_dispatch:
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call the Multica autopilot webhook
+        env:
+          WEBHOOK: ${{ secrets.MULTICA_DRUNK_SYNC_WEBHOOK }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$WEBHOOK" ]; then echo "MULTICA_DRUNK_SYNC_WEBHOOK is not set; nothing to do."; exit 0; fi
+          # Until the owner seeds live/drunk there is no base to diff from.
+          if ! gh api "repos/${{ github.repository }}/git/ref/tags/live/drunk" --silent 2>/dev/null; then
+            echo "Tag live/drunk is not seeded yet; skipping."; exit 0
+          fi
+          curl -fsS -X POST "$WEBHOOK" -H 'Content-Type: application/json' -H 'X-Event-Type: drunk.main.push' \
+            -d "{\"sha\":\"${GITHUB_SHA}\",\"before\":\"${{ github.event.before }}\",\"actor\":\"${GITHUB_ACTOR}\"}"

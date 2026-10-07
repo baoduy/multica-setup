@@ -1,0 +1,14 @@
+{
+  "title": "🔄 Drunk Live Sync",
+  "source_id": "701d6f5e-68dd-4d5b-b406-d1bdf6aa6cce",
+  "status": "active",
+  "execution_mode": "create_issue",
+  "issue_title_template": "Drunk Live Sync ({{date}})",
+  "project_title": "drunk-setup",
+  "assignee_type": "agent",
+  "assignee_name": "claude_ultra",
+  "subscriber_names": [],
+  "had_webhook_trigger": true,
+  "triggers": [],
+  "description_file": "autopilots/drunk-live-sync.description.md"
+}

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-08 |
-| **Version** | 1.4 |
+| **Version** | 1.5 |
 | **Status** | Active |
 | **Owner** | devops (build/publish automation) · release-manager (the `dev`→`main` release) |
 | **Applies to** | Every drunk repo that publishes a NuGet/npm package, a container image, or a Helm chart |
@@ -63,7 +63,7 @@ covers everything CI does to produce a published artifact.
    the Helm charts (chart repos). No agent tags production and no agent deploys anything — for
    library, image and chart repos alike,
    publishing the artifact off `main` **is** the release.
-2. **`release-manager` is the only agent that opens or merges the `dev`→`main` PR.** Exactly
+2. **`release-manager` is the only agent that opens or merges the `dev`→`main` PR** (the setup repo follows [Policy 03](03-source-control-branching.md) statement 11: `setup-steward` opens it, the owner merges it). Exactly
    one open release PR per cycle, `--base main --head dev`, verified on both refs before merge,
    merged with a merge commit (never squash/rebase, to preserve `dev` history on the release
    line). No other agent ever targets or merges into `main`.

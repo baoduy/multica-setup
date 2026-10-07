@@ -425,6 +425,15 @@
         "service-design-template"
       ],
       "had_secrets": true
+    },
+    {
+      "name": "setup-steward",
+      "file": "agents/setup-steward.json",
+      "source_id": "a07692a6-718c-45a7-a21b-e410b2ddc8bd",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
+      "source_runtime_provider": "claude",
+      "skill_names": [],
+      "had_secrets": false
     }
   ],
   "squads": [
@@ -553,6 +562,13 @@
       "source_id": "018fdfa3-51a2-4a31-a50e-71660c3eba52",
       "lead_name": "product-owner",
       "lead_type": "agent"
+    },
+    {
+      "title": "drunk-setup",
+      "file": "projects/drunk-setup.json",
+      "source_id": "17f5a6a4-7a1f-4c56-96e5-98caf77f0934",
+      "lead_name": "drunkcoding",
+      "lead_type": "member"
     }
   ],
   "autopilots": [
@@ -627,6 +643,24 @@
       "assignee_name": "default",
       "project_title": "drunk-others",
       "had_webhook_trigger": false
+    },
+    {
+      "title": "🔁 Weekly Setup Retro",
+      "file": "autopilots/weekly-setup-retro.json",
+      "source_id": "2deb281e-87f0-4592-9e72-1960656e675b",
+      "assignee_type": "agent",
+      "assignee_name": "setup-steward",
+      "project_title": "drunk-setup",
+      "had_webhook_trigger": false
+    },
+    {
+      "title": "🔄 Drunk Live Sync",
+      "file": "autopilots/drunk-live-sync.json",
+      "source_id": "701d6f5e-68dd-4d5b-b406-d1bdf6aa6cce",
+      "assignee_type": "agent",
+      "assignee_name": "claude_ultra",
+      "project_title": "drunk-setup",
+      "had_webhook_trigger": true
     }
   ],
   "labels_file": "labels/labels.json",

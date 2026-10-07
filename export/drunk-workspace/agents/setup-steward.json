@@ -1,0 +1,30 @@
+{
+  "name": "setup-steward",
+  "model": "claude-opus-5-5[1m]",
+  "visibility": "workspace",
+  "avatar_url": "emoji:🐳",
+  "service_tier": "",
+  "permission_mode": "public_to",
+  "conversation_starters": [],
+  "disabled_runtime_skills": [],
+  "invocation_targets": [
+    {
+      "target_id": "4539126d-0687-4993-8852-3554b7c5fb50",
+      "target_type": "workspace"
+    }
+  ],
+  "max_concurrent_tasks": 1,
+  "runtime_config": {},
+  "custom_args": [],
+  "thinking_level": "xhigh",
+  "source_runtime_provider": "claude",
+  "mcp_servers": [],
+  "source_id": "a07692a6-718c-45a7-a21b-e410b2ddc8bd",
+  "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
+  "skill_names": [],
+  "mcp_config": null,
+  "custom_env": null,
+  "had_secrets": false,
+  "instructions_file": "agents/setup-steward.md",
+  "description_file": "agents/setup-steward.description.md"
+}
