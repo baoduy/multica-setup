@@ -17,8 +17,8 @@ its interactive HTML source in `.archify/`.
 
 <a href=".archify/architecture-runtime/runtime.html">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset=".archify/architecture-runtime/visual-check/runtime.visual-check.2048x1320.dark.png">
-    <img alt="multica-setup runtime architecture (drunk-workspace)" src=".archify/architecture-runtime/visual-check/runtime.visual-check.2048x1320.light.png">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/runtime.dark.png">
+    <img alt="multica-setup runtime architecture (drunk-workspace)" src="docs/diagrams/runtime.light.png">
   </picture>
 </a>
 
@@ -26,8 +26,8 @@ its interactive HTML source in `.archify/`.
 
 <a href=".archify/workflow-setup-improvement-loop/setup-improvement-loop.html">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset=".archify/workflow-setup-improvement-loop/visual-check/setup-improvement-loop.visual-check.2048x1320.dark.png">
-    <img alt="multica-setup improvement loop (drunk-workspace)" src=".archify/workflow-setup-improvement-loop/visual-check/setup-improvement-loop.visual-check.2048x1320.light.png">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/setup-improvement-loop.dark.png">
+    <img alt="multica-setup improvement loop (drunk-workspace)" src="docs/diagrams/setup-improvement-loop.light.png">
   </picture>
 </a>
 
@@ -35,8 +35,8 @@ its interactive HTML source in `.archify/`.
 
 <a href=".archify/workflow-setup-gitflow/setup-gitflow.html">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset=".archify/workflow-setup-gitflow/visual-check/setup-gitflow.visual-check.2048x1320.dark.png">
-    <img alt="multica-setup improvement loop git flow (drunk-workspace)" src=".archify/workflow-setup-gitflow/visual-check/setup-gitflow.visual-check.2048x1320.light.png">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/setup-gitflow.dark.png">
+    <img alt="multica-setup improvement loop git flow (drunk-workspace)" src="docs/diagrams/setup-gitflow.light.png">
   </picture>
 </a>
 
