@@ -16,7 +16,7 @@
       "kind": "schedule",
       "label": "Monthly, 1st at 03:00 SGT",
       "enabled": true,
-      "cron_expression": "0 3 1 * *",
+      "cron_expression": "TZ=Asia/Singapore 0 0 1 * *",
       "timezone": "Asia/Singapore"
     }
   ],
