@@ -5,6 +5,9 @@ Each bundle holds the workspace's agents, skills, squads, docs/policies, and a
 `manifest.json`. Edit locally first, keep the bundle byte-identical to what is
 pushed, and always confirm before pushing to a live workspace (see `../CLAUDE.md`).
 
+The drunk bundle improves itself weekly and syncs live when `main` is merged:
+see [`docs/drunk-setup-improvement-loop.md`](docs/drunk-setup-improvement-loop.md).
+
 ## Review-gate scoring — design lessons (2026-08)
 
 Learned from auditing `pr-review-gate` and `spec-review-gate`. Apply these to any
