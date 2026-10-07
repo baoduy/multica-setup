@@ -5,6 +5,8 @@ policy and version, what the new rule says, the cause, and every file the change
 into. The catalog, the authority hierarchy and the change-control procedure live in
 [`00-policies-index.md`](00-policies-index.md).
 
+- 2026-10-07 (k) — No policy amended. **arch-reviewer's instructions stop restating the Workspace Context.** Two sentences repeated rules every run already carries: every PR targets `dev` with both `--head` and `--base` (Workspace Context, **Git and PRs**), and flip a `todo` ticket to `in_progress` on wake (**Status and wakes**). Both are removed. "Never `in_review`" stays: the run issue is a root ticket, which the Workspace Context rule does not cover. Cause: the 2026-10-07 setup audit (only Workspace Context is injected into every run, so only its copies are safe to delete).
+
 - 2026-10-07 (j) — No policy amended. **The DRK-1974/DRK-1978 grandfather clause is removed.** `squads/dev-team.md` (Parallel surfaces) and `agents/release-manager.md` (trigger) let two `[D<num>-4] Release` sub-tasks run under the retired Release-stage rule "until both are `done`". Both are `done`, and so are their roots DRK-1969 and DRK-1970. Cause: the 2026-10-07 setup audit; dead text in two always-loaded files.
 
 - 2026-10-07 (i) — No policy amended. **Pulumi builder tests run on jest.** `pulumi-azure-iac-standards` (`PULUMI-TEST-001`, the tier-discipline note and Dimension 1) still named mocha. `nodejs-typescript-standards` `TS-TEST-001` says these repos run jest via ts-jest and carried a note that the Pulumi skill was stale. The Pulumi skill now says jest and cites `TS-TEST-001`; the stale-note is removed. Cause: the 2026-10-07 setup audit.
