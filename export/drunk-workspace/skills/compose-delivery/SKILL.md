@@ -59,8 +59,9 @@ never let a reviewer assume validation passed silently.
 Follow `sdlc-gitflow`: push a `chore/<issue-key>` branch by refspec (never
 `git checkout` a shared branch), open ONE PR to repo's integration branch
 with `--head` and `--base` explicit, and report link. A human merges and
-deploys. State in PR body whether a manual deploy step is required after
-merge.
+deploys. Write the PR body per `sdlc-gitflow` **PR body**: Evidence carries the
+`docker compose config` result, and Merge danger states whether a manual deploy
+step is required after merge.
 
 ## Never
 

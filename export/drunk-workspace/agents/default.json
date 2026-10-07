@@ -1,6 +1,6 @@
 {
   "name": "default",
-  "model": "claude-sonnet-5",
+  "model": "gpt-6-sol",
   "visibility": "workspace",
   "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a0a935-e876-7d8b-b49a-60970edfbef9.png",
   "service_tier": "",
@@ -17,10 +17,10 @@
   "runtime_config": {},
   "custom_args": [],
   "thinking_level": "high",
-  "source_runtime_provider": "claude",
+  "source_runtime_provider": "codex",
   "mcp_servers": [],
   "source_id": "5bb59f89-c18e-4094-9b90-0de909d537d8",
-  "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
+  "source_runtime_id": "9d566bf1-b859-4fd3-8eba-ca5b59d19eb4",
   "skill_names": [
     "blocker-report",
     "interview-me",

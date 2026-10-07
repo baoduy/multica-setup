@@ -16,7 +16,7 @@ The requester, the workspace owner, the spec gate, the dev-leader, and the imple
 2. Everyday words. No metaphors or idioms ("pay a tax", "double down", "cheapest moment").
 3. Bullets over paragraphs. A paragraph is at most 3 sentences.
 4. Numbers as digits (16 routes, 80%). Dates as `2026-09-15`.
-5. Name a thing the same way every time. Define an acronym once, in brackets.
+5. Name a thing the same way every time. Define an acronym once, in brackets. When a Scope repo has an approved service design, use the terms of its ubiquitous-language table (`docs/architect/02-domain.md`) with the meaning given there; a term the table lacks is defined once, in the spec.
 6. No code words: no class names, method signatures, file paths, flags or `file:line` — in any section, §3a and §3b included. Product and package names and error codes in backticks are fine. §3a is the only place entity, field and endpoint names appear.
 7. Lead with the answer. Reasoning comes after, short.
 

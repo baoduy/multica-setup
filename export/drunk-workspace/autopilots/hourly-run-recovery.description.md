@@ -120,7 +120,7 @@ Failures that are not safe to retry are never retried, and an issue already woke
 
    **The escalation reports the wake list and nothing else.** Every issue it names is one that qualified for a wake: it is in `./candidates.json` and, for class A, passed the step-5 transient classification. Issues that were skipped — parents with children, issues assigned to a member, a squad or nobody, `done`/`cancelled`/`in_review`/`blocked`/`backlog` leaves, permanent errors, issues with a task already in flight — are expected outcomes, not findings; they are never listed, never counted, and never explained. If nothing qualified for a wake, there is nothing to escalate: create no issue at all and end the run silently, however many raw candidates the sweep started from.
 
-   Then create ONE issue: `multica issue create --title "Run recovery needs attention (<UTC date>)" --description-file ./escalation.md --assignee-id <owner user_id> --priority high --project <drunk-others id>` (id from `multica project list --output json`). The description carries exactly three things:
+   Then create ONE issue: `multica issue create --title "Run recovery needs attention (<UTC date>)" --description-file ./escalation.md --assignee-id <owner user_id> --priority high --project <this run issue's project id>` (the `project_id` of the issue this autopilot run created). The description carries exactly three things:
 
    - one line naming the reason — the guard tripping with its count, or which step left the sweep partial;
    - one table, one row per wake-list issue. **Identify each issue by its ticket identifier (`DRK-1673`), never by its UUID** — the script already put it in each row as `identifier`. Name the agent by its `agent_name` from step 1, never its id:

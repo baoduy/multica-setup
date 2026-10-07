@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | MX-POL-07 |
-| **Version** | 1.0 |
+| **Version** | 1.2 |
 | **Status** | Active |
 | **Owner** | product-owner (triage & root cause) · qc-team (defect discovery) |
 | **Applies to** | Every reported bug, discovered defect, and escalation |
@@ -46,7 +46,7 @@ policy's report shape.
 
 ## Policy statements
 
-1. **Bug flow (Workflow A):** intake → research → a root-cause report comment (evidence, repro, fix direction targeting the layer all callers route through) with a **calibrated confidence (0–100%)** that this is a genuine platform defect with the identified root cause.
+1. **Bug flow (Workflow A):** intake → research → a root-cause report comment (evidence, repro, fix direction targeting the layer all callers route through) with a **calibrated confidence (0–100%)** that this is a genuine platform defect with the identified root cause. The reproduction conditions are concrete enough to become a failing test verbatim — exact inputs, exact observed vs. expected outcome — since a confirmed bug carries no Gherkin and this is the only frozen description of what the fix must make pass ([Policy 02](02-testing-and-quality.md) statement 1a).
 2. **Confidence gates delegation:**
    - **≥ 90%** (confirmed) → auto-delegate Workflow C immediately, FYI to the requester ("fix delegated — reply to halt").
    - **< 90%** (possibly by-design/config/user error) → the requester reviews and explicitly confirms before any delegation.
@@ -57,7 +57,7 @@ policy's report shape.
 6. **One issue per distinct root cause; de-duplicate before filing.** A QC cycle files **ONE consolidated, deduped** defect ticket with a summary table (`defect · scope · severity · root cause · suggested owner`) then one three-section block per defect.
 7. **Title names the root cause, not the symptom** ("shared-state coupling breaks parallel OIDC tests", never "CI red").
 8. **Escalate as an action, not a status.** After **2 failed attempts on the same root cause** (or anything outside squad control — a product decision, missing credentials, a broken environment), post ONE standalone `## BLOCKER` + `## OPTIONS` comment (per [`blocker-report`](../../skills/blocker-report/SKILL.md)) and deliver it: agent mention for an agent hop, **ticket reassignment at `todo`** for a human hop. Never take a ticket back while a human holds it.
-9. **Report completion in the fixed shape** — `## RESULT` / `## EVIDENCE` (every claim has an evidence row; a skipped check is a row saying so) / `## LEFT OPEN`, one comment per event.
+9. **Report completion in the fixed shape** — `## RESULT` / `## EVIDENCE` (every claim has an evidence row; a skipped check is a row saying so, except a dev-team `Build:`/`Fix (review):` check, which is never reported skipped — [Policy 02](02-testing-and-quality.md) statement 10 governs it instead) / `## LEFT OPEN`, one comment per event.
 
 ## Best practices for .NET developers
 

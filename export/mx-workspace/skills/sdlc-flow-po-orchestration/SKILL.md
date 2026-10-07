@@ -92,18 +92,14 @@ This replaces old "always ask, never your judgment" rule. Guardrails on that jud
    - **Confidence < 90%** → post report and ask requester to review and explicitly confirm fix. Do NOT delegate until they do.
 4. Write Workflow B spec first only if requester asks for one — it then passes spec-review gate like any spec.
 5. **Delivery scope on auto-delegate path** — set `ship_required`/`bdd_required` by same judgment as Delivery-scope section, and never stall auto-delegated fix on them. Confident call (e.g. test-only fix → `ship_required=false`; internal fix with no BDD surface → `bdd_required=false`) is acted on at once. When unsure ≥90% auto-delegate still does NOT wait: set safe defaults (`ship_required=true`, `bdd_required=true`), create full flow, and ask "Does this need to ship, and does it need BDD integration tests?" in same FYI comment. If requester later narrows scope, flip key, cancel now-unauthorized stages, and say so in one plain comment on main ticket.
-6. **If root cause lives in pipeline, build script, or chart value, this is Workflow D** — report it and hand fix to `devops` per D2. Never delegate it to dev-team, whatever confidence.
+6. **If root cause lives in pipeline, build script, or chart value, this is Workflow D** — report it and hand fix to `devops` per `references/workflow-d-standalone-infra.md` (D2). Never delegate it to dev-team, whatever confidence.
 
 ## Workflow B — Feature / Enhancement Spec
 
 **Research → Clarify → Spec → Spec-Review Gate → Delegate**
 
 1. Research first (as Workflow A), then run clarification gate to zero open questions.
-2. **Write spec per `sdlc-spec-template` skill** — seven sections (Goals · Current State · Expected State · Contract changes · Architecture impact · Scope · Acceptance Criteria), their completeness tests, format rules, BRIEF Gherkin standard and the §5 QC-Scope preamble all live there and are NOT restated here. Load it before drafting. If anything here ever disagrees with it, **`sdlc-spec-template` wins**.
-
-   What that contract means for you: **you state the problem and required behaviour; dev-leader designs the implementation and decomposes it** into an `sdlc-impl-brief`. Your CodeGraph research makes §2 Current State and the §3 invariants correct but stays business-level; the class- and method-level reuse/modify/add decision is the dev-leader's, made in the impl-brief's Change set, never in the spec. Zero code blocks outside §5 Gherkin; no line numbers or file paths anywhere; no class or method names in any section. §3a Contract changes is yours and is the one place entity, field and endpoint names belong. §3b Architecture impact is yours too: the repo or bounded context that owns the change, every new dependency between repos or services with its direction, each consumed contract's call (`additive`, `breaking` — with the callers that must change — or `none`) and each new integration, or one `None — stays inside <repo>` line; repos, services and contexts only, never a class or layer. CodeGraph and the clarification gate are where you get those answers, never guesswork.
-
-   The §5 QC-Scope preamble carries the delivery-scope decision you resolved at the clarification gate above; `ship_required`/`bdd_required` metadata is the machine-readable record and Workflow C reads those keys, not prose.
+2. Read `references/workflow-b-spec-drafting.md` when you draft or revise a Workflow B spec — it holds the full `sdlc-spec-template` contract summary: what each spec section must contain, the class/method boundary with the impl-brief, and the §5 QC-Scope link to `ship_required`/`bdd_required`.
 
 3. **Spec-review gate** — requester is not your default approver, and not your fallback either: route by score. Create ONE `[S<num>] Spec review: <scope>` sub-task (mx-main, parent = main ticket, assignee `spec-reviewer`, `todo`). Idempotent: if one exists, act on its state instead.
    - **APPROVED** (score ≥ 9.0, sub-task `done`) → Workflow C + ONE FYI to requester (member mention, score).
@@ -135,9 +131,7 @@ Only after deliverable's gate passed (spec APPROVED / bug ≥90% / requester con
 
    When trigger does fire, both phases run in PARALLEL with `[P<num>-1]` and both must be resolved before `[P<num>-2a]` promotes.
 
-   - `[P<num>-1b] CI/CD change: <scope>` — assignee `devops` (`--assignee-id`), `todo`. Self-contained description: target repo(s) and file paths, what to change and why, acceptance criteria, and landing rule for that repo class (app repo + named feature branch → commit to THAT branch; app repo standalone → `chore/<issue-key>` branch + PR to `dev`; helm repo → `chore/<issue-key>` from `origin/main` + PR to `main`, and STOP).
-   - `[P<num>-1c] Review CI/CD PR: <scope>` — assignee `pr-reviewer`, `backlog`. Create it ONLY when `[P<num>-1b]` will produce standalone PR (commit onto squad feature branch is reviewed inside squad's cycle PR instead). Promote it once devops posts PR URL. **Its description must state merge authority for that repo class**: app-repo PR to `dev` — pr-reviewer merges on APPROVED; helm PR to `main` — pr-reviewer scores and votes but NEVER merges, because merging chart IS deploy.
-   - Helm only: also create `[P<num>-2] Merge helm PR (deploy): <scope>`, assignee = requester's member UUID, `backlog`, promoted after `[P<num>-1c]` approves.
+   - Read `references/infra-phase-creation.md` when trigger 1 or 2 fires and you are creating the `[P<num>-1b]`/`[P<num>-1c]`/helm `[P<num>-2]` phase tickets.
    - Squad reporting mid-cycle that it added config key needing chart entry IS trigger 1 — create `[P<num>-1b]` then; squads are forbidden from creating it themselves. Squad reporting general infra opinion is not trigger: acknowledge it and, if it has merit on its own, tell them to file it as standalone devops ticket.
 
 3. **On every stage-complete wake or handoff line** — re-read children + latest comments (including comments on any `blocked` child or child that woke you — gate verdicts, leader questions, and squad escalations live on child tickets; MAIN carries only their handoff lines) AND `ship_required`/`bdd_required`, reconcile, act on lowest newly-completed stage:
@@ -152,7 +146,7 @@ Only after deliverable's gate passed (spec APPROVED / bug ≥90% / requester con
    - **P2b done**: refresh P3's description (merged dev PR, merged release PR, feature branch, deploy facts), promote it.
    - **P3 done**: verify consolidated test report and QC PR is merged, then flip MAIN ticket `done` with final plain summary (spec → merged PR → deploy → QC results). No mentions.
    - Phase `blocked` or reporting failures → never promote past it; resolve on THAT squad's phase ticket with the squad leader's agent mention (a plain comment is an unreliable wake — MXW-454) or escalate to requester on main ticket.
-4. **Review leftovers are not delivery work.** A review's non-gating findings never reach you as a cycle. pr-reviewer clears in-scope leftovers inside its own cycle (a polish round before merge) and drops out-of-scope ones unless they clear the worth-fixing bar — a defect or security finding with a named observable failure and reproduction — in which case the squad leader files ONE ordinary defect ticket. **`Review follow-ups:` tickets are retired; never file one and never accept one as a main ticket.**
+4. **Review leftovers are not delivery work.** A review's non-gating findings never reach you as a cycle. In-scope leftovers merge with a passing PR, named under `Merged with:` (no polish round, Policy 04 statement 7); below the bar they take a rework round like any other finding. Out-of-scope ones are dropped unless they clear the worth-fixing bar — a defect or security finding with a named observable failure and reproduction — in which case the squad leader files ONE ordinary defect ticket. **`Review follow-ups:` tickets are retired; never file one and never accept one as a main ticket.**
 
    When a defect ticket raised from a review is assigned to you, it enters the normal flow as a **bug on its own merits** — confidence gate, priority judged against everything else in the backlog, folded into an existing ticket when one shares the root cause. It does NOT inherit the priority of the cycle that surfaced it.
 
@@ -163,23 +157,7 @@ Only after deliverable's gate passed (spec APPROVED / bug ≥90% / requester con
 
 **This section is for infra work that stands ALONE.** Infra work feature depends on is not Workflow D — it is `[P<num>-1b]` phase inside Workflow C (step 2b above).
 
-`devops` owns standalone infra work end to end. You never spec it and never route it through dev-team, qc-team, release-manager, or spec-review gate. Standalone PR it opens still gets pr-reviewer gate, on same repo-class merge-authority rules as step 2b.
-
-**Two exits. Pick by what requester actually asked for.**
-
-### D1 — Analysis only ("look at X and tell me")
-
-Requester wants information so THEY can decide. Research, post report — evidence at `file:line`, what would have to change, which repos and files, landing rule that applies — mention requester, and **STOP**. Create no sub-tasks, promote nothing, delegate at no confidence level. Workflow A's ≥90% auto-delegate does NOT apply to this class: pipeline or infra change is always requester's call, never yours.
-
-### D2 — Change requested ("update the pipeline / update the chart")
-
-Route it straight to `devops`. Clarify only what genuinely blocks change (never what files answer), then:
-
-1. Create ONE `[P<num>-1] CI/CD change: <scope>` in `mx-main`, parent = main ticket, assignee `devops` (`--assignee-id`, resolved from `multica agent list --output json`), `todo`. Description is self-contained — `devops` must never need to read main ticket: target repo(s) and file paths, what to change and why, acceptance criteria, and **landing rule for that repo class** (app repo → commit directly to `dev`; helm repo → branch + PR to `main`, human merges).
-2. **Helm repos only** — also create `[P<num>-2] Merge helm PR (deploy): <scope>`, assignee = requester's member UUID (`--assignee-id`; workspace-owner fallback when creator is agent), `backlog`. Description: review PR `devops` opened and merge it if correct — merging publishes chart, so **merge IS deploy decision** — then flip this ticket `done`.
-3. **On P1 done** — re-read report. App repo: verify commit landed on `dev`. Helm repo: verify OPEN PR whose base is `main` (`multica issue pull-requests <p1-id> --output json`); no PR means there is nothing to merge — resolve it with `devops` on their ticket and never promote. Satisfied → promote P2 (`backlog`→`todo`) with ONE comment carrying PR link and requester's MEMBER mention.
-4. **On P2 done** — verify PR is merged, then flip MAIN ticket `done` with plain summary: what changed, commit or PR link, and where it landed. No mentions.
-5. **No other phases exist in this flow** — no `[S#]` spec review, no `[P#-2a]` release, no `[P#-2b]` argoCD ticket, no `[P#-3]` BDD phase. If change genuinely warrants integration testing afterwards, say so in final summary and let requester file it.
+Read `references/workflow-d-standalone-infra.md` when the work is classified Workflow D — standalone CI/CD, build automation, or helm-chart work. It holds devops ownership, the D1 (analysis-only) and D2 (change-requested) exits, and the full phase procedure for each.
 
 **Requester-filed devops tickets are not yours.** Requester may assign `devops` directly and bypass you entirely — that is supported path, not error. Never adopt such ticket, re-parent it, or wrap it in phases.
 
@@ -205,7 +183,7 @@ Barrier wakes **parent's assignee**, not agent that created children. Create pha
 - **Requester overrides you, and two waivers you may never make on your own.** Your judgment sets scope, but requester's explicit statement always wins in either direction. Two carve-outs your judgment can never waive: (1) dev-team's in-repo BDD/unit tests — never waivable by anyone, by either key; narrowed scope makes them change's only automated coverage, so they become MORE important, never less; (2) SANDBOX suite on money or identity path (`monxa.payment-gateway`, `monxa.auth-api`) — keep `bdd_required=true` there unless requester waives it.
 - **Never let narrowed scope reach dev-team as bare "no BDD" / "no deploy".** `bdd_required=false` drops qc-team SANDBOX suite only; `ship_required=false` additionally drops release and SANDBOX deploy. Whatever you relay into `[P#-1]` must name which downstream artifact is dropped, on what basis (requester / your judgment / repo note), and that in-repo tests and acceptance criteria are unchanged.
 - **Standalone CI/CD and infra work never enters product delivery flow.** For Workflow D ticket, never create `[S#]` spec review, `[P#-1]` for dev-team, `[P#-2a]` for release-manager, or `[P#-3]` for qc-team. Infra work FEATURE depends on is exception and only one: it becomes `[P#-1b]`/`[P#-1c]` inside that feature's Workflow C.
-- Never delegate pipeline or helm change requester did not ask you to make — D1 ends at report. Inside feature, spec or squad's report is ask; your own opinion that pipeline could be nicer is not.
+- Never delegate pipeline or helm change requester did not ask you to make — D1 ends at report (`references/workflow-d-standalone-infra.md`). Inside feature, spec or squad's report is ask; your own opinion that pipeline could be nicer is not.
 - **No agent ever merges helm chart PR.** pr-reviewer may score and vote on one; merge is deploy and belongs to requester via `[P#-2]`. Image-tag promotion for production release is `prd-release`'s, never devops'.
 - **Escalate by assignment, to the resolved owner.** Human hop goes to the resolved owner per `sdlc-flow-delivery-pipeline` "Who the human owner is" (`Owner`-property-first → root member-creator → workspace owner; resolve at runtime, never hardcode) — delivered by reassigning stuck ticket to them at `todo`, never by member mention alone (member mention renders link and delivers nothing). Squads escalate phase-ticket problems to YOU; converting that into human hop when it needs one is your job, not theirs.
 - Never assign created issues to yourself; comment bodies via `--content-file` (file inside your working directory); end-of-work comments carry no mention at all.

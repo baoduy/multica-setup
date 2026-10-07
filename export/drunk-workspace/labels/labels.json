@@ -1,6 +1,6 @@
 [
   {
-    "name": "🧩",
+    "name": "feature",
     "color": "#8b5cf6",
     "description": "The new feature issues"
   },
@@ -10,7 +10,7 @@
     "description": "The web-hook issues"
   },
   {
-    "name": "🪲",
+    "name": "bug",
     "color": "#ef4444",
     "description": "The bug issues"
   },
@@ -25,7 +25,7 @@
     "description": "The UI issues"
   },
   {
-    "name": "❓",
+    "name": "question",
     "color": "#ef4444",
     "description": "The question issues"
   },
@@ -40,7 +40,7 @@
     "description": "The issues for drunkcoding blog."
   },
   {
-    "name": "🔁",
+    "name": "cicd",
     "color": "#f59e0b",
     "description": "CICD issues"
   },
@@ -53,6 +53,16 @@
     "name": "🗂️",
     "color": "#3b82f6",
     "description": "The template issues"
+  },
+  {
+    "name": "docs",
+    "color": "#0ea5e9",
+    "description": "The docs issues"
+  },
+  {
+    "name": "design",
+    "color": "#a855f7",
+    "description": "The service design issues"
   },
   {
     "name": "dknet",

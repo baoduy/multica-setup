@@ -37,8 +37,10 @@ Rules:
 
 - **Every claim in RESULT has EVIDENCE row.** Rows are whatever your
   brief's "done when" list names (build, tests, coverage, diff shape, mutation
-  check, merge SHA, …). Check you skipped is row saying `skipped — <why>`,
-  never missing row.
+  check, CI parity, merge SHA, …). Check you skipped is row saying `skipped — <why>`,
+  never missing row — except a dev-team `Build:`/`Fix (review):` check, which is never
+  skipped ([Policy 02](../../docs/policies/02-testing-and-quality.md) statement 10): it is
+  `blocked` with the reason, or its own named fallback.
 - **At most one paragraph below LEFT OPEN.** If it needs more, it is blocker
   report (below) or spec discussion on main ticket — not completion
   comment.

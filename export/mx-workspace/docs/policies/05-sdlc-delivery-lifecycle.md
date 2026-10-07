@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | MX-POL-05 |
-| **Version** | 1.6 |
+| **Version** | 1.8 |
 | **Status** | Active |
 | **Owner** | product-owner (product-team) |
 | **Applies to** | Every ticket that flows through the mx software factory |
@@ -56,7 +56,7 @@ pr-reviewer + the requester) owns the main ticket end to end, read-only on code.
 `dev-team` (leader **dev-leader**; dev-backend, pr-reviewer) implements acceptance-test-first in two
 runs: dev-backend writes the spec's scenarios as RED acceptance tests, dev-leader reads and
 freezes them (`at_sha`), dev-backend implements against them in Build at ≥80% coverage plus a
-mutation report per touched class ([Policy 02](02-testing-and-quality.md) §1/§3).
+mutation report per touched class ([Policy 02](02-testing-and-quality.md) §1/§3); a confirmed bug fix runs both halves in one `bug-build` run, the gate checking the reproduction instead of the leader (Policy 02 §1a).
 `qc-team` (leader **qc-leader**; qc-tester, qc-runner, pr-reviewer) runs SANDBOX BDD.
 `devops` owns CI/CD & helm, never a squad member. Humans: the requester and the
 workspace owner (escalation valve).
@@ -69,6 +69,8 @@ workspace owner (escalation valve).
 3. **CI/CD flow (D):** pipelines and helm are `devops` work — never enter dev/qc cycles, never open a spec gate. Two doors: **direct** (requester assigns devops; product-team stays out) or **delegated** `[P#-1b]`/`[P#-1c]` phases of a feature. A standalone devops PR to `dev` gets a PR gate; a helm PR to `main` is scored but **never merged by the gate**. See [Policy 08](08-release-management.md).
 4. **Gates front-load quality** — spec gate before implementation, PR gate before merge (see [Policy 04](04-code-and-spec-review.md)).
 5. **Stage barriers fire on `done`; a handoff line covers what they miss.** Completion = `done`; `blocked` = needs help. The report, the `## BLOCKER` and every question or defect report stay on the child's OWN ticket, so assigner↔assignee communication stays paired there. The platform's sub-issue rule wakes the parent's owner when every sub-issue at a stage and below is closed (`done`/`cancelled`) while a later stage waits, and once more when every sub-issue is closed — whoever closed them — so a plain `done` needs nothing more. It never fires for a `blocked` child, nor for a `done` while a sibling at its stage or below sits `blocked`; in those two cases the child's turn ends with ONE line on the parent — `<KEY> blocked — BLOCKER on <KEY>` or `<KEY> done — report on <KEY>` (`<KEY> — <what> on <KEY>` for anything else the parent's owner must read now) — and that line is the wake: on a squad-assigned parent (every main and phase ticket here) it carries no mention of any kind (the platform routes an agent's plain comment there to the squad leader; any mention, `@all` or a `/note` prefix stops that), on an agent-assigned parent it ends with that agent's mention, on a member-assigned parent none is posted. The line is the only thing a child posts on the parent; the parent's other comments remain its owner's orchestration space. `in_review` is leader-only for root parents awaiting a human; on a phase ticket it deadlocks the pipeline — use `done`.
+5a. **A leader ignores the echo of a member's sub-task comment.** The platform also routes an agent's plain comment on a sub-task of a squad-assigned parent to the squad leader, so a member's report or a gate's score comment wakes the leader in the same second as the barrier or handoff line for that event (statement 5). The leader acts only on wakes on the cycle parent and on comments that carry its mention or come from a human; a run started by an agent's plain comment on a sub-task ends at once, with no comment and no status change, while the author's run is still active or the sub-task is already `done`/`blocked` — with neither, the report was left without its status flip and the leader handles it as a mis-signal (the leader playbook's wake guard), so one event never drives two leader runs that both re-arm.
+
 6. **Mentions are actions.** An agent/squad mention (real UUID, resolved at runtime) enqueues a run; a member (human) mention only renders a link and delivers nothing. To make a human act, **assign them a ticket at `todo`** — never rely on a mention. Never agent-mention in FYI/ack comments.
 7. **Titles, projects, labels:** **every ROOT main ticket title carries one type prefix** — `[Feature]` · `[Enhance]` · `[Bug]` · `[Question]` · `[CICD]` — followed by the plain title; children carry `[S#]`/`[P#-n]`/`[D#-n]`/`[T#-n]` keyed to the root ticket number. Labels on main tickets **only** (`main` + `feature`/`bug`/`question`/`cicd`). Every sub-task parents directly to its cycle parent.
 

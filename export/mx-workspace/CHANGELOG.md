@@ -4,6 +4,381 @@
 live incidents, and review findings. The README stays the living description of the CURRENT
 system; this file is its history.*
 
+## 2026-10-06 — brainstorming catches gate conflicts before the preview (no policy amended)
+
+Owner-approved, ported from drunk-workspace. `multica-brainstorming` was reviewed against
+obra/superpowers `brainstorming` v6.4.2 (`8ca22db`), the upstream baseline for the next
+comparison. The HARD-GATE adds that a reply approves only the stage actually presented. A short
+Red Flags table is added. "My read" keeps what the requester said apart from what the agent
+assumed. Step 4 checks each rule and decision against what the spec gate never accepts: an answer
+that waives dev-team's in-repo tests goes back to the requester as a question with the rule
+quoted; a waiver the template allows (BDD integration suite, no ship) is recorded with its reason
+and basis. Anything new found after approval re-opens step 2 with a short round. Cause: in
+drunk-workspace 10 of 18 brainstormed tickets met spec-gate REWORK, and one failed three times on
+a requester's test waiver the dialogue had accepted. The drunk change that parks a waiting ticket
+at `blocked` is not ported: mx's hourly recovery wakes only killed runs, so an `in_progress` wait
+is never nudged. Files: `skills/multica-brainstorming/SKILL.md`.
+
+## 2026-10-06 — every PR body has one shape: Summary, Evidence, Merge danger (Policy 03 v1.3)
+
+Owner-approved. New Policy 03 statement 7a. Summary is one or two sentences plus the smallest
+text visual that shows the change (call tree, file tree, pseudocode or a `diff` sketch; never
+Mermaid). Evidence shows the test red before and green after, or the checks that ran, plus
+every check that could not run. Merge danger names the door (two-way: reverting the merge undoes
+it; one-way: a field removed, renamed or retyped, data migrated or deleted, or a §3b `breaking`
+contract) and the blast radius from §3b; a chart PR writes `deploy — merging this deploys to
+<environment>`. The body goes in with `--body-file`. dev-leader's Evidence quotes the members'
+reports. Release PRs into `main` (release-manager's `dev`→`main`, prd-release's `release/prd-*` and
+the BDD repo's `dev`→`main`) keep their own format. pr-reviewer does not
+score the body (Policy 04 unchanged). Cause: a review against mattpocock/skills v1.3 `pr` (MIT;
+credited in the skill); drunk-workspace's agent PR bodies had no shared shape and no risk
+statement. `helm-chart-delivery`'s three required body items fold into the shared shape. Files:
+`docs/policies/03-source-control-branching.md`, skills `sdlc-gitflow`, `leader-gitops`,
+`helm-chart-delivery`, `compose-delivery`, `architecture-review-sweep`, `README.md`.
+
+## 2026-10-04 (o) — the 2026-10-03 and 2026-10-04 changes are live, minus 2026-09-29 (c)
+
+**Live note (2026-10-04).** Pushed live on top of the pre-2026-09-29 (c) text: live still
+carries the handoff-line wake model, because 2026-09-29 (c) stays withheld until the platform's
+sub-issue wake works on this server. For `agents/dev-backend.md`, `squads/dev-team.md`,
+`workspace/workspace.context.md` and the skills `pr-review-gate` (`references/multica-flow.md`),
+`sdlc-flow-delivery-pipeline`, `sdlc-flow-po-orchestration`, `sdlc-flow-squad-leader-playbook`,
+`sdlc-flow-squad-member-protocol`, `sdlc-impl-brief` and `spec-review-gate`, live = this bundle
+minus 2026-09-29 (c) (a 3-way merge; the live wake guard names only the handoff line). Every other
+resource is byte-identical to the bundle.
+
+`📊 Monthly Gate Digest` was created live (`3d4ea210-8ead-449c-828b-b1d45d4945fd`, schedule
+`0 9 1 * *` Asia/Singapore, next run 2026-11-01). `agents/dev-backend.description.md` was cut to
+245 characters (the platform caps a description at 255). The hourly stuck-run recovery prompt is
+live; its status stays `paused` for the owner to flip.
+
+## 2026-10-04 (n) — conditional skill sections move into references/, verbatim (not live: live keeps the full text until 2026-09-29 (c) ships)
+
+Owner's request; no policy amended. A SKILL.md loads on every run, a reference file only when
+its pointer's condition holds (github.com/affaan-m/ECC's context-budget rule). Only blocks
+needed in one situation moved, byte-identical, each replaced by one `Read references/<file>.md
+when <condition>` line; a script confirmed old SKILL.md = new SKILL.md with each pointer
+swapped back. `sdlc-flow-squad-leader-playbook` 36,144 → 29,117 bytes
+(`references/fix-loop-pattern.md`, `references/recovery-loop.md`);
+`sdlc-flow-po-orchestration` 43,950 → 39,347 (`references/workflow-d-standalone-infra.md`,
+`references/workflow-b-spec-drafting.md`, `references/infra-phase-creation.md`);
+`sdlc-flow-delivery-pipeline` 27,707 → 25,313 (`references/workflow-d-cicd-infra.md`).
+`pr-review-gate` had no conditional block worth moving. Files: those three skills.
+
+## 2026-10-04 (m) — dev-backend pre-review before done (live)
+
+Owner-approved, ported from drunk-workspace's 2026-10-03 (h). **Policy 01 v1.5**, statement
+17 gains ONE fresh-context subagent — a mini PR gate — before every `Build:` sub-task (any
+mode) and every `Fix (review):` sub-task reports done: it reviews the diff against the
+brief the way the PR gate will (brief conformance, correctness on the §6a input domain,
+security, test strength, standards, comments), the implementer fixes every
+`blocking`/`important` finding in the same run or declares it LEFT OPEN, and reports one
+`Pre-review` row that stands in for self-review checks 4, 5 and 8. A missing `Pre-review`
+row is a `nit` at the gate (Policy 04 statement 4), same treatment as a missing Standards
+row; only a row claiming a fix the diff does not hold is `important`. mx has no
+`build-ui`/Pulumi surface and no separate CI-parity change to port (mx already shipped its
+own in 2026-10-03, entry (i) upstream/88289c0 here) — this port is pre-review only.
+**Policy 09 v1.10**: dev-backend's charter responsibilities gain the pre-review clause.
+Evidence (26 of 28 rework rounds held only findings an earlier check could have caught) is
+drunk-workspace's 2026-09–10-02 measurement; mx has not independently measured its own
+rate. Cascade: `sdlc-flow-squad-member-protocol` (self-review intro/outro, checks-per-type
+line, new `references/pre-review.md`), `pr-review-gate` (pass 5 Standards bullet),
+`sdlc-flow-squad-leader-playbook` (Review & verification send-back list),
+`agents/dev-backend.md` (Build step 7, Done means, Rework from review),
+`test-driven-development` (Verification list).
+
+## 2026-10-04 (l) — brief §6a input-domain table (live)
+
+Owner-approved, ported from drunk-workspace's 2026-10-03 (j). **Policy 06 v2.4**, new
+statement 10a: every changed guard, default, mapping and external call gets a §6a table
+row for each input class it must handle — empty/null collections, every enum/option
+member, both forms of a two-form value, the unknown value, range boundaries, and every
+failure (exception or `IResultBase`) the call can raise — each with its expected result and
+proof (an acceptance scenario or a named test). Prose elsewhere in the brief does not bind.
+Cascade: `sdlc-impl-brief` (new §6a section, §6 pointer, §3 writing-rule sentence, §8
+Done-when checkbox), `sdlc-flow-squad-leader-playbook` (Decomposition rules, new bullet),
+`test-driven-development` (Author step, "cannot fail" bullet, Verification list). Evidence
+(DRK-1842, DRK-1834, DRK-1985, DRK-1851, DRK-1934, each an input the brief never named,
+costing a rework round) is drunk-workspace's; mx has not independently measured this gap.
+
+## 2026-10-04 (k) — independent surfaces build in parallel against one frozen test set (live)
+
+Owner-approved, ported from drunk-workspace's 2026-10-03 (k), adapted to mx: mx already ran
+Acceptance-tests + Build pairs per surface in parallel (`squads/dev-team.md`), so the port adds
+what was missing — a concurrency cap and a finish condition, not the shape itself.
+**Policy 02 v1.8**, new statement 1b: Builds for independent surfaces (disjoint file sets,
+inside one cycle's one repo) run at the same stage, **at most 3 at once**; a Build is `done`
+only when its own `@new` scenarios and every already-`done` sibling Build's `@new` scenarios
+are green (a still-running sibling's may stay red); a push rejected by a sibling's push is
+rebased onto the updated branch and the suite re-run, so the last Build to finish proves the
+whole surface set green. `sdlc-impl-brief`'s "split an oversize brief into sequenced stages"
+line — the wording drunk's cause section blamed for forcing parallel cycles to run
+sequentially — now says parallel surfaces (same stage, cap 3), never sequenced, unless a real
+file overlap or behaviour dependency exists.
+
+**Excluded, owner-confirmed conflict**: drunk's "pr-reviewer groups REWORK findings per Build
+sub-task so the leader re-arms them in parallel" is NOT ported. It contradicts mx
+**Policy 04 statement 6**, which requires the leader to consolidate every round's findings,
+across members and rounds sharing a root cause, into ONE fix sub-issue — porting the grouping
+would mean amending that statement, and this bundle's change-control rule puts a policy
+conflict to the owner first. REWORK stays ONE consolidated `Fix (review):` sub-task per round
+regardless of how many Builds ran this cycle; drunk's `pr-review-gate` and
+`references/multica-flow.md` grouping changes have no mx counterpart.
+
+mx's one-repo-per-cycle rule (`sdlc-flow-squad-leader-playbook`, Decomposition rules) already
+rejects any phase ticket spanning two repos before decomposition, so "independent surfaces"
+here is always within one repo — cross-repo work is already split into separate cycles
+upstream and needed no cascade. Evidence (12 of 20 cycles with more than one Build ran every
+Build in sequence) is drunk-workspace's 2026-09-20–10-03 measurement; mx has not independently
+measured this. Cascade: `squads/dev-team.md` (Stages closing paragraph),
+`sdlc-flow-squad-leader-playbook` (Same-stage-parallel cap), `sdlc-impl-brief` (split rule),
+`docs/policies/09-agent-roles-and-responsibilities.md` (dev-leader charter, max-3 mention),
+`agents/dev-leader.md`.
+
+## 2026-10-04 (j) — a confirmed bug fix proves itself in one bug-build run (live)
+
+Owner-approved, ported from drunk-workspace's 2026-10-03 (g), adapted: mx bug tickets carry no
+Gherkin (`bug-report` skill: Scope / Root cause / Suggested owner only), so pr-reviewer matches
+`at_sha` against product-owner's root-cause report's reproduction conditions instead of
+Gherkin — the owner confirmed this substitution. **Policy 02 v1.7**, new statement 1a: a phase
+ticket whose root is a confirmed Workflow A bug, one surface, no new public signature, gets ONE
+`Build:` sub-task (`Mode: bug-build`) instead of the Acceptance-tests + Build pair — dev-backend
+commits and pushes the reproduction alone first (that commit is `at_sha`, red for the reason
+the root-cause report names), then fixes in the same run; dev-leader approves nothing in
+between; pr-reviewer checks that `at_sha` holds only the reproduction and stubs, predates every
+fix commit, is red, and matches the root-cause report's reproduction conditions — a mismatch is
+`blocking`. **Policy 04 v1.9** (PR gate statement 4 names the `at_sha` check;
+`references/scoring-rubric.md` gets its 6.9 cap and calibration-anchor line), **Policy 05 v1.8**
+(Actors paragraph), **Policy 07 v1.2** (statement 1: reproduction conditions concrete enough to
+stand in for Gherkin as the frozen test description), **Policy 09 v1.9** (dev-leader,
+dev-backend and pr-reviewer charters — these version numbers are shared with entry (k) above,
+both landing in the same pass).
+
+Evidence (the Acceptance-tests stage running ~a third of dev-backend's tokens, plus a leader
+approval run and a stage hop, per bug cycle) is drunk-workspace's 2026-09-28–10-03 measurement;
+mx has not independently measured its own bug-cycle cost. Cascade: `squads/dev-team.md`
+(Route C paragraph, Members table, Stages table, Gates paragraph), `sdlc-flow-squad-leader-playbook`
+(hard-gate send-back list), `sdlc-impl-brief` (`Mode` row), `test-driven-development`
+(Prove-It), `pr-review-gate` (Testing phase, Phase 2 point 4), `references/scoring-rubric.md`
+(cap + calibration anchor), `agents/dev-leader.md`, `agents/dev-backend.md` +
+`agents/dev-backend.description.md`, `agents/pr-reviewer.md`.
+
+## 2026-10-04 (i) — dev-leader ignores the echo of a member's sub-task comment (live)
+
+Owner-approved, ported from drunk-workspace's 2026-10-03 (e). **Policy 05 v1.7**, new statement
+5a: the platform also routes an agent's plain comment on a sub-task of a squad-assigned parent
+to the squad leader, so a member's report or a gate's score comment wakes the leader in the
+same second as the barrier or handoff line for that event (statement 5); the leader ends a run
+started by such a comment at once when the author's run is still active or the sub-task is
+already `done`/`blocked`, else treats it as a mis-signal the wake-up checklist handles. Written
+to hold under both of mx's current wake descriptions — the bundle's reinstated stage-barrier
+wake (2026-09-29 (c), not live) and the live handoff-line-only wake (same date, live) — since
+the guard's trigger condition (an active author run, or a sub-task already closed) does not
+depend on which mechanism produces the second wake. Evidence (98 of 422 dev-leader runs, 13%
+of its tokens, 2026-09-28–10-03) is drunk-workspace's measurement on the same Multica platform
+version; mx has not independently measured its own echo rate. Cascade:
+`workspace/workspace.context.md` (wake list), `sdlc-flow-squad-leader-playbook` (new Wake guard
+section, before the wake-up checklist), `sdlc-flow-delivery-pipeline` (trigger line),
+`README.md` (Trigger mechanics).
+
+**Not resolved, flagged only, left for the owner**: `squads/product-team.md:132` and two lines
+in `sdlc-flow-po-orchestration` still cite `MXW-454` ("a plain comment is an unreliable wake"),
+which contradicts both this entry and the 2026-09-29 entries asserting a plain comment on a
+squad-assigned ticket does wake the leader — a pre-existing split in the bundle, not introduced
+or resolved here. `squads/dev-team.md`'s rework-loop step 1 ("dev-backend... ends its report
+with your mention") also looks stale against `agents/dev-backend.md` and
+`sdlc-flow-squad-member-protocol`'s "handoff line, never a mention" rule — likewise pre-existing
+and left as-is.
+
+## 2026-10-04 (h) — nothing is reported skipped, and CI runs locally first (live)
+
+Owner-approved, ported from drunk's 2026-10-03 (i). **Policy 02 v1.6**, new statement 10;
+**Policy 07 v1.1**, statement 9 carve-out; **Policy 09 v1.7**. A dev-team `Build:` or
+`Fix (review):` sub-task never reports a check skipped or deferred — a check that cannot run
+is `blocked` with the reason, or its own named fallback. Before the last push the implementer
+makes a throwaway local merge of fresh `origin/dev` into HEAD (scratch branch, never pushed)
+and runs every `pull_request` workflow step that runs locally from the repo root, reported in
+a `CI parity` row; a step needing a secret, upload, publish or deploy is `not local: <step>`.
+dev-leader sends back a Build/Fix whose report marks any check skipped (hard-gate,
+`sdlc-flow-squad-leader-playbook`); a row that is merely absent stays a `nit` the gate measures
+itself (Policy 04 statement 4, unchanged by this port). Adaptations from drunk: no
+SonarCloud/jscpd stand-in — confirmed no `the-wixo` repo runs SonarCloud or has a jscpd step
+(checked `dev` check-runs across email-service, auth-api, payment-gateway,
+web-hook-deliverer and monxa.bdd-integration, plus a `sonar-project.properties` probe, all
+negative); mx's `pull_request` CI is plain `dotnet restore/build/test` or a no-push
+`docker build`, so the local step list is restore/build/test/docker-build-no-push, and a
+container-build step is `not local` when the runtime has no Docker daemon (unconfirmed either
+way — flagged for the owner). Scoped to dev-team only: `monxa.bdd-integration` showed no
+check-runs on `dev` at all, so qc-team's SANDBOX suite is left untouched pending its own
+decision. Cascade: `docs/policies/02-testing-and-quality.md` (statement 10, Definition of
+Done), `docs/policies/07-bug-and-defect-management.md` (statement 9),
+`docs/policies/09-agent-roles-and-responsibilities.md` (dev-leader Never list, dev-backend
+responsibilities), `skills/sdlc-flow-squad-member-protocol/SKILL.md` (new check 9, check-count
+fix), `skills/blocker-report/SKILL.md` (skipped-row carve-out),
+`skills/sdlc-flow-squad-leader-playbook/SKILL.md` (hard-gate send-back list),
+`skills/pr-review-gate/SKILL.md` (CI parity row in the EVIDENCE list), `agents/dev-backend.md`
+(Done-means, rework), `squads/dev-team.md` (Build row), `skills/test-driven-development/SKILL.md`
+(Verification list).
+
+## 2026-10-04 (g) — mutation runs are scoped to the lines changed, not the whole class (live)
+
+Owner-approved, ported from drunk's 2026-10-03 (f). **Policy 02 v1.5**, new statement 3a;
+**Policy 09 v1.6**. The mutation run targets each touched class's changed hunks —
+`git fetch origin dev` then `dotnet stryker --since:origin/dev` — never a whole-class run,
+which re-tests code the cycle does not own; still reported per touched class with every
+survivor dispositioned. The speed-up is unmeasured here, same as in drunk: compare mutant
+count and wall time on the next Build, and widen to `-m` touched-class globs if `--since`
+doesn't narrow the run. mx is .NET-only (confirmed: no TypeScript repo in `the-wixo`), so only
+the `.NET` command changed; the inherited TypeScript example line in `test-driven-development`
+is left as-is, dead either way. Cascade: `docs/policies/02-testing-and-quality.md` (statement
+3a), `docs/policies/09-agent-roles-and-responsibilities.md` (dev-backend responsibilities),
+`skills/test-driven-development/SKILL.md` (Mutation score), `skills/testing-standards/SKILL.md`
+(Mutation report), `skills/sdlc-flow-squad-member-protocol/SKILL.md` (check 1),
+`agents/dev-backend.md` (Build step 4), `squads/dev-team.md` (dev-backend row).
+
+## 2026-10-04 (f) — test code reuses its harness; a copied setup block is a DRY defect (live)
+
+Owner-approved, ported from drunk's 2026-10-03 (d). **Policy 02 v1.4**, amended statement 7
+(DAMP carve-out) and new statement 7a. A new test extends the AT harness or the repo's shared
+fixture instead of copying its setup; a copied setup or arrange block of ~10 lines or more is
+a DRY defect at the second copy — tighter than Policy 01 statement 13's 3-occurrence
+threshold, because test setup drifts faster. DAMP still holds inside the test body: the rule
+targets copied setup, not readable assertions. Adaptation from drunk: dropped the
+`npx jscpd --min-lines 10` / SonarCloud duplication-gate clause — confirmed no `the-wixo` repo
+gates on SonarCloud or jscpd (same check-runs/`sonar-project.properties` probe as (h) above).
+Placement differs from drunk too: drunk put this in Policy 01 (coding standards); mx's own
+Policy 01 Scope says test code follows Policy 02, and Policy 02 statement 7 already owns
+DAMP-over-DRY in tests, so the rule amends statement 7 there instead. Cascade:
+`docs/policies/02-testing-and-quality.md` (statements 7, 7a),
+`skills/sdlc-flow-squad-member-protocol/SKILL.md` (check 8 DRY bullet),
+`skills/test-driven-development/SKILL.md` (Ports-and-adapters).
+
+## 2026-10-04 (e) — a missing self-review row is a `nit`, not a rework round (live)
+
+Owner-approved, ported from drunk's 2026-10-03 (c). **Policy 04 v1.8**, statement 4; **Policy
+01 v1.4**, statement 17: a Build EVIDENCE row — the mutation report, per-branch hits, the
+assertion-fragment grep, the drift-check output, the added-tests list, or the Standards
+self-review row — that is missing or carries no measured value is a `nit`: the gate measures
+that point itself and scores what it finds. A row the diff or CI contradicts stays `important`;
+no mutation evidence at all keeps its own 7.9 cap. Two carve-outs this port adds that drunk did
+not need to state: the coverage number itself stays governed by the auto-merge coverage
+precondition (unknown coverage → APPROVAL DEFERRED, never a nit) and its own 7.9 cap; on
+`monxa.bdd-integration` the per-scenario pass/fail table plays that role instead of coverage and
+is likewise unaffected. The squad-leader playbook's send-back rule is narrowed to match: a Build
+goes back only for a missing or failing hard-gate result (green suite, coverage, mutation
+report, AT drift, pushed SHA) — any other missing self-review row rides to the gate instead.
+Cause: drunk's own data (DRK-1938, DRK-1943, DRK-1871 — a correct, CI-green Build capped at 8.4
+and sent back a full round for two missing report rows); not independently measured in mx.
+Cascaded to `docs/policies/04-code-and-spec-review.md` (statement 4),
+`docs/policies/01-coding-standards-dotnet.md` (statement 17, Enforcement),
+`skills/pr-review-gate/SKILL.md` (Phase 2 pass 4 Testing, pass 5 Architecture),
+`skills/pr-review-gate/references/scoring-rubric.md` (Self-review rows),
+`skills/sdlc-flow-squad-leader-playbook/SKILL.md` (Review & verification of member work),
+`agents/dev-backend.md`, `agents/pr-reviewer.md`. Same change as drunk 2026-10-03 (c), plus the
+mx-only coverage/BDD carve-outs. mx-workspace only.
+
+## 2026-10-04 (d) — a passing PR merges; the polish round is retired; a new cap holds two-plus `important`s to 8.4 (live)
+
+Owner-approved, ported from drunk's 2026-10-03 (b). **Policy 04 v1.7**, statement 7: the score
+alone decides what in-scope findings cost — below 8.5 or any `blocking` → a rework round; at
+8.5 or above the PR merges, its open `nit`s and its one permitted `important` named under
+`Merged with:` and dropped. No more polish round; `review_verdict=POLISH` is retired (survives
+only on tickets pinned before this version — the gate never pins it again). mx-only addition
+this port requires: mx's rubric carried no cap on the count of open `important` findings (today,
+any in-scope `important` always forces a rework round — "never merged past"), so retiring
+polish without a cap would let a PR carrying two or three importants merge under the one
+permitted slot. New hard cap in `references/scoring-rubric.md`: **two or more open `important`
+findings anywhere, no `blocking` → 8.4 max.** Calibration anchors recomputed arithmetically
+(mx's PR-rubric weights are identical to drunk's — 25/20/20/15/10/5/5 — so the numbers match
+exactly): one `important` alone scores 9.5–9.9; two score 9.0–9.8 before the new cap sets it to
+8.4; nits alone, maxed in every category, bottom out at exactly 8.5. The docs-only floor row now
+says caps beat it. mx-only addition: mx has an APPROVAL DEFERRED verdict drunk's rubric has no
+analogue for (score ≥ 8.5, an auto-merge precondition fails, a human merges manually) — extended
+`Merged with:` to that path too, so the human merging the PR sees the same open nits/one-important
+the gate would have let ride. Cause: drunk's own data (8 of 59 REWORK/POLISH comments sent back
+PRs scoring 9.4–9.8, each costing a fix run, a full re-review, and ~25 minutes); not
+independently measured in mx. Cascaded to `docs/policies/04-code-and-spec-review.md` (statement
+7), `skills/pr-review-gate/SKILL.md` (Leftover findings, Phase 4 gate table, output contract),
+`skills/pr-review-gate/references/multica-flow.md` (round tracking, Verdict actions
+APPROVED/APPROVAL DEFERRED, in-scope leftovers, score announcement),
+`skills/pr-review-gate/references/scoring-rubric.md` (hard caps, calibration anchors),
+`skills/sdlc-flow-delivery-pipeline/SKILL.md` (Review leftovers row),
+`skills/sdlc-flow-po-orchestration/SKILL.md` (statement 4), `agents/pr-reviewer.md`,
+`README.md` (DEV CYCLE diagram). `autopilots/monthly-gate-digest.description.md` keeps `POLISH`
+in its verdict enumeration on purpose — it reads the last 30 days of history, which still holds
+tickets pinned before this version. Same change as drunk 2026-10-03 (b), plus the mx-only 8.4
+cap and the DEFERRED extension (owner-approved; drunk's rubric has no DEFERRED verdict to
+extend). mx-workspace only.
+
+## 2026-10-04 (c) — hourly stuck-run recovery wakes only agent-assigned issues; prompt live, still paused
+
+Owner's request to resume it; no policy amended. Before resuming, its crash sweep got drunk's
+2026-10-01 fix: step 4 (and the Scope line) wakes only an issue assigned to an agent; an issue
+assigned to a member, a squad or nobody is skipped silently. Without it a crashed run on a
+ticket waiting for a human (a release approval, a deploy) is woken to the cap and escalated, as
+four drunk tickets were on 2026-09-30. Pass B already filtered to agent assignees. The status
+stays `paused`; the flip to `active` is left to the owner. Files:
+`autopilots/hourly-stuck-run-recovery-wake-agents-killed-by-transient-errors.description.md`.
+
+## 2026-10-04 (b) — new monthly gate digest autopilot (live)
+
+Owner's request; no policy amended. `📊 Monthly Gate Digest` (1st of the month, 09:00 SGT,
+`mx-jobs`, create_issue, `default`) runs a fixed `gate-digest.sh` over every review sub-task
+created in the last 30 days and reports, per gate, reviews, first-pass rate, reworked, mean
+rework rounds, escalated, median score and verdict counts from the `review_*` and
+`spec_review_*` metadata, plus the rule-ids and severity tags most cited in the comments of
+reworked sub-tasks. Report only: it proposes nothing. First run, 2026-09-04 to 10-04: PR gate
+35 of 51 first-pass (13 DEFERRED to a human), spec gate 12 of 14. Same digest in drunk, as part
+3 of its monthly insights autopilot. Files: `autopilots/monthly-gate-digest.*`, `manifest.json`.
+
+## 2026-10-04 — a spec-gate finding names its consequence (live)
+
+Owner-approved. **Policy 04 v1.6**, new statement 3a: a `blocker` or `major` finding names its
+section and what goes wrong downstream (what dev-team would build wrong, which §5 scenario
+cannot be written or checked, which question the implementer is left to guess); a claim the
+code contradicts cites the CodeGraph `file:line` in the finding; a format-gate finding cites its
+rule. A finding that can do neither is `minor`, `nit` or dropped. The proof decides whether a
+finding exists, never which of two severities it takes, so "when uncertain, it is a `blocker`"
+still holds for a proven finding. A spec with no finding above `minor` is valid, and
+`spec-review-gate` lists the false positives the gate does not raise. The 9.0 / 8.0–8.9 spec
+bars are unchanged. Cascade: `spec-review-gate`, agent `spec-reviewer`. Same change in drunk.
+
+## 2026-10-03 — PR-gate findings prove their failure; a PR never loosens its own checks; silent failures and migration safety (live)
+
+Owner-approved, from the owner's review of github.com/affaan-m/ECC against this bundle.
+
+**Policy 04 v1.5.** New statement 1a: a `critical`, `blocking` or `important` correctness or
+security finding names the input or state that triggers it, the wrong outcome, and why
+existing guards do not stop it; a rule finding cites its rule; a finding that can do neither
+is demoted to `nit` or dropped. A review with no finding above `nit` is valid, and the rubric
+lists the false positives the gate does not raise. New statement 4a: the gate reads
+`.pr-review.json` from `dev` on GitHub, never from the PR head; a new suppression with no reason
+beside it is `important`; a repo-wide analyzer, lint, coverage or mutation setting lowered, or
+a CI step deleted, skipped or made non-failing, is `blocking` unless the cycle ticket asks for
+it (a new 6.9 rubric row, quoted in the Scoring cap list). Definition of Done adds the check.
+The loosened-check greps run on Phase 1's `gh`-collected `diff.patch` and `files.txt`, and
+`.pr-review.json` is fetched with `gh api ...?ref=dev`, because a task-scoped checkout may have
+no `origin/dev`. The new text uses only defined severities; the older `critical` in the caps
+and auto-merge preconditions is not in the Phase 2 severity list and is left for a separate fix. Cause: the gate collected
+`.pr-review.json` from the PR checkout, so a PR could lower its own bar, and nothing caught a
+PR that changed a check instead of the code. Multica has no hooks, so the gate checks the diff.
+
+**Policy 02 v1.3.** Exceptions: the coverage override is the `.pr-review.json` merged on
+`dev`; a PR that lowers it is `blocking` (Policy 04 statement 4a).
+
+**Policy 01 v1.3.** Statement 8: no silent failure — no discarding `catch`, no empty
+collection, `null` or `default` returned from a failed call, no rethrow that drops the
+original exception (new `NET10-ERR-001..003`). Statement 11: migrations are safe against the
+data the running release still reads (new `EFC-013..018` in `dotnet10-efcore10-standards`:
+rename as drop + add, a drop in the same release as the code change, a new required column on
+a populated table, schema and bulk data in one migration, a blocking index build, an edited
+merged migration).
+
+Cascade: `pr-review-gate` (Non-negotiable rule 5, Phase 1, Phase 2 Correctness, Loosened
+checks, Config), `references/scoring-rubric.md` (Proof before severity, hard-cap row),
+`dotnet10-efcore10-standards`, `sdlc-flow-squad-member-protocol` (self-review check 8), agent
+`pr-reviewer`. Same change in drunk (CHANGELOG 2026-10-03 (l) and (m)).
+
 ## 2026-09-29 (c) — stage barriers are the wake again; the handoff line covers only what they miss (not live)
 
 Owner's decision. **Policy 05 v1.6** (statement 5): Multica's built-in sub-issue rule wakes

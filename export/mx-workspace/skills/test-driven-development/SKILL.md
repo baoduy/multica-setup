@@ -13,7 +13,7 @@ Why this shape and not "write the test first, watch it fail": when one run write
 
 ## Outer loop — acceptance tests
 
-1. **Author** (`Acceptance tests:` sub-task, fresh run, no implementation in context). Read the brief's §7 Gherkin, §5 contract and §6 rules. One executable AT per scenario: the feature file is §7 verbatim (library repos without a BDD harness: one public-API test per scenario, named after it). Step definitions drive the application through its inbound port; outbound ports are replaced by hand-written in-memory fakes (see Ports-and-adapters below). **Expected values are literals copied from the spec — never computed by calling production code.** The only production code allowed is the signatures §5 names, with bodies that `throw new NotImplementedException()` (or the stack's equivalent), so the suite compiles. Run it: every `@existing` scenario green, every `@new` scenario red with a reason you can name (not-implemented, assertion), one row per scenario — a `@new` scenario that is already green means the scenario is wrong or the brief's §2 is. Commit tests + stubs, push. Report the RED commit SHA, the AT file paths, and the per-scenario table.
+1. **Author** (`Acceptance tests:` sub-task, fresh run, no implementation in context). Read the brief's §7 Gherkin, §5 contract, §6 rules and §6a input domain. One executable AT per scenario: the feature file is §7 verbatim (library repos without a BDD harness: one public-API test per scenario, named after it). Step definitions drive the application through its inbound port; outbound ports are replaced by hand-written in-memory fakes (see Ports-and-adapters below). **Expected values are literals copied from the spec — never computed by calling production code.** The only production code allowed is the signatures §5 names, with bodies that `throw new NotImplementedException()` (or the stack's equivalent), so the suite compiles. Run it: every `@existing` scenario green, every `@new` scenario red with a reason you can name (not-implemented, assertion), one row per scenario — a `@new` scenario that is already green means the scenario is wrong or the brief's §2 is. Commit tests + stubs, push. Report the RED commit SHA, the AT file paths, and the per-scenario table.
 2. **Approve** (leader, no execution). Reads the ATs against the spec: every scenario present, none softened, expected values literal and traceable to the spec, business-readable. Pins `at_sha` and the AT paths into the Build sub-task. A rejected AT set goes back to the author with the scenario named — never to the Build run.
 3. **Implement** (`Build:` sub-task, fresh run). The approved ATs are **frozen**: at done, `git diff <at_sha>..HEAD -- <AT paths>` shows no modified or deleted scenario. You may ADD tests — list every addition in the report. An approved AT that is wrong, or unreachable without changing §4 code → `blocked` with your handoff line (workspace context). Never edit, skip, tag out, or weaken one to reach green. Implement until the ATs are green, with whatever inner loop you like.
 4. **Verify by outcome.** ATs green, full suite green (zero errors, zero warnings, nothing skipped), coverage per touched class ≥80%, mutation report on touched classes, AT-drift check empty. These artefacts are the evidence; a sentence saying you did TDD is not.
@@ -24,13 +24,13 @@ Write unit tests where they help you design or pin a detail the ATs do not reach
 
 ## Prove-It (bug fixes)
 
-The outer loop at bug scale. The reproduction test IS the acceptance test: authored in the `Acceptance tests:` stage from the bug's Gherkin, red for the reason the bug report describes, approved, frozen; the fix lands in Build and turns it green; the full suite proves no regression. A fix with no frozen reproduction test is unverified. In a review REWORK round the same rule applies inside the fix run: add the reproduction test first, list it as an addition, then fix.
+The outer loop at bug scale. The reproduction test IS the acceptance test: red for the reason the root-cause report describes, frozen the moment it is committed, the fix lands after it and turns it green; the full suite proves no regression. A fix with no frozen reproduction test is unverified. For a confirmed bug on one surface with no new public signature (Policy 02 statement 1a), the reproduction is authored and frozen inside the single `bug-build` Build run — its own first commit is `at_sha` — instead of a separate `Acceptance tests:` stage; otherwise (a surface in doubt, or a defect surfaced mid-cycle) it is authored in the `Acceptance tests:` stage as usual, approved, frozen. In a review REWORK round the same rule applies inside the fix run: add the reproduction test first, list it as an addition, then fix.
 
 ## Ports-and-adapters — what makes ATs fast and honest
 
 - Drive the **inbound port** (application service, command/query handler, mediator, or the package's public API) — not HTTP, not the UI, not a controller.
 - **Outbound ports** (repositories, clock, message bus, external HTTP clients, secrets) get hand-written in-memory fakes implementing the port interface. Not an in-memory database, not a mocking framework scripting call order.
-- Compose the application for tests from its ports, the way production composes it from adapters — one factory taking the fakes, so the AT harness signature stays stable as handlers multiply.
+- Compose the application for tests from its ports, the way production composes it from adapters — one factory taking the fakes, so the AT harness signature stays stable as handlers multiply. A second test that needs the same setup extends this factory instead of pasting it — a copied setup block of ~10+ lines is a DRY defect at the second copy (Policy 02 statement 7a).
 - `WebApplicationFactory<T>` / Testcontainers / real adapters only for scenarios tagged `@integration`.
 - No port seam where one is needed? That is a §3 row for the leader to add (smallest seam that lets the AT drive the behaviour), reported `blocked` from the `Acceptance tests:` stage — never an ad-hoc refactor made there.
 
@@ -38,7 +38,7 @@ The outer loop at bug scale. The reproduction test IS the acceptance test: autho
 
 Run mutation testing on the touched classes and report it; it replaces hand-narrated "I deleted the guard and it went red" wherever the tool runs.
 
-- .NET: `dotnet stryker --mutate "**/<TouchedClass>.cs"` (install once: `dotnet tool install -g dotnet-stryker`). TypeScript: `npx stryker run --mutate "src/<file>.ts"` (`@stryker-mutator/core` + the repo's runner plugin).
+- .NET: `git fetch origin dev` then `dotnet stryker --since:origin/dev` (install once: `dotnet tool install -g dotnet-stryker`), scoped to the lines this cycle changed — never the whole class (Policy 02 statement 3a). TypeScript: `npx stryker run --mutate "src/<file>.ts"` (`@stryker-mutator/core` + the repo's runner plugin).
 - Report per touched class: mutation score, and **every surviving mutant** with a disposition — `killed — added <test>`, `equivalent — <why no test can tell>`, or `accepted — <reason>`. An undispositioned survivor in code you added is an open finding.
 - Tool cannot run (no network, unsupported runner): fall back to the manual mutation check per guard — delete or invert it, run, confirm RED, restore — and state in the report that the tool was unavailable.
 
@@ -69,7 +69,7 @@ RED is not just the author stage — it is a property every finished test must s
 - **Assertions pin the exact expected text, never a fragment.** `ShouldContain("typeof(")` plus `ShouldContain("Marker")` passes with the fragments in unrelated positions; `ShouldContain("typeof(global::Probe.Markers.Marker)")` does not. Anchor an annotation assertion to the member it belongs to.
 - **An absence assertion needs a presence sibling.** `dto.Nickname.ShouldBeNull()` for an omitted field also passes when the field is dropped end to end. Pair it with a test that sends a value and asserts it round-trips.
 - **Branch coverage on every branch you added, not line coverage.** A 1-of-2 arm is an untested edge case — report per-branch hits. An arm no input can reach is not a gap: prove it with a probe and say so.
-- **Every edge case the brief names anywhere — §3 row, contract, rules, §9, a prose note — needs a fact or an explicit "no fact, reason".**
+- **Every edge case the brief names anywhere — §3 row, contract, rules, §9, a prose note, or a §6a input-domain row — needs a fact or an explicit "no fact, reason".**
 - **Never mutate ambient state in a test** (`CultureInfo.CurrentCulture`, environment variables, static config). Scope and restore it, or pin it on a dedicated thread.
 
 ## Verification (after any implementation)
@@ -78,4 +78,7 @@ RED is not just the author stage — it is a property every finished test must s
 - Every `@new` scenario green, every `@existing` scenario still green; bug fixes carry the reproduction AT that was red at `at_sha`.
 - Full suite passes; nothing skipped or disabled; per-touched-class coverage reported; mutation report with survivor dispositions.
 - Standards row: `dknet-ddd-conventions` + `dotnet10-efcore10-standards` opened, rule-ids checked, a CodeGraph reuse search per new public symbol, SRP and DRY measured (member-protocol check 8, Policy 01 statement 17).
+- CI parity row: every `pull_request` workflow step run locally on a throwaway merge of `origin/dev`, nothing reported skipped (member-protocol check 9, Policy 02 statement 10).
+- Every §6a input-domain row has its proof: an AT scenario or a named test (Policy 06 statement 10a).
+- Pre-review run once on `Build:` (any mode) or `Fix (review):`, every `blocking`/`important` finding fixed or in LEFT OPEN (member-protocol `references/pre-review.md`, Policy 01 statement 17).
 - Run each test command after a change that could affect its result — never re-run an unchanged suite for reassurance.

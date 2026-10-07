@@ -1,6 +1,6 @@
 # drunk-workspace export
 
-Full-workspace bundle: 30 skills, 16 agents, 3 squads, 4 projects, 8 autopilots (`autopilots/`, prompt in `*.description.md`; push with `multica autopilot update <id> --description "$(cat f)"`), plus `workspace/context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push it with `multica workspace update <id> --context-stdin < workspace/context.md`.
+Full-workspace bundle: 31 skills, 17 agents, 3 squads, 5 projects, 8 autopilots (`autopilots/`, prompt in `*.description.md`), 19 labels, 9 properties, plus `workspace/workspace.context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push text byte-exact: pass the file content as a raw argv element (e.g. from Python `subprocess`) to `multica workspace update <id> --context`, `multica agent update <id> --instructions`, `multica squad update <id> --instructions` and `multica autopilot update <id> --description`; use `--content-stdin` for `multica skill update` and `multica skill files upsert`. Shell `"$(cat f)"` and `--context-stdin` drop the trailing newline, and `--context` decodes backslash escapes. Read every pushed resource back and diff it against the file.
 
 **Config files.** `properties/properties.json` carries the ACTIVE property definitions only — archived ones are
 dropped on purpose (the CLI has `property archive`/`unarchive` but no delete, so an archived definition lives on
@@ -16,7 +16,7 @@ there; amend the policy first, then cascade. See the [index](docs/policies/00-po
 
 ## Layering (what an agent actually receives)
 
-- **Workspace Context** (`workspace/context.md`) — every run, every agent: statuses, wakes, ticket conventions, `Owner`, git rules, report shapes. Stated once here, cited elsewhere.
+- **Workspace Context** (`workspace/workspace.context.md`) — every run, every agent: statuses, wakes, ticket conventions, `Owner`, git rules, report shapes. Stated once here, cited elsewhere.
 - **Agent instructions** (`agents/*.md`) — identity, triggers, hard limits, the skills to load.
 - **Squad instructions** (`squads/*.md`) — injected into the squad LEADER's task only, with a platform-generated roster (mention markdown + skills per member). Members never see them.
 - **Skills** (`skills/*/SKILL.md` + `references/`) — written to the run's working directory as files; a skill costs tokens only when opened. Every-wake procedure lives in `SKILL.md`; rare paths live in `references/`.
@@ -42,14 +42,14 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 | claude_ultra     | claude  | claude-opus-5-5[1m] | xhigh    |
 | dev-backend      | claude  | claude-opus-5-5     | high     |
 | release-manager  | claude  | claude-sonnet-5     | high     |
-| docs-writer      | claude  | claude-sonnet-5     | high     |
-| devops           | claude  | claude-sonnet-5     | high     |
-| default          | claude  | claude-sonnet-5     | high     |
-| run-medic        | claude  | claude-haiku-4-5    | low      |
-| issue-janitor    | claude  | claude-haiku-4-5    | (runtime default) |
-| Mika             | claude  | claude-haiku-4-5    | (runtime default) |
 | medium-publisher | claude  | (runtime default)   | —        |
+| docs-writer      | codex   | gpt-6-sol           | high     |
+| devops           | codex   | gpt-6.1-sol         | high     |
+| default          | codex   | gpt-6-sol           | high     |
+| run-medic        | codex   | gpt-6-luna          | low      |
+| issue-janitor    | codex   | gpt-6-luna          | medium   |
+| Mika             | codex   | gpt-6-luna          | medium   |
 
 
-Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5-5[1m]`) — arch-reviewer, product-owner, pr-reviewer and the `claude_ultra` assistant at `xhigh`, dev-leader, spec-reviewer and service-architect at `high`; `dev-backend` rides opus on the standard tier (`claude-opus-5-5`) at `high`; devops, release, writing and the `default` assistant ride sonnet. `run-medic` rides haiku at `low`: hourly run recovery is pattern-matching over agent task rows, not judgment.
-`issue-janitor` and `Mika` ride haiku at the runtime-default thinking level. Every agent runs on the `Claude (Stevens-Mac-mini.local)` runtime.
+Main development stays on Claude; the work around it rides Codex. Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5-5[1m]`) — arch-reviewer, product-owner, pr-reviewer and the `claude_ultra` assistant at `xhigh`, dev-leader, spec-reviewer and service-architect at `high`; `dev-backend` rides opus on the standard tier (`claude-opus-5-5`) at `high`; release-manager and blog-writer ride sonnet. These run on the `Claude (Stevens-Mac-mini.local)` runtime.
+docs-writer and the `default` assistant ride `gpt-6-sol` at `high`; devops rides `gpt-6.1-sol` at `high` (moved off `gpt-6-sol` after OpenAI returned "Selected model is at capacity" mid-run); `run-medic`, `issue-janitor` and `Mika` ride `gpt-6-luna` (`low` for run-medic — hourly run recovery is pattern-matching over agent task rows, not judgment — `medium` for the other two). These run on the `Codex (Stevens-Mac-mini.local)` runtime: the same host as Claude, because `default`'s monthly insights autopilot shells out to `claude -p "/insights"` and docs-writer renders archify diagrams with the host's Chrome. Thinking is always set explicitly on a Codex agent; left empty, it inherits the host's `~/.codex/config.toml`.

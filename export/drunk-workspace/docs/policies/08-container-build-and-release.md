@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-08 |
-| **Version** | 1.2 |
+| **Version** | 1.4 |
 | **Status** | Active |
 | **Owner** | devops (build/publish automation) · release-manager (the `dev`→`main` release) |
 | **Applies to** | Every drunk repo that publishes a NuGet/npm package, a container image, or a Helm chart |
@@ -22,22 +22,23 @@
    drunk has NO deployed environment. Publishing the artifact IS the release. There is no
    SANDBOX, no PRD, no k8s promotion to gate on top of what's below.
 
-   (a) LIBRARY REPOS (DKNet, DKNet.Templates, drunk-pulumi-*)
+   (a) LIBRARY REPOS (a repo that publishes NuGet or npm packages)
        dev ──[devops CI: build+test]──▶ PR to dev, reviewed by pr-reviewer, merged
         │
         └──[release-manager: ONE PR, dev──▶main]── merge triggers CI ──▶ NuGet `dotnet pack`/
            `nuget push`  OR  npm `npm pack`/`npm publish`.  No deploy step after this.
 
-   (b) CONTAINER-IMAGE REPOS (drunk-mcp-proxy, dev-environments, drunk-action-runners,
-       HBD.YarpProxy, per-service Dockerfiles)
+   (b) CONTAINER-IMAGE REPOS (a repo whose CI publishes a container image)
        CI builds + publishes a MULTI-ARCH image (linux/amd64 + linux/arm64) off `main`.
        Publishing the manifest IS the release — no environment to promote it to.
 
-   (c) HELM CHART REPOS (drunk.charts)
-       Chart version bump ──▶ CI publishes to OCI registry + npm, per helm-k8s-conventions.
-       No app-repo `dev`→`main` model applies — see that skill's own chart-repo conventions.
+   (c) HELM CHART REPOS (a repo whose CI publishes its Helm charts)
+       dev ──[devops: chart change + version bump]──▶ PR to dev, reviewed by pr-reviewer, merged
+        │
+        └──[release-manager: ONE PR, dev──▶main]── merge triggers CI ──▶ OCI registry + npm,
+           per helm-k8s-conventions.  No deploy step after this.
 
-   Guardrail: devops owns the CI workflow, never app code, never `main`.
+   Guardrail: devops owns the CI workflow and the charts, never app code, never `main`.
    release-manager is the ONLY agent that opens/merges the dev──▶main PR.
 ```
 
@@ -58,8 +59,9 @@ covers everything CI does to produce a published artifact.
 ## Policy statements
 
 1. **`main` triggers the publish; there is no deploy after it.** Merging into `main` runs CI,
-   which publishes the NuGet/npm package (library repos) or the container image (image repos).
-   No agent tags production and no agent deploys anything — for library and image repos alike,
+   which publishes the NuGet/npm package (library repos), the container image (image repos) or
+   the Helm charts (chart repos). No agent tags production and no agent deploys anything — for
+   library, image and chart repos alike,
    publishing the artifact off `main` **is** the release.
 2. **`release-manager` is the only agent that opens or merges the `dev`→`main` PR.** Exactly
    one open release PR per cycle, `--base main --head dev`, verified on both refs before merge,
@@ -79,9 +81,11 @@ covers everything CI does to produce a published artifact.
    **B** hold until a fix lands — and merges only when the owner replies A with
    release-manager's mention, re-checking first if `dev` moved since the handoff. Large diffs,
    unknown coverage and CI exceptions do not make a release critical.
-3. **`devops` owns CI, never app code, and never `main`.** `devops` writes and maintains
-   pipeline configs (GitHub Actions), build/test workflows, and the package-publish automation
-   that runs off `main` — it does not touch application/library code, tests, or documentation,
+3. **`devops` owns CI and Helm charts, never app code, and never `main`.** `devops` writes and
+   maintains pipeline configs (GitHub Actions), build/test workflows, the package-publish
+   automation that runs off `main`, and the Helm charts in every factory repo (templates, values,
+   chart README, their `helm-unittest` tests, the `Chart.yaml` version) — it does not touch
+   application/library code, their tests, or any other documentation,
    and it never commits to or merges `dev` or `main` directly. Its own changes land via a
    `chore/<issue-key>` branch and ONE PR to `dev`, scored by `pr-reviewer`, merged by
    `pr-reviewer` — `devops` never merges its own PR.
@@ -93,12 +97,15 @@ covers everything CI does to produce a published artifact.
 5. **Container-image repos: publish a multi-arch manifest, not a deploy.** Same "merge to
    `main` triggers CI" shape as library repos, except the published artifact is the image
    manifest covered by statement 10 below, not a package.
-6. **Helm chart repos follow `helm-k8s-conventions`'s own delivery rules, not the app-repo
-   `dev` model.** A chart publishes to the OCI registry and npm via the repo's own workflows
-   (`publish-oci.yml` / `npm-publish.yaml`), never a manual `helm push` (`HELM-DEL-003`). Any
+6. **Helm chart repos follow the same `dev`→`main` model, plus `helm-k8s-conventions`'s
+   delivery rules.** `devops` authors every chart change and validates it locally only — it
+   never runs `helm install`, `helm upgrade` or `helm push`. A chart publishes to the OCI
+   registry and npm via the repo's own workflows (`publish-oci.yml` / `npm-publish.yaml`),
+   never a manual `helm push` (`HELM-DEL-003`). Any
    template/values change bumps the chart's `Chart.yaml` `version`; `appVersion` tracks the
    shipped image separately (`HELM-DEL-002`). New conditional rendering in a template ships
-   with a `helm-unittest` assertion, and `helm lint`/`helm template` must run clean
+   with a `helm-unittest` assertion where the repo has a suite (else the before-and-after
+   `helm template` output in the PR body), and `helm lint`/`helm template` must run clean
    (`HELM-DEL-001`).
 7. **Multi-stage builds — no build tooling in the runtime layer.** A Dockerfile uses a
    `builder` stage (compiles/packages: wheel, `dotnet publish`, `npm run build`) and a minimal
@@ -138,8 +145,10 @@ covers everything CI does to produce a published artifact.
     **breaking change bumps the MINOR only**: `v1.2.3` → `v1.3.0`, signalled by putting
     `(MINOR)` in the commit title that lands the break on `main` (`VER-REL-001`). No agent
     ever writes `(MAJOR)` in a commit title, PR title, or merge-commit subject, and no agent
-    hand-edits a version literal (`Directory.Build.props`, `package.json`, `Chart.yaml`
-    `version`, a release tag) or creates a tag or GitHub Release by hand (`VER-REL-002`).
+    hand-edits a version literal (`Directory.Build.props`, `package.json`, a release tag) or
+    creates a tag or GitHub Release by hand (`VER-REL-002`). The one exception is `devops`'
+    `Chart.yaml` `version` bump on a chart change (statement 6, `HELM-DEL-002`): patch, or
+    minor for a breaking template/values change, never major.
     **A major bump is the owner's decision alone**, taken deliberately outside a delivery
     cycle — a breaking change is never reason enough for one. If a publish run emits a major
     bump nobody asked for, that is a release defect: report it on the ticket under Policy 07
@@ -151,10 +160,10 @@ covers everything CI does to produce a published artifact.
 
 ## Roles & responsibilities
 
-- **devops** — owns CI/CD pipeline configs and the package-publish/image-publish automation
-  that runs off `main`; opens PRs to `dev` only, never merges them, never touches app code,
+- **devops** — owns CI/CD pipeline configs, the package-publish/image-publish automation
+  that runs off `main`, and the Helm charts in every factory repo; opens PRs to `dev` only, never merges them, never touches app code,
   never touches `main`.
-- **release-manager** — the sole owner of the `dev`→`main` PR for library and image repos;
+- **release-manager** — the sole owner of the `dev`→`main` PR for library, image and chart repos;
   three acts only (open the PR, check whether it is critical from commit subjects and PR labels,
   merge it — a critical one on the owner's reply); never runs tests/builds, never triggers or
   verifies the publish beyond one snapshot.
@@ -177,17 +186,18 @@ covers everything CI does to produce a published artifact.
 - **Release numbering:** no `(MAJOR)` marker anywhere in the release's commit titles; a
   breaking change carries `(MINOR)` plus a `Breaking` changelog entry naming the replacement;
   the published tag's major equals the previous release's major; no version literal or tag
-  edited by hand.
+  edited by hand, except devops' patch/minor `Chart.yaml` `version` bump (statement 12).
 - No secret literal in any Dockerfile layer, chart value, or CI workflow file.
 
 ## Enforcement
 
 `pr-review-gate` flags any `Dockerfile`/build-workflow diff missing the multi-arch platform
 list, a missing non-root `USER`, or a secret in a layer as `blocking`. It also flags a
-`(MAJOR)` marker in any commit or PR title, and a hand-edited version literal or tag, as
+`(MAJOR)` marker in any commit or PR title, a hand-edited version literal or tag (outside
+devops' patch/minor `Chart.yaml` bump), and a major `Chart.yaml` bump, as
 `blocking` (`VER-REL-001`/`VER-REL-002`). `devops` is the sole
 configurer of the CI workflows enforcing this at build time. `release-manager` owns the
-`main` merge monopoly for library and image repos; a PR targeting `main` opened by any other
+`main` merge monopoly for library, image and chart repos; a PR targeting `main` opened by any other
 agent is itself a policy violation.
 
 ## Exceptions & waivers
@@ -205,5 +215,5 @@ agent is itself a policy violation.
 
 - [`docker-image-standards`](../../skills/docker-image-standards/SKILL.md) — full Dockerfile rule catalogue (`DOCKER-BLD-*`, `DOCKER-RUN-*`, `DOCKER-SEC-*`, `DOCKER-DEL-*`).
 - [`helm-k8s-conventions`](../../skills/helm-k8s-conventions/SKILL.md) — chart structure, templating, K8s manifest hygiene, `HELM-DEL-*` publish rules.
-- `agents/devops.md` — CI/CD scope and hard boundary (no app code, no `main`).
+- `agents/devops.md` — CI/CD and Helm chart scope and hard boundary (no app code, no `main`).
 - `agents/release-manager.md` — the two-act `dev`→`main` release procedure and its absolute boundary.

@@ -1,0 +1,5 @@
+# Infra Phase Ticket Creation (P1b / P1c / Helm P2)
+
+   - `[P<num>-1b] CI/CD change: <scope>` — assignee `devops` (`--assignee-id`), `todo`. Self-contained description: target repo(s) and file paths, what to change and why, acceptance criteria, and landing rule for that repo class (app repo + named feature branch → commit to THAT branch; app repo standalone → `chore/<issue-key>` branch + PR to `dev`; helm repo → `chore/<issue-key>` from `origin/main` + PR to `main`, and STOP).
+   - `[P<num>-1c] Review CI/CD PR: <scope>` — assignee `pr-reviewer`, `backlog`. Create it ONLY when `[P<num>-1b]` will produce standalone PR (commit onto squad feature branch is reviewed inside squad's cycle PR instead). Promote it once devops posts PR URL. **Its description must state merge authority for that repo class**: app-repo PR to `dev` — pr-reviewer merges on APPROVED; helm PR to `main` — pr-reviewer scores and votes but NEVER merges, because merging chart IS deploy.
+   - Helm only: also create `[P<num>-2] Merge helm PR (deploy): <scope>`, assignee = requester's member UUID, `backlog`, promoted after `[P<num>-1c]` approves.

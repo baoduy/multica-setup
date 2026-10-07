@@ -1,0 +1,13 @@
+# Recovery Loop
+
+Whenever wake finds any child `blocked`, failed, or stalled (including `in_progress` with silent assignee):
+
+1. **Diagnose** root-cause stage — stuck sub-task itself or EARLIER stage with defective deliverable (missing branch, broken build, wrong artifact).
+2. **Loop back**: re-arm root-cause sub-task — flip it `in_progress` (`multica issue status <id> in_progress --no-start`) whether it sits `blocked` or `done`, add the key of each `blocked` gate that waits on its return to its `Retrigger on done` (comma-separated), then ONE corrective comment — assignee mention, exact defect, evidence, and what "fixed" looks like. Flip first, mention last. Downstream stays `blocked`/`backlog`.
+3. **Resume forward** when it returns `done`: verify failure is resolved, re-arm stalled downstream sub-task (`in_progress --no-start` + assignee mention). A `done` child still carrying `Retrigger on done` while an issue it names sits `blocked` (and every child naming that issue is `done`) means your re-arm was lost: re-arm that issue now and drop its key from the property, unsetting it when none is left.
+4. Every wake that finds stuck child MUST end in exactly one of: loop-back dispatched, stage resumed/promoted, or escalation posted. Ending turn with stuck child untouched is forbidden.
+5. **Escalate instead of spinning**: after 2 failed fix attempts on same root cause, or when cause is outside squad control (product decision, missing credentials, broken environment, out of scope) — stop looping and escalate per pipeline escalation map:
+ - **phase-ticket cycle** → ONE comment on YOUR OWN phase ticket, then your handoff line on the main ticket (it wakes product-owner; main ticket carries one line); product-team owns hop to human from there.
+ - **root-ticket cycle** → reassign ticket that needs human — stuck child, or gate sub-task its owner handed off — to the resolved owner per `sdlc-flow-delivery-pipeline` "Who the human owner is" (`Owner`-property-first → root member-creator → workspace owner; resolve at runtime, never hardcode): `multica issue update <id> --assignee-id <member-uuid> --status todo`. A member MENTION renders link and delivers nothing — ASSIGNMENT is what puts escalation in front of them. Never agent mention in escalation to human.
+
+ Say what was tried, what failed, exact decision you need, and what stays blocked until it arrives — in standalone `## BLOCKER` section at top of comment on reassigned ticket, per the `blocker-report` skill. Never hold work hostage on ticket nobody was handed, and never re-arm or take back sub-task human currently holds.

@@ -1,6 +1,6 @@
 ---
 name: api-feature-doc-template
-description: House template for an API FEATURE doc page — a feature of a running application that callers reach over HTTP, a webhook or an MCP tool (overview, business domain, end-to-end flow from endpoint to database and events, endpoints, entity fields at database level, downstream systems), plus the app's service README. Not for an installable package — that is library-doc-template.
+description: House template for an API FEATURE doc page — a feature of a running application that callers reach over HTTP, a webhook or an MCP tool (overview, business domain, end-to-end flow from endpoint to database and events, endpoints, entity fields at database level, downstream systems), plus the app's service README and its deployment guide. Not for an installable package — that is library-doc-template.
 ---
 
 # API feature doc template
@@ -17,9 +17,8 @@ calls in their own code → `library-doc-template`, even when the package helps
 build APIs (middleware, endpoint-mapping extensions). A UI — screens,
 components, a console guide — has no house template yet. A repo with its own
 template for feature docs (today: the `dknet-docs` set in DKNet.Templates
-`plugin/skills/dknet-docs/` and DKNet.Accounts.Api `.agents/skills/dknet-docs/`
-— five files under `docs/features/<feature>/`) → that template for the feature
-pages; the **Service README** below still shapes the repo-root README unless
+`plugin/skills/dknet-docs/` — five files under `docs/features/<feature>/` — and
+any repo that copied it in) → that template for the feature pages; the **Service README** below still shapes the repo-root README unless
 that template defines one.
 
 Fill sections in this order. Omit a section when its trigger below is absent;
@@ -49,6 +48,29 @@ placeholder text under it.
 - **Downstream systems:** registered HTTP and typed clients, SDK clients,
   message-bus publishers and consumers, and the configuration keys holding
   their addresses. A partner no code calls is not a dependency.
+- **Configuration:** the options classes and their validation, the
+  `appsettings*.json` files, and the Helm values or compose files that set
+  them. Where a value comes from (settings file, environment variable, secret
+  store) and when it is read (startup, per request, on reload) come from the
+  binding code, never from the key's name.
+- **Concurrency:** the concurrency token, ETag or row version the entity
+  mapping declares, and the status a stale write gets — or the lock the
+  handler takes. Neither means last write wins; say so.
+- **Deployment:** the Dockerfile, the Helm chart (values, probes, resources,
+  identity), the pipeline YAML, and how migrations reach the database (startup
+  migrate, migration bundle, a job). A file that exists is not proof that
+  production uses it: say "the chart sets", never "production runs".
+- **What the repo cannot tell:** production values, backup and restore,
+  recovery time and data-loss window, service objectives, the owning team.
+  Never inferred, never invented: each goes in ❓ Open questions.
+
+**Point at code by name, never by line.** Name the class or type (`AuthConfig`),
+or the folder that holds it (`ApiEndpoints/DKNet.Notification.Api/Configs/Auth/`).
+A file path is fine when the file itself is the subject (`appsettings.json`,
+`Program.cs`). Never a line number or line range (`AuthConfig.cs:28-29`,
+`#L28`): every edit to the file moves its lines, and the page goes stale with
+nobody noticing. Line-level evidence belongs in the archify IR's `evidence` and
+in your completion report, never on the page.
 
 ## The skeleton
 
@@ -106,6 +128,9 @@ eventually consistent.>
 - **Auth:** <role or scope, and where it is declared — or "anonymous">
 - **Idempotency** (write routes): <the header and what a replay returns — or
   "not idempotent: a retry creates a second <thing>">
+- **Concurrency** (write routes that change an existing entity): <what the
+  caller sends (`If-Match`, a version field) and the status a stale write gets
+  — or "none: the last write wins">
 - **Request:** a table — Field | Type | Required | Rules | From (body, route,
   query, header, claim)
 - **Response:** `<status>` and a JSON example
@@ -128,10 +153,26 @@ it serves — never its type restated. Then the relations
 token and soft-delete or audit columns when the entity has them, and, when the
 entity has a status: Value | Meaning | Reached by | Next.>
 
+<A store that is not a table (a Redis key or list, a blob container): one `###`
+per shape, headed by its key pattern or name, with the same table minus Column
+and DB type, plus its lifetime and what removes it.>
+
+<Then, each only when the code has it and it is specific to this feature:
+cache entries (key, lifetime, what clears them, what a reader sees while
+stale) and retention (what deletes or archives rows, and when). How the schema
+changes is the same for every feature of one database: it lives once in the
+deployment guide's 🗃️ Database changes; link it.>
+
 ## 📣 Events
 
-| Event | Raised when | Payload | Transport | Consumers |
-|---|---|---|---|---|
+| Event | Raised when | Payload | Transport | Consumers | Ordering | Duplicates | On failure |
+|---|---|---|---|---|---|---|---|
+
+<Ordering: what keeps two events in order, or "none". Duplicates: what a
+consumer sees on redelivery and what makes it safe (message id, idempotent
+handler). On failure: retries, dead-letter queue, how to replay — with the
+replay's side effects — and what happens to an event raised while its
+transport is switched off.>
 
 ## 🌐 Downstream systems
 
@@ -139,14 +180,24 @@ entity has a status: Value | Meaning | Reached by | Next.>
 |---|---|---|---|---|
 
 <Direction: `we call it`, `it consumes our events`, `we consume its events`,
-`it calls us`. How: HTTP, queue or topic name, SDK. When it is down: timeout,
-retry, circuit breaker, fallback, or "the request fails with <status>". Then
-the configuration keys that point at each system.>
+`it calls us`, or `registered, unused` for a client the app wires up but no
+handler calls. How: HTTP, queue or topic name, SDK. When it is down: the
+timeout, retry and circuit breaker the registered client sets, the fallback, or
+"the request fails with <status>". Then the configuration keys that point at
+each system.>
 
 ## ⚙️ Configuration reference
 
-| Key | Type | Default | Effect |
-|---|---|---|---|
+| Key | Type | Required | Default | Rules | Secret | Takes effect | Effect |
+|---|---|---|---|---|---|---|---|
+
+<Rules: range, format, unit or allowed values, from the validator. Secret: `no`,
+or `yes — <store>` (Key Vault, Kubernetes secret); a secret's example value is
+always a placeholder. Takes effect: `startup` (restart to change), `per
+request`, or `on reload`. Then, once, how a key maps to an environment
+variable (`A:B` → `A__B`). List only the keys this feature alone reads. Keys
+the whole application shares live once in its configuration reference page:
+link it, never copy their rows onto each feature page.>
 
 ## ⚠️ Errors & limits
 
@@ -157,6 +208,16 @@ consistency; retry safety; what the feature deliberately does NOT do.>
 
 <Sibling features and the client SDK, if one exists, each with one line on when
 to reach for it instead.>
+
+## ❓ Open questions
+
+| Question | Why it matters | Checked | Who can answer |
+|---|---|---|---|
+
+<One row per fact the page needs and the repo cannot prove: a production
+value, a retention or recovery target, an owner, an intended behaviour the
+code contradicts. Checked: what you read before giving up. The rest of the
+page never states a guess as fact.>
 ```
 
 ## Section rules
@@ -168,13 +229,14 @@ to reach for it instead.>
 | 🏢 Business domain | Always | A term the page uses is missing from the table; a rule no code enforces; the "Enforced by" column names no validator, guard or constraint |
 | 🚀 Quick Start | Always | Not run or copied from a test; the auth step or a required header is missing |
 | 🔄 End-to-end flow | Always | The main-route diagram stops before the database or skips a raised event; not the route's real path (generic boxes, invented hops); the entity has a status whose changes are not drawn; a transition no handler performs; a diagram with no prose |
-| 🔌 Endpoints | Always | A published route has no section; an error the route cannot return; a write route silent on idempotency |
-| 🗃️ Data model | When the feature stores data | A column, type, length, key or default disagrees with the entity mapping; a field with no purpose or one that restates the type; a relation missing; a status value no code writes |
-| 📣 Events | When the feature publishes or consumes a message or webhook | A payload field, transport or consumer that is not in the code |
+| 🔌 Endpoints | Always | A published route has no section; an error the route cannot return; a write route silent on idempotency; a write to an existing entity silent on concurrency |
+| 🗃️ Data model | When the feature stores data | A column, type, length, key or default disagrees with the entity mapping; a field with no purpose or one that restates the type; a relation missing; a status value no code writes; a non-table store with no lifetime |
+| 📣 Events | When the feature publishes or consumes a message or webhook | A payload field, transport or consumer that is not in the code; ordering, duplicates or failure handling left blank |
 | 🌐 Downstream systems | When the feature calls, is called by, or exchanges events with another system | A registered client or bus endpoint missing; no "when it is down" behaviour; a partner no code calls |
-| ⚙️ Configuration reference | When the feature reads settings, env vars or flags | A default disagrees with the code |
+| ⚙️ Configuration reference | When the feature reads settings, env vars or flags | A default or rule disagrees with the code; a secret with a real-looking value; no "Takes effect" |
 | ⚠️ Errors & limits | Always | Empty, or only restates the happy path |
 | 🔗 Related features | When siblings or a client SDK exist | Bare links with no "reach for this when" line |
+| ❓ Open questions | When the page needs a fact the repo cannot prove | A guess stated as fact elsewhere on the page; a row with no "Checked" |
 
 Emoji headings are house style on these pages — keep them, exactly as above.
 
@@ -189,7 +251,9 @@ status that changes over its life (a state diagram with only the transitions
 the handlers actually perform), and several calls a caller must make in a set
 order. A route whose path differs from the main one (async hand-off, external
 call, compensation) gets its own diagram in its 🔌 Endpoints section; an event
-that travels on after it is raised may get one in 📣 Events.
+that travels on after it is raised may get one in 📣 Events. A deployment guide
+carries one diagram, in 🔄 Release path: the pipeline's real stages, artifacts
+and target environments.
 
 Every diagram is drawn with archify, never Mermaid — even where the repo's own
 template offers Mermaid as a fallback. Only an `erDiagram` a repo template asks
@@ -210,21 +274,131 @@ one sentence.
 
 ## Service README
 
-The repo-root `README.md` of an application: Title + one-liner, 📖 Overview
-(one bullet per feature, each linking its page), 🏗️ Runtime architecture (once
-the repo has one: its `docs/diagrams/runtime.svg`, alt text narrating the primary path in one
-sentence — Policy 05 statement 3a; shape and drawing prompt in docs-writer's
-procedure, archify type always `architecture`), 🌐 Downstream systems for the
-whole application, 🚀 Quick Start (run it locally,
-then one call), a link to the configuration reference, then a table of the
-feature pages. No endpoint sections — they drift from the feature page that
-owns them.
+The repo-root `README.md` of an application. It gets a newcomer from "what is
+this" to a working local call; every detail lives on the page that owns it, and
+the README links there. Sections, in this order:
+
+- Title + one-liner.
+- 📖 Overview: one bullet per feature, each linking its page, then one line on
+  who calls the application.
+- 🏗️ Runtime architecture, once the repo has one: its
+  `docs/diagrams/runtime.svg` (a repo that committed it under another name:
+  link that file and flag the rename in your report), alt text narrating the primary path in one
+  sentence (Policy 05 statement 3a; shape and drawing prompt in docs-writer's
+  procedure, archify type always `architecture`).
+- 🌐 Downstream systems for the whole application.
+- 🚀 Quick Start: from a fresh clone to the running app, then one call. Each
+  command names its working directory and what must run first.
+- ✅ Verify it works: one request, page or health check, and the exact
+  result to expect. Run it, or copy it from a passing test.
+- 🛠️ Common commands: restore, build, test, run, format — only commands the
+  repo actually has, each with its working directory.
+- ⚠️ Known limitations: what a new developer or caller hits first.
+- 📚 Documentation: a table of the feature pages, the configuration
+  reference and the 🚢 deployment guide, one line each on what it answers.
+- ❓ Open questions, when the README needs a fact the repo cannot prove
+  (owner, support route).
+
+No endpoint sections, no full configuration table — they drift from the page
+that owns them.
+
+## Deployment guide
+
+`docs/deployment.md` for an application that ships as an image or a chart. The
+reader is an operator with access to the cluster and the pipeline; they never
+read the code. They need what ships, how it reaches an environment, how to tell
+it worked, and what a rollback does not undo. Skip the guide for a library.
+
+```markdown
+# Deploying <service>
+
+<One sentence: what ships and where it runs.>
+
+## 📦 What ships
+
+<The artifacts: image name and tag scheme, chart name and version, where each
+is published, which pipeline builds it. Then how to trace one deployment back:
+commit → image tag → chart version.>
+
+## 🔄 Release path
+
+<The diagram: commit → pipeline stages → artifacts → environment, drawn from
+the pipeline YAML. A step a human does by hand (promote `dev` to `main`, run
+`helm upgrade`) is drawn as a manual step, set apart from the automated ones.
+Then: Stage | Trigger | What it does | Gate. Then the environments the repo
+names, and what differs between them; a repo that names none says so and asks
+in ❓ Open questions — never invent `staging` or `prod`.>
+
+## 🧱 Runtime shape
+
+<What the chart creates: workloads, replicas, ports, identity, resources. Each
+probe and exactly what it checks. What must already exist in the cluster or
+the subscription before install (stores, queues, secrets, identities, a
+gateway).>
+
+## ⚙️ Configuration and secrets
+
+<How settings reach the pod (chart values → environment variables, a secret
+store mount) and who supplies each secret. Link the configuration reference;
+never copy its table.>
+
+## 🗃️ Database changes
+
+<The migration tool, who applies migrations, when, and whether the previous
+version still runs on the new schema. Only when the application stores data;
+feature pages link here instead of repeating it.>
+
+## 🚀 Deploy
+
+<The supported procedure: the pipeline to run or the exact commands, every
+required input, and the side effects. A command that restarts, migrates or
+deletes says so.>
+
+## ✅ Verify
+
+<The checks after a deploy: health endpoints, one smoke call and its expected
+result, the logs or metrics to watch and for how long.>
+
+## ↩️ Roll back
+
+<When to roll back, the procedure, and what it does NOT undo: applied
+migrations, sent messages, written data.>
+
+## 🧯 When a deploy fails
+
+| What you see | Likely cause | What to do |
+|---|---|---|
+
+<Failed rollout, failing probe, failed migration, missing secret or dependency —
+only causes the chart, the startup code or the pipeline can produce.>
+
+## ❓ Open questions
+```
+
+| Section | Required? | Fails review when |
+|---|---|---|
+| 📦 What ships | Always | An artifact name or tag scheme not in the pipeline; no trace from commit to deployment |
+| 🔄 Release path | Always | No diagram, or one not drawn from the pipeline YAML; a stage or gate the pipeline lacks |
+| 🧱 Runtime shape | Always | A probe described by name only, not by what it checks; a precondition missing that startup refuses to run without |
+| ⚙️ Configuration and secrets | Always | A copied configuration table; a secret with a real-looking value |
+| 🗃️ Database changes | When the application stores data | Silent on who applies migrations or on old-version compatibility |
+| 🚀 Deploy | Always | A step with an unstated input or side effect |
+| ✅ Verify | Always | No expected result; a check the service does not expose |
+| ↩️ Roll back | Always | Silent on what a rollback leaves behind |
+| 🧯 When a deploy fails | Always | A cause the code cannot produce |
+| ❓ Open questions | When the guide needs a fact the repo cannot prove | Production state stated as fact from a repo file |
+
+One authoritative place: a page that already covers part of this (an operator
+guide, the chart's README) is linked or reshaped into this guide, never copied.
+Describe deploy commands; never run them — a documentation ticket authorises no
+deploy, migration or replay.
 
 ## Keep the index in step
 
-A new feature page that no index links to is an orphan and does not count as
-delivered: link it from the service README's feature table and from the
-`docs/README.md` or `docs/index.md` that sits above it.
+A new feature page or deployment guide that no index links to is an orphan and
+does not count as delivered: link it from the service README's 📚
+Documentation table and from the `docs/README.md` or `docs/index.md` that sits
+above it.
 
 ## Self-check before pushing
 
@@ -233,7 +407,8 @@ delivered: link it from the service README's feature table and from the
 2. Every request, response and `curl` was run, or copied from a passing test.
 3. Every status in an Errors table is one the route can return; every default
    matches the code at this commit.
-4. Every link resolves (relative links included).
+4. Every link and anchor resolves, checked by a script, not by eye: emoji
+   headings make GitHub slugs easy to get wrong.
 5. 🔄 End-to-end flow draws the main route from the endpoint through the tables
    it writes to the events it raises, plus the status changes when the entity
    has a status and the caller's steps when the feature takes several calls in
@@ -246,4 +421,12 @@ delivered: link it from the service README's feature table and from the
    what enforces it.
 8. 🌐 Downstream systems lists every registered client and bus endpoint the
    feature touches, each with its "when it is down" behaviour.
-9. `git diff --stat` shows documentation and diagram files only.
+9. No line references on the page: `git diff origin/dev... -- '*.md' | grep -E '^\+.*\.(cs|ts|tsx|js|py|json|ya?ml|csproj|props|targets|sh|bicep|tf)(:[0-9]+|#L[0-9]+)'`
+   prints nothing.
+10. Every fact the repo cannot prove is a ❓ Open questions row, never a
+    sentence elsewhere; every config row has Required, Rules, Secret and Takes
+    effect; no secret has a real-looking value.
+11. A deployment guide's 🔄 Release path diagram is drawn from the pipeline
+    YAML, ↩️ Roll back names what it leaves behind, and no deploy command was
+    run.
+12. `git diff --stat` shows documentation and diagram files only.

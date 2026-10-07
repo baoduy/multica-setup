@@ -96,45 +96,7 @@ intake: 👤 files bug ticket → product-owner (mx-main, todo, labels main+bug)
 ```
 
 
-## CI/CD & infra flow (Workflow D)
-
-Pipelines, build/release automation, and helm charts are `devops` work. They never enter dev-team or qc-team flow and never open a spec-review gate. They DO open a PR-review gate whenever `devops` produces a standalone PR — see "PR-review gate for devops PRs" below.
-
-**Two doors, and only one of them is product-team's:**
-
-| Door | When | Owner |
-|---|---|---|
-| **direct** | requester files a pipeline/helm ticket straight to `devops` | `devops`, end to end. product-team stays out entirely — never adopts, re-parents, or wraps such a ticket. |
-| **delegated** | a FEATURE needs a pipeline or chart change, surfaced by spec or by a squad | product-team creates `[P<num>-1b] CI/CD change` (devops, `todo`) + `[P<num>-1c] Review CI/CD PR` (pr-reviewer, `backlog`) as phases of that feature |
-
-A squad that discovers pipeline/helm work mid-cycle never creates sub-task itself: it reports on its phase ticket, posts its handoff line on the main ticket, and product-team routes it.
-
-### PR-review gate for devops PRs
-
-| devops landed it as | pr-reviewer's action on APPROVED |
-|---|---|
-| commit on a named feature branch (app repo) | none — it is reviewed inside squad's cycle PR |
-| PR → `dev` (app repo, standalone) | score, vote, **and merge**, exactly as for a squad PR |
-| PR → `main` (either helm repo) | score and vote, **never merge** — merging a chart PR IS deploy, so a human merges it via `[P<num>-2] Merge helm PR` |
-
-```
-👤 asks for pipeline / helm work
- ├─ direct door: 👤 assigns 🔧 devops straight away (supported, not an error — 🦊 stays out)
- └─ via 🦊: intake (labels main+cicd) → classify Workflow D
-       ├─ D1 "analyse and tell me"  → 🦊 report (file:line) + STOP. No sub-tasks, no delegation
-       │                              at any confidence. 👤 decides what happens next.
-       └─ D2 "make the change"      → 🦊 creates [P#-1] CI/CD change (devops, todo) only
- → 🔧 devops does work, landing it by REPO CLASS:
-       app repo   → task names a feature branch? commit to THAT branch (squad leader owns PR).
-                    otherwise → chore/<issue> branch, open PR to `dev`, report link. Never
-                    commits directly to `dev` or `main`.
-       helm repo  → branch chore/<issue>, push, open PR to `main`, STOP. Never merges.
- → 🦊 verifies (commit on feature branch | OPEN PR based on dev | OPEN PR based on main)
- → helm only: 🦊 promotes [P#-2] Merge helm PR (deploy) → 👤 reviews and merges = deploy decision
- → 🦊 flips main ticket done + plain summary
-```
-
-No `[P#-2a]` release, no `[P#-2b]` argoCD ticket, no `[P#-3]` BDD phase in this flow.
+Read `references/workflow-d-cicd-infra.md` when a ticket involves CI/CD pipelines, build/release automation or helm charts (Workflow D): classifying or routing such a ticket, doing devops work, creating `[P#-1b]`/`[P#-1c]` for a feature, reviewing a PR `devops` opened, or discovering pipeline/helm work mid-cycle.
 
 ## Stage ownership
 
@@ -190,7 +152,7 @@ Therefore, in either chart repo: never commit to `dev` (inert), and never commit
 
 ## Triggers & status discipline (summary — full protocol in leader playbook)
 
-- A run is triggered by: assignment at `todo`, promotion `backlog`→`todo`, a `done` or `cancelled` that closes a stage (the platform's sub-issue rule wakes the parent's assignee), an agent/squad mention link (real UUID required), and an agent's plain comment on a squad-assigned ticket (it wakes that squad's leader: the handoff line, workspace context). **Mentions are not deduped** — every mention enqueues its own run even when the target is already `queued` or `running`, and a stage barrier re-fires on EVERY re-entry into `done`. Three consequences: post ONE mention comment per turn (not two); every `mention://agent/<uuid>` link in a comment or description is a wake — even inside backticks or quoted instructions — so write instructions about mentioning someone in prose and never paste the link; and nobody flips their OWN sub-task out of `done` — only the leader does, to `in_progress` (`multica issue status <id> in_progress --no-start`), as step one of re-triggering fix work on a `done` or `blocked` sub-task, mention posted after; the barrier (or handoff line) that follows its return to `done` is a report to verify, not a new stage.
+- A run is triggered by: assignment at `todo`, promotion `backlog`→`todo`, a `done` or `cancelled` that closes a stage (the platform's sub-issue rule wakes the parent's assignee), an agent/squad mention link (real UUID required), and an agent's plain comment on a squad-assigned ticket or any sub-task under one (it wakes that squad's leader: the handoff line, workspace context — the leader's wake guard ends a run this double-fires, Policy 05 statement 5a). **Mentions are not deduped** — every mention enqueues its own run even when the target is already `queued` or `running`, and a stage barrier re-fires on EVERY re-entry into `done`. Three consequences: post ONE mention comment per turn (not two); every `mention://agent/<uuid>` link in a comment or description is a wake — even inside backticks or quoted instructions — so write instructions about mentioning someone in prose and never paste the link; and nobody flips their OWN sub-task out of `done` — only the leader does, to `in_progress` (`multica issue status <id> in_progress --no-start`), as step one of re-triggering fix work on a `done` or `blocked` sub-task, mention posted after; the barrier (or handoff line) that follows its return to `done` is a report to verify, not a new stage.
 - **No member-to-member traffic.** A member writes only on its own ticket (comments, status, properties) plus its handoff line on the parent. It never comments on, mentions, or changes another member's ticket. Anything meant for another member (review findings, a fix request, a question) is a comment on the member's OWN ticket, and its handoff line wakes the leader, who routes it. Only the leader writes on tickets it does not own.
 - **`Retrigger on done`** (text custom property, one issue key or several comma-separated: `MXW-1703,MXW-1704`) marks a sub-task whose completion must re-trigger one or more `blocked` issues. The leader sets it on every sub-task it re-triggers for fix work (a re-armed Build/Scenarios, or the Fix sub-task it files) — `multica issue property set <id> --name "Retrigger on done" --value <blocked-key>[,<blocked-key>…]`, appending to a value already set, never overwriting — because a `done` at or above a blocked stage fires no barrier and the leader would otherwise have no record of which gates to re-arm. Leader on every wake: each `done` child carrying it → for every key it names, once every child naming that key is `done`, flip that issue `in_progress --no-start` and post ONE comment there with its assignee's mention pointing at the fix report; then set the property to the keys still waiting, or `multica issue property unset <id> --name "Retrigger on done"` when none is left. Members never set or clear it.
 - Agent/squad mention = triggers a run; a MEMBER (human) mention renders a link only — server delivers nothing for it. To make a human ACT, put a ticket in their queue: assign (or reassign) relevant ticket to them at `todo`. Comments that need an agent to act MUST carry that agent's mention link (MXW-454) — except a handoff line on a squad-assigned parent, which wakes its leader without one; never agent-mention in FYI/ack comments.
@@ -218,6 +180,6 @@ Therefore, in either chart repo: never commit to `dev` (inert), and never commit
 | SANDBOX deploy (argoCD) | — | requester runs `[P#-2b]`; dev→main release + build is automated (release-manager + CI) |
 | Production tagging | — | automatic in CI/CD downstream, outside this flow |
 | Helm chart merge | — | requester reviews and merges PR `devops` opened; merge IS deploy. pr-reviewer may score it, never merge it |
-| Review leftovers | — | in-scope: pr-reviewer clears them in-cycle (polish round before merge), no ticket. Out-of-scope: dropped, unless a defect/security finding with a named reproduction ⇒ the squad leader files ONE ordinary defect ticket. `Review follow-ups:` tickets retired; never decomposed into phases |
+| Review leftovers | — | in-scope: the score decides — below 8.5 takes a rework round, at 8.5+ it merges with the PR named under `Merged with:` (no polish round, Policy 04 statement 7), no ticket either way. Out-of-scope: dropped, unless a defect/security finding with a named reproduction ⇒ the squad leader files ONE ordinary defect ticket. `Review follow-ups:` tickets retired; never decomposed into phases |
 
 **Escalation is an action, not a status.** A squad that escalates still owns its cycle: it posts ONE comment naming what was tried, what failed, decision needed, and what stays blocked — in a standalone `## BLOCKER` section per `blocker-report` skill — and delivers it (agent mention for an agent hop; ticket reassignment at `todo` for a human hop), then parks blocked child. Ending a turn with a stuck child and no comment dispatched is a flow defect.

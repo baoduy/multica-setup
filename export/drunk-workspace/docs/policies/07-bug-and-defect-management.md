@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-07 |
-| **Version** | 1.10 |
+| **Version** | 1.12 |
 | **Status** | Active |
 | **Owner** | product-owner (intake, root-cause, confidence gate, triage) |
 | **Applies to** | Every reported bug, every architecture-sweep finding routed as a defect, every PR-gate REWORK finding, and every blocker escalation |
@@ -65,7 +65,7 @@ format, not this policy's three-section shape.
    - **< 90%** (possibly by-design, config, or user error) → post the report and require the requester to explicitly confirm before any delegation. Never inflate confidence to skip this step.
    - **Pure question, no change requested** → the report ends the workflow; nothing is delegated.
 4. **A Workflow B spec is written only if the requester asks for one** — it then passes the spec-review gate ([Policy 04](04-code-and-spec-review.md)) like any other spec; a bug fix does not require one by default.
-5. **A pipeline/build-script root cause is Workflow D, never dev-team.** Regardless of confidence, a fix that lives in a pipeline or build script routes to `devops`, reported and handed off explicitly — Workflow A's auto-delegate does not apply to that class.
+5. **A pipeline, build-script or Helm chart root cause is Workflow D, never dev-team.** Regardless of confidence, a fix that lives in a pipeline, a build script or a Helm chart (any `Chart.yaml`) routes to `devops`, reported and handed off explicitly — Workflow A's auto-delegate does not apply to that class.
 6. **Fix at the root, once.** The fix targets the layer all callers route through; a guard in one shared function that closes every caller's path beats a guard duplicated in each caller, and it is the only way to guarantee no sibling caller is left broken.
 7. **Bug ticket = three sections, in order, per `bug-report`:** **Scope (Git Repo, Module/Classes)** (the most precise VERIFIED location — git repo + module/class/file, package, or endpoint; a guessed location is worse than none, since it routes the ticket to the wrong team), **Root cause** (the mechanism that makes it fail, never the symptom, + blast radius if left unfixed; `HYPOTHESIS:` unless proven), **Suggested owner** (one team + one line of reasoning derived from Scope and Root cause, routed by what must change — never by where the symptom surfaced). Evidence and a proposed fix are the owner's to produce during diagnosis, not the reporter's.
 8. **One issue per distinct root cause; de-duplicate before filing.** A review-round consolidation or an architecture-sweep triage batch files ONE ticket with a summary table (`defect · scope · severity · root cause · suggested owner`) followed by one three-section block per defect — never one ticket per symptom observed.
@@ -84,7 +84,7 @@ format, not this policy's three-section shape.
 - **dev-backend** — catches its own defects test-first inside Build; fixes pr-reviewer's findings (routed by dev-leader) on its own Build sub-task with a reproduction test per finding, reports and flips `done`.
 - **pr-reviewer** — finds in-cycle defects at the PR gate; owns the consolidated findings comment and the re-review loop, capped at 3 rounds.
 - **dev-leader** — out of the rework loop; owns the cycle's git-flow, closes a duplicate root (statement 8a), and finalizes on Review `done`.
-- **devops** — owns any defect whose root cause lives in a pipeline or build script (Workflow D), regardless of confidence level.
+- **devops** — owns any defect whose root cause lives in a pipeline, a build script or a Helm chart (Workflow D), regardless of confidence level.
 - **Requester / workspace owner** — confirms delegation below the 90% confidence bar; receives blocker escalations that are outside squad control.
 
 ## Definition of Done / compliance
@@ -104,7 +104,7 @@ fix carries its proving test as part of the merge gate.
 ## Exceptions & waivers
 
 - A bug needs a Workflow B spec only if the requester explicitly asks for one; the spec-review gate then applies as normal.
-- A pipeline/build-script root cause is always Workflow D — the ≥ 90% auto-delegate to dev-team never applies to it.
+- A pipeline, build-script or Helm chart root cause is always Workflow D — the ≥ 90% auto-delegate to dev-team never applies to it.
 
 ## References
 

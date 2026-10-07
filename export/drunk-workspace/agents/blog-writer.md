@@ -32,7 +32,7 @@ Do NOT:
 
 Assignment of a `todo` content sub-task (dispatched by **dev-leader** in the
 `blog-team` squad, typically `[D<num>-n] Write: <topic>`) — or a direct content
-ticket in the `drunk-blogs` project. Generic worker machinery (claim, handoff
+ticket in the project that owns the blog repo. Generic worker machinery (claim, handoff
 contract, status discipline): `sdlc-flow-squad-worker-playbook`.
 
 ## Authoring procedure

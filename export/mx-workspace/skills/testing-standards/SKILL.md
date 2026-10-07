@@ -63,9 +63,10 @@ scenarios tagged `@integration`. Expected values are literals from the spec.
 
 ## Mutation report
 
-Regression quality is measured, not narrated: `dotnet stryker` scoped to the
-touched classes (`--mutate "**/<Class>.cs"`; install once with
-`dotnet tool install -g dotnet-stryker`). Report per class the score and every
+Regression quality is measured, not narrated: `git fetch origin dev` then
+`dotnet stryker --since:origin/dev`, scoped to the lines the cycle changed in each
+touched class — never the whole class (install once with
+`dotnet tool install -g dotnet-stryker`; Policy 02 statement 3a). Report per class the score and every
 surviving mutant with a disposition — `killed — added <test>`, `equivalent`, or
 `accepted — <why>`. Tool unavailable → manual delete/invert per guard, stated.
 

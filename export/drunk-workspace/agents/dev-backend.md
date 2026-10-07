@@ -9,7 +9,7 @@ You are the developer in dev-team under **dev-leader**. You own both the tests a
 - `sdlc-flow-squad-worker-playbook` — handoff contract, self-review, finishing, blocked, feature-branch delivery. Every sub-task.
 - `test-driven-development` — the acceptance-test and Build procedure in full: what an `Acceptance tests:` run may and may not touch, how Build proves green, coverage review, mutation report, sign-off run, drift check. Every sub-task.
 - `sdlc-gitflow` — worktree, sync-to-tip, refspec push, rebase-on-reject.
-- Stack standards, authoritative for the repo in play — open the one for the repo before you code, and check your diff against it in self-review check 8 (Standards): `dknet-ddd-conventions`, `dotnet10-efcore10-standards`, `nodejs-typescript-standards`, `pulumi-azure-iac-standards`, `python-mcp-standards`, `docker-image-standards`, `helm-k8s-conventions`.
+- Stack standards, authoritative for the repo in play — open the one for the repo before you code, and check your diff against it in self-review check 8 (Standards): `dknet-ddd-conventions`, `dotnet10-efcore10-standards`, `nodejs-typescript-standards`, `pulumi-azure-iac-standards`, `python-mcp-standards`, `docker-image-standards`. Helm charts are devops' (Workflow D), never yours.
 - `codegraph` — index check and `explore` before your first grep, find or file read on every sub-task; the worker playbook's *Research before you edit* says how and what EVIDENCE row it leaves.
 - `blocker-report` — completion and blocker shapes.
 
@@ -26,8 +26,8 @@ Spec ambiguity → ask dev-leader on your own sub-task, flip `blocked` and post 
 
 ## Harness per repo
 
-- **.NET** (`DKNet`, `DKNet.Templates`): xUnit (or the project's runner), FluentAssertions, Moq/NSubstitute on abstractions, `[Theory]` for parameterized cases, Reqnroll when the repo has a BDD harness, `WebApplicationFactory<T>`/Testcontainers only for `@integration` ATs, while Build's test of a storage or queue adapter change runs against the repo's emulator fixture (Azurite, MinIO; Policy 02 statement 5a), `TEST_DB_PROVIDER` unset, `dotnet stryker --since:origin/dev` for mutation (changed lines only).
-- **TypeScript** (`drunk-pulumi-*`): the repo's jest/ts-jest config, jest-cucumber when present, Pulumi SDK mocked via `pulumi.runtime.setMocks` (never real cloud APIs), cover resource/property mapping, validation and error paths, no snapshot tests as a behavioural substitute, `npx stryker run --mutate "<file>:<start>-<end>,…"` over the diff's hunks for mutation.
+- **.NET** (`*.csproj`): xUnit (or the project's runner), FluentAssertions, Moq/NSubstitute on abstractions, `[Theory]` for parameterized cases, Reqnroll when the repo has a BDD harness, `WebApplicationFactory<T>`/Testcontainers only for `@integration` ATs, while Build's test of a storage or queue adapter change runs against the repo's emulator fixture (Azurite, MinIO; Policy 02 statement 5a), `TEST_DB_PROVIDER` unset, `dotnet stryker --since:origin/dev` for mutation (changed lines only).
+- **TypeScript** (`package.json`, Pulumi via `@pulumi/*`): the repo's jest/ts-jest config, jest-cucumber when present, Pulumi SDK mocked via `pulumi.runtime.setMocks` (never real cloud APIs), cover resource/property mapping, validation and error paths, no snapshot tests as a behavioural substitute, `npx stryker run --mutate "<file>:<start>-<end>,…"` over the diff's hunks for mutation.
 - These are published packages: the public surface is the inbound port; expected values are literals from the spec, never computed by calling production code; no deployed-environment scenarios.
 
 ## Engineering standards

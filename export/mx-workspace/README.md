@@ -99,7 +99,7 @@ without jargon. 🦊 the "foreman" always knows which step you're on.*
 
 **Legend** — 👤 human · 🦊 product-owner · 🦉 spec-reviewer · 🐺 dev-leader · 🔨 dev-backend · 🐳 release-manager · 🦅 pr-reviewer · 🐝 qc-leader · 🐜 qc-tester · 🐞 qc-runner
 
-**Trigger mechanics** — assignment at `todo` starts the assignee · `backlog→todo` promotion starts the assignee · child `done` fires the stage barrier that wakes the parent's owner · a child's handoff line on its parent (a `blocked`, or a `done` beside a `blocked` sibling) wakes the parent's owner — an agent's plain comment on a squad-assigned ticket wakes that squad's leader · agent mention triggers a run (NOT deduped — one mention, one run, even when the target is already running) · member (human) mention notifies only. A stage barrier re-fires on every re-entry into `done`, so members never flip their own sub-task out of `done`; the LEADER re-triggers fix work by flipping the sub-task `in_progress --no-start` (adding the blocked gate's key to `Retrigger on done`, comma-separated when there are several) and then posting the ONE mention — the re-fired barrier (or the member's handoff line) is the expected "fix is back" signal. Every mention link in a posted comment is a wake, quoted or not. Members write only on their own ticket plus their handoff line, and mention nobody.
+**Trigger mechanics** — assignment at `todo` starts the assignee · `backlog→todo` promotion starts the assignee · child `done` fires the stage barrier that wakes the parent's owner · a child's handoff line on its parent (a `blocked`, or a `done` beside a `blocked` sibling) wakes the parent's owner — an agent's plain comment on a squad-assigned ticket or any sub-task under one wakes that squad's leader (the leader's wake guard ends a run this double-fires) · agent mention triggers a run (NOT deduped — one mention, one run, even when the target is already running) · member (human) mention notifies only. A stage barrier re-fires on every re-entry into `done`, so members never flip their own sub-task out of `done`; the LEADER re-triggers fix work by flipping the sub-task `in_progress --no-start` (adding the blocked gate's key to `Retrigger on done`, comma-separated when there are several) and then posting the ONE mention — the re-fired barrier (or the member's handoff line) is the expected "fix is back" signal. Every mention link in a posted comment is a wake, quoted or not. Members write only on their own ticket plus their handoff line, and mention nobody.
 
 ---
 
@@ -380,7 +380,7 @@ big picture.*
   │   ├── loops     rework, max 3 rounds
   │   │   ├── ⟲ AT rejected / wrong ─▶ re-arm [D#-1] ─▶ 🔨 (never edited in build)
   │   │   └── ⟲ [D#-3] rework    ─▶ ONE Fix ─▶ 🔨   ⛔ 3 rounds ─▶ 👤 owner
-  │   ├── done      ✅ 🦅 merges into dev · leftovers ─▶ ONE follow-ups ─▶ 🦊
+  │   ├── done      ✅ 🦅 merges into dev · in-scope leftovers ─▶ Merged with: (no ticket) ─▶ 🦊
   │   └── ═══ barrier · wakes 🦊 — verifies the merged PR + review score ═══
   │
   ├── ⑤  RELEASE — 🐳 release-manager
@@ -509,6 +509,10 @@ touches nothing else.
 - **Both refs explicit, every PR** — `gh pr create --head <branch> --base dev …`. A missing
 `--base` silently targets `main`; a missing `--head` yields an empty or wrong diff that
 still reports success.
+- **One PR body shape** — Summary (a text visual of the change) · Evidence (red before,
+green after, every check that could not run) · Merge danger (one-way or two-way door, blast
+radius), passed with `--body-file` (Policy 03 statement 7a, `sdlc-gitflow`). Release PRs keep
+their own format.
 - **Remote-only branch ops** — never `git checkout` `dev`, `main`, or a shared feature
 branch; a checkout locks it against every other agent, potentially past the end of the task.
 - **Branch from freshly fetched `origin/dev`** — never a stale local ref. Conventional
@@ -942,7 +946,7 @@ agent, was retired when the squad leaders took over its git-flow duties (see `CH
 
 | Skill           | Governs                                                                                                              | Bound to              |
 | --------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `sdlc-gitflow`  | feature→dev→main branch/PR discipline: remote-only ops, explicit `--head/--base`, post-create verification           | 🐺 🔨 🧪 🐳 🏛️ 🌙 🐙 |
+| `sdlc-gitflow`  | feature→dev→main branch/PR discipline: remote-only ops, explicit `--head/--base`, post-create verification, PR body shape | 🐺 🔨 🧪 🐳 🏛️ 🌙 🐙 |
 | `leader-gitops` | the squad leaders' inline git-flow runbook — branch cut, the ONE cycle PR, conflict handling, worktree-lock recovery | 🐺 🐝                 |
 
 

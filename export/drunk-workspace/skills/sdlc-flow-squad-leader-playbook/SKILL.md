@@ -49,28 +49,13 @@ Verify each stage against the plan before promoting. On every promotion or hold,
 
 ## Rework: routed through you
 
-Members never write on each other's tickets; every hop of a review round passes through you. pr-reviewer never files tickets; you may, when the fix is a distinct deliverable that deserves its own brief (`[D<num>-n] Fix:` at a stage above the gate, dev-backend, same branch, same PR) — the default is re-arming the existing Build.
-
-1. **REWORK lands on you.** pr-reviewer posts ONE findings comment on its OWN Review sub-task (grouped per implementer and per Build sub-task, `file:line`, acceptance criteria, `round N of 3`), parks Review `blocked`, and wakes you with its handoff line on the cycle parent. For each Build sub-task the findings name (pr-reviewer groups them per Build whose §3 owns the file; dev-backend for code/test/coverage/changelog), re-arming parallel Builds together: flip that sub-task `in_progress` (`multica issue status <id> in_progress --no-start`), add the Review sub-task's key to its `Retrigger on done` (`multica issue property set <id> --name "Retrigger on done" --value <review-key>`; already set → append, comma-separated: `<existing>,<review-key>`), then ONE comment on it with that implementer's mention pointing at the findings comment (Review key + timestamp) and restating what "fixed" looks like. A Fix sub-task you file instead carries the same property from creation. One comment per sub-task, one mention each. Git/PR-mechanics findings are yours: fix per `leader-gitops`, report on the Review sub-task when re-arming it.
-2. **Fix returns to you.** The implementer reports on its own sub-task and flips `done`. A re-armed Build below the gate's stage re-fires its barrier and wakes you; a Fix sub-task at or above the gate's stage fires none, so the implementer posts its handoff line. Either way the wake-up checklist finds the `done` child carrying `Retrigger on done`. Verify the report (commits on the feature branch via `ls-remote`, a closure row per finding). Children naming the Review still `in_progress` → end the wake, nothing to do yet. All `done` → re-arm Review: flip it `in_progress` (`multica issue status <id> in_progress --no-start`), ONE comment on it with pr-reviewer's mention pointing at the fix report(s), then drop the Review key from each fix child's property (unset it when no key is left). Never re-review or re-score yourself.
-3. **Verdict.** pr-reviewer re-reviews and ends in APPROVED (merges, Review `done` → you finalize), REWORK round 2 or 3 (back to step 1), or ESCALATED (Review reassigned to the resolved owner with options — see below).
+Read `references/review-outcomes.md` when any Review sub-task's `Gate verdict` is REWORK (findings to route, or a fix coming back).
 
 A Review sub-task `blocked` with a recent REWORK comment, and the implementer's sub-task `in_progress` beside it, is healthy: that is the fix in flight. While any Build or Review sub-task is `blocked`, or a Build with an Acceptance-tests stage has no pinned `at_sha`: no PR, no promotion past the gate, no finalize.
 
 ## Failed merge and the owner's choice
 
-**MERGE_FAILED lands on you** — pr-reviewer scored the PR ≥ 8.5 but could not merge it, and parks Review `blocked` with the error on it, then wakes you with its handoff line. PR mechanics are yours (`leader-gitops`): a draft → `gh pr ready`; a conflict because `dev` moved → bring the branch up to date per the conflict procedure (mechanical yourself, substantive to dev-backend's Build via Rework step 1); a conflict with an older duplicate root's merged fix, which pr-reviewer reports as a `Duplicate probe` → `references/recovery.md` (**Duplicate roots**), never a rebase. Then re-arm Review (`in_progress --no-start` + pr-reviewer's mention). A failure you cannot fix (permission, branch protection, auth) → `references/recovery.md`, escalate. Never send a failed merge to the owner yourself when you can fix it.
-
-**ESCALATED waits for the owner.** Review sits with the resolved owner at `todo` with options. Do nothing — no promotion past the gate, no finalize, no nudge — until the owner replies on the Review sub-task with a letter and your mention. Then:
-
-Hand-backs never wake by assignment: reassign with `multica issue update <review-id> --assignee-id <pr-reviewer id> --no-start`, and let your one mention, posted last, be the wake.
-
-- **A — merge as-is:** reassign Review back to pr-reviewer (`--no-start`), flip it `in_progress --no-start`, ONE comment with pr-reviewer's mention quoting and linking the owner's reply. pr-reviewer merges and flips `done`; finalize as usual.
-- **B — one more round:** reassign Review back to pr-reviewer (`--no-start`) and flip it `blocked`; route the owner's guidance plus the open findings exactly as Rework step 1 (the owner's reply is the findings comment); re-arm Review when the fix is `done`. pr-reviewer ends that re-review APPROVED or ESCALATED — no further round without the owner.
-- **C — park:** nothing to do; the cycle stays with the owner.
-- **D — close:** `gh pr close <PR#> -R baoduy/<repo> --comment "<owner's decision, link>"`, cancel Review and every open sub-task, then hand the cycle back — phase cycle: flip it `blocked` with ONE comment (re-scope or cancel), then your handoff line on the root with product-owner's mention; root cycle: reassign it to the resolved owner at `todo` with a `blocker-report` comment.
-
-A reply with no letter, or one you cannot map to A–D, gets ONE question back on the Review sub-task (member mention), nothing else.
+Read `references/review-outcomes.md` when any Review sub-task's `Gate verdict` is MERGE_FAILED or ESCALATED.
 
 ## Parent status and finalize
 

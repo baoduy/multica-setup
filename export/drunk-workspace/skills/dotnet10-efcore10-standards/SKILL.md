@@ -1,6 +1,6 @@
 ---
 name: dotnet10-efcore10-standards
-description: Verified .NET 10 / C# 14 / EF Core 10 / ASP.NET Core 10 review standards — language features by correct version, EF Core 10 breaking changes, EF query anti-patterns with official doc links, and CA/Meziantou analyzer rule IDs reviewer should expect. Use when reviewing or modernizing C# code targeting .NET 10 and EF Core 10.
+description: Verified .NET 10 / C# 14 / EF Core 10 / ASP.NET Core 10 review standards — language features by correct version, EF Core 10 breaking changes, EF query anti-patterns with official doc links, migration safety, error handling, and CA/Meziantou analyzer rule IDs reviewer should expect. Use when reviewing or modernizing C# code targeting .NET 10 and EF Core 10.
 ---
 
 # .NET 10 / EF Core 10 Review Standards
@@ -68,6 +68,17 @@ EF tools need `--framework` on multi-targeted projects · Application Name auto-
 - `EFC-011` **Unbounded query.** List endpoint or job query with no pagination or row cap.
 - `EFC-012` **Owned entity type used where complex type now fits** (table-splitting / JSON) under EF10 guidance.
 
+### Migration safety
+
+A migration runs against data the previous release still reads. Check every new file under `Migrations/`.
+
+- `EFC-013` **Rename scaffolded as drop + add.** EF scaffolds a renamed property or table as `DropColumn` + `AddColumn`, which loses the data. Edit the migration to `RenameColumn` / `RenameTable`. → https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/managing
+- `EFC-014` **Drop in the same release as the code that stops using it.** A column or table the previous release still reads is dropped in the migration that ships with the code change. Remove the code first; drop the column in a later release. A rename on a live table goes expand → contract: add the new column, write both, backfill, switch reads, then drop the old one.
+- `EFC-015` **New required column on a populated table.** A `NOT NULL` column with no default fails on existing rows, or a default silently invents values. Add it nullable, backfill, then make it required in a later migration.
+- `EFC-016` **Schema change and bulk data change in one migration.** A large `migrationBuilder.Sql` backfill beside DDL holds locks for the whole run. Put the backfill in its own migration, batched.
+- `EFC-017` **Blocking index build on a large table.** PostgreSQL: create it concurrently (Npgsql `IsCreatedConcurrently()`, or `migrationBuilder.Sql(..., suppressTransaction: true)`). SQL Server: `ONLINE = ON` where the edition supports it.
+- `EFC-018` **Edited migration.** A migration already merged to `dev` is never edited, renamed or deleted; a fix is a new migration. Its model snapshot stays in step.
+
 ## ASP.NET Core 10
 
 - `ASP-001` **Hand-rolled validation** duplicating built-in Minimal API validation (`AddValidation()`, `Microsoft.Extensions.Validation`, per-endpoint `.DisableValidation()`).
@@ -87,6 +98,9 @@ EF tools need `--framework` on multi-targeted projects · Application Name auto-
 - `ASYNC-005` **Missing `ConfigureAwait`** in *library* projects (**CA2007**, Meziantou **MA0004**). Not applicable to ASP.NET Core app code — no `SynchronizationContext`. Do not flag it there. → https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2007
 - `ASYNC-006` **Missing `Async` suffix** on async method.
 - `ASYNC-007` **`async void` event handler without a catch-all** — the whole body sits in `try { … } catch (Exception ex)`, which logs and leaves the operation in a defined state (an intercepted request is continued or aborted). Catching only a library type such as `PuppeteerException` lets any other exception escape and crash the host (Policy 01 statement 14).
+- `NET10-ERR-001` **Swallowed exception.** An empty `catch`, or one that only logs and continues as if the call succeeded (Policy 01 statement 5).
+- `NET10-ERR-002` **Fallback that hides a failure.** A failed call returns an empty collection, `null` or `default` where the caller cannot tell failure from an empty result. Return a failed `IResult`/`Result`, or let the exception through.
+- `NET10-ERR-003` **Lost stack trace.** `throw ex;` instead of `throw;`, or a new exception thrown without the caught one as its inner exception.
 - `LOG-001` **Non-source-generated logging on hot path** (**CA1848**) — use `[LoggerMessage]`. → https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1848
 - `LOG-002` **Sensitive data in logs** — PAN, tokens, full request bodies, secrets.
 
@@ -116,3 +130,4 @@ Thresholds are triggers for look, not automatic defects. Say why specific instan
 Flagged honestly rather than presented as fact:
 - Exact verbatim wording of Meziantou **MA0032** / **MA0040** — intent above is correct; fetch `docs/Rules/MA0032.md` and `MA0040.md` from github.com/meziantou/Meziantou.Analyzer before quoting them in style guide.
 - `EFC-006` has no dedicated official page; two performance pages cited are real sources.
+- `EFC-017`: `IsCreatedConcurrently()` is the Npgsql provider's index-builder extension; confirm it exists in the repo's Npgsql version before citing it, else use the `suppressTransaction` SQL form.

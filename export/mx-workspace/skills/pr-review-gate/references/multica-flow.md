@@ -24,12 +24,12 @@ Exactly ONE `mention://agent/<uuid>` link per comment — the leader who must ac
 
 ## Round tracking (before anything else in pipeline mode)
 
-Read your review sub-task's metadata: `multica issue metadata list <own-subtask-id> --output json`. `review_round` (default 0) = REWORK verdicts already issued this cycle. After every verdict, pin state:
+Read your review sub-task's metadata: `multica issue metadata list <own-subtask-id> --output json`. `review_round` (default 0) = REWORK verdicts already issued this cycle. (`review_verdict=POLISH` on an older ticket is a retired polish round; never pin it.) After every verdict, pin state:
 
 ```bash
 multica issue metadata set <own-subtask-id> --key review_round --value <N> --type number
 multica issue metadata set <own-subtask-id> --key review_score --value <X.X>
-multica issue metadata set <own-subtask-id> --key review_verdict --value <APPROVED|DEFERRED|REWORK|POLISH|ESCALATED>
+multica issue metadata set <own-subtask-id> --key review_verdict --value <APPROVED|DEFERRED|REWORK|ESCALATED>
 ```
 
 The leader's re-arm after a fix (your sub-task flipped `blocked`→`in_progress` plus ONE resume comment carrying your mention; legacy: a promotion to `todo`) means: re-review the UPDATED PR in full (fresh collect + analyze + score — never a delta-only skim), AND open the new report with a **closure table**: every finding from the previous round → `resolved` / `not resolved` / `obsolete`, each with `file:line` evidence. A prior `blocking` or `important` finding still unresolved keeps its deduction — a fresh look never silently forgives it.
@@ -43,12 +43,12 @@ When the state guard finds the PR `MERGED` before you have reviewed anything: po
 ### APPROVED (score ≥ bar, all auto-merge preconditions pass)
 
 1. GitHub: report comment + best-effort approve vote + MERGE the PR (`gh pr merge --merge`) and verify state MERGED (`references/github.md`). If the merge command fails, switch to the Manual handoff path below — do not flip `done`.
-2. Post the score announcement + report summary — explicitly stating the PR is MERGED into `dev` — as a plain comment on your OWN sub-task (no mention).
+2. Post the score announcement + report summary — explicitly stating the PR is MERGED into `dev`, and naming any open in-scope `nit`s or the one `important` the caps allowed under `Merged with:` (`file:line` each, or `none`) — as a plain comment on your OWN sub-task (no mention).
 3. Pin metadata, flip your sub-task to `done`. The stage barrier wakes the squad leader; do not mention anyone.
 
 ### APPROVAL DEFERRED (score ≥ bar, a precondition fails)
 
-NO vote, NO merge. Post the report comment on the PR, opening with `APPROVAL DEFERRED — manual review required` and naming the exact precondition (e.g. "coverage unknown"). Then run the Manual handoff below — a human reviews and merges; never flip `done` yourself on a deferred gate.
+NO vote, NO merge. Post the report comment on the PR, opening with `APPROVAL DEFERRED — manual review required`, naming the exact precondition (e.g. "coverage unknown"), and naming any open in-scope `nit`s or the one `important` the caps allowed under `Merged with:` — the human who merges this PR manually should see exactly what is riding through, same as an APPROVED run. Then run the Manual handoff below — a human reviews and merges; never flip `done` yourself on a deferred gate.
 
 **Who the human is — the resolved owner (`Owner`-property-first, per `sdlc-flow-delivery-pipeline`), never a hardcoded name/UUID:** (1) the ticket's own `Owner` property, else the nearest ancestor's `Owner` (`multica issue property list <id> --output json`, walking `parent_issue_id` up); (2) else the ROOT main ticket's `creator_id` when `creator_type` is `member` (`multica issue get <root-id> --output json`); (3) else the workspace owner (`multica workspace member list --output json`, role `owner`). This applies to every manual handoff below.
 
@@ -109,14 +109,12 @@ Classify every finding by SCOPE first, and never by "did this PR introduce it":
 - **in-scope** — its `file:line` is in a file this cycle's diff touched, OR in a code path the diff newly reaches, OR a missing test for behaviour the diff added or changed. Pre-existing age is irrelevant: the cycle touched it, the cycle owns it.
 - **out-of-scope** — a file this diff never touched.
 
-### In-scope leftovers — fix inside the cycle, file no follow-up
+### In-scope leftovers — the score decides, file no follow-up
 
-You never merge with an open in-scope finding above `suggestion`, and you never ask for a `Review follow-ups:` ticket for one.
+You never ask for a `Review follow-ups:` ticket for one.
 
-- `blocking` / `important` → REWORK (Verdict actions above). Unchanged.
-- `nit`-only → ONE **polish round**. Same mechanics as REWORK — one consolidated fix sub-issue, routed by WHAT MUST CHANGE, your own review sub-task `blocked` — with two differences: pin `review_verdict=POLISH` and do **not** increment `review_round` (a polish round must not spend the rework budget), and take at most ONE per cycle. Say in the report that these are non-gating nits being cleared before merge. The implementer pushes to the SAME branch and reports to the leader; the leader re-arms you; you re-review, and if nothing new gates it, merge.
-- A leftover whose deliverable belongs to a different member (docs wording, changelog) is routed to that member by the same WHAT-MUST-CHANGE table. Still inside the cycle; still before merge.
-- If a leftover is not worth a polish round, drop it in the report. Dropping is a legal outcome; filing is not.
+- Score below 8.5 or any `blocking` → REWORK (Verdict actions above): every open in-scope finding, `nit`s included, goes in the one consolidated fix report — including one whose deliverable belongs to a different member (docs wording, changelog), still routed by the same WHAT-MUST-CHANGE table.
+- Score ≥ 8.5 with zero `blocking` → merge. The open `nit`s and the one `important` the caps allow go in your report under `Merged with:` (`file:line` each) and are dropped. No polish round: it is retired (Policy 04 statement 7), and `review_verdict=POLISH` is never pinned.
 
 ### Out-of-scope leftovers — drop by default
 
@@ -131,7 +129,7 @@ Everything that does not clear the bar — comment wording, loose assertions, al
 
 `Review follow-ups:` tickets are **retired**. `followup_issue` metadata is no longer set; leave it alone on in-flight cycles.
 
-State the outcome in your score announcement: `Leftovers: polish round N | none | out-of-scope defect reported to the squad leader`.
+State the outcome in your score announcement: `Merged with: none | <file:line list>` and `Leftovers: none | out-of-scope defect reported to the squad leader`.
 
 ## Blocked path (cannot review at all)
 

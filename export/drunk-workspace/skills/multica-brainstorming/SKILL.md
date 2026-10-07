@@ -9,6 +9,8 @@ Turn an idea into an agreed design through dialogue with the requester, record i
 
 <HARD-GATE>
 Write no spec, design or code, scaffold nothing, and take no implementation action until the requester has approved the spec preview (step 4) in writing. This applies to EVERY change regardless of perceived simplicity.
+
+A reply approves only the stage actually presented. Answers to a round, or a pick between options, do not approve a preview that has not been posted yet.
 </HARD-GATE>
 
 ## Precedence
@@ -20,6 +22,15 @@ Where your role skill already defines the procedure — product-owner's Workflow
 ## Anti-Pattern: "This Is Too Simple To Need A Design"
 
 "Simple" work is where unexamined assumptions waste most effort. The preview may be five lines, but you MUST present it and get approval.
+
+## Red Flags
+
+| Thought | Reality |
+|---------|---------|
+| "They answered every question, so the preview is approved" | Answers release the preview, not the spec. Post it and wait for `approved`. |
+| "The requester decided it, so the spec can say it" | A decision that waives a gate rule fails the gate. Raise it in the round (step 4). |
+| "I'll fold this new finding into the spec quietly" | Something new after approval re-opens step 2 with a short round. |
+| "One more question round is cheap" | Every round costs the requester a reply round-trip. Ask everything independent now. |
 
 ## Checklist
 
@@ -53,11 +64,11 @@ Ask ONLY what research cannot answer: business rules, scope, priorities, trade-o
 
 Each round is ONE comment, mentioning the requester — `mention://member/<id>` for a human, `mention://agent/<id>` for an agent creator (`creator_type`/`creator_id` from `multica issue get`):
 
-- **My read:** your one-line hypothesis of what the requester wants, with a confidence number.
+- **My read:** your one-line hypothesis of what the requester wants, with a confidence number. Keep what the requester said apart from what you assumed.
 - **Numbered questions**, each with **Guess:** and the evidence behind it. Ask only questions that do not depend on each other's answers; a dependent question waits for the next round.
 - **Reply by number** — ask for "1 yes · 2 no, because …", so every answer is traceable.
 
-Then **STOP and wait**, ticket `in_progress`. Repeat until zero open questions remain.
+Then **STOP and wait**, ticket `blocked`. The round comment is the blocker; post no separate `## BLOCKER`. The requester's reply wakes you; flip the ticket `in_progress` before you work on it. Repeat until zero open questions remain.
 
 **Only a written reply answers.** A status move, a resolved thread, or silence is not an answer and never confirms a guess. On such a wake, post ONE short comment listing the numbers still open, with the requester's mention, and stop.
 
@@ -91,7 +102,11 @@ ONE comment, mentioning the requester, before any spec is written:
 
 Before posting, check the rules against each other. Two rules that cannot both hold ("an empty group can be moved" and "no group is its own parent") are a question for the requester, not a spec.
 
+Then check each rule and decision against what the spec gate never accepts. The one requesters hit most: testing is never optional (`sdlc-spec-template`), so any answer that waives, defers or skips a test is a gate `blocker`, whoever decided it. Never carry such a rule into the preview. Ask about it in the next round: quote the gate rule, and offer options that can pass. A change to the rule itself is a policy change for the workspace owner, never a spec decision.
+
 End with: "Reply `approved`, or name the lines to change." Then **STOP**. A written approval releases step 5; anything else starts a new round.
+
+The approval covers only what the preview said. If you find something new after it (a rule conflict, a hidden caller, a second repo), stop, post a short round about that point only, and get a new written approval.
 
 ## 5. Record the design on the issue
 
@@ -118,9 +133,9 @@ Re-read it with fresh eyes and fix inline — one pass, no loop:
 
 The approved design is input to the delivery pipeline, never a licence to implement. Shared contract: `sdlc-flow-delivery-pipeline`. Your terminal step depends on your role:
 
-- **product-owner** — the design becomes the main-ticket spec. Feature or enhancement → spec-review gate, then Workflow C once APPROVED. CI/CD → Workflow D, straight to `devops`, no spec gate. A new service → Workflow F: the settled brief goes to `service-architect` as `[P<num>-1] Design`, no spec gate. You stay read-only on code throughout.
-- **platform assistants (`default`, `claude_ultra`) and Mika** — you never spec or implement. Stop at the confirmed intent (`interview-me` step 4), write it into the ticket you file, and route per your own routing rules: product work to `product-owner` (a new service's design included), CI/CD to `devops`, docs to `docs-writer`.
+- **product-owner** — the design becomes the main-ticket spec. Feature or enhancement → spec-review gate, then Workflow C once APPROVED. CI/CD or a Helm chart → Workflow D, straight to `devops`, no spec gate. A new service → Workflow F: the settled brief goes to `service-architect` as `[P<num>-1] Design`, no spec gate. You stay read-only on code throughout.
+- **platform assistants (`default`, `claude_ultra`) and Mika** — you never spec or implement. Stop at the confirmed intent (`interview-me` step 4), write it into the ticket you file, and route per your own routing rules: product work to `product-owner` (a new service's design included), CI/CD and Helm charts to `devops`, docs to `docs-writer`.
 
 Mention only the requester in a dialogue comment. Never mention another agent there: every agent mention link enqueues a run, even a quoted one.
 
-Status discipline on your own ticket: finished → `done` (never `in_review` — it fires no trigger and strands the ticket); waiting on answers → stay `in_progress`; genuinely stuck → `blocked` plus a plain comment for whoever must unblock you.
+Status discipline on your own ticket: finished → `done` (never `in_review` — it fires no trigger and strands the ticket); waiting on the requester's written reply (a round or the preview) → `blocked`, because hourly run recovery re-wakes an agent-assigned `in_progress` ticket whose run has ended; genuinely stuck → `blocked` plus a plain comment for whoever must unblock you.

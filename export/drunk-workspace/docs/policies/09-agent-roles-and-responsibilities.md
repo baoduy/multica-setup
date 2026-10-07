@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.26 |
+| **Version** | 1.29 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The thirteen chartered factory agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika` |
@@ -33,7 +33,7 @@ The thirteen agents named above — everything they are woken for inside drunk-w
 platform assistants (workspace management, CLI help, ad-hoc questions) sharing one
 instruction text. They hold **no SDLC authority**: no charter here, no stage ownership, no
 gate, no git/branch authority under [Policy 03](03-source-control-branching.md). They may
-file and route tickets (product work to `product-owner`, CI/CD to `devops`, docs to
+file and route tickets (product work to `product-owner`, CI/CD and Helm charts to `devops`, docs to
 `docs-writer`, blog content to `blog-team`) but never execute them; factory work that lands on
 them is declined with a pointer to the owning agent.
 
@@ -56,8 +56,8 @@ or the sub-task description.
    on a green suite at ≥80% per-touched-class coverage (a UI presentation Build: green build,
    typecheck, lint and existing suites, [Policy 02](02-testing-and-quality.md) statement 1a) — there is no separate QC role, the
    PR gate is the independent second pass; only `pr-reviewer` merges
-   into `dev`; only `release-manager` targets or merges `main`; only `devops` edits pipelines and
-   compose files; only `service-architect` authors a new service's design (`docs/architect/`), and only
+   into `dev`; only `release-manager` targets or merges `main`; only `devops` edits pipelines,
+   compose files and Helm charts; only `service-architect` authors a new service's design (`docs/architect/`), and only
    the workspace owner approves it; only `arch-reviewer` files new backlog findings from review sweeps;
    only `issue-janitor` deletes issues; only `run-medic` wakes an agent whose run was killed
    by a transient infrastructure failure; only `Mika` turns human goals into new main
@@ -100,7 +100,7 @@ or the sub-task description.
 
 ## Authority matrix
 
-| Agent | App/lib code | Tests | Pipelines/compose | Branch+push | Open PR→`dev` | Merge→`dev` | `dev`→`main` | Creates tickets |
+| Agent | App/lib code | Tests | Pipelines/compose/charts | Branch+push | Open PR→`dev` | Merge→`dev` | `dev`→`main` | Creates tickets |
 |---|---|---|---|---|---|---|---|---|
 | product-owner | — | — | — | — | — | — | — | `[S#]`, `[P#-n]` phase tickets |
 | spec-reviewer | — | — | — | — | — | — | — | none (verdict comments only) |
@@ -108,7 +108,7 @@ or the sub-task description.
 | dev-leader | — | — | — | branch cut only (`leader-gitops`) | ONE cycle PR | — | — | `[D#-n]` sub-tasks |
 | dev-backend | ✅ (in cycle) | ✅ (test-first) | — | feature branch | — | — | — | none |
 | pr-reviewer | — | — | — | — | — | ✅ (scored APPROVED, or the owner's option A on an ESCALATED gate; a `design/<key>` PR only on the owner's option A) | — | none — reports out-of-scope defects to dev-leader, which files them to product-owner (rework = comment on the implementer's sub-task, no ticket) |
-| devops | — | — | ✅ | `chore/<key>` | ✅ (its own) | — | — | none |
+| devops | — | chart `helm-unittest` only | ✅ | `chore/<key>` | ✅ (its own) | — | — | none |
 | docs-writer | — | — | — | `docs/<key>` | ✅ (its own) | — | — | none |
 | service-architect | — | — | — | `design/<key>` | ✅ (its own) | — | — | none |
 | release-manager | — | — | — | — | — | — | ✅ (open + merge; `[P#-2]` only; a critical release on the owner's reply) | none |
@@ -161,16 +161,16 @@ or the sub-task description.
 
 ### Build & release
 
-**devops — CI/CD & Compose Automation**
-- **Goal.** Keep the repos' CI/CD pipelines, package-publish automation, and docker-compose files correct — landing every change as one reviewed `chore/<issue-key>` PR to `dev`.
-- Responsibilities: GitHub Actions build/test workflows and the NuGet/npm publish automation that runs off `main` ([Policy 08](08-container-build-and-release.md)); docker-compose deployment files, validated with `docker compose config` (`compose-delivery`); serve both doors — direct requester tickets and product-owner's D1 (analysis + STOP) / D2 (change) flows; report the PR URL with verified base and non-empty diff.
-- Never: touch application/library code, tests, or docs; merge its own PR (pr-reviewer's), commit to `dev`/`main`, or build/deploy anything — no helm, no k8s, no image builds, no waiting on CI.
+**devops — CI/CD, Compose & Helm Charts**
+- **Goal.** Keep the repos' CI/CD pipelines, package-publish automation, docker-compose files and Helm charts correct — landing every change as one reviewed `chore/<issue-key>` PR to `dev`.
+- Responsibilities: GitHub Actions build/test workflows and the NuGet/npm publish automation that runs off `main` ([Policy 08](08-container-build-and-release.md)); docker-compose deployment files, validated with `docker compose config` (`compose-delivery`); the Helm charts in every factory repo — templates, values, the chart README, their `helm-unittest` tests and the `Chart.yaml` version bump, validated locally with `helm lint`, `helm template`, plus `helm unittest` and the repo's verify scripts where the repo has them (`helm-k8s-conventions`, [Policy 02](02-testing-and-quality.md) statement 1d); serve both doors — direct requester tickets and product-owner's D1 (analysis + STOP) / D2 (change) flows; report the PR URL with verified base and non-empty diff.
+- Never: touch application/library code, their tests, or docs other than a chart's README; merge its own PR (pr-reviewer's), commit to `dev`/`main`, or deploy or publish anything — no `helm install`/`upgrade`/`push`, no `kubectl`, no image builds, no waiting on CI.
 
 ### Documentation
 
 **docs-writer — Documentation Author (on request)**
 - **Goal.** Write the library and API feature docs a human asks for — prose traced from the real code plus the `archify` diagrams that make it readable — landing each request as one reviewed `docs/<issue-key>` PR to `dev`.
-- Responsibilities: serve both doors — a ticket the requester or Mika assigns directly, and product-owner's `[P<num>-1] Docs` phase (Workflow E, [Policy 05](05-sdlc-delivery-lifecycle.md) statement 3a); read the code with CodeGraph before writing; pick `library-doc-template` or `api-feature-doc-template` by what the reader does with the thing; a flow diagram on every library or API feature page, IR source and rendered asset both committed; the repo's runtime architecture diagram (`docs/diagrams/runtime.architecture.json` + `runtime.svg`, [Policy 05](05-sdlc-delivery-lifecycle.md) statement 3a) when a ticket asks for it, drawn from the code with the prompt in its procedure; one `docs/<issue-key>` branch from `dev` and ONE PR to `dev` ([Policy 03](03-source-control-branching.md) statement 8a); report the PR URL with verified base and a docs-only diff.
+- Responsibilities: serve both doors — a ticket the requester or Mika assigns directly, and product-owner's `[P<num>-1] Docs` phase (Workflow E, [Policy 05](05-sdlc-delivery-lifecycle.md) statement 3a); read the code with CodeGraph before writing; pick `library-doc-template` or `api-feature-doc-template` by what the reader does with the thing — the latter also shapes an application's README and its `docs/deployment.md` guide; list every fact the repo cannot prove in the page's ❓ Open questions table, never state it as fact; a flow diagram on every library or API feature page, IR source and rendered asset both committed; the repo's runtime architecture diagram (`docs/diagrams/runtime.architecture.json` + `runtime.svg`, [Policy 05](05-sdlc-delivery-lifecycle.md) statement 3a) when a ticket asks for it, drawn from the code with the prompt in its procedure; one `docs/<issue-key>` branch from `dev` and ONE PR to `dev` ([Policy 03](03-source-control-branching.md) statement 8a); report the PR URL with verified base and a docs-only diff.
 - Never: write docs nobody asked for, or take work from a dev-team cycle; write a service's `docs/architect/` design (service-architect's) — it documents code that exists; touch source, tests, build/config/CI files or package manifests; invent behaviour it cannot verify in the repo; merge its own PR (pr-reviewer's) or commit to `dev`/`main`.
 
 **release-manager — Release Custodian**

@@ -169,7 +169,7 @@ Description template — implements shared `bug-report` contract (that skill's t
 <smallest change that resolves it — you read code, so state it plainly; prefix `HYPOTHESIS:` only when unverified>
 
 ## Suggested owner
-<dev-team (library/test code, default) · devops (workflow/pipeline/publish) — one line of reasoning derived from Scope; triager decides, this is routing hint>
+<dev-team (library/test code, default) · devops (workflow/pipeline/publish, Helm chart) — one line of reasoning derived from Scope; triager decides, this is routing hint>
 
 ## Enforcement
 <one of: architecture test added in PR #N | baseline test added, this file is on allow-list | judgement call, not mechanically checkable>
@@ -208,7 +208,7 @@ Test-only. **Never** touch production code in this PR.
 cd src && dotnet build <Solution>.slnx -c Release              # analyzers are errors
 dotnet test <path/to/Project.Tests.csproj>                      # must be green
 git push origin HEAD:refs/heads/<feature-branch>
-gh pr create --head <feature-branch> --base dev --title "[<ISSUE-KEY>] ..." --body "..."
+gh pr create --head <feature-branch> --base dev --title "[<ISSUE-KEY>] ..." --body-file <path>   # body: Summary · Evidence · Merge danger (sdlc-gitflow **PR body**)
 ```
 
 Branch and PR mechanics follow `sdlc-gitflow` skill — **always pass both `--head` and `--base dev` explicitly**; without `--base`, `gh` silently targets production branch. Verify `baseRefName`/`headRefName` and non-empty diff before reporting done.

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-03 |
-| **Version** | 1.6 |
+| **Version** | 1.9 |
 | **Status** | Active |
 | **Owner** | release-manager (`dev`→`main`) · dev-leader (cycle git-flow) |
 | **Applies to** | Every agent that branches, commits, pushes, or opens a PR in a drunk repo |
@@ -41,9 +41,8 @@ policy fixes a branch/PR discipline that is safe under multi-agent concurrency a
 
 ## Scope
 
-Every drunk repo in scope of the factory: the `DKNet` family, `DKNet.Templates`, the
-`drunk-pulumi-*` packages, and any repo under `drunk-others` (Python MCP services, Docker
-images, Helm charts). All of them follow the same `feature → dev → main` model — there is
+Every repo in scope of the factory: every repo attached to a workspace project
+([Policy 05](05-sdlc-delivery-lifecycle.md) statement 7c), whatever its stack. All of them follow the same `feature → dev → main` model — there is
 no separate branch strategy for a different repo class.
 
 ## Policy statements
@@ -62,7 +61,8 @@ no separate branch strategy for a different repo class.
    Always branch from freshly fetched `origin/dev`, never a stale local ref. Verify local HEAD SHA == remote branch SHA before reporting done.
 6. **Every PR carries explicit `--head` AND `--base`.** `gh pr create` without `--base` silently targets the repo default (often `main`); without `--head` it produces an empty/wrong diff that still reports success. After creating, verify `baseRefName`, `headRefName`, a **non-empty** `--stat` diff, and `mergeable == MERGEABLE`. A wrong head is not editable — close and recreate.
 7. **PR titles carry the ROOT main ticket's key in `[<KEY>]` form; bodies and titles never contain `Closes`/`Fixes`/`Resolves` next to an issue key** — that auto-completes the ticket and kills the remaining pipeline phases. Check for an existing open PR (`gh pr list --head <branch> --base <base> --state open`) before opening a second.
-8. **Devops CI/CD changes follow the same `dev` rule — there is no separate track.** `devops` branches `chore/<issue-key>` from freshly fetched `origin/dev`, opens exactly one PR to `dev`, and `pr-reviewer` scores and merges it on APPROVED — identical mechanics to a feature cycle. There is no Helm/GitOps exception in drunk: a Helm chart repo is just another repo in scope, released the same `dev`→`main` way (merge triggers the chart/image publish, not a deploy).
+7a. **Every PR body shows what changed, proves it works, and says how risky the merge is.** Three sections, in order: **Summary** (one or two sentences and the smallest text visual that shows the change: call tree, file tree, pseudocode or a diff sketch), **Evidence** (the test that was red before and is green now, or the checks that ran, plus every check that could not run), and **Merge danger** (one-way or two-way door, and the blast radius, taken from the spec's §3b). The body is passed with `--body-file`. The shape and its rules live in [`sdlc-gitflow`](../../skills/sdlc-gitflow/SKILL.md) (**PR body**). The exception is the release PR: release-manager's `dev`→`main` PR keeps its own format. Cause: agent-written PR bodies had no shared shape, no risk statement, and evidence that often listed passing commands without showing a test could fail (2026-10-06 review against mattpocock/skills v1.3 `pr`).
+8. **Devops CI/CD and Helm chart changes follow the same `dev` rule — there is no separate track.** `devops` branches `chore/<issue-key>` from freshly fetched `origin/dev`, opens exactly one PR to `dev`, and `pr-reviewer` scores and merges it on APPROVED — identical mechanics to a feature cycle. There is no Helm/GitOps exception in drunk: a Helm chart repo is just another repo in scope, its chart changes authored by `devops` and released the same `dev`→`main` way (merge triggers the chart/image publish, not a deploy).
 8a. **docs-writer's docs changes follow the same rule.** `docs-writer` branches `docs/<issue-key>` from freshly fetched `origin/dev` (or the repo's default branch where it has no `dev`), opens exactly one PR to it, and `pr-reviewer` scores and merges it on APPROVED. It never commits to a squad cycle's feature branch — dev-team cycles carry no docs stage ([Policy 05](05-sdlc-delivery-lifecycle.md) statement 3a).
 8b. **service-architect's design follows the same rule, except the merge.** `service-architect` branches `design/<issue-key>` from freshly fetched `origin/dev` of the new service's repo, which the requester created empty with a `dev` branch before the phase started, and opens exactly one PR to it. `pr-reviewer` scores it but merges it only on the owner's reply A ([Policy 04](04-code-and-spec-review.md) statement 9a). The diff touches `docs/architect/` only.
 9. **Merge conflicts:** resolve mechanical ones (whitespace, import order, trivial renames) on a *detached* checkout of the feature branch (`git checkout --detach origin/<branch>` takes no lock), commit, push by refspec, re-check `mergeable`. Escalate **substantive** conflicts (overlapping logic, deleted code) to the code's owner (dev-backend, via dev-leader) — never guess. **One exception:** when the conflict is an older duplicate root's fix already merged into `dev`, dev-leader closes the PR as superseded instead of resolving it, on the evidence [Policy 07](07-bug-and-defect-management.md) statement 8a requires.
@@ -84,6 +84,7 @@ no separate branch strategy for a different repo class.
 - Push verified (local SHA == remote SHA) before any "done" report.
 - PR created with both `--head` and `--base`; refs verified; `--stat` non-empty; `mergeable == MERGEABLE`.
 - PR title carries the issue-key prefix; no `Closes/Fixes/Resolves` next to an issue key.
+- PR body has Summary, Evidence and Merge danger (statement 7a).
 - The `dev`→`main` release PR is the only PR in the cycle whose base is `main`, and it was opened and merged by release-manager alone.
 
 ## Enforcement

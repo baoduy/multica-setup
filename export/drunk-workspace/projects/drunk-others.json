@@ -2,7 +2,7 @@
   "title": "drunk-others",
   "icon": null,
   "priority": "medium",
-  "status": "planned",
+  "status": "in_progress",
   "due_date": null,
   "start_date": null,
   "source_id": "4d89c81e-fc43-4b09-91af-20e8846a785b",
@@ -25,6 +25,14 @@
       },
       "label": null,
       "position": 1
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/baoduy/drunk.charts.git"
+      },
+      "label": null,
+      "position": 2
     }
   ],
   "description_file": "projects/drunk-others.description.md"

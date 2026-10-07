@@ -71,6 +71,16 @@ what this deliberately does NOT do. Never empty on a non-trivial package.>
 ## 🔗 Related packages
 
 <Sibling packages, with one line on when to reach for each instead.>
+
+## ❓ Open questions
+
+| Question | Why it matters | Checked | Who can answer |
+|---|---|---|---|
+
+<One row per fact the page needs and the repo cannot prove: a supported
+version range, an intended behaviour the code contradicts, an owner. Checked:
+what you read before giving up. The rest of the page never states a guess as
+fact.>
 ```
 
 ## Section rules
@@ -86,8 +96,17 @@ what this deliberately does NOT do. Never empty on a non-trivial package.>
 | 🧱 Where it fits | When the package works across more than one component, service, or package | Prose that a diagram would say better, or a diagram with no prose around it |
 | ⚠️ Gotchas & limits | Always, unless the package is genuinely one behaviour with no edges | Empty, or only restates the happy path |
 | 🔗 Related packages | When siblings exist | Bare links with no "reach for this when" line |
+| ❓ Open questions | When the page needs a fact the repo cannot prove | A guess stated as fact elsewhere on the page; a row with no "Checked" |
 
 Emoji headings are house style on these pages — keep them, exactly as above.
+
+**Point at code by name, never by line.** Name the class or type (`AuthConfig`),
+or the folder that holds it (`ApiEndpoints/DKNet.Notification.Api/Configs/Auth/`).
+A file path is fine when the file itself is the subject (`appsettings.json`,
+`Program.cs`). Never a line number or line range (`AuthConfig.cs:28-29`,
+`#L28`): every edit to the file moves its lines, and the page goes stale with
+nobody noticing. Line-level evidence belongs in the archify IR's `evidence` and
+in your completion report, never on the page.
 
 ## Diagrams
 
@@ -154,4 +173,6 @@ in your report so it can be scheduled as its own change.
 5. 🔄 How it works has its flow diagram, drawn from the call path you traced in
    the code; every diagram's JSON IR and rendered `.svg` are both committed, and
    the `.svg` renders in the Markdown preview.
-6. `git diff --stat` shows documentation and diagram files only.
+6. No line references on the page: `git diff origin/dev... -- '*.md' | grep -E '^\+.*\.(cs|ts|tsx|js|py|json|ya?ml|csproj|props|targets|sh|bicep|tf)(:[0-9]+|#L[0-9]+)'`
+   prints nothing.
+7. `git diff --stat` shows documentation and diagram files only.
