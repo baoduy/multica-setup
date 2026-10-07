@@ -16,28 +16,19 @@ its interactive HTML source in `.archify/`.
 ### Runtime architecture
 
 <a href=".archify/architecture-runtime/runtime.html">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/runtime.dark.png">
-    <img alt="multica-setup runtime architecture (drunk-workspace)" src="docs/diagrams/runtime.light.png">
-  </picture>
+  <img alt="multica-setup runtime architecture (drunk-workspace)" src="docs/diagrams/runtime.light.png">
 </a>
 
 ### Setup improvement loop
 
 <a href=".archify/workflow-setup-improvement-loop/setup-improvement-loop.html">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/setup-improvement-loop.dark.png">
-    <img alt="multica-setup improvement loop (drunk-workspace)" src="docs/diagrams/setup-improvement-loop.light.png">
-  </picture>
+  <img alt="multica-setup improvement loop (drunk-workspace)" src="docs/diagrams/setup-improvement-loop.light.png">
 </a>
 
 ### Setup git flow
 
 <a href=".archify/workflow-setup-gitflow/setup-gitflow.html">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/setup-gitflow.dark.png">
-    <img alt="multica-setup improvement loop git flow (drunk-workspace)" src="docs/diagrams/setup-gitflow.light.png">
-  </picture>
+  <img alt="multica-setup improvement loop git flow (drunk-workspace)" src="docs/diagrams/setup-gitflow.light.png">
 </a>
 
 ## Review-gate scoring — design lessons (2026-08)
