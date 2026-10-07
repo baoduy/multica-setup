@@ -1,6 +1,6 @@
 # Goal
 
-Find what the drunk agents got wrong in the last 7 days, more than once, and file one fix issue per recurring problem for setup-steward. The issue this run creates is the record, and its final comment is the report. **You change nothing in the repo or the live workspace in this run.**
+Find what the drunk agents got wrong in the last 7 days, more than once, and file one fix issue per recurring problem for setup-steward. Report the setup's health counts too. The issue this run creates is the record, and its final comment is the report. **You change nothing in the repo or the live workspace in this run.**
 
 # Context
 
@@ -47,6 +47,27 @@ File at most **3** issues per run, most frequent first. Never file one that chan
 
 List `drunk-setup` issues set `done` in the last 28 days. For each, compare its **Watch** metric now with the value its Evidence quoted. Say in the report whether it moved, did not move, or cannot be measured yet. A fix that did not move after 3 weeks gets one line asking the owner whether to revert it.
 
+# Step 6: Setup health (report only)
+
+Run the lens script, exactly as written in the repo. Never rewrite or re-implement it:
+
+```bash
+(cd setup && python3 scripts/setup-health.py --digest ../digest.json) > health.json
+```
+
+It prints one count per lens. A lens is a standing check of the setup itself, not a recorded mistake:
+
+| Lens | Counts |
+|---|---|
+| 1 Duplication | 10-word runs shared with the Workspace Context, identical agent instructions, dangling `references/` paths |
+| 2 Wording | agents over the 24,000-byte always-loaded budget, lines over 600 characters, ticket keys in always-loaded text |
+| 3 Structure | SKILL.md over 10 KB with no `references/`, skills with no frontmatter |
+| 4 Practices | agents with no Goal line or Never list, skill descriptions with no "Use when", bundle descriptions that differ from live |
+| 5 Built-ins | Multica releases since the last release review |
+| 6 Performance | per gate: first-pass %, mean rounds, escalations |
+
+Find the previous `Weekly Setup Retro` issue in `drunk-setup` and read the `health.json` block in its report comment. Compare each count with it. A lens never files an issue and never comments on one: lens findings are for the owner. If the script fails, write its error line under `## Setup health` and go on: a lens failure is not a `## BLOCKER`.
+
 # Report
 
 Post ONE comment on this issue with `multica issue comment add --content-stdin`:
@@ -54,6 +75,7 @@ Post ONE comment on this issue with `multica issue comment add --content-stdin`:
 - `## Filed`: each issue key and title, or "none".
 - `## One-offs`: problems seen once, one line each.
 - `## Previous fixes`: step 5, one line each.
+- `## Setup health`: step 6. One line per lens: the count now, last week's, and the change. For a count that got worse, name up to 3 files from the output. Then the full `health.json` in a fenced `json` block, which next week's retro reads. When releases are listed under lens 5, ask the owner to run the Multica release review.
 - `## For the owner`: gate-change proposals and anything you could not place, or omit the section.
 - `## BLOCKER`: only if a step failed. Name the step and quote its output line.
 - End with one member mention of the workspace owner.

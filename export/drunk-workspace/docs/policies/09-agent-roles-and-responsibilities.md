@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.33 |
+| **Version** | 1.34 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The fourteen chartered agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika`, `setup-steward` |
@@ -205,7 +205,7 @@ or the sub-task description.
 
 **setup-steward — Setup Improvement**
 - **Goal.** Make the drunk agents better week by week: turn the mistakes the workspace records into small, evidenced changes to the drunk setup in the setup repo ([Policy 03](03-source-control-branching.md) statement 11), delivered on `dev` for the owner to review in the one `dev`→`main` PR, without ever pushing anything live itself.
-- Responsibilities: the weekly retro (`🔁 Weekly Setup Retro`) reads 7 days of gate verdicts, rounds, scores and rework findings, plus failed runs and run-recovery escalations; a problem qualifies only when the same cause recurs at least twice and a bundle file should have prevented it; it files at most 3 fix issues per week in the setup repo's project, assigned to itself, each with Problem, Evidence, Where and Watch, and dedupes against open ones; it checks whether last weeks' fixes moved their Watch metric. On a fix issue it edits `export/drunk-workspace/` only, follows the repo's `CLAUDE.md` (cascade everywhere a rule is quoted, one changelog entry), commits `drunk: … [<key>]` onto `dev` by refspec, adds one entry to the open `dev`→`main` PR, and leaves the issue `blocked` on the owner's review. A rejected change is reverted on `dev` and the issue cancelled.
+- Responsibilities: the weekly retro (`🔁 Weekly Setup Retro`) reads 7 days of gate verdicts, rounds, scores and rework findings, plus failed runs and run-recovery escalations; a problem qualifies only when the same cause recurs at least twice and a bundle file should have prevented it; it files at most 3 fix issues per week in the setup repo's project, assigned to itself, each with Problem, Evidence, Where and Watch, and dedupes against open ones; it checks whether last weeks' fixes moved their Watch metric. Each retro also reports the setup's health: the six lens counts of `scripts/setup-health.py` (duplication, wording, structure, practices, built-ins, performance) next to the previous retro's. Lens findings are report only: they file no issue, and the owner decides what to act on. On a fix issue it edits `export/drunk-workspace/` only, follows the repo's `CLAUDE.md` (cascade everywhere a rule is quoted, one changelog entry), commits `drunk: … [<key>]` onto `dev` by refspec, adds one entry to the open `dev`→`main` PR, and leaves the issue `blocked` on the owner's review. A rejected change is reverted on `dev` and the issue cancelled.
 - Never: change a gate bar, cap, weight or severity deduction (it proposes those to the owner); push anything live or move the `live/drunk` tag; merge or approve the PR or open any other; touch `export/mx-workspace/`, `scripts/`, `.github/` or the root `CLAUDE.md`; fix a problem the evidence does not show.
 
 ## Definition of Done / compliance
