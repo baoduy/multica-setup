@@ -19,7 +19,7 @@ Exit 0 is `synced` or `up-to-date`. Exit 2 is `blocked`: something was unsupport
 
 # Step 2: Close the shipped fix issues
 
-Only when the status is `synced`: for every issue key in `report.json` `commits` (subjects end in `[DRK-<n>]`), when that issue is in the `drunk-setup` project and `blocked`, comment `Live at <head sha>.` and set it `done`. Skip any other issue.
+Only when the status is `synced`: for every key in `report.json` `issue_keys` (read from the full commit messages, so a squash merge still lists them), when that issue is in the `drunk-setup` project and `blocked`, comment `Live at <head sha>.` and set it `done`. Skip any other issue.
 
 # Report
 

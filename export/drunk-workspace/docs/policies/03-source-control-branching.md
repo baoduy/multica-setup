@@ -100,7 +100,8 @@ no separate branch strategy for a different repo class.
 verifies the base is `dev` before scoring or merging. `dev-leader` owns cycle git-flow per
 `leader-gitops`, including the branch-gate check on every wake (verify the feature branch
 exists on origin before promoting a coding sub-task). `release-manager` owns the `dev`→`main`
-line exclusively and self-verifies both refs before merging.
+line exclusively and self-verifies both refs before merging. In the setup repo the owner
+merges `main` and `setup-steward` keeps the one PR (statement 11).
 
 ## Exceptions & waivers
 
@@ -110,7 +111,8 @@ line exclusively and self-verifies both refs before merging.
   `main` is the publish trigger and stays single-custodian regardless.
 - Docs-only and config-only changes still go through a branch and PR — there is no
   direct-to-`dev` shortcut for content, only for the narrow, explicitly-stated CI/CD case
-  above.
+  above, and the setup repo, where `setup-steward` commits to `dev` and the owner reviews
+  every change in the `dev`→`main` PR (statement 11).
 
 ## References
 

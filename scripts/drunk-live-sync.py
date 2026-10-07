@@ -16,6 +16,7 @@ import fcntl
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 
@@ -259,13 +260,15 @@ def sync(base, head, accept):
             (pushed if ok else failed).append({"path": path, "status": status, **({} if ok else {"error": "read-back differs"})})
         except Exception as e:  # report and keep going; the tag stays put
             failed.append({"path": path, "status": status, "error": str(e)})
-    commits = git("log", "--format=%h %s", "%s..%s" % (base, head)).splitlines() if base else []
+    commits = git("log", "--format=%h %s", "%s..%s" % (base, head)).splitlines()
+    # A squash merge keeps the fix commits only in the body, so read full messages.
+    keys = sorted(set(re.findall(r"\[(DRK-[0-9]+)\]", git("log", "--format=%B", "%s..%s" % (base, head)))))
     move = not failed and (not unsupported or accept)
     if move:
         git("tag", "-f", TAG, head)
         git("push", "-f", "origin", "refs/tags/%s" % TAG)
     return {"status": "synced" if move else "blocked", "base": base, "head": head,
-            "commits": commits, "pushed": pushed, "unsupported": unsupported,
+            "commits": commits, "issue_keys": keys, "pushed": pushed, "unsupported": unsupported,
             "failed": failed, "ignored": ignored, "tag_moved": move}
 
 
