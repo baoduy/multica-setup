@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop-20261007-082920/candidate.json",
+    "sha256": "6fe22fd63a463879626b975c0cc25559cd7e8b45a2a2a21113abb54b3e1a0261",
+    "bytes": 6738
+  },
+  "artifact": {
+    "path": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop-20261007-082920/setup-improvement-loop.html",
+    "sha256": "77fb267cfa72e613539bb4146de71f37e32db81a6fd9dbbe1f584065dc93a889",
+    "bytes": 768624
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop-20261007-082920/setup-improvement-loop.finalize.json",
+    "summaryReceipt": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop-20261007-082920/setup-improvement-loop.finalize-summary.json",
+    "browserCheckReceipt": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop-20261007-082920/setup-improvement-loop.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.0.1",
+    "availableVersion": "3.0.1",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-07T00:29:41.365Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 1739,
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "routesOverSuggestedBends": 3,
+      "routesOverSuggestedStretch": 1
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [],
+      "detours": [
+        {
+          "relationship": {
+            "id": "issue-assign",
+            "from": "issues",
+            "to": "fix",
+            "label": "assigned",
+            "collectionIndex": 3,
+            "artifactIndex": 4
+          },
+          "bends": 3,
+          "stretch": 1.183
+        },
+        {
+          "relationship": {
+            "id": "retro-open",
+            "from": "retro",
+            "to": "issues",
+            "label": "1 issue per problem",
+            "collectionIndex": 6,
+            "artifactIndex": 7
+          },
+          "bends": 3,
+          "stretch": 1.448
+        },
+        {
+          "relationship": {
+            "id": "sync-live",
+            "from": "sync",
+            "to": "runs",
+            "label": "pushed live, tag moved",
+            "collectionIndex": 12,
+            "artifactIndex": 13
+          },
+          "bends": 3,
+          "stretch": 1.094
+        }
+      ],
+      "truncated": false
+    },
+    "hints": [
+      "issues → fix needs 3 bends: move node issues or fix so they share a row or column with matching centers, or sit diagonally with a clear corner.",
+      "retro → issues needs 3 bends: move node retro or issues so they share a row or column with matching centers, or sit diagonally with a clear corner.",
+      "sync → runs needs 3 bends: move node sync or runs so they share a row or column with matching centers, or sit diagonally with a clear corner."
+    ],
+    "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
+  }
+}

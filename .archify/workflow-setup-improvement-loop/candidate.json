@@ -1,0 +1,314 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "multica-setup Improvement Loop (proposed, drunk-workspace)",
+    "quality_profile": "showcase",
+    "output": ".archify/workflow-setup-improvement-loop-20261007-082920/setup-improvement-loop.html",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "owner",
+      "label": "Owner (you)"
+    },
+    {
+      "id": "github",
+      "label": "GitHub baoduy/multica-setup"
+    },
+    {
+      "id": "multica",
+      "label": "Multica live workspace"
+    },
+    {
+      "id": "steward",
+      "label": "Agents on this PC runtime"
+    }
+  ],
+  "phases": [
+    {
+      "id": "monitor",
+      "label": "Monitor",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "improve",
+      "label": "Improve",
+      "fromCol": 2,
+      "toCol": 2,
+      "variant": "emphasis"
+    },
+    {
+      "id": "develop",
+      "label": "Develop",
+      "fromCol": 3,
+      "toCol": 3
+    },
+    {
+      "id": "release",
+      "label": "Release",
+      "fromCol": 4,
+      "toCol": 4,
+      "variant": "security"
+    },
+    {
+      "id": "sync",
+      "label": "Sync to live",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "runs",
+    "signals",
+    "retro",
+    "issues",
+    "fix",
+    "dev",
+    "pr",
+    "review",
+    "main",
+    "hook",
+    "sync"
+  ],
+  "nodes": [
+    {
+      "id": "review",
+      "lane": "owner",
+      "col": 4,
+      "type": "security",
+      "label": "Owner Review",
+      "sublabel": "approve or reject PR",
+      "tag": "only human merge",
+      "width": 140
+    },
+    {
+      "id": "dev",
+      "lane": "github",
+      "col": 3,
+      "type": "backend",
+      "label": "dev branch",
+      "sublabel": "commit by refspec",
+      "width": 132
+    },
+    {
+      "id": "pr",
+      "lane": "github",
+      "col": 4,
+      "type": "backend",
+      "label": "PR dev → main",
+      "sublabel": "one open PR, reused",
+      "width": 140
+    },
+    {
+      "id": "main",
+      "lane": "github",
+      "col": 5,
+      "type": "cloud",
+      "label": "main + GH Action",
+      "sublabel": "curl webhook (GH secret)",
+      "width": 150
+    },
+    {
+      "id": "runs",
+      "lane": "multica",
+      "col": 0,
+      "type": "external",
+      "label": "Live Agent Runs",
+      "sublabel": "squads, gates, autopilots",
+      "width": 140
+    },
+    {
+      "id": "signals",
+      "lane": "multica",
+      "col": 1,
+      "type": "database",
+      "label": "Run Signals",
+      "sublabel": "gate round/score, failures",
+      "width": 150
+    },
+    {
+      "id": "issues",
+      "lane": "multica",
+      "col": 2,
+      "type": "messagebus",
+      "label": "Fix Issues",
+      "sublabel": "drunk-setup project",
+      "width": 150
+    },
+    {
+      "id": "blocked",
+      "lane": "multica",
+      "col": 4,
+      "type": "security",
+      "label": "Sync Issue blocked",
+      "sublabel": "manual steps listed",
+      "width": 140
+    },
+    {
+      "id": "hook",
+      "lane": "multica",
+      "col": 5,
+      "type": "messagebus",
+      "label": "Sync Autopilot",
+      "sublabel": "webhook trigger, issue",
+      "tag": "multica-api.st24.live",
+      "width": 150
+    },
+    {
+      "id": "retro",
+      "lane": "steward",
+      "col": 1,
+      "type": "backend",
+      "label": "Weekly Retro",
+      "sublabel": "setup-steward, Mon 09:00",
+      "tag": "cluster repeats",
+      "width": 150
+    },
+    {
+      "id": "fix",
+      "lane": "steward",
+      "col": 2,
+      "type": "backend",
+      "label": "Fix or Revert",
+      "sublabel": "setup-steward, drunk only",
+      "width": 150
+    },
+    {
+      "id": "sync",
+      "lane": "steward",
+      "col": 5,
+      "type": "backend",
+      "label": "claude_ultra Sync",
+      "sublabel": "sync-live.py from main",
+      "tag": "byte-exact + read-back",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "id": "runs-emit",
+      "from": "runs",
+      "to": "signals",
+      "label": "record"
+    },
+    {
+      "id": "signals-read",
+      "from": "signals",
+      "to": "retro",
+      "label": "read 7 days",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "retro-open",
+      "from": "retro",
+      "to": "issues",
+      "label": "1 issue per problem",
+      "variant": "emphasis",
+      "fromSide": "right"
+    },
+    {
+      "id": "issue-assign",
+      "from": "issues",
+      "to": "fix",
+      "label": "assigned"
+    },
+    {
+      "id": "fix-commit",
+      "from": "fix",
+      "to": "dev",
+      "label": "push"
+    },
+    {
+      "id": "dev-pr",
+      "from": "dev",
+      "to": "pr",
+      "label": "open / update"
+    },
+    {
+      "id": "pr-review",
+      "from": "pr",
+      "to": "review",
+      "label": "issue blocked, waits"
+    },
+    {
+      "id": "review-merge",
+      "from": "review",
+      "to": "main",
+      "label": "approve + merge",
+      "variant": "emphasis"
+    },
+    {
+      "id": "review-reject",
+      "from": "review",
+      "to": "issues",
+      "label": "reject: comment",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "main-webhook",
+      "from": "main",
+      "to": "hook",
+      "label": "POST /api/webhooks/autopilots",
+      "variant": "emphasis"
+    },
+    {
+      "id": "hook-run",
+      "from": "hook",
+      "to": "sync",
+      "label": "assign + run",
+      "variant": "emphasis"
+    },
+    {
+      "id": "sync-blocked",
+      "from": "sync",
+      "to": "blocked",
+      "label": "unsupported change",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "sync-live",
+      "from": "sync",
+      "to": "runs",
+      "label": "pushed live, tag moved",
+      "variant": "emphasis",
+      "role": "return"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Guardrails",
+      "items": [
+        "setup-steward edits export/drunk-workspace/ only; mx untouched",
+        "Never changes gate bars, caps or weights: asks owner in an issue",
+        "No agent merges main in this repo; only the owner"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Sync contract",
+      "items": [
+        "Action runs on push to main, paths export/drunk-workspace/**",
+        "Diff tag live/drunk..origin/main; push changed resources, read back",
+        "Tag on GitHub moves only when all match; lock file serialises runs",
+        "JSON config, new/deleted resources, labels, properties: blocked + manual steps"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Pending before build",
+      "items": [
+        "Approve Policy 03 + Workspace Context setup-repo exception",
+        "Retro + fixes: new setup-steward, or claude_ultra too (max 1 run)"
+      ]
+    }
+  ]
+}
