@@ -66,7 +66,7 @@ It prints one count per lens. A lens is a standing check of the setup itself, no
 | 5 Built-ins | Multica releases since the last release review |
 | 6 Performance | per gate: first-pass %, mean rounds, escalations |
 
-Find the previous `Weekly Setup Retro` issue in `drunk-setup` and read the `health.json` block in its report comment. Compare each count with it. A lens never files an issue and never comments on one: lens findings are for the owner. If the script fails, write its error line under `## Setup health` and go on: a lens failure is not a `## BLOCKER`.
+Find the previous `Weekly Setup Retro` issue in `drunk-setup` and read the `health.json` block in its report comment. Compare each count with it. No previous retro, or its report has no `health.json` block: report the counts with "no baseline"; that is not a failure. A lens never files an issue and never comments on one: lens findings are for the owner. If the script fails, write its error line under `## Setup health` and go on: a lens failure is not a `## BLOCKER`.
 
 # Report
 
