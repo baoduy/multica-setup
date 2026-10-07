@@ -13,7 +13,7 @@ Why this shape and not "write the test first, watch it fail": when one run write
 
 ## Reading the brief
 
-Your sub-task description is an `sdlc-impl-brief`. Its header row **Mode** tells you which run this is (`acceptance-tests`, `build`, `bug-build` — Prove-It below — or `build-ui`). Section numbers below refer to it: §2 current code, §3 change set, §4 do-not-touch, §5 contract, §6 rules, §6a input domain (each row needs its proof), §7 scenarios in this slice, §8 extra done checks, §9 questions. The spec's Gherkin is NOT in the brief: §7 names the scenarios; read them from the ticket the header's **Spec** row names (`multica issue get <key> --output json`).
+Your sub-task description is an `sdlc-impl-brief`. Its header row **Mode** tells you which run this is (`acceptance-tests`, `build`, `bug-build` — Prove-It below — `build-ui` or `build-excluded`). Section numbers below refer to it: §2 current code, §3 change set, §4 do-not-touch, §5 contract, §6 rules, §6a input domain (each row needs its proof), §7 scenarios in this slice, §8 extra done checks, §9 questions. The spec's Gherkin is NOT in the brief: §7 names the scenarios; read them from the ticket the header's **Spec** row names (`multica issue get <key> --output json`).
 
 **Change-set markers (§3 Op):** `KEEP` exists and is correct, do not modify, behaviour must still hold · `MODIFY` exists, change as described, preserve everything else · `EXTEND` exists, add without altering current behaviour · `NEW` does not exist, create it · `REMOVE` exists, delete it with its tests and dead references.
 
@@ -102,6 +102,17 @@ Policy 02 statement 1a: a change confined to a front-end app's screens, layouts,
 - Run the app's build, typecheck, lint and every existing suite, unit and acceptance. Each test your change broke gets the runner's own skip (`test.skip`, `it.skip`) and a one-line note — `// skipped: <KEY> — UI presentation change; restored in the UI test pass` — never deleted, never rewritten to pass.
 - A §3 file outside the presentation surface (route handler, `lib/`, data access, auth, session, contract, middleware, config) is mis-routed: `blocked` to the leader.
 - Done when: build, typecheck and lint clean; every existing suite passes with the skips; every skipped test listed in the report (file · test name · the control it drove); every §3 row implemented and nothing outside §3 changed; pushed; report posted; sub-task `done`.
+
+## Coverage-excluded Build (`Mode: build-excluded`)
+
+Policy 02 statement 1e: wiring the repo's coverage config on `origin/dev` leaves out (an Aspire AppHost, container, compose or realm definitions, config data, demo or load tools), or that the spec's §4 `Test scope` decision names. The brief's `Coverage scope` row says which. In this mode:
+
+- Frozen ATs, when the header has an `at_sha`, bind exactly as in `Mode: build`: green at done, drift check empty.
+- No coverage figure, no coverage review, no mutation report. Never add a test only to cover an excluded file.
+- Run the build, every existing suite and CI parity (Policy 02 statement 6b).
+- Run every `@stack` scenario in §7 on the running stack (for an Aspire AppHost: `dotnet run` the AppHost, then drive the scenario). Quote its literal output — HTTP status and body, log line, inbox entry, command output — in a `Stack evidence` row, one line per scenario. "Verified" without the output is not evidence. A stack you cannot start is `blocked` with the error, never `skipped`.
+- A §3 file the repo's coverage config includes, or new branching or decision logic you would have to put in an excluded file, is mis-routed: `blocked` to the leader. Logic belongs in a covered project.
+- Done when: build and existing suites green; own ATs green with an empty drift check; CI parity green; every `@stack` scenario has its literal output; every §3 row implemented and nothing outside §3 changed; pushed; report posted; sub-task `done`.
 
 ## Done when (standard list — the EVIDENCE rows of your completion report)
 

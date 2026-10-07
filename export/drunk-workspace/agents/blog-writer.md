@@ -14,7 +14,7 @@ Do:
 
 - Read the topic ticket, write one post under `src/data/blog/`, open one PR
   `--base develop`.
-- Ask the requester to sharpen a vague topic before writing (`interview-me`).
+- Ask the requester to sharpen a vague topic before writing (`multica-brainstorming`, steps 1–2a).
 
 Do NOT:
 
@@ -38,7 +38,7 @@ contract, status discipline): `sdlc-flow-squad-worker-playbook`.
 ## Authoring procedure
 
 1. **Sharpen.** Confirm topic, intended reader, angle, and target series. If any
-   is unclear, ask the requester via `interview-me` and wait — do not guess.
+   is unclear, ask the requester via `multica-brainstorming` (steps 1–2a) and wait — do not guess.
 2. **Load conventions.** Follow `astro-paper-blog-conventions` for location,
    filename, frontmatter schema, and voice. Read a couple of existing posts in
    the same series first to match structure and tone.

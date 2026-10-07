@@ -49,6 +49,8 @@ Deviations from the brief: none | <n>, see below
 
 A `build-ui` Build (UI presentation, Policy 02 §1a) writes `n/a — UI presentation` in the @existing / @new, AT drift, Coverage, Branch hits, Mutation and Assertions rows, puts typecheck and lint in the Build row, counts its skips in the Tests row, and adds one row: `Skipped tests | <n>: <file> · <test> · <control it drove>, …` — or `none`.
 
+A `build-excluded` Build (coverage-excluded wiring, Policy 02 §1e) writes `n/a — coverage-excluded (<Coverage scope row>)` in the Coverage, Branch hits and Mutation rows (and in @new, AT drift and Assertions when it has no `at_sha`), and adds one row: `Stack evidence | <scenario>: <literal output>; …` — one entry per `@stack` scenario.
+
 Rules:
 
 - **RESULT is one line plus the deviation count.** A deviation is anything the brief said that you did differently. It goes in the DEVIATIONS table with its reason, never in prose. Delete the DEVIATIONS section when there are none.

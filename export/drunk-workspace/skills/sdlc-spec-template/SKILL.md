@@ -106,14 +106,14 @@ Business language · Real data ("treasury-ops", 100.00 SGD, never "a user") · I
 - Primary test: would this wording change if the implementation changed? If yes, fix it.
 - At most 6 steps per scenario. Happy path first, then refusals and edges. Use a Scenario Outline for variants of one rule instead of copies. No hard scenario count; around 10 is a warning sign to look for Outlines.
 - Third-person named actors, never "I". No UI mechanics, config keys, or member names.
-- Tag every scenario `@integration` (crosses a real boundary: database, HTTP, package) or `@unit`. The tags are the test-scope statement; there is no separate section.
+- Tag every scenario `@integration` (crosses a real boundary: database, HTTP, package) or `@unit`. The tags are the test-scope statement; there is no separate section. The third tag, `@stack`, marks a scenario only the running stack can show, on coverage-excluded wiring (Policy 02 §1e): the repo's coverage config on `dev` leaves the surface out, or a §4 `Test scope` decision names it. dev-team quotes its literal output instead of automating it. `@stack` on anything else is a waiver.
 - When the deliverable is a sample or demo, at least one scenario is observable from the running artefact, not only from its tests.
 - The Gherkin block is the only code block in the spec. The §3a tables are tables, not code blocks.
 - §5 still carries no field or endpoint names — scenarios stay in business language. The contract lives in §3a.
 
 ## Verification
 
-Testing is never optional and never negotiated at spec time. dev-team writes the §5 scenarios as acceptance tests first, implements against them frozen, and self-verifies at ≥80% coverage per touched class plus a clean pack (`test-driven-development`). §5 says what the suite covers and which kind each scenario is, never whether it runs. The one exception is set by policy, not by the spec: a UI presentation change (screens, layouts, components, styling, copy — Policy 02 §1a) is built without tests, and its §5 scenarios are still written and tagged — they scope the later UI test pass.
+Testing is never optional and never negotiated at spec time. dev-team writes the §5 scenarios as acceptance tests first, implements against them frozen, and self-verifies at ≥80% coverage per touched class plus a clean pack (`test-driven-development`). §5 says what the suite covers and which kind each scenario is, never whether it runs. The exceptions are set by policy, not by the spec: a UI presentation change (screens, layouts, components, styling, copy — Policy 02 §1a) is built without tests, and its §5 scenarios are still written and tagged — they scope the later UI test pass. Coverage-excluded wiring (an Aspire AppHost, container, compose or realm definitions, config data, demo or load tools — Policy 02 §1e) has no coverage or mutation bar: its automatable scenarios keep `@unit`/`@integration`, and the rest are `@stack`. When the repo's coverage config on `dev` does not settle a wiring surface, §4 carries the requester's answer as `<date> · <who> · Test scope: <surface> — proven on the running stack`.
 
 ## Quality bar
 

@@ -27,7 +27,7 @@ Only you create issues in this squad. Members report on their own tickets; you r
 |---|---|---|
 | feature from an approved spec | dev-team | `[P<num>-1] Implementation`, `todo`, stage 1, description = the FULL approved spec opening with `Spec revision: <n>`; frozen for the cycle |
 | confirmed bug (≥90% or requester-confirmed) | dev-team | the ROOT ticket reassigned to the dev-team squad at `todo`; the root-cause report is the brief; dev-team stops at the merge into `dev` and hands the root back, then you stage ONE `[P<num>-2]` as for a bundle root |
-| tests | dev-team, inside `[P<num>-1]` | never a separate phase, never waived — except UI presentation, built without tests (Policy 02 §1a) |
+| tests | dev-team, inside `[P<num>-1]` | never a separate phase, never waived — except UI presentation, built without tests (Policy 02 §1a), and coverage-excluded wiring, proven on the running stack (Policy 02 §1e; ask the `Test scope` question only when the repo's coverage config is silent, `multica-brainstorming` step 2) |
 | `dev`→`main` release | release-manager | `[P<num>-2]`, `backlog`, stage 2, promoted after `[P<num>-1]` verifies; only on a root ticket (spec root, bundle root, or a root dev-team handed back), and only when a package consumer can observe the change |
 | CI/CD, build/test, package-publish automation, Helm charts (any `Chart.yaml`) | devops | `[P<num>-1] CI/CD change` + `[P<num>-1c]` (Workflow D2); never through the spec gate or release-manager |
 | docs, only when a human asks | docs-writer | `[P<num>-1] Docs: <scope>` + `[P<num>-1c] Review docs PR` (Workflow E); never through the spec gate, dev-team or release-manager. A requester may assign docs-writer directly. dev-team cycles write no docs pages |
