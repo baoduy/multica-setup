@@ -112,7 +112,7 @@ On a re-armed round: full fresh review, AND open the verdict with a **closure ta
 
 **MANUAL HANDOFF** — verdict would be REWORK but R ≥ 5 (more than 5 loops):
 1. Post final verdict comment on MAIN ticket with short per-round history (round → score → top finding). NO agent mention.
-2. Resolve the handoff human as the resolved owner per `sdlc-flow-delivery-pipeline` "Who the human owner is" (`Owner`-property-first → root member-creator → workspace owner). Resolve at runtime, never hardcode a name/UUID; keep its `user_id`.
+2. Resolve the handoff human as the resolved owner per the Workspace Context, **Tickets** (`Owner`-property-first → root member-creator → workspace owner). Resolve at runtime, never hardcode a name/UUID; keep its `user_id`.
 3. Reassign YOUR sub-task: `multica issue update <subtask-id> --assignee-id <uuid> --status todo`, and post ONE comment on sub-task with MEMBER mention `[@Name](mention://member/<uuid>)` summarizing what to review and stating that their `done` flip releases product-owner to delegate.
 4. Pin `Gate verdict` = ESCALATED. END. Never issue a 6th rework and never take the sub-task back while a human holds it.
 

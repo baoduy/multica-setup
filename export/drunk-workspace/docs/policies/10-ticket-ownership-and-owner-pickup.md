@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-10 |
-| **Version** | 1.2 |
+| **Version** | 1.3 |
 | **Status** | Active |
 | **Owner** | product-owner (sets Owner on the tickets it creates; every agent shares the resolution duty) |
 | **Applies to** | Every ticket in the workspace — main tickets, spec-review sub-tasks, phase tickets, dev sub-tasks, gate handoffs, arch/BDD findings, and autopilot-filed issues |
@@ -49,8 +49,8 @@ fallback.
 
 - **In scope**: resolving the human owner of any ticket; stamping ownership at create time;
 every human handoff (gate manual-handoff, squad escalation, clarification, FYI).
-- **Out of scope**: *agent* assignment and wake mechanics (Policy 05 / `sdlc-flow-delivery-pipeline`
-"Triggers & status discipline"); which human makes which *decision* (Policy 05 escalation
+- **Out of scope**: *agent* assignment and wake mechanics (Policy 05 statements 5 and 6;
+the Workspace Context, "Status and wakes"); which human makes which *decision* (Policy 05 escalation
 map). This policy answers only **which human**, not what they are asked to do.
 
 ## The `Owner` custom property
@@ -144,6 +144,6 @@ assignee is a policy amendment, not a local exception.
 
 - [Policy 05 — SDLC Delivery Lifecycle](05-sdlc-delivery-lifecycle.md) — escalation map, wake/status discipline.
 - [Policy 09 — Agent Roles & Responsibilities](09-agent-roles-and-responsibilities.md) — workspace-identity header, triager routing.
-- `sdlc-flow-delivery-pipeline` "Who the human owner is" / "Set `Owner` on every issue you create" — the implementing contract.
+- The Workspace Context, **Tickets** ("Set the `Owner` property on every issue you create" and the resolution order) — the implementing contract every agent run carries.
 - Incident: MXW-2066 (`[D2058-3] Review`) — gate resolved to workspace owner because the 2-step order skipped the `Owner` property; the fix that motivated this policy.
 
