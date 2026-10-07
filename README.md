@@ -1,4 +1,4 @@
-# multica/export — workspace bundles
+# multica setup — workspace bundles
 
 Local mirrors of live Multica workspaces (`drunk-workspace/`, `mx-workspace/`).
 Each bundle holds the workspace's agents, skills, squads, docs/policies, and a
