@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-05 |
-| **Version** | 1.24 |
+| **Version** | 1.25 |
 | **Status** | Active |
 | **Owner** | product-owner |
 | **Applies to** | Every ticket that flows through the drunk software factory |
@@ -66,7 +66,7 @@ dev-team self-verifies; there is no SANDBOX to deploy to and no BDD integration 
 dev-team cycle writes no docs pages (statement 3a).
 **pr-reviewer** — the automated PR review + merge gate for every `dev`-bound PR (dev-team's
 cycle PR and the standalone PRs of devops, docs-writer and service-architect). **release-manager** — owns the single
-`dev`→`main` release PR and its merge; the only agent that ever targets `main`. **devops**
+`dev`→`main` release PR and its merge; the only agent that ever targets `main` (the setup repo follows [Policy 03](03-source-control-branching.md) statement 11). **devops**
 — CI/CD pipelines, build/publish automation and Helm charts, outside the squad flow, no spec gate.
 **docs-writer** — library and API feature docs, written only when a human asks for them,
 outside the squad flow, no spec gate.

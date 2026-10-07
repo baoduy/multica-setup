@@ -1,0 +1,22 @@
+{
+  "title": "🔁 Weekly Setup Retro",
+  "source_id": "2deb281e-87f0-4592-9e72-1960656e675b",
+  "status": "active",
+  "execution_mode": "create_issue",
+  "issue_title_template": "Weekly Setup Retro ({{date}})",
+  "project_title": "drunk-setup",
+  "assignee_type": "agent",
+  "assignee_name": "setup-steward",
+  "subscriber_names": [],
+  "had_webhook_trigger": false,
+  "triggers": [
+    {
+      "kind": "schedule",
+      "label": null,
+      "enabled": true,
+      "cron_expression": "0 9 * * 1",
+      "timezone": "Asia/Singapore"
+    }
+  ],
+  "description_file": "autopilots/weekly-setup-retro.description.md"
+}

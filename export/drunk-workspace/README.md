@@ -1,6 +1,6 @@
 # drunk-workspace export
 
-Full-workspace bundle: 31 skills, 17 agents, 3 squads, 5 projects, 8 autopilots (`autopilots/`, prompt in `*.description.md`), 19 labels, 9 properties, plus `workspace/workspace.context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push text byte-exact: pass the file content as a raw argv element (e.g. from Python `subprocess`) to `multica workspace update <id> --context`, `multica agent update <id> --instructions`, `multica squad update <id> --instructions` and `multica autopilot update <id> --description`; use `--content-stdin` for `multica skill update` and `multica skill files upsert`. Shell `"$(cat f)"` and `--context-stdin` drop the trailing newline, and `--context` decodes backslash escapes. Read every pushed resource back and diff it against the file.
+Full-workspace bundle: 31 skills, 18 agents, 3 squads, 6 projects, 10 autopilots (`autopilots/`, prompt in `*.description.md`), 19 labels, 9 properties, plus `workspace/workspace.context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push text byte-exact: pass the file content as a raw argv element (e.g. from Python `subprocess`) to `multica workspace update <id> --context`, `multica agent update <id> --instructions`, `multica squad update <id> --instructions` and `multica autopilot update <id> --description`; use `--content-stdin` for `multica skill update` and `multica skill files upsert`. Shell `"$(cat f)"` and `--context-stdin` drop the trailing newline, and `--context` decodes backslash escapes. Read every pushed resource back and diff it against the file.
 
 **Config files.** `properties/properties.json` carries the ACTIVE property definitions only — archived ones are
 dropped on purpose (the CLI has `property archive`/`unarchive` but no delete, so an archived definition lives on
@@ -13,6 +13,12 @@ Workspace Context.
 authoritative SDLC policies (coding standards, testing, source control, review, delivery,
 requirements, defects, container/build/release). Every skill and agent derives from a policy
 there; amend the policy first, then cascade. See the [index](docs/policies/00-policies-index.md).
+
+**Live sync ([Policy 03](docs/policies/03-source-control-branching.md) statement 11).** The tag `live/drunk` marks the
+`main` commit the live workspace matches. A merge to `main` that touches this bundle wakes the `🔄 Drunk Live Sync`
+autopilot through `.github/workflows/drunk-live-sync.yml`; `claude_ultra` runs `scripts/drunk-live-sync.py`, which pushes
+the changed resources byte-exact, reads them back and moves the tag. `python3 scripts/drunk-live-sync.py --check`
+compares every supported file on `main` with live and pushes nothing.
 
 ## Layering (what an agent actually receives)
 
@@ -33,6 +39,7 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 | Agent            | Runtime | Model               | Thinking |
 | ---------------- | ------- | ------------------- | -------- |
 | arch-reviewer    | claude  | claude-opus-5-5[1m] | xhigh    |
+| setup-steward    | claude  | claude-opus-5-5[1m] | xhigh    |
 | product-owner    | claude  | claude-opus-5-5[1m] | xhigh    |
 | service-architect | claude | claude-opus-5-5[1m] | high     |
 | spec-reviewer    | claude  | claude-opus-5-5[1m] | high     |
@@ -51,5 +58,5 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 | Mika             | codex   | gpt-6-luna          | medium   |
 
 
-Main development stays on Claude; the work around it rides Codex. Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5-5[1m]`) — arch-reviewer, product-owner, pr-reviewer and the `claude_ultra` assistant at `xhigh`, dev-leader, spec-reviewer and service-architect at `high`; `dev-backend` rides opus on the standard tier (`claude-opus-5-5`) at `high`; release-manager and blog-writer ride sonnet. These run on the `Claude (Stevens-Mac-mini.local)` runtime.
+Main development stays on Claude; the work around it rides Codex. Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5-5[1m]`) — arch-reviewer, product-owner, pr-reviewer, setup-steward and the `claude_ultra` assistant at `xhigh`, dev-leader, spec-reviewer and service-architect at `high`; `dev-backend` rides opus on the standard tier (`claude-opus-5-5`) at `high`; release-manager and blog-writer ride sonnet. These run on the `Claude (Stevens-Mac-mini.local)` runtime.
 docs-writer and the `default` assistant ride `gpt-6-sol` at `high`; devops rides `gpt-6.1-sol` at `high` (moved off `gpt-6-sol` after OpenAI returned "Selected model is at capacity" mid-run); `run-medic`, `issue-janitor` and `Mika` ride `gpt-6-luna` (`low` for run-medic — hourly run recovery is pattern-matching over agent task rows, not judgment — `medium` for the other two). These run on the `Codex (Stevens-Mac-mini.local)` runtime: the same host as Claude, because `default`'s monthly insights autopilot shells out to `claude -p "/insights"` and docs-writer renders archify diagrams with the host's Chrome. Thinking is always set explicitly on a Codex agent; left empty, it inherits the host's `~/.codex/config.toml`.

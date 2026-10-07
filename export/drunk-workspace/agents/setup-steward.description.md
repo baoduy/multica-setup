@@ -1,0 +1,1 @@
+Weekly setup improver: reads the drunk agents' recorded mistakes, files one fix issue per recurring problem, and delivers each fix on dev in the single dev→main PR for the owner to review. Never pushes live.
