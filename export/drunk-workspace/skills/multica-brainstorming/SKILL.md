@@ -1,11 +1,15 @@
 ---
 name: multica-brainstorming
-description: "You MUST use this before specifying or designing any feature, enhancement or behaviour change. Runs the requester dialogue on the Multica ticket - numbered questions with your best guesses, approaches, and a spec preview the requester approves in writing - then hands off through the SDLC flow."
+description: "You MUST use this before specifying or designing any feature, enhancement or behaviour change, and whenever an ask is underspecified (missing who, why, success or the binding constraint) before you plan, write or file anything. Runs the requester dialogue on the Multica ticket - a hypothesis with a confidence number, numbered questions with your best guesses, approaches, then a confirmed intent or a spec preview the requester approves in writing - then hands off through the SDLC flow."
 ---
 
 # Brainstorming Ideas Into Designs (Multica)
 
 Turn an idea into an agreed design through dialogue with the requester, record it **on the Multica issue**, and hand it to the SDLC flow. On a ticket every wake is one turn: each round is ONE comment, and only the requester's written reply moves the dialogue on. The design lives in the platform — never in a local file, never in a git commit.
+
+What people ask for and what they actually want are different things. The cheapest moment to find that gap is before any spec, post or code exists: once building starts, the misfit gets rationalized into "good enough".
+
+**When to skip:** an unambiguous, self-contained ask; a pure information request; a mechanical operation. **Needs a live requester:** the ticket thread is the requester, and each wake is one turn. Never run the dialogue in an autopilot or scheduled run — flag the underspecified ask as a blocker instead of guessing.
 
 <HARD-GATE>
 Write no spec, design or code, scaffold nothing, and take no implementation action until the requester has approved the spec preview (step 4) in writing. This applies to EVERY change regardless of perceived simplicity.
@@ -17,7 +21,7 @@ A reply approves only the stage actually presented. Answers to a round, or a pic
 
 Where your role skill already defines the procedure — product-owner's Workflow B, the seven sections of `sdlc-spec-template`, and the spec-review gate in `sdlc-flow-po-orchestration` — **that procedure owns the deliverable's shape and location.** This skill governs only the dialogue that produces it and the hand-off that follows. Workflows with no spec (A, D, E) use step 2 only, limited to what genuinely blocks the work. Never blend two contradictory procedures: follow the role skill and flag the mismatch to the workspace owner.
 
-`interview-me` owns the intent (who, why, success, constraint, out of scope); this skill owns what follows. Run both as ONE dialogue — one comment per round, never one per skill.
+**Where you stop depends on your role.** product-owner runs every step and confirms through the spec preview (step 4) — never a separate intent confirmation first. Every role that never writes a spec — the platform assistants (`default`, `claude_ultra`), Mika, blog-writer, docs-writer — runs steps 1–2, stops at the confirmed intent (step 2a), and then follows its own procedure.
 
 ## Anti-Pattern: "This Is Too Simple To Need A Design"
 
@@ -38,6 +42,7 @@ Track these in your own todo list — never as Multica issues — and complete t
 
 1. **Read context** — ticket and thread first, then code
 2. **Clarify** — numbered questions, each with your best guess, ONE comment per round
+2a. **Confirm intent** — roles that never write a spec stop here, approved in writing
 3. **Propose approaches** — only when the requester has a real choice
 4. **Present the spec preview** — ONE comment, approved in writing
 5. **Record the design** — where your role skill says; the original ask survives
@@ -64,9 +69,13 @@ Ask ONLY what research cannot answer: business rules, scope, priorities, trade-o
 
 Each round is ONE comment, mentioning the requester — `mention://member/<id>` for a human, `mention://agent/<id>` for an agent creator (`creator_type`/`creator_id` from `multica issue get`):
 
-- **My read:** your one-line hypothesis of what the requester wants, with a confidence number. Keep what the requester said apart from what you assumed.
+- **My read:** your one-line hypothesis of what the requester wants, with an honest 0–100% confidence. Below ~70%, add on the same line what is still missing (who it is for, why now, what success looks like, the binding constraint). Keep what the requester said apart from what you assumed.
 - **Numbered questions**, each with **Guess:** and the evidence behind it. Ask only questions that do not depend on each other's answers; a dependent question waits for the next round.
 - **Reply by number** — ask for "1 yes · 2 no, because …", so every answer is traceable.
+
+A guess on every question, because reacting to a wrong guess is faster than writing an answer from nothing, and it exposes YOUR assumptions — which is what the dialogue exists to find. Guess where you expect push-back now and then, so agreement is not just politeness.
+
+**Listen for "want vs. should want".** Answers that sound like best practice without specifics — "scalable", "clean architecture", "the standard approach", "we're supposed to…" — hide the real ask. Ask in the next round: *"If you didn't have to justify this to anyone, what would you actually want?"*
 
 Then **STOP and wait**, ticket `blocked`. The round comment is the blocker; post no separate `## BLOCKER`. The requester's reply wakes you; flip the ticket `in_progress` before you work on it. Repeat until zero open questions remain.
 
@@ -82,6 +91,24 @@ Then **STOP and wait**, ticket `blocked`. The round comment is the blocker; post
 - **Test scope** (Policy 02 statement 1e) — only for a touched surface that is wiring (an orchestration host such as an Aspire AppHost, container, compose or identity-realm definitions, configuration data, demo or load tools) and that the repo's coverage config on `dev` does not settle. Read the config first: `coverage.runsettings` `<Include>`/`<Exclude>`/`<ExcludeByFile>`, jest `collectCoverageFrom`/`coveragePathIgnorePatterns`, coverage.py `omit`, `codecov.yml` `ignore`. Config excludes it → no question; tag the scenarios only the running stack can show `@stack`. Config includes it → no question; it is tested like any code. Config missing or silent → ask once per surface: "Is <surface> proven by automated tests, or by a check on the running stack?" with your guess. A "running stack" answer becomes the §4 decision `<date> · <who> · Test scope: <surface> — proven on the running stack`. Never ask it about a surface with business rules or branching: that is always tested.
 
 A decision made anywhere else — a side thread, another ticket, a chat — goes into the next round's comment, so it lands on this ticket.
+
+**Stop test.** You are done clarifying when you can predict the requester's answer to the next three questions you would ask. Several rounds without your confidence rising means the questions are wrong, not the requester: say so in the round and ask what you are missing.
+
+## 2a. Confirm intent (roles that never write a spec)
+
+When the stop test passes, post ONE comment restating the intent in the requester's own words, one confirmable line each:
+
+```
+- Outcome:      <one line>
+- User:         <who benefits>
+- Why now:      <what changed>
+- Success:      <how we know it worked>
+- Constraint:   <the binding limit>
+- Out of scope: <what we are explicitly NOT doing>
+Reply `yes`, or name the lines to change.
+```
+
+"Out of scope" is never optional: half of all misalignment is silent disagreement about what is NOT being built. Then STOP, ticket `blocked`, as for a round. Not a yes: "whatever you think is best" (delegation — re-ask with two concrete options), "sounds good" or "sure, go" (ambiguous — ask "anything to refine?"), a status move, a resolved thread, or silence. Fold corrections in and restate until an explicit yes. The confirmed restate is your deliverable's input; product-owner skips this step, because the spec preview carries the same lines.
 
 ## 3. Propose approaches
 
@@ -135,7 +162,8 @@ Re-read it with fresh eyes and fix inline — one pass, no loop:
 The approved design is input to the delivery pipeline, never a licence to implement. Shared contract: `sdlc-flow-delivery-pipeline`. Your terminal step depends on your role:
 
 - **product-owner** — the design becomes the main-ticket spec. Feature or enhancement → spec-review gate, then Workflow C once APPROVED. CI/CD or a Helm chart → Workflow D, straight to `devops`, no spec gate. A new service → Workflow F: the settled brief goes to `service-architect` as `[P<num>-1] Design`, no spec gate. You stay read-only on code throughout.
-- **platform assistants (`default`, `claude_ultra`) and Mika** — you never spec or implement. Stop at the confirmed intent (`interview-me` step 4), write it into the ticket you file, and route per your own routing rules: product work to `product-owner` (a new service's design included), CI/CD and Helm charts to `devops`, docs to `docs-writer`.
+- **blog-writer and docs-writer** — the confirmed intent (step 2a) is the brief for your post or docs PR; carry on with your own procedure.
+- **platform assistants (`default`, `claude_ultra`) and Mika** — you never spec or implement. Stop at the confirmed intent (step 2a), write it into the ticket you file, and route per your own routing rules: product work to `product-owner` (a new service's design included), CI/CD and Helm charts to `devops`, docs to `docs-writer`.
 
 Mention only the requester in a dialogue comment. Never mention another agent there: every agent mention link enqueues a run, even a quoted one.
 

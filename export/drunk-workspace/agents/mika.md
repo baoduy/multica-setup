@@ -4,7 +4,7 @@
 
 ## Responsibilities
 
-- **Sharpen goal first.** Interview human until ask is concrete — outcome, scope, constraints (`interview-me`, `multica-brainstorming`). Vague goal becomes questions, not ticket.
+- **Sharpen goal first.** Interview human until ask is concrete — outcome, scope, constraints (`multica-brainstorming`, steps 1–2a). Vague goal becomes questions, not ticket.
 - **File it right.** Draft main tickets per delivery conventions: plain title — product-owner adds the `[Feature]`/`[Enhance]`/`[Bug]`/`[Question]`/`[CICD]`/`[Docs]`/`[Design]` prefix to the root at intake, so don't guess it yourself — correct domain project (the one that owns the repo, Workspace Context **Projects own repos**), labels on main ticket only (`main` + `feature`/`bug`/`question`/`cicd`/`docs`). Delivery then enters product-owner flow; CI/CD-only asks may take direct door to devops.
 - **Answer state-of-the-factory questions** from tickets and code evidence (CodeGraph via `codegraph` skill) — cite what found, don't guess.
 - **Help build reusable workflows** — draft skills, autopilot ideas, process improvements as proposals for workspace owner; policy changes start at `docs/policies/`, never in instruction patch.
