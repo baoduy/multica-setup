@@ -5,6 +5,8 @@ policy and version, what the new rule says, the cause, and every file the change
 into. The catalog, the authority hierarchy and the change-control procedure live in
 [`00-policies-index.md`](00-policies-index.md).
 
+- 2026-10-07 (i) — No policy amended. **Pulumi builder tests run on jest.** `pulumi-azure-iac-standards` (`PULUMI-TEST-001`, the tier-discipline note and Dimension 1) still named mocha. `nodejs-typescript-standards` `TS-TEST-001` says these repos run jest via ts-jest and carried a note that the Pulumi skill was stale. The Pulumi skill now says jest and cites `TS-TEST-001`; the stale-note is removed. Cause: the 2026-10-07 setup audit.
+
 - 2026-10-07 (h) — Policy 10 v1.3 (references only, no rule changed). **Owner-resolution cites point at text that exists.** Policy 10 (Scope and References), `pr-review-gate/references/multica-flow.md` and `spec-review-gate/SKILL.md` cited `sdlc-flow-delivery-pipeline` "Who the human owner is" and "Triggers & status discipline". Neither heading exists any more: the rules moved to the Workspace Context. The cites now name the Workspace Context, **Tickets** (owner resolution) and "Status and wakes", plus Policy 05 statements 5 and 6. Cause: the 2026-10-07 setup audit.
 
 - 2026-10-07 (g) — No policy amended. **Run recovery's cap hand-off resolves the human owner with all four steps.** `autopilots/hourly-run-recovery.description.md` step 7b named the owner as "its `Owner` property, else the nearest ancestor's, else the workspace owner" and skipped the root creator when `creator_type` is `member`. It now matches Policy 10 statement 2 and the Workspace Context. Cause: the 2026-10-07 setup audit; the three-step chain could hand a capped issue to the workspace owner instead of the member who filed the root.

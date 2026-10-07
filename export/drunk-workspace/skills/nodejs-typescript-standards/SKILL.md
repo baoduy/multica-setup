@@ -40,7 +40,7 @@ for Pulumi builders (naming, RBAC, Builder pattern, `*Info`/`*Args`) live in
 
 ## Testing (jest + ts-jest)
 
-- `TS-TEST-001` **Wrong test runner.** These repos run **jest** via **ts-jest** (`jest.config.js`, `preset: ts-jest`, `testEnvironment: node`), compiled with `tsconfig.test.json`. Do NOT add mocha/vitest. *(Note: `pulumi-azure-iac-standards` PULUMI-TEST-001 still says "mocha" — that is stale; jest is real runner. Follow this.)*
+- `TS-TEST-001` **Wrong test runner.** These repos run **jest** via **ts-jest** (`jest.config.js`, `preset: ts-jest`, `testEnvironment: node`), compiled with `tsconfig.test.json`. Do NOT add mocha/vitest.
 - `TS-TEST-002` **Test file misnamed/misplaced.** `testMatch` is `**/*.test.ts`; name tests `<unit>.test.ts` beside or under the source. A `.ts` not picked up by that glob isn't a test.
 - `TS-TEST-003` **Untested new logic.** New builder/helper/type-composition logic ships with a `*.test.ts`. Pulumi resource behaviour is mocked with `pulumi.runtime.setMocks` (see `pulumi-azure-iac-standards`); pure TS logic needs no Pulumi mocks — just unit-test it.
 
