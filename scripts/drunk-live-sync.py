@@ -85,9 +85,11 @@ def owners(rev):
     for p in manifest["projects"]:
         cfg = json.loads(show(rev, p["file"]))
         out[cfg["description_file"]] = ("project", cfg["title"], "description")
+        out[p["file"]] = ("project", cfg["title"], "config")
     for a in manifest["autopilots"]:
         cfg = json.loads(show(rev, a["file"]))
         out[cfg["description_file"]] = ("autopilot", cfg["title"], "description")
+        out[a["file"]] = ("autopilot", cfg["title"], "config")
     out["workspace/workspace.context.md"] = ("workspace", WORKSPACE_ID, "context")
     skills = {s["dir"].rstrip("/"): s["name"] for s in manifest["skills"]}
     return out, skills
@@ -159,6 +161,8 @@ def matches(live, kind, name, field, text):
         return files.get(field) == text
     if kind == "agent" and field == "config":
         return agent_config_live(live, name) == agent_config_file(text)
+    if field == "config":
+        return json_matches_live(live, kind, name, text)
     got = live_value(live, kind, name, field)
     return got is not None and got == norm(kind, field, text)
 
@@ -201,6 +205,74 @@ def push_agent_config(live, name, text):
     run(["multica", "agent", "skills", "set", a["id"], "--skill-ids", ",".join(ids)])
 
 
+def json_live_view(live, kind, name):
+    """The live side of a bundle .json, in the bundle's own keys (ids resolved to names)."""
+    if kind == "agent":
+        a = live.agents[name]
+        return {**agent_config_live(live, name), "avatar_url": a.get("avatar_url"),
+                "visibility": a.get("visibility"), "permission_mode": a.get("permission_mode"),
+                "service_tier": a.get("service_tier") or "", "custom_args": a.get("custom_args") or [],
+                "runtime_config": a.get("runtime_config") or {}, "source_runtime_id": a.get("runtime_id"),
+                "invocation_targets": a.get("invocation_targets") or [],
+                "conversation_starters": a.get("conversation_starters") or [],
+                "disabled_runtime_skills": a.get("disabled_runtime_skills") or [],
+                "mcp_config": a.get("mcp_config"), "has_custom_env": bool(a.get("has_custom_env"))}
+    people = {m["user_id"]: m["name"] for m in mjson("workspace", "member", "list")}
+    agents = {a["id"]: a["name"] for a in live.agents.values()}
+    if kind == "project":
+        p = live.projects[name]
+        res = mjson("project", "resource", "list", p["id"])
+        return {"icon": p.get("icon"), "priority": p.get("priority"), "status": p.get("status"),
+                "due_date": p.get("due_date"), "start_date": p.get("start_date"),
+                "lead_type": p.get("lead_type"),
+                "lead_name": (people if p.get("lead_type") == "member" else agents).get(p.get("lead_id")),
+                "resources": sorted([r["resource_type"], json.dumps(r["resource_ref"], sort_keys=True),
+                                     r.get("label"), r.get("position")] for r in res)}
+    a = live.autopilots[name]
+    projects = {p["id"]: t for t, p in live.projects.items()}
+    triggers = mjson("autopilot", "trigger-list", a["id"])
+    return {"status": a.get("status"), "execution_mode": a.get("execution_mode"),
+            "issue_title_template": a.get("issue_title_template"),
+            "project_title": projects.get(a.get("project_id")), "assignee_type": a.get("assignee_type"),
+            "assignee_name": agents.get(a.get("assignee_id")) or people.get(a.get("assignee_id")),
+            "subscriber_names": sorted(people.get(x.get("user_id") if isinstance(x, dict) else x, "?")
+                                       for x in a.get("subscribers") or []),
+            "had_webhook_trigger": any(t["kind"] == "webhook" for t in triggers),
+            "triggers": sorted([t["kind"], t.get("label"), t.get("enabled"), t.get("cron_expression"),
+                                t.get("timezone")] for t in triggers if t["kind"] != "webhook")}
+
+
+def json_file_view(kind, text):
+    """The bundle side of the same comparison; ids, file pointers and export bookkeeping drop out."""
+    c = json.loads(text)
+    if kind == "agent":
+        return {**agent_config_file(text), "avatar_url": c.get("avatar_url"), "visibility": c.get("visibility"),
+                "permission_mode": c.get("permission_mode"), "service_tier": c.get("service_tier") or "",
+                "custom_args": c.get("custom_args") or [], "runtime_config": c.get("runtime_config") or {},
+                "source_runtime_id": c.get("source_runtime_id"),
+                "invocation_targets": c.get("invocation_targets") or [],
+                "conversation_starters": c.get("conversation_starters") or [],
+                "disabled_runtime_skills": c.get("disabled_runtime_skills") or [],
+                "mcp_config": c.get("mcp_config"), "has_custom_env": bool(c.get("custom_env") or c.get("had_secrets"))}
+    if kind == "project":
+        return {"icon": c.get("icon"), "priority": c.get("priority"), "status": c.get("status"),
+                "due_date": c.get("due_date"), "start_date": c.get("start_date"),
+                "lead_type": c.get("lead_type"), "lead_name": c.get("lead_name"),
+                "resources": sorted([r["resource_type"], json.dumps(r["resource_ref"], sort_keys=True),
+                                     r.get("label"), r.get("position")] for r in c.get("resources") or [])}
+    return {"status": c.get("status"), "execution_mode": c.get("execution_mode"),
+            "issue_title_template": c.get("issue_title_template"), "project_title": c.get("project_title"),
+            "assignee_type": c.get("assignee_type"), "assignee_name": c.get("assignee_name"),
+            "subscriber_names": sorted(c.get("subscriber_names") or []),
+            "had_webhook_trigger": bool(c.get("had_webhook_trigger")),
+            "triggers": sorted([t["kind"], t.get("label"), t.get("enabled"), t.get("cron_expression"),
+                                t.get("timezone")] for t in c.get("triggers") or [])}
+
+
+def json_matches_live(live, kind, name, text):
+    return json_live_view(live, kind, name) == json_file_view(kind, text)
+
+
 def check(head):
     """Full drift report: every supported bundle file against live."""
     owner_map, skill_dirs = owners(head)
@@ -215,7 +287,8 @@ def check(head):
         kind, name, field = c
         if not exists(live, kind, name):
             missing.append(path)
-        elif not matches(live, kind, name, field, show(head, path)):
+        elif not (json_matches_live(live, kind, name, show(head, path)) if field == "config"
+                  else matches(live, kind, name, field, show(head, path))):
             drift.append(path)
     return {"status": "clean" if not drift and not missing else "drift", "rev": head,
             "drift": drift, "missing_live": missing}
@@ -226,7 +299,7 @@ def sync(base, head, accept):
     live = Live()
     changes = [l.split("\t") for l in git(
         "diff", "--name-status", "--no-renames", base, head, "--", BUNDLE).splitlines() if l]
-    pushed, unsupported, failed, ignored = [], [], [], []
+    pushed, already, unsupported, failed, ignored = [], [], [], [], []
     for status, full in changes:
         path = full[len(BUNDLE) + 1:]
         c = classify(path, owner_map, skill_dirs)
@@ -238,9 +311,13 @@ def sync(base, head, accept):
             unsupported.append({"path": path, "status": status})
             continue
         kind, name, field = c
-        if kind == "agent" and field == "config" and status != "D":
+        if field == "config":
+            text = show(head, path)
+            if json_matches_live(live, kind, name, text):
+                already.append(path)  # applied live by hand before the merge
+                continue
             old = run(["git", "show", "%s:%s" % (base, full)]) if status == "M" else ""
-            extra = agent_config_unsupported(old, show(head, path))
+            extra = agent_config_unsupported(old, text) if kind == "agent" else ["config"]
             if extra:
                 unsupported.append({"path": path, "status": status, "keys": extra})
                 continue
@@ -268,7 +345,7 @@ def sync(base, head, accept):
         git("tag", "-f", TAG, head)
         git("push", "-f", "origin", "refs/tags/%s" % TAG)
     return {"status": "synced" if move else "blocked", "base": base, "head": head,
-            "commits": commits, "issue_keys": keys, "pushed": pushed, "unsupported": unsupported,
+            "commits": commits, "issue_keys": keys, "pushed": pushed, "already_live": already, "unsupported": unsupported,
             "failed": failed, "ignored": ignored, "tag_moved": move}
 
 
