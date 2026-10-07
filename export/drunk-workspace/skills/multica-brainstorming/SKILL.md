@@ -79,6 +79,7 @@ Then **STOP and wait**, ticket `blocked`. The round comment is the blocker; post
 - **Contract** — for each new or changed field: required or optional, allowed values, default, and what existing rows get. For each refusal: which field is at fault.
 - **Break or add** — must any existing caller change (a package consumer, another service, an external client)? Additive or breaking is the requester's call, never yours.
 - **Prerequisites** — anything outside the team the change waits on (a consent, a secret, another ticket), and who owns it.
+- **Test scope** (Policy 02 statement 1e) — only for a touched surface that is wiring (an orchestration host such as an Aspire AppHost, container, compose or identity-realm definitions, configuration data, demo or load tools) and that the repo's coverage config on `dev` does not settle. Read the config first: `coverage.runsettings` `<Include>`/`<Exclude>`/`<ExcludeByFile>`, jest `collectCoverageFrom`/`coveragePathIgnorePatterns`, coverage.py `omit`, `codecov.yml` `ignore`. Config excludes it → no question; tag the scenarios only the running stack can show `@stack`. Config includes it → no question; it is tested like any code. Config missing or silent → ask once per surface: "Is <surface> proven by automated tests, or by a check on the running stack?" with your guess. A "running stack" answer becomes the §4 decision `<date> · <who> · Test scope: <surface> — proven on the running stack`. Never ask it about a surface with business rules or branching: that is always tested.
 
 A decision made anywhere else — a side thread, another ticket, a chat — goes into the next round's comment, so it lands on this ticket.
 
@@ -102,7 +103,7 @@ ONE comment, mentioning the requester, before any spec is written:
 
 Before posting, check the rules against each other. Two rules that cannot both hold ("an empty group can be moved" and "no group is its own parent") are a question for the requester, not a spec.
 
-Then check each rule and decision against what the spec gate never accepts. The one requesters hit most: testing is never optional (`sdlc-spec-template`), so any answer that waives, defers or skips a test is a gate `blocker`, whoever decided it. Never carry such a rule into the preview. Ask about it in the next round: quote the gate rule, and offer options that can pass. A change to the rule itself is a policy change for the workspace owner, never a spec decision.
+Then check each rule and decision against what the spec gate never accepts. The one requesters hit most: testing is never optional (`sdlc-spec-template`), so any answer that waives, defers or skips a test is a gate `blocker`, whoever decided it. The one answer that passes is a `Test scope` decision on wiring the repo's coverage config does not settle (the **Test scope** item in step 2, Policy 02 statement 1e). Never carry such a rule into the preview. Ask about it in the next round: quote the gate rule, and offer options that can pass. A change to the rule itself is a policy change for the workspace owner, never a spec decision.
 
 End with: "Reply `approved`, or name the lines to change." Then **STOP**. A written approval releases step 5; anything else starts a new round.
 

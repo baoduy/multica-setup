@@ -1,6 +1,6 @@
 # Pre-review — a mini PR gate before you report done
 
-Policy 01 statement 15. Run it on every `build`, `bug-build` and `build-ui` sub-task, and on a Build's rework fix, once your code is pushed and the mechanical checks (1–3, 6, 7, 9) are green. It exists to remove the findings the PR gate would raise. It does not repeat the gate: no score, no `report.md`, no GitHub calls, one pass.
+Policy 01 statement 15. Run it on every `build`, `bug-build`, `build-ui` and `build-excluded` sub-task, and on a Build's rework fix, once your code is pushed and the mechanical checks (1–3, 6, 7, 9) are green. It exists to remove the findings the PR gate would raise. It does not repeat the gate: no score, no `report.md`, no GitHub calls, one pass.
 
 ## How
 
