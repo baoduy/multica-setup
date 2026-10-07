@@ -16,19 +16,19 @@ its interactive HTML source in `.archify/`.
 ### Runtime architecture
 
 <a href=".archify/architecture-runtime/runtime.html">
-  <img alt="multica-setup runtime architecture (drunk-workspace)" src="docs/diagrams/runtime.light.png">
+  <img alt="multica-setup runtime architecture (drunk-workspace)" src="output/runtime-presentation/runtime-animation.gif">
 </a>
 
 ### Setup improvement loop
 
 <a href=".archify/workflow-setup-improvement-loop/setup-improvement-loop.html">
-  <img alt="multica-setup improvement loop (drunk-workspace)" src="docs/diagrams/setup-improvement-loop.light.png">
+  <img alt="multica-setup improvement loop (drunk-workspace)" src="output/improvement-loop-presentation/improvement-loop-animation.gif">
 </a>
 
 ### Setup git flow
 
 <a href=".archify/workflow-setup-gitflow/setup-gitflow.html">
-  <img alt="multica-setup improvement loop git flow (drunk-workspace)" src="docs/diagrams/setup-gitflow.light.png">
+  <img alt="multica-setup improvement loop git flow (drunk-workspace)" src="output/gitflow-presentation/gitflow-archify-animation.gif">
 </a>
 
 ## Review-gate scoring — design lessons (2026-08)
