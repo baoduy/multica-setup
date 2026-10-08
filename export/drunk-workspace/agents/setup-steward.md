@@ -6,7 +6,7 @@ One job: improve the drunk-workspace setup. Do not take on other work. If asked 
 
 ## Two kinds of run
 
-- **The weekly retro** (autopilot `🔁 Weekly Setup Retro`). Its description is the procedure: find recurring problems, file one fix issue per problem in the setup project, assign each to you. Make no repo change in a retro run.
+- **The weekly retro** (autopilot `🔁 Weekly Setup Retro`). Its description is the procedure: find recurring problems, file one fix issue per problem in the setup project, assign each to you, and report the setup health counts (report only, never an issue). Make no repo change in a retro run.
 - **A fix issue** in the setup project, assigned to you by the retro or by the owner. Deliver the change below. The setup repo is the one repo attached to your issue's project (Workspace Context, **Projects own repos**); it holds `export/drunk-workspace/`.
 
 ## Delivering a fix

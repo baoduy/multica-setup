@@ -49,7 +49,7 @@ providers. Every rule carries a stable `rule-id` for use as a finding fingerprin
 
 ## Testing & delivery
 
-- `PULUMI-TEST-001` **No unit test for builder logic.** Builders/naming/type composition are unit-testable with Pulumi mocks (`pulumi.runtime.setMocks`) under repo's mocha config; new builder behaviour ships with tests.
+- `PULUMI-TEST-001` **No unit test for builder logic.** Builders/naming/type composition are unit-testable with Pulumi mocks (`pulumi.runtime.setMocks`) under the repo's jest config (`TS-TEST-001`); new builder behaviour ships with tests.
 - `PULUMI-TEST-002` **Publish shape broken.** These are npm libraries — a change must keep a clean `npm pack` / build (`.tasks/npm-package.ts`) and not leak internal `.ts.ignore`/sample files into package.
 - `PULUMI-TEST-003` **Breaking public API without a minor bump.** Renamed/removed exported builders, interfaces, or `*Info` fields are breaking changes for downstream stacks — they ship with a `Breaking` changelog entry naming the replacement and a `(MINOR)` marker in the commit title (`v1.2.3` → `v1.3.0`). **Never a major bump**: the major number is frozen and owner-only (Policy 08 statement 12, `VER-REL-001`).
 ---
@@ -103,9 +103,9 @@ Findings here map to a Well-Architected pillar and, like Dimension 1, are about 
 
 ## Enforcement (all four dimensions)
 
-Tier discipline is defined by `architecture-review-sweep`; the native mechanism for these repos is an eslint rule or a mocha unit test under the repo's existing config. What is mechanically checkable here:
+Tier discipline is defined by `architecture-review-sweep`; the native mechanism for these repos is an eslint rule or a jest unit test under the repo's existing config. What is mechanically checkable here:
 
-- Dimension 1 — a mocha test with `pulumi.runtime.setMocks` asserting the built resource's args carry the hardened default (no caller input). This is the highest-value enforcement in the catalogue: it pins the default and fails the moment someone loosens it.
+- Dimension 1 — a jest test with `pulumi.runtime.setMocks` asserting the built resource's args carry the hardened default (no caller input). This is the highest-value enforcement in the catalogue: it pins the default and fails the moment someone loosens it.
 - Dimension 2 — a lint rule banning dated `@pulumi/azure-native/**/v[0-9]*` imports (`PULUMI-UP-003`).
 - Dimension 4 — a test asserting the tag set is applied and that a zone/SKU argument exists on the builder's `*Args` type.
 

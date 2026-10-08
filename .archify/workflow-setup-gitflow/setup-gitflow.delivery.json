@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "receiptId": "3bee6178-7ab6-4d2f-81d9-47b23c2a3142",
+  "receiptId": "0a73172e-f6a9-4099-b3ec-9a6b997dba18",
   "status": "current",
   "command": "deliver",
   "type": "workflow",
-  "input": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-gitflow-20261007-084711/candidate.json",
-  "output": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-gitflow-20261007-084711/setup-gitflow.html",
+  "input": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-gitflow/candidate.json",
+  "output": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-gitflow/setup-gitflow.html",
   "specification": {
-    "sha256": "c5c872d8d3e9340935f31c866b51bfcbd3a870ccd3bcfa01d3f4c0e3aa3afef0",
-    "bytes": 4892
+    "sha256": "17fc2f99a8c14ea8c6254831b096d1b3726c1f28d92868c1d6f731f78cb5e20b",
+    "bytes": 4866
   },
   "artifact": {
-    "sha256": "67b8733ad084204a353ae468a48a10b80e5a84608def4d2fd7a92b86c58cb358",
-    "bytes": 759024
+    "sha256": "b68f30a06667925008c49a79e4febc853068183220494e7fe93e21ee7f7cf436",
+    "bytes": 758994
   }
 }

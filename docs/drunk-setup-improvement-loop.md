@@ -6,7 +6,11 @@ The rule behind it is drunk Policy 03 statement 11
 (`export/drunk-workspace/docs/policies/03-source-control-branching.md`); the
 charter is in Policy 09 (**setup-steward**).
 
-Diagram: `.archify/workflow-setup-improvement-loop/setup-improvement-loop.html`
+<a href="../.archify/workflow-setup-improvement-loop/setup-improvement-loop.html">
+  <img alt="multica-setup improvement loop (drunk-workspace)" src="../output/improvement-loop-presentation/improvement-loop-animation.gif">
+</a>
+
+Interactive diagram: `.archify/workflow-setup-improvement-loop/setup-improvement-loop.html`
 (open it in a browser).
 
 ## The flow at a glance
@@ -30,6 +34,12 @@ Diagram: `.archify/workflow-setup-improvement-loop/setup-improvement-loop.html`
 `main` commit that live matches. Nothing reaches live without the owner
 merging `main`.
 
+<a href="../.archify/workflow-setup-gitflow/setup-gitflow.html">
+  <img alt="multica-setup improvement loop git flow (drunk-workspace)" src="../output/gitflow-presentation/gitflow-archify-animation.gif">
+</a>
+
+Interactive diagram: `.archify/workflow-setup-gitflow/setup-gitflow.html`.
+
 ## Parts
 
 | Part | Where | What it does |
@@ -39,6 +49,7 @@ merging `main`.
 | `🔁 Weekly Setup Retro` autopilot | `autopilots/weekly-setup-retro.*` | Mondays 09:00 Asia/Singapore. Its description is the retro procedure. |
 | `🔄 Drunk Live Sync` autopilot | `autopilots/drunk-live-sync.*` | Webhook trigger. Assigns `claude_ultra` to run the sync script and report. |
 | Sync script | `scripts/drunk-live-sync.py` | Pushes the changed resources, reads them back, moves the tag. |
+| Health script | `scripts/setup-health.py` | The retro's six lens counts. Read-only. |
 | GitHub Action | `.github/workflows/drunk-live-sync.yml` | On a push to `main` touching `export/drunk-workspace/**`, POSTs to the webhook. |
 | Webhook secret | repo secret `MULTICA_DRUNK_SYNC_WEBHOOK` | The autopilot's webhook URL on `https://multica-api.st24.live`. |
 | Tag `live/drunk` | GitHub | The `main` commit live matches. Only the sync script moves it. |
@@ -70,6 +81,24 @@ that would change a gate bar, cap, weight or deduction go into the retro's
 report for the owner instead of an issue. The retro also checks whether
 earlier fixes moved their Watch metric and asks about reverting one that did
 not move in 3 weeks.
+
+Every retro also reports the setup's health. `scripts/setup-health.py`
+prints one count per lens, and the report compares each with last week's:
+
+| Lens | Counts |
+|---|---|
+| 1 Duplication | 10-word runs shared with the Workspace Context, identical agent instructions, dangling `references/` paths |
+| 2 Wording | agents over the 24,000-byte always-loaded budget, lines over 600 characters, ticket keys in always-loaded text |
+| 3 Structure | SKILL.md over 10 KB with no `references/`, skills with no frontmatter |
+| 4 Practices | agents with no Goal line or Never list, skill descriptions with no "Use when", bundle descriptions that differ from live |
+| 5 Built-ins | Multica releases since the last release review |
+| 6 Performance | per gate: first-pass %, mean rounds, escalations (from the gate digest) |
+
+Lens findings are report only: they file no issue (Policy 09, setup-steward
+charter). The owner picks what to act on. The baseline is
+[`drunk-setup-audit-2026-10-07.md`](drunk-setup-audit-2026-10-07.md).
+`setup-steward` never edits the script; owner sessions maintain it
+(`python3 scripts/setup-health.py --selftest` checks its parsers).
 
 ## 3. Develop: a fix
 

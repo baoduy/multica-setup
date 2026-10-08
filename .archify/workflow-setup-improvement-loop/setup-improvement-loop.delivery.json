@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "receiptId": "5c860a69-63d3-4636-8c36-3ba4b7a9c3c1",
+  "receiptId": "c92b4680-70f8-4825-bdc4-43cf55acaa7f",
   "status": "current",
   "command": "deliver",
   "type": "workflow",
-  "input": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop-20261007-082920/candidate.json",
-  "output": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop-20261007-082920/setup-improvement-loop.html",
+  "input": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop/candidate.json",
+  "output": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop/setup-improvement-loop.html",
   "specification": {
-    "sha256": "6fe22fd63a463879626b975c0cc25559cd7e8b45a2a2a21113abb54b3e1a0261",
-    "bytes": 6738
+    "sha256": "a26e356ec14d6b5ce185cee3bcb0191546a794b8fe78562e4b5f5acdc9acc10e",
+    "bytes": 6712
   },
   "artifact": {
-    "sha256": "77fb267cfa72e613539bb4146de71f37e32db81a6fd9dbbe1f584065dc93a889",
-    "bytes": 768624
+    "sha256": "5590f74baa024af1d8bee7ffd83d835f5e796b1c224d2fd9635dfcfe66e6d59a",
+    "bytes": 768594
   }
 }

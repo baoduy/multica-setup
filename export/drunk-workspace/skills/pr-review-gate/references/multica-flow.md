@@ -88,7 +88,7 @@ If `Gate round` ≥ `maxReworkRounds` (default 3) and the PR still fails the bar
 
 ## Owner handoff (ESCALATED only)
 
-1. Resolve the owner at runtime per `sdlc-flow-delivery-pipeline` "Who the human owner is" (`Owner`-property-first: your review sub-task's own `Owner`, else nearest ancestor's `Owner` via `multica issue property list <id> --output json`; else ROOT ticket `creator_id` when `creator_type` is `member`; else workspace owner via `multica workspace member list --output json`, role `owner`). Never hardcode a name/UUID; keep both the member's `user_id` and name.
+1. Resolve the owner at runtime per the Workspace Context, **Tickets** (`Owner`-property-first: your review sub-task's own `Owner`, else nearest ancestor's `Owner` via `multica issue property list <id> --output json`; else ROOT ticket `creator_id` when `creator_type` is `member`; else workspace owner via `multica workspace member list --output json`, role `owner`). Never hardcode a name/UUID; keep both the member's `user_id` and name.
 2. Reassign YOUR review sub-task to the owner and reopen it: `multica issue update <own-subtask-id> --assignee-id <owner-user_id>` then `multica issue status <own-subtask-id> todo`.
 3. Post ONE comment on the sub-task in the `blocker-report` Blocker shape, written to a file. `## BLOCKER`: PR URL, score, rounds used with the per-round history (score + what was and wasn't fixed), the open findings with `file:line`; **From:** the owner's MEMBER mention `[@<owner-name>](mention://member/<owner-user_id>)` (notify-only). `## OPTIONS`, recommendation first:
    - **A — merge as-is.** The open findings ship to `dev`. Leave A out, and say why, when the diff holds a secret or a `blocking (critical)` finding.

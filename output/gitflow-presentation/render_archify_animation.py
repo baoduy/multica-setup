@@ -4,6 +4,7 @@ import io
 import re
 import math
 import subprocess
+import argparse
 import xml.etree.ElementTree as ET
 from PIL import Image, ImageDraw, ImageFont
 import resvg_py
@@ -16,15 +17,19 @@ BOLD = '/System/Library/Fonts/Supplemental/Arial Bold.ttf'
 def text(d, xy, value, size=24, color=NAVY, bold=False):
     d.text(xy, value, font=ImageFont.truetype(BOLD if bold else FONT, size), fill=color)
 
-def dot_on_path(d, points, fraction, color):
+def dot_on_path(d, points, fraction, color, scale=1):
     lengths = [math.dist(a, b) for a, b in zip(points, points[1:])]
     distance = sum(lengths) * fraction
     for a, b, length in zip(points, points[1:], lengths):
+        if length == 0:
+            continue
         if distance <= length:
             x = a[0] + (b[0] - a[0]) * distance / length
             y = a[1] + (b[1] - a[1]) * distance / length
-            d.ellipse((x-15, y-15, x+15, y+15), fill='white', outline=color, width=4)
-            d.ellipse((x-5, y-5, x+5, y+5), fill=color)
+            radius = 8 * scale
+            inner = 2.5 * scale
+            d.ellipse((x-radius, y-radius, x+radius, y+radius), fill='white', outline=color, width=max(1, round(2*scale)))
+            d.ellipse((x-inner, y-inner, x+inner, y+inner), fill=color)
             return
         distance -= length
 
@@ -72,11 +77,10 @@ svg=svg.replace('<!-- Definitions -->','<style>'+''.join(css)+'</style><!-- Defi
 svg=re.sub(r'(<title id="archify-diagram-title">).*?(</title>)',r'\1Multica setup - git flow\2',svg,flags=re.S)
 svg=re.sub(r'<pattern id="grid".*?</pattern>',
     '<pattern id="grid" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".5" fill="#d9dee5"/></pattern>',svg,flags=re.S)
-(OUT/'gitflow-archify-layout.svg').write_text(svg)
 BASE=Image.open(io.BytesIO(resvg_py.svg_to_bytes(svg_string=svg,width=1760,height=836,background='white'))).convert('RGB')
 
 SCENES=[
- (3,None,None,'Proposed Git flow','Follow the original Archify layout: commit → review → release → sync to live.'),
+ (3,None,None,'Git flow','Follow the original Archify layout: commit → review → release → sync to live.'),
  (4,'commit',None,'1  Fix Commit','The steward creates one focused commit per Fix Issue, scoped to the drunk bundle.'),
  (4,'devtip','commit-push','2  Push to dev','Push HEAD:refs/heads/dev, then verify the remote tip with git ls-remote.'),
  (4,'pr','dev-pr','3  Open or update the PR','Reuse one open dev → main pull request and wait for the owner.'),
@@ -104,7 +108,7 @@ def frame(t,still=False):
     if still:
         node=edge=None
         title='Owner approval. Verified sync. A traceable live state.'
-        caption='The proposed workflow preserves human merge control and moves the live tag only after verification.'
+        caption='The workflow preserves human merge control and moves the live tag only after verification.'
     im=Image.new('RGB',(W,H),'#f4f5f7')
     d=ImageDraw.Draw(im)
     text(d,(80,29),'Multica setup - git flow',30,NAVY,True)
@@ -128,26 +132,66 @@ def frame(t,still=False):
         d.rectangle((80,1045,80+1760*t/DURATION,1049),fill=GREEN)
     return im
 
-def main():
+GIF_SIZE = (1440, 810)
+GIF_FPS = 50  # GIF timing uses 10 ms ticks; 20 ms is an exact frame duration.
+GIF_SECONDS = 4
+
+def render_gif():
+    # Use one clock for every connector, independent of the narrated scenes.
+    # Draw at twice the export resolution for antialiased, subpixel motion.
+    scale = 2 * GIF_SIZE[0] / W
+    size = tuple(v * 2 for v in GIF_SIZE)
+    background = frame(0, True).resize(size, Image.Resampling.LANCZOS)
+    routes = {
+        edge_id: [(scale*(DX+x*SCALE), scale*(DY+y*SCALE)) for x,y in points]
+        for edge_id, points in edges.items()
+    }
+    palette_source = background.copy()
+    draw = ImageDraw.Draw(palette_source)
+    for i, color in enumerate((GREEN, RED, PURPLE, 'white')):
+        draw.rectangle((i*40, 0, (i+1)*40-1, 39), fill=color)
+    palette = palette_source.resize(GIF_SIZE, Image.Resampling.LANCZOS).quantize(colors=256)
+    frames = []
+    for n in range(GIF_SECONDS * GIF_FPS):
+        phase = n / (GIF_SECONDS * GIF_FPS)
+        # Ease departure/arrival and fade across the reset for a seamless loop.
+        progress = phase * phase * (3 - 2 * phase)
+        opacity = min(1, phase / 0.04, (1 - phase) / 0.04)
+        canvas = background.copy()
+        draw = ImageDraw.Draw(canvas)
+        for edge_id, points in routes.items():
+            color = RED if edge_id in ('review-reject', 'diff-blocked', 'sync-blocked') else GREEN
+            dot_on_path(draw, points, progress, color, scale)
+        if opacity < 1:
+            canvas = Image.blend(background, canvas, opacity)
+        frames.append(canvas.resize(GIF_SIZE, Image.Resampling.LANCZOS).quantize(
+            palette=palette, dither=Image.Dither.NONE))
+    frames[0].save(OUT/'gitflow-archify-animation.gif', save_all=True,
+        append_images=frames[1:], duration=1000//GIF_FPS, loop=0,
+        optimize=True, disposal=1)
+    print(f'GIF complete: {len(routes)} synchronized arrows, {GIF_SECONDS}s, {GIF_FPS} fps', flush=True)
+
+def main(gif_only=False):
+    if gif_only:
+        render_gif()
+        return
+    (OUT/'gitflow-archify-layout.svg').write_text(svg)
     frame(0,True).save(OUT/'gitflow-archify-overview.png')
     proc=subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(),'-y','-f','rawvideo','-vcodec','rawvideo',
       '-s',f'{W}x{H}','-pix_fmt','rgb24','-r',str(FPS),'-i','-',
       '-an','-vcodec','libx264','-preset','fast','-crf','18','-pix_fmt','yuv420p',
       '-movflags','+faststart',str(OUT/'gitflow-archify-animation.mp4')],stdin=subprocess.PIPE,stderr=subprocess.DEVNULL)
-    gif=[]
     for n in range(DURATION*FPS):
         im=frame(n/FPS)
         proc.stdin.write(im.tobytes())
-        if n%3==0:
-            gif.append(im.resize((1440,810),Image.Resampling.LANCZOS))
         if n%(FPS*5)==0:
             print(f'Rendered {n/FPS:.0f}/{DURATION}s',flush=True)
     proc.stdin.close()
     if proc.wait()!=0: raise RuntimeError('Video export failed')
-    palette=frame(0,True).resize((1440,810)).quantize(colors=192)
-    frames=[f.quantize(palette=palette,dither=Image.Dither.NONE) for f in gif]
-    frames[0].save(OUT/'gitflow-archify-animation.gif',save_all=True,append_images=frames[1:],
-      duration=40,loop=0,optimize=True,disposal=1)
-    print(f'Complete: {DURATION}s video; {DURATION/5:g}s GIF; {len(frames)} GIF frames',flush=True)
+    render_gif()
+    print(f'Complete: {DURATION}s video',flush=True)
 
-if __name__=='__main__': main()
+if __name__=='__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--gif-only', action='store_true', help='Regenerate only the synchronized GIF')
+    main(parser.parse_args().gif_only)

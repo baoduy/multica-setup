@@ -1,4 +1,4 @@
-# multica/export — workspace bundles
+# multica setup — workspace bundles
 
 Local mirrors of live Multica workspaces (`drunk-workspace/`, `mx-workspace/`).
 Each bundle holds the workspace's agents, skills, squads, docs/policies, and a
@@ -7,6 +7,29 @@ pushed, and always confirm before pushing to a live workspace (see `../CLAUDE.md
 
 The drunk bundle improves itself weekly and syncs live when `main` is merged:
 see [`docs/drunk-setup-improvement-loop.md`](docs/drunk-setup-improvement-loop.md).
+
+## Diagrams (drunk-workspace)
+
+Rendered with [archify](https://github.com/tt-a1i/archify). Each image links to
+its interactive HTML source in `.archify/`.
+
+### Runtime architecture
+
+<a href=".archify/architecture-runtime/runtime.html">
+  <img alt="multica-setup runtime architecture (drunk-workspace)" src="output/runtime-presentation/runtime-animation.gif">
+</a>
+
+### Setup improvement loop
+
+<a href=".archify/workflow-setup-improvement-loop/setup-improvement-loop.html">
+  <img alt="multica-setup improvement loop (drunk-workspace)" src="output/improvement-loop-presentation/improvement-loop-animation.gif">
+</a>
+
+### Setup git flow
+
+<a href=".archify/workflow-setup-gitflow/setup-gitflow.html">
+  <img alt="multica-setup improvement loop git flow (drunk-workspace)" src="output/gitflow-presentation/gitflow-archify-animation.gif">
+</a>
 
 ## Review-gate scoring — design lessons (2026-08)
 

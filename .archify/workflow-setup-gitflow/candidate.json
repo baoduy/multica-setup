@@ -2,9 +2,9 @@
   "schema_version": 2,
   "diagram_type": "workflow",
   "meta": {
-    "title": "multica-setup Improvement Loop: Git Flow (proposed, drunk-workspace)",
+    "title": "multica-setup Improvement Loop: Git Flow (drunk-workspace)",
     "quality_profile": "showcase",
-    "output": ".archify/workflow-setup-gitflow-20261007-084711/setup-gitflow.html",
+    "output": ".archify/workflow-setup-gitflow/setup-gitflow.html",
     "legend": {
       "mode": "hidden"
     }

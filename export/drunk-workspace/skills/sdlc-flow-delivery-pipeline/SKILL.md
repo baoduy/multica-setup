@@ -11,7 +11,7 @@ The numbers the whole factory quotes. Change one here and it changes everywhere 
 | spec gate approve bar | **8.5** (zero `blocker` findings) | Policy 04 §6 · `spec-review-gate` |
 | PR gate approve bar | **8.5** (zero `blocking` findings) — a passing PR always merges into `dev`, never waits for a human; the one exception is a service design PR, which merges only on the owner's reply A (Workflow F) | Policy 04 §5 · `pr-review-gate/references/scoring-rubric.md` |
 | deduction math, both gates | start 10 · blocker/blocking −4 · major/important −2 · minor/nit −0.5 (max −1.5) · floor 1 · caps after the weighted sum | `scoring-rubric.md` (the full cap table lives there) |
-| coverage bar | **≥80%** per class/module the cycle touched, on the feature branch only; UI presentation files (§1a) and coverage-excluded wiring (§1e) exempt | Policy 02 §6, §1a, §1e |
+| coverage bar | **≥80%** per class/module the cycle touched, on the feature branch only; UI presentation files (§1a), coverage-excluded wiring (§1e) and owner-waived code that never ships (§1f) exempt | Policy 02 §6, §1a, §1e, §1f |
 | rework rounds | spec **5**, PR **3** (no polish round: a passing PR merges with its leftovers; then the owner's options, and only the owner's option B adds a round) | Policy 04 §6, §11, §11b |
 | CI wait before merging past a running check | **30 min** | Policy 04 §5 · `pr-review-gate` |
 | bug auto-delegate | confidence **≥90%**, else the requester confirms | Policy 07 §3 |

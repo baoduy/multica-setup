@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-01 |
-| **Version** | 1.9 |
+| **Version** | 1.10 |
 | **Status** | Active |
 | **Owner** | dev-leader |
 | **Applies to** | Every engineer and agent writing or modifying code in any drunk stack: .NET/DDD NuGet libraries, Pulumi/TypeScript npm packages, Python MCP/FastAPI services, Docker images, Helm charts |
@@ -127,7 +127,7 @@ generic rule here where they differ (see Exceptions).
     TypeScript is awaited or explicitly handled — no fire-and-forget in the sync path
     (`TS-ERR-002`).
 15. **The implementer proves the standards before handoff, not the reviewer after.** Every
-    Build (and `build-ui` and `build-excluded` Build) ends with a **Standards self-review**, reported as its own
+    Build (and `build-ui`, `build-excluded` and `build-waived` Build) ends with a **Standards self-review**, reported as its own
     EVIDENCE row: the stack's governing skill(s) opened by name and the rule-ids checked
     against the diff; a CodeGraph reuse search for every new public symbol, with its result
     (reused `<symbol>`, or none found); the SRP triggers of statement 8 measured on every
@@ -142,7 +142,7 @@ generic rule here where they differ (see Exceptions).
     finding; a missing one is a `nit`, because the gate runs the standards check itself
     ([Policy 04](04-code-and-spec-review.md) statement 5).
     **Then ONE pre-review, a mini PR gate.** Before reporting `done`, every `build`,
-    `bug-build`, `build-ui` and `build-excluded` sub-task, and every rework fix of a Build, starts one fresh-context
+    `bug-build`, `build-ui`, `build-excluded` and `build-waived` sub-task, and every rework fix of a Build, starts one fresh-context
     subagent. The subagent reviews `git diff origin/dev...HEAD` against the brief the way the
     PR gate will: brief conformance, correctness on the brief's input domain, security
     (secret marking included), test strength, standards, comments. It returns findings with

@@ -13,7 +13,7 @@ Invoke them — never work from memory. **Match the skill to the repo's stack**:
 | Skill | Use |
 |---|---|
 | `architecture-review-sweep` | **The workflow. Read first, every run.** Steps, scope file set per stack, dedupe protocol, issue format, enforcement tiers. Its examples are .NET-flavored — apply the same finding/dedupe/cap/Tier discipline to every stack, using that stack's native check. |
-| `sdlc-gitflow` | Branch and PR mechanics. Every PR targets `dev` with **both** `--head` and `--base` explicit. |
+| `sdlc-gitflow` | Branch and PR mechanics. |
 | `dknet-ddd-conventions` + `dotnet10-efcore10-standards` | **.NET only.** |
 | `pulumi-azure-iac-standards` | **Pulumi/TS IaC** (`@pulumi/*` in `package.json`). |
 | `docker-image-standards` | **Dockerfiles / image repos.** |
@@ -65,4 +65,4 @@ You review library code every downstream consumer depends on. A vague finding wa
 
 ## Finishing
 
-On wake, if the run issue is `todo`, flip it `in_progress` before the sweep begins — a task left `todo` while actively running reads as un-started. Set the run issue `done` when the consolidated report is posted. Never `in_review`.
+Set the run issue `done` when the consolidated report is posted. Never `in_review`.

@@ -2,9 +2,9 @@
   "schema_version": 2,
   "diagram_type": "workflow",
   "meta": {
-    "title": "multica-setup Improvement Loop (proposed, drunk-workspace)",
+    "title": "multica-setup Improvement Loop (drunk-workspace)",
     "quality_profile": "showcase",
-    "output": ".archify/workflow-setup-improvement-loop-20261007-082920/setup-improvement-loop.html",
+    "output": ".archify/workflow-setup-improvement-loop/setup-improvement-loop.html",
     "legend": {
       "mode": "hidden"
     }
