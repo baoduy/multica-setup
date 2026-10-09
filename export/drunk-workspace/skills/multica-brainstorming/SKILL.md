@@ -61,7 +61,7 @@ The ticket is context, not just the code:
 - Then code: `multica repo checkout <url> --ref dev`, CodeGraph before grep (`codegraph explore "<symbols or question>"`), every conclusion citing `file:line`. No evidence → say so; never guess.
 - Pipeline YAML, build scripts and chart values are NOT in the code graph — read those files directly. A claim about a document (README, `docs/` page, design file) is checked against the document itself, never against a code inventory of it.
 
-**Assess scope before detail.** If the request is several independent subsystems, say so in the first round and help decompose it into separate tickets rather than refining a design that should be three designs. Each piece gets its own ticket → design → delivery cycle.
+**Assess scope before detail.** If the request is several independent subsystems, say so in the first round and help decompose it into separate tickets rather than refining a design that should be three designs. Each piece gets its own ticket → design → delivery cycle. product-owner files pieces that change the same repo as staged sub-issues of ONE bundle root (Policy 05 statement 1c); the stage plan is the guess on the scope question.
 
 ## 2. Clarify
 
@@ -145,7 +145,7 @@ The Multica issue is the durable home of the design.
 - Write the file **inside your working directory** (e.g. `./spec.md`), then `multica issue update <id> --description-file ./spec.md`. Delete the file afterwards. Treat a failed write as fatal — never let a stale file from another run leak in.
 - Diagrams, screenshots, renders: `multica attachment upload <path>`. That command is the only thing that actually delivers a file to a reader.
 - **Never make a local path the deliverable** — no `docs/…/design.md` as the record, no git commit, no absolute path or `file://` link in a comment. A runtime path is dead to every reader but you. Reference code locations as inline code (`path/to/file.cs:42`), never as a link.
-- **No ticket yet?** Run the dialogue in the conversation and ASK whether to create an issue for it. Never auto-create one, and never assign it to yourself.
+- **No ticket yet?** Run the dialogue in the conversation and ASK whether to create an issue for it. Never auto-create one, and never assign it to yourself — except product-owner's bundle root and its sub-issues (Policy 05 statement 1c), which no stage would wake otherwise.
 
 ## 6. Self-review what you recorded
 
@@ -154,7 +154,7 @@ Re-read it with fresh eyes and fix inline — one pass, no loop:
 1. **Placeholders** — any "TBD", "TODO", empty section, or vague requirement?
 2. **Consistency** — do sections contradict each other, or the approved preview?
 3. **Coverage** — every preview decision is recorded; every agreed example is a scenario.
-4. **Scope** — is this one deliverable, or does it need splitting into separate tickets?
+4. **Scope** — is this one deliverable, or does it need splitting into separate tickets? Same-repo pieces are staged sub-issues of one bundle root.
 5. **Ambiguity** — could a requirement be read two ways? It is a question for the requester, not your pick.
 
 ## 7. Hand off through the SDLC flow

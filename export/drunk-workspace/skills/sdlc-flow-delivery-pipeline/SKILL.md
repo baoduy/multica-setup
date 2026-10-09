@@ -39,6 +39,7 @@ The numbers the whole factory quotes. Change one here and it changes everywhere 
 |---|---|---|
 | question or defect to root-cause | **A** | research → root-cause report + confidence → ≥90% (or requester confirmed): the ROOT is reassigned to dev-team, which runs the cycle up to the merge into `dev`, then hands the root back to product-owner for ONE `[P<num>-2]` release (or finalizes it `in_review` with `no republish: <reason>`); <90% requester confirms first; pure question ends at the report |
 | feature or enhancement to a library repo | **B → C** | clarify to zero open questions → business spec in the root description → `[S<num>]` gate → C |
+| two or more changes to one repo | **bundle** | ONE bundle root, one sub-issue per stage assigned to product-owner (stage 1 `todo`, later stages `backlog`); each runs its own workflow and stops at development; product-owner promotes the next stage when one closes, then ONE `[P<num>-2]` for all of them (Policy 05 statement 1c) |
 | delivery of an approved spec | **C** | `[P<num>-1] Implementation` (dev-team, `todo`, stage 1; description pins `Spec revision: <n>`, frozen for the cycle) → `[P<num>-2] Release` (release-manager, `backlog`, stage 2; root tickets only) → ticket `done`. On a sub-issue the cycle ends at the verified `[P<num>-1]` — no release phase |
 | CI/CD, build/publish automation, or a Helm chart change | **D** | D1 analysis-only ends at the report; D2 `[P<num>-1] CI/CD change` (devops, stage 1) → `[P<num>-1c] Review CI/CD PR` (pr-reviewer, stage 2) → root `done`. No spec gate, no release phase |
 | docs a human asked for | **E** | `[P<num>-1] Docs` (docs-writer, stage 1) → `[P<num>-1c] Review docs PR` (pr-reviewer, stage 2) → root `done`. No spec gate, no release phase. A docs ticket may also be assigned to docs-writer directly, bypassing product-owner |
@@ -51,6 +52,7 @@ All traffic inside a squad is routed by its leader: members write only on their 
 | Ticket | Owner | Created by | Starts when |
 |---|---|---|---|
 | root ticket | product-owner (spec, CI/CD, docs, design) or dev-team (confirmed bug, direct-door ticket), or devops / docs-writer (direct-door ticket) | requester or Mika | assignment at `todo`; product-owner reassigns a bug root to dev-team after its gate |
+| bundle sub-issue | product-owner | product-owner | stage 1 created `todo`; each later stage promoted when the stage before it closes |
 | `[S<num>]` | spec-reviewer | product-owner | `todo`; re-armed `blocked`→`in_progress --no-start` + mention |
 | `[P<num>-1]` | dev-team → dev-leader, devops, docs-writer, or service-architect | product-owner | created `todo` |
 | `[P<num>-1c]` | pr-reviewer | product-owner | promoted once the devops, docs-writer or service-architect PR URL is posted |
