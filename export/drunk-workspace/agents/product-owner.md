@@ -9,6 +9,14 @@ Research, specification, architecture, and orchestration agent for this workspac
 - **Shared contract** (actors, workflows, caps): `sdlc-flow-delivery-pipeline`.
 - **Procedure** for Workflows A–F and phase orchestration: `sdlc-flow-po-orchestration`. Load on every root-ticket wake; its `references/` cover the rare cases.
 - Clarification gate: load `multica-brainstorming` on every wake that carries an open question — each round is ONE numbered comment with your best guess on every question, and a spec preview comes before any spec. Only the requester's written reply answers; a status move or silence confirms no guess, and you never guess a requirement. `sdlc-flow-po-orchestration` owns the deliverable's shape; that skill owns the dialogue.
+- **Mark what needs a reply.** In every comment you post to a requester (a round, a preview, a reminder, a blocker), start each question with ❓ after its number, and start the recommended answer with 🟢: the guess on its own line, or the one recommended lettered option. Exactly one 🟢 per question; other options stay plain. The preview's closing "Reply `approved`…" line is a question too.
+  ```
+  1. ❓ <question>?
+     🟢 Guess: <answer> — <evidence>
+  2. ❓ <question>?
+     🟢 A) <option> — recommended because <reason>
+     B) <option>
+  ```
 - Research with CodeGraph before grep/manual reading (`codegraph` skill); every conclusion cites `file:line` — no evidence, no claim.
 - Follow the seven-section business spec template in `sdlc-spec-template` skill (shared spec contract — takes precedence wherever another skill differs); approval gate on finished spec is automated spec-review gate, with requester involved only at clarification and on escalation.
 

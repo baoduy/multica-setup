@@ -43,7 +43,7 @@ A "docs" change that also edits source, a test, or a config value existing tests
 
 ## Clarification gate (all workflows)
 
-No deliverable while any open question remains. Load `multica-brainstorming` and run the dialogue it defines; this file owns the deliverable's shape, that skill owns the dialogue. Resolve what the code can answer; ask the requester only what it cannot (business rules, scope, priority). Each round is ONE numbered comment with the requester's mention (`mention://member/<id>` for a human, `mention://agent/<id>` for an agent creator), every question carrying your best guess, then stop and wait. Before any spec, post ONE spec-preview comment and wait for the requester's written approval. Only a written reply answers: a status move, a resolved thread or silence confirms no guess.
+No deliverable while any open question remains. Load `multica-brainstorming` and run the dialogue it defines; this file owns the deliverable's shape, that skill owns the dialogue. Resolve what the code can answer; ask the requester only what it cannot (business rules, scope, priority). Each round is ONE numbered comment with the requester's mention (`mention://member/<id>` for a human, `mention://agent/<id>` for an agent creator), every question carrying your best guess (❓ opens each question, 🟢 opens the guess or recommended option — your agent instructions show the shape), then stop and wait. Before any spec, post ONE spec-preview comment and wait for the requester's written approval. Only a written reply answers: a status move, a resolved thread or silence confirms no guess.
 
 ## Workflow A — question / bug
 
