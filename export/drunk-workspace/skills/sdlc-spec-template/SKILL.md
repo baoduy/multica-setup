@@ -97,7 +97,7 @@ Feature: <name>
 ```
 ```
 
-Section tests: §1 is done when a non-engineer could act on it. §2 is done when it describes today's behaviour without saying how it is built. §3 is done when every requirement can be checked from outside and every invariant is a property. §3a is done when a developer can create every field and call every endpoint without asking a question. §3b is done when a reviewer can tell, without opening the code, which repo owns the change, which way every new dependency points, and whether any published package breaks. §4 is done when it names every repo the change touches and holds zero open questions. §5 is done when every requirement in §3 has at least one scenario and every scenario traces to §1.
+Section tests: §1 is done when a non-engineer could act on it. §2 is done when it describes today's behaviour without saying how it is built. §3 is done when every requirement can be checked from outside and every invariant is a property. §3a is done when a developer can create every field and call every endpoint without asking a question. §3b is done when a reviewer can tell, without opening the code, which repo owns the change, which way every new dependency points, and whether any published package breaks. §4 is done when it names every repo the change touches and holds zero open questions. §5 is done when every requirement in §3 has at least one scenario and every scenario traces to §1. Each **Must stay true** invariant, a Security line that names a new trust boundary, and each alternative in a bullet joined by "or" counts as its own requirement.
 
 ## Gherkin — BRIEF
 
