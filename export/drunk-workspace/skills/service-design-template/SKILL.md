@@ -205,9 +205,12 @@ the PR body. A spec or a code PR never edits `docs/architect/`.
 ## Self-check before pushing
 
 1. Every file in the set exists; no empty heading, no TODO, no placeholder.
-2. Every claim about a neighbouring repo cites the evidence in your report
-   (`file:line` from CodeGraph); what you could not verify is an open question
-   on your ticket, not a sentence in the design.
+2. Every claim about a neighbouring repo or a library package cites the
+   evidence in your report: `file:line` from CodeGraph, or from the package's
+   source at the version the service will pin (its docs for that version when
+   there is no source); an absence claim ("X is new") cites the search that
+   came back empty. What you could not verify is an open question on your
+   ticket, not a sentence in the design.
 3. Non-goals is not empty; every consumed API names its failure behaviour.
 4. Every dependency points the way the stack allows, with no cycle.
 5. Every entity field has type, required and default; every endpoint has verb,
