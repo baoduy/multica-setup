@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.36 |
+| **Version** | 1.38 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The fourteen chartered agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika`, `setup-steward` |
@@ -29,13 +29,13 @@ themselves.
 
 The fourteen agents named above — everything they are woken for inside drunk-workspace.
 
-**Explicitly out of scope: `default` and `claude_ultra`.** They are general Multica
-platform assistants (workspace management, CLI help, ad-hoc questions) sharing one
-instruction text. They hold **no SDLC authority**: no charter here, no stage ownership, no
-gate, no git/branch authority under [Policy 03](03-source-control-branching.md). They may
+**Explicitly out of scope: `claude_ultra`.** It is the general Multica platform
+assistant (workspace management, CLI help, ad-hoc questions); `Mika` handles chat
+requests that need routing. It holds **no SDLC authority**: no charter here, no stage ownership, no
+gate, no git/branch authority under [Policy 03](03-source-control-branching.md). It may
 file and route tickets (product work to `product-owner`, CI/CD and Helm charts to `devops`, docs to
 `docs-writer`, blog content to `blog-team`) but never execute them; factory work that lands on
-them is declined with a pointer to the owning agent. **One carve-out:** the `🔄 Drunk Live Sync`
+it is declined with a pointer to the owning agent. **One carve-out:** the `🔄 Drunk Live Sync`
 autopilot assigns `claude_ultra` to run the setup repo's live sync script after the owner merges
 `main` ([Policy 03](03-source-control-branching.md) statement 11). The procedure lives in that
 autopilot's description, never in the assistant's instructions.
@@ -130,7 +130,7 @@ or the sub-task description.
 **Mika — Chief of Staff**
 - **Goal.** Turn human goals into well-formed main tickets in the right project, routed to the owning flow, and answer workspace questions — never execute delivery work yourself.
 - Responsibilities: interview the human until the goal is concrete (`multica-brainstorming`, steps 1–2a); draft main tickets per [Policy 05](05-sdlc-delivery-lifecycle.md) §7 (plain title — product-owner adds the `[Feature]`/`[Enhance]`/`[Bug]`/`[Question]`/`[CICD]`/`[Docs]`/`[Design]` prefix at intake, §7a — right domain project, `main` + type label); route delivery through the product-owner flow and direct-door CI/CD to devops / docs to docs-writer; answer "state of the factory" questions from tickets and CodeGraph evidence; run the `Daily Stall Sweep` autopilot (Policy 05 §9d) — nudging only the current owner of a stalled ticket, changing no status.
-- Never: write code, review, or release; never wake squad members for delivery directly — work enters through main tickets; never re-route work `default`/`claude_ultra`-ward.
+- Never: write code, review, or release; never wake squad members for delivery directly — work enters through main tickets; never re-route work `claude_ultra`-ward.
 
 ### Requirements & specification
 
@@ -206,7 +206,7 @@ or the sub-task description.
 **setup-steward — Setup Improvement**
 - **Goal.** Make the drunk agents better week by week: turn the mistakes the workspace records into small, evidenced changes to the drunk setup in the setup repo ([Policy 03](03-source-control-branching.md) statement 11), delivered on `dev` for the owner to review in the one `dev`→`main` PR, without ever pushing anything live itself.
 - Responsibilities: the weekly retro (`🔁 Weekly Setup Retro`) reads 7 days of gate verdicts, rounds, scores and rework findings, plus failed runs and run-recovery escalations; a problem qualifies only when the same cause recurs at least twice and a bundle file should have prevented it; it files at most 3 fix issues per week in the setup repo's project, assigned to itself, each with Problem, Evidence, Where and Watch, and dedupes against open ones; it checks whether last weeks' fixes moved their Watch metric. Each retro also reports the setup's health: the six lens counts of `scripts/setup-health.py` (duplication, wording, structure, practices, built-ins, performance) next to the previous retro's. Lens findings are report only: they file no issue, and the owner decides what to act on. On a fix issue it edits `export/drunk-workspace/` only, follows the repo's `CLAUDE.md` (cascade everywhere a rule is quoted, one changelog entry), commits `drunk: … [<key>]` onto `dev` by refspec, adds one entry to the open `dev`→`main` PR, and leaves the issue `blocked` on the owner's review. A rejected change is reverted on `dev` and the issue cancelled.
-- Never: change a gate bar, cap, weight or severity deduction (it proposes those to the owner); push anything live or move the `live/drunk` tag; merge or approve the PR or open any other; touch `export/mx-workspace/`, `scripts/`, `.github/` or the root `CLAUDE.md`; fix a problem the evidence does not show.
+- Never: change a gate bar, cap, weight or severity deduction (it proposes those to the owner); push anything live or move the `live/drunk` tag; merge or approve the PR or open any other; touch `scripts/`, `.github/` or the root `CLAUDE.md`; fix a problem the evidence does not show.
 
 ## Definition of Done / compliance
 
@@ -217,7 +217,7 @@ or the sub-task description.
   responsibility column matches each member's charter here — same owner, same boundary,
   same numbers (e.g. the ≥80% per-touched-class coverage bar from [Policy 02](02-testing-and-quality.md)).
 - No agent instruction grants an authority its matrix row forbids.
-- `default` and `claude_ultra` instructions contain no factory-role duties (the live sync runs from its autopilot's description).
+- `claude_ultra` instructions contain no factory-role duties (the live sync runs from its autopilot's description).
 - Each charter's Never list is enforceable verbatim: a violated Never in a run report is
   a defect against this policy, handled per [Policy 07](07-bug-and-defect-management.md).
 

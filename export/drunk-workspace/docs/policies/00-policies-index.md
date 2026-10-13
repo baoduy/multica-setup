@@ -127,7 +127,7 @@ A policy change is not done until its entry is there.
 
 - **Skills** are the executable contracts agents load at runtime — they *implement* these policies.
 - **Policies** (this folder) are the governance and the source of truth — intent, scope, responsibilities, compliance bar, waiver rules.
-- **Agents / squads** (`agents/`, `squads/`) are the actors these policies assign responsibility to: `product-owner`, `spec-reviewer`, `arch-reviewer`, `dev-leader`/`dev-team`, `dev-backend`, `pr-reviewer`, `devops`, `release-manager`, `issue-janitor`, `run-medic`, `Mika` — each chartered (goal, responsibilities, boundaries) in [Policy 09](09-agent-roles-and-responsibilities.md); `default` and `claude_ultra` are platform assistants outside the factory.
+- **Agents / squads** (`agents/`, `squads/`) are the actors these policies assign responsibility to: `product-owner`, `spec-reviewer`, `service-architect`, `arch-reviewer`, `dev-leader`/`dev-team`, `dev-backend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `issue-janitor`, `run-medic`, `Mika`, `setup-steward` — each chartered (goal, responsibilities, boundaries) in [Policy 09](09-agent-roles-and-responsibilities.md); `claude_ultra` is the platform assistant outside the factory.
 
 ## Reading order for a new drunk developer
 

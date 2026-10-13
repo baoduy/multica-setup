@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-03 |
-| **Version** | 1.10 |
+| **Version** | 1.11 |
 | **Status** | Active |
 | **Owner** | release-manager (`dev`→`main`) · dev-leader (cycle git-flow) |
 | **Applies to** | Every agent that branches, commits, pushes, or opens a PR in a drunk repo |
@@ -51,14 +51,12 @@ no separate branch strategy for a different repo class.
 2. **`main` has exactly one custodian.** `release-manager` is the **only** agent permitted to target or merge `main`, in every repo except the setup repo (statement 11), via the single `dev`→`main` release PR (`[P<num>-2]`), authorized by product-owner. A feature or CI/CD PR based on `main` is a defect — fix the base to `dev`.
 3. **Only dev-leader cuts branches and opens the cycle PR into `dev`** — inline, per [`leader-gitops`](../../skills/leader-gitops/SKILL.md), never as separate Branch/PR sub-tasks. Exactly one PR per cycle: head = the feature branch, base = `dev`. No QC squad and no separate git custodian exist in drunk — the squad leader is both.
 3b. **Squad members never create a branch, and never push one of their own.** The `agent/...` branch the runtime puts a member on is a scratch worktree, not a delivery target. A member delivers only by refspec onto the leader's feature branch, and **never runs a bare `git push`** — with no refspec git pushes the current branch to origin under its own name, which delivers nothing and leaves a stray `agent/...` branch behind. A member whose sub-task names no branch, or whose named branch is absent from origin (`git ls-remote origin <branch>` empty), stops and asks the leader for it (`blocked` on its OWN sub-task + its handoff line on the parent, [Policy 05](05-sdlc-delivery-lifecycle.md) statement 5); it never cuts the branch itself, not even when the code is finished and correct.
-3c. **A push is proved against the remote.** `git rev-parse HEAD` must equal the SHA `git ls-remote origin <feature-branch>` prints, and that SHA goes in the completion report. The local `origin/<feature-branch>` tracking ref is not proof: after a bare push it still points where it did before, so the usual `git rev-parse origin/<branch>` check passes while the remote never moved (DRK-1353, 2026-09-16 — the fix sat on `agent/dev-backend/1b37847e15ca` and dev-leader had to fast-forward the feature branch by hand).
+3c. **A push is proved against the remote.** `git rev-parse HEAD` must equal the SHA `git ls-remote origin <feature-branch>` prints, and that SHA goes in the completion report. The local `origin/<feature-branch>` tracking ref is not proof: after a bare push it still points where it did before, so the usual `git rev-parse origin/<branch>` check passes while the remote never moved (a bare push has stalled a feature branch this way before; see CHANGELOG).
 4. **Never `git checkout` a shared branch** (`dev`, `main`, or any feature branch). A checkout locks it in one worktree until the task ends, stalling every other agent. Stay on the auto-generated `agent/...` branch and operate on the remote.
-5. **Branch and push by refspec, without checking out:**
-   ```bash
-   git push origin origin/dev:refs/heads/<feature-branch>      # create from fresh origin/dev
-   git push origin HEAD:refs/heads/<feature-branch>             # deliver commits
-   ```
-   Always branch from freshly fetched `origin/dev`, never a stale local ref. Verify local HEAD SHA == remote branch SHA before reporting done.
+5. **Branch and push by refspec, without checking out.** Always branch from freshly fetched
+   `origin/dev`, never a stale local ref, and verify local HEAD SHA == remote branch SHA
+   before reporting done. The exact push commands live in
+   [`sdlc-gitflow`](../../skills/sdlc-gitflow/SKILL.md).
 6. **Every PR carries explicit `--head` AND `--base`.** `gh pr create` without `--base` silently targets the repo default (often `main`); without `--head` it produces an empty/wrong diff that still reports success. After creating, verify `baseRefName`, `headRefName`, a **non-empty** `--stat` diff, and `mergeable == MERGEABLE`. A wrong head is not editable — close and recreate.
 7. **PR titles carry the ROOT main ticket's key in `[<KEY>]` form; bodies and titles never contain `Closes`/`Fixes`/`Resolves` next to an issue key** — that auto-completes the ticket and kills the remaining pipeline phases. Check for an existing open PR (`gh pr list --head <branch> --base <base> --state open`) before opening a second.
 7a. **Every PR body shows what changed, proves it works, and says how risky the merge is.** Three sections, in order: **Summary** (one or two sentences and the smallest text visual that shows the change: call tree, file tree, pseudocode or a diff sketch), **Evidence** (the test that was red before and is green now, or the checks that ran, plus every check that could not run), and **Merge danger** (one-way or two-way door, and the blast radius, taken from the spec's §3b). The body is passed with `--body-file`. The shape and its rules live in [`sdlc-gitflow`](../../skills/sdlc-gitflow/SKILL.md) (**PR body**). The exception is the release PR: release-manager's `dev`→`main` PR keeps its own format. Cause: agent-written PR bodies had no shared shape, no risk statement, and evidence that often listed passing commands without showing a test could fail (2026-10-06 review against mattpocock/skills v1.3 `pr`).

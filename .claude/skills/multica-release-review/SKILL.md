@@ -1,14 +1,14 @@
 ---
 name: multica-release-review
-description: Review new multica-ai/multica releases since the last recorded run and propose how to use their features to improve the agents, squads, skills, autopilots and policies in the drunk and mx workspace bundles. Use when the user asks to check new Multica releases, catch up on Multica changes, or runs /multica-release-review.
+description: Review new multica-ai/multica releases since the last recorded run and propose how to use their features to improve the agents, squads, skills, autopilots and policies in the drunk workspace bundle. Use when the user asks to check new Multica releases, catch up on Multica changes, or runs /multica-release-review.
 argument-hint: "[--from <tag>] [--to <tag>]"
 ---
 
 # Multica release review
 
 Study the Multica releases the setup has not been reviewed against yet. Work out
-which new features would improve the drunk and mx workspaces or which changes break
-them, write a report, and record the run so the next one starts after the newest
+which new features would improve the drunk workspace or which changes break
+it, write a report, and record the run so the next one starts after the newest
 release reviewed.
 
 This skill only analyses and proposes changes. It never edits a bundle or pushes
@@ -93,7 +93,7 @@ behaviour.
 Read the setup before proposing anything. Proposals that ignore how the bundles
 work today are useless.
 
-- `export/{drunk,mx}-workspace/docs/policies/`. Policy is the source of truth.
+- `export/drunk-workspace/docs/policies/`. Policy is the source of truth.
 - `workspace/workspace.context.md`, `agents/*.md`, `squads/*.md`, `autopilots/*.json`,
   `properties/properties.json`, and the flow skills (`sdlc-flow-*`, `leader-gitops`,
   `pr-review-gate`, `spec-review-gate`).

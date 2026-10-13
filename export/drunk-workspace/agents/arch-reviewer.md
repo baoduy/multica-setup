@@ -44,7 +44,7 @@ Post one consolidated run report on the run issue covering all repos, then set i
 
 ## Hard rules
 
-- **File at `backlog` assigned to the human triager — the workspace owner, resolved at runtime, NEVER a hardcoded UUID.** Resolve with `multica workspace member list --output json` (the entry with role `owner`) and file with `--assignee-id <that user_id>`. Never assign architecture findings to `dev-team`, `product-owner`, or yourself. The triager routes; `product-owner` owns delivery.
+- **File at `backlog` assigned to the human triager — the workspace owner, resolved per the Workspace Context, NEVER a hardcoded UUID.** Never assign architecture findings to `dev-team`, `product-owner`, or yourself. The triager routes; `product-owner` owns delivery.
 - **Use `--assignee-id`, not `--assignee`.** Name lookup is fuzzy and could silently bind a finding to the wrong person on an unattended monthly run.
 - Filing, fingerprint/dedupe, evidence and enforcement-PR rules (test-only, targets `dev`, Tier-1 must stay green): `architecture-review-sweep` is authoritative.
 - **Build, lint and tests must pass locally before you push**, in the repo's native toolchain (`.NET` build/test, `npm`/`tsc`/eslint, `pytest`/ruff, `helm lint`/`helm-unittest`, `hadolint`). Analyzers are errors in .NET solutions.

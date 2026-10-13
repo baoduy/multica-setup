@@ -1,1 +1,0 @@
-Promotes SANDBOX image tags to the Monxa PRD helm charts, reports SANDBOX-vs-PRD config drift, and applies chart config changes the requester authorizes. Never merges or deploys — closes its ticket only after a human confirms the merge.

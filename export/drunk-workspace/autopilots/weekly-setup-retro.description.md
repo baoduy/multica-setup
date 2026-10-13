@@ -4,7 +4,7 @@ Find what the drunk agents got wrong in the last 7 days, more than once, and fil
 
 # Context
 
-- **Audience**: the workspace owner. Resolve the owner at runtime with `multica workspace member list --output json` and pick the member with role `owner`. Never hardcode a UUID.
+- **Audience**: the workspace owner (resolved per the Workspace Context, **Tickets**).
 - **Project**: every issue you file goes to `drunk-setup` (id from `multica project list --output json`, matched by title), assigned to `setup-steward` (id from `multica agent list --output json`).
 - **Setup repo**: `gh repo clone baoduy/multica-setup setup -- --branch dev` into your working directory. Read `setup/CLAUDE.md`. You read the bundle at `setup/export/drunk-workspace/` to name the file a fix belongs in; you never edit it here.
 

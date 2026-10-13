@@ -1,3 +1,8 @@
+---
+name: nodejs-typescript-standards
+description: Node.js/TypeScript language and tooling standards (pnpm, strict TS, ESM, Prettier) for baoduy TS repos. Use when dev-backend or pr-reviewer builds or reviews code in one of those repos.
+---
+
 # Node.js / TypeScript Standards (baoduy TS repos)
 
 Derived from actual config of `github.com/baoduy/drunk-pulumi-azure-components` and

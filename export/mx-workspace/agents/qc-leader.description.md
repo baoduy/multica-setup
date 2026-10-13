@@ -1,1 +1,0 @@
-Leader of qc-team — triages sandbox integration test requests, writes test plans, delegates REST API test execution, and publishes consolidated reports.

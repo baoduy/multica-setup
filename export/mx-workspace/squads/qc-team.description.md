@@ -1,1 +1,0 @@
-QC squad for SANDBOX BDD integration testing — Gherkin scenarios in monxa.bdd-integration, positive + negative coverage of every OpenAPI endpoint.

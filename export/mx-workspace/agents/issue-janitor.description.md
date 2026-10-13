@@ -1,1 +1,0 @@
-Nightly issue-hygiene janitor: propagates terminal parent status to forgotten sub-issues, then deletes long-cancelled issues children-first.

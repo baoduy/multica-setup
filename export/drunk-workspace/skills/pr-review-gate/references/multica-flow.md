@@ -1,6 +1,6 @@
 # Multica pipeline flow (dev-team review stage)
 
-You serve the dev-team. Your review sub-task's title prefix is `[D<num>-<n>]` (legacy `[DEV-<n>]` on in-flight cycles) (leader dev-leader; rework findings go on your OWN sub-task and your handoff line on the cycle parent wakes the leader, who routes them to the implementer; no fix tickets, and you never write on another member's ticket). Any ticket raised from your findings lives in the SAME project as the cycle ticket — resolve it at runtime from the cycle ticket's `project_id`, never by a hardcoded board name. `<num>` (the cycle parent phase ticket's key number) and `<n>` (your review stage number) both come from your own sub-task's title — copy them verbatim into every ticket you create. Squad protocol applies: completion = `done` with ONE plain summary comment on your own sub-task (no agent mention) — the stage barrier wakes dev-leader; anything needing dev-leader = comment on your OWN sub-task, then your handoff line on the cycle parent (Workspace Context); never edit a comment that carried mentions.
+You serve the dev-team. Your review sub-task's title prefix is `[D<num>-<n>]` (leader dev-leader; rework findings go on your OWN sub-task and your handoff line on the cycle parent wakes the leader, who routes them to the implementer; no fix tickets, and you never write on another member's ticket). Any ticket raised from your findings lives in the SAME project as the cycle ticket — resolve it at runtime from the cycle ticket's `project_id`, never by a hardcoded board name. `<num>` (the cycle parent phase ticket's key number) and `<n>` (your review stage number) both come from your own sub-task's title — copy them verbatim into every ticket you create. Squad protocol applies: completion = `done` with ONE plain summary comment on your own sub-task (no agent mention) — the stage barrier wakes dev-leader; anything needing dev-leader = comment on your OWN sub-task, then your handoff line on the cycle parent (Workspace Context); never edit a comment that carried mentions.
 
 Mention links are built at run time, never remembered: `multica agent list --output json`, take the `id` of the agent by name, write `[@<name>](mention://agent/<that id>)`. A plain name, a guessed id or the literal `<that id>` placeholder silently does nothing. The only mention this stage ever posts is product-owner's, in your handoff line on a `[P<num>-1c]` (its parent is product-owner's ticket); on a dev-team Review sub-task the handoff line carries no mention, because the platform routes it to dev-leader.
 
@@ -22,7 +22,7 @@ multica issue property set <own-subtask-id> --name "Gate verdict" --value <APPRO
 
 Properties show on the board and in `multica issue children --resolve-properties`, which is how the leader and the human see a parked gate without opening threads.
 
-The leader's re-arm after a fix (your sub-task flipped `in_progress` + your mention on it; legacy: a promotion from `blocked` to `todo`) means: re-review the UPDATED PR in full (fresh collect + analyze + score — never a delta-only skim), AND open the new report with a **closure table**: every finding from the previous round → `resolved` / `not resolved` / `obsolete`, each with `file:line` evidence. A prior `blocking` or `important` finding still unresolved keeps its deduction — a fresh look never silently forgives it.
+The leader's re-arm after a fix (your sub-task flipped `in_progress` + your mention on it) means: re-review the UPDATED PR in full (fresh collect + analyze + score — never a delta-only skim), AND open the new report with a **closure table**: every finding from the previous round → `resolved` / `not resolved` / `obsolete`, each with `file:line` evidence. A prior `blocking` or `important` finding still unresolved keeps its deduction — a fresh look never silently forgives it.
 
 ## Already-merged short-circuit (pipeline mode only)
 
@@ -130,8 +130,6 @@ Record them in `report.md` and in your terminal report, then **drop them**. File
 Then add ONE `## OUT-OF-SCOPE DEFECT (file separately)` section to your terminal report — at most one per review, consolidated by root cause — with `file:line`, the observable failure, the reproduction, and the recommended fix. **You do not create it:** dev-leader files it as a `bug-report` ticket (title = the defect, never `Review follow-ups: …`) assigned to product-owner at `todo`, `Owner` set, after folding it into any open ticket that already covers the same root cause.
 
 Everything that does not clear the bar — comment wording, loose assertions, alignment, duplication suggestions, coverage of paths this diff never touched, architectural debt — is **dropped** to the monthly arch-review sweep. That loss is the deliberate trade.
-
-`Review follow-ups:` tickets are **retired**.
 
 State the outcome in your score announcement: `Merged with: none | <file:line list>` and `Leftovers: none | out-of-scope defect reported to dev-leader`.
 

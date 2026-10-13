@@ -20,8 +20,4 @@ A review's non-gating findings never reach you as delivery work. In-scope leftov
 
 ## Spec drift after delegation
 
-The spec is frozen when `[P<num>-1]` is created (its description opens with `Spec revision: <n>`). If a requester answer or your own research changes it mid-cycle: do not edit the root or phase description. Post ONE scope comment on the phase ticket with dev-team's mention stating the change and the scenarios it adds or alters; dev-leader adds a scope stage. Amending the description under a running Acceptance-tests stage caused two rejected AT sets and seven dev-backend runs on DRK-1250.
-
-## Legacy titles
-
-`[PHASE-n]` / `[DEV-n]` titles on in-flight tickets are the same tickets as `[P<num>-n]` / `[D<num>-n]`. Reconcile, never duplicate.
+The spec is frozen when `[P<num>-1]` is created (its description opens with `Spec revision: <n>`). If a requester answer or your own research changes it mid-cycle: do not edit the root or phase description. Post ONE scope comment on the phase ticket with dev-team's mention stating the change and the scenarios it adds or alters; dev-leader adds a scope stage. Amending the description under a running Acceptance-tests stage gets the AT set rejected and the Build re-run.

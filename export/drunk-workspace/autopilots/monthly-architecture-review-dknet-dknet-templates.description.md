@@ -6,7 +6,7 @@ The review has one purpose: make the code **smaller, newer, cleaner and safer wi
 
 # Context
 
-- **Audience** — the workspace owner (resolve at runtime: `multica workspace member list --output json`, role `owner`; never a hardcoded UUID). The enhancement issues you file are the deliverable for triage; the report on this issue is the index.
+- **Audience** — the workspace owner (resolved per the Workspace Context, **Tickets**). The enhancement issues you file are the deliverable for triage; the report on this issue is the index.
 - **Scope** — TWO repos, each swept with the full procedure:
   1. `DKNet` — https://github.com/baoduy/DKNet.git. The framework library every DKNet-based service depends on (`DKNet.EfCore.*`, `DKNet.Svc.*`, `DKNet.Fw.*`) — a defect here compounds into every consumer.
   2. `DKNet.Templates` — https://github.com/baoduy/DKNet.Templates.git. The project templates new services are scaffolded from — a defect here is baked into every new service at day zero. The scaffolded template content (projects, config files) is in scope, not just the packaging code.
@@ -15,9 +15,9 @@ The review has one purpose: make the code **smaller, newer, cleaner and safer wi
 - **How** — your agent instructions already define the procedure: invoke the `architecture-review-sweep` skill and follow it end to end PER REPO (checkout, CodeGraph index, scope/exclusions, shard, rank, dedupe, enforcement PR against that repo's `dev`, report). Read each repo's own `CLAUDE.md` / `AGENTS.md` FIRST — solution-local conventions override the generic rules.
 - **Toolchain baseline** — both repos pin SDK `10.0.0` (`src/global.json`) with `LangVersion` `latest`, so **.NET 10 / C# 14 / EF Core 10 features are already available** and a finding may assume them. Re-read `global.json` and `Directory.Build.props` at the start of each sweep instead of trusting this line — if the pin has moved, the pinned version wins. A framework or SDK **version bump is never itself a finding**.
 - **Constraints**
-  - Findings are filed at `backlog`, children of this run issue (`--parent`), `--assignee-id <triager user_id>` resolved at runtime as the workspace owner (`multica workspace member list --output json`, role `owner`; never a hardcoded UUID, never `--assignee` by name), titled `[A<N>-<n>] [<RULE-ID>] <what and where>` where `N` is this run issue's number — one `[A<N>-<n>]` sequence shared across both repos — with the `Arch fingerprint`, `Arch severity`, `Arch repo` and `Owner` properties set (`Arch repo` is `DKNet` or `DKNet.Templates`).
+  - Findings are filed at `backlog`, children of this run issue (`--parent`), `--assignee-id` the workspace owner per the Workspace Context (never `--assignee` by name), titled per `architecture-review-sweep` §5 (`N` = this run issue's number, one `[A<N>-<n>]` sequence shared across both repos) with the `Arch fingerprint`, `Arch severity`, `Arch repo` and `Owner` properties set (`Arch repo` is `DKNet` or `DKNet.Templates`).
   - Cap: at most 10 findings filed TOTAL across both repos — rank globally after both sweeps, not 10 per repo.
-  - Dedupe fingerprint: `<repo>:<rule-id>:<relative/path/File.cs>:<SymbolName>` where `<repo>` is `DKNet` or `DKNet.Templates`. Never re-file a finding with an open issue.
+  - Dedupe per `architecture-review-sweep` §4; the fingerprint's repo prefix is `DKNet` or `DKNet.Templates`.
   - Enforcement PRs are test-only, target `dev`, both `--head` and `--base` explicit, ONE PR per repo and only where that repo has enforcement-worthy findings; build and tests green locally before pushing.
 - **Inputs** — none; monthly schedule.
 

@@ -1,1 +1,0 @@
-The project for qc-team to do integration tests

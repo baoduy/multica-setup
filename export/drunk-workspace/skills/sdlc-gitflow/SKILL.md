@@ -1,3 +1,8 @@
+---
+name: sdlc-gitflow
+description: Defines correct git-flow mechanics: branch topology, naming, commit style and merge targets. Use when any agent performs a git operation and needs the mechanics, not whether it is allowed.
+---
+
 # SDLC Gitflow
 
 **This skill defines what correct git operation looks like. Your agent instructions define whether you are allowed to perform it.** If two ever disagree on authority, your instructions win. If they disagree on mechanics, this skill wins.

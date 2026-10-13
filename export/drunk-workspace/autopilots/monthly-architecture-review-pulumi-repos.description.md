@@ -4,7 +4,7 @@ Each month, run an architecture review of the drunk Pulumi IaC libraries across 
 
 # Context
 
-- **Audience** — the workspace owner (resolve at runtime: `multica workspace member list --output json`, role `owner`; never a hardcoded UUID). The findings you file are the deliverable for triage; the report on this issue is the index.
+- **Audience** — the workspace owner (resolved per the Workspace Context, **Tickets**). The findings you file are the deliverable for triage; the report on this issue is the index.
 - **Project** — this run issue and every filed finding live in `drunk-pulumi` (id from `multica project list --output json`). Never cross-file into another project.
 - **How** — your agent instructions already define the procedure: invoke `architecture-review-sweep` and follow it end to end PER REPO (checkout, CodeGraph index, scope/exclusions, shard, rank, dedupe, enforcement PR against that repo's `dev`, report), applying `pulumi-azure-iac-standards` as the rule catalogue. Read each repo's own `CLAUDE.md` / `AGENTS.md` FIRST — repo-local conventions override anything generic.
 - **Inputs** — none; monthly schedule.
@@ -43,11 +43,11 @@ The existing convention rules (`PULUMI-BLD-*`, `PULUMI-NAME-*`, `PULUMI-TYPE-*`,
 
 # Filing rules
 
-- Findings are filed at `backlog`, children of this run issue (`--parent`), assigned to the human triager — the workspace owner resolved at runtime via `multica workspace member list --output json` (the entry with role `owner`), passed as `--assignee-id <that user_id>`, never `--assignee` (fuzzy name matching could silently bind the finding to the wrong person on an unattended run).
-- Title: `[A<N>-<n>] [<RULE-ID>] <what and where>` where `N` is this run issue's number — ONE `[A<N>-<n>]` sequence shared across all repos in the run.
+- Findings are filed at `backlog`, children of this run issue (`--parent`), assigned to the human triager — the workspace owner, `--assignee-id` per the Workspace Context (fuzzy `--assignee` matching could bind the finding to the wrong person on an unattended run).
+- Title per `architecture-review-sweep` §5, `N` = this run issue's number — ONE `[A<N>-<n>]` sequence shared across all repos in the run.
 - Properties on every finding: `Arch fingerprint`, `Arch severity`, `Arch repo` (the repo short name, e.g. `drunk-pulumi-azure-components`) and `Owner`.
 - **Cap: at most 10 findings filed TOTAL across all repos in the run** — rank globally after all sweeps finish, not 10 per repo. Everything above the cap goes in the report body only.
-- Dedupe fingerprint: `<repo-short-name>:<rule-id>:<relative/path/File.ts>:<SymbolName>` — e.g. `drunk-pulumi-azure:PULUMI-SEC-006:src/Storage/StorageBuilder.ts:StorageBuilder`. Never re-file a finding that already has an open issue.
+- Dedupe per `architecture-review-sweep` §4; the fingerprint's repo prefix is the short name (`drunk-pulumi-azure:PULUMI-SEC-006:src/Storage/StorageBuilder.ts:StorageBuilder`).
 - A pattern repeated across every repo is worth more as ONE cross-repo finding than as three per-repo ones — say so explicitly and fingerprint it against the repo where the fix belongs.
 
 # Quality bar

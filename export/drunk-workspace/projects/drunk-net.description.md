@@ -1,1 +1,1 @@
-The project to handle all .NET repos (the DKNet family: DKNet, DKNet.Templates), published as NuGet packages.
+The project to handle all .NET repos (the DKNet family: DKNet, DKNet.Templates, and hbd.healthz.ui), published as NuGet packages.

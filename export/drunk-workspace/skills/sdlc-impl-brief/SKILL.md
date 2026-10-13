@@ -1,3 +1,8 @@
+---
+name: sdlc-impl-brief
+description: Defines the implementation-brief contract dev-leader writes into each coding sub-task description. Use when dev-leader decomposes a cycle into coding sub-tasks for an implementer.
+---
+
 # SDLC Implementation Brief — sub-task contract
 
 What dev-leader writes into a coding sub-task's description. Reader: an agent that can read the repo but not your mind. Content: what exists, what changes, what must not change, how "done" is proven. Target 6–8 KB; **over 10 KB the surface is too large — split it into parallel surfaces** with disjoint §3 files and shared §5 stubs (Policy 02 §1c); sequence surfaces only for a real file overlap or behaviour dependency.

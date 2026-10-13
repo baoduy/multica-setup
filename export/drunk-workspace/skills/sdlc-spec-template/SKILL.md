@@ -1,3 +1,8 @@
+---
+name: sdlc-spec-template
+description: Shared spec contract (sections, Gherkin standard, format rules) for a drunk-workspace feature spec. Use when product-owner writes a Workflow B spec or spec-review-gate scores one.
+---
+
 # SDLC Spec Template — shared spec contract
 
 **Single source of truth for what a drunk-workspace feature spec contains.** `product-owner` writes against it; `spec-reviewer` scores against it. If a role skill and this file disagree, this file wins.

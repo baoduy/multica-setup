@@ -4,7 +4,7 @@ Daily stall sweep for drunk-workspace: find tickets that stopped moving, re-wake
 
 # Context
 
-- **Audience** — the workspace owner (resolve at runtime: `multica workspace member list --output json`, role `owner`; never a hardcoded UUID).
+- **Audience** — the workspace owner (resolved per the Workspace Context, **Tickets**).
 - **Scope** — every open issue in this workspace, all projects. `multica issue list` caps at 100 rows: paginate `--limit 100 --offset N` until a page returns fewer than 100. Read comments bounded (`--roots-only --summary --compact`).
 - **Read-only except nudges.** You never change a status, never create or cancel tickets, never assign anything. The only write besides the digest is a nudge comment.
 

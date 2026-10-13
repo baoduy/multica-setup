@@ -195,18 +195,6 @@
       "had_secrets": false
     },
     {
-      "name": "default",
-      "file": "agents/default.json",
-      "source_id": "5bb59f89-c18e-4094-9b90-0de909d537d8",
-      "source_runtime_id": "9d566bf1-b859-4fd3-8eba-ca5b59d19eb4",
-      "source_runtime_provider": "codex",
-      "skill_names": [
-        "blocker-report",
-        "multica-brainstorming"
-      ],
-      "had_secrets": false
-    },
-    {
       "name": "claude_ultra",
       "file": "agents/claude-ultra.json",
       "source_id": "4e429902-8ce5-44b1-85a2-09c3e5c88ee7",
@@ -515,7 +503,8 @@
           "role": "member"
         }
       ],
-      "description_file": "squads/blog-team.description.md"
+      "description_file": "squads/blog-team.description.md",
+      "instructions_file": "squads/blog-team.md"
     }
   ],
   "projects": [
@@ -655,7 +644,7 @@
     }
   ],
   "labels_file": "labels/labels.json",
-  "labels_count": 19,
+  "labels_count": 12,
   "properties_file": "properties/properties.json",
   "properties_count": 9,
   "mcp_servers_file": null,

@@ -4,7 +4,7 @@ Bring the live drunk workspace up to the `main` branch of `baoduy/multica-setup`
 
 # Context
 
-- **Audience**: the workspace owner. Resolve the owner at runtime with `multica workspace member list --output json` and pick the member with role `owner`. Never hardcode a UUID.
+- **Audience**: the workspace owner (resolved per the Workspace Context, **Tickets**).
 - **The script does the sync.** It diffs the tag `live/drunk` against `origin/main`, pushes each changed resource byte-exact, reads it back, and moves the tag only when everything matches. You never push a resource by hand, edit a bundle file, or move the tag yourself.
 - **Runtime**: this host's `multica` and `gh` logins. The script takes a lock, so a second run waits and then finds nothing left to do.
 

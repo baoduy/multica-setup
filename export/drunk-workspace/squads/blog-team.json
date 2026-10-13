@@ -25,5 +25,6 @@
       "role": "member"
     }
   ],
-  "description_file": "squads/blog-team.description.md"
+  "description_file": "squads/blog-team.description.md",
+  "instructions_file": "squads/blog-team.md"
 }

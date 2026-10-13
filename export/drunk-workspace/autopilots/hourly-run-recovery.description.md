@@ -3,13 +3,13 @@
 Every hour, find issues whose agent run stopped without finishing and wake that agent back onto them. Two classes, both covered:
 
 - **A — the run was killed.** A transient infrastructure error: API rate limit / overload, or a background-process failure such as the runtime going offline or the daemon restarting mid-task.
-- **B — the run abandoned its turn.** The task ended `completed` with no error, but the ticket never reached `done` or `blocked` — typically the agent ended its turn waiting on something it backgrounded, which never notifies because the run is already over (DRK-1673 ended on "I'll stop issuing calls now and wait for the background run notification" and sat `in_progress` with nobody coming).
+- **B — the run abandoned its turn.** The task ended `completed` with no error, but the ticket never reached `done` or `blocked` — typically the agent ended its turn waiting on something it backgrounded, which never notifies because the run is already over (a turn that ends on "wait for the background run notification" sits `in_progress` with nobody coming).
 
 Failures that are not safe to retry are never retried, and an issue already woken 3 times is left for a human member to review.
 
 # Context
 
-- **Audience** — the workspace owner (resolve at runtime: `multica workspace member list --output json`, entry with role `owner`; use its `user_id` and name, never a hardcoded UUID). This autopilot runs in `run_only` mode and creates NO run issue: the wake comment on the affected issue is the audit record. A run that finds nothing stranded must leave no trace at all.
+- **Audience** — the workspace owner (resolved per the Workspace Context, **Tickets**). This autopilot runs in `run_only` mode and creates NO run issue: the wake comment on the affected issue is the audit record. A run that finds nothing stranded must leave no trace at all.
 - **Scope** — every agent in this workspace (the one the run is in). Read the agent list at run time with `multica agent list --output json`; never hardcode it, so a newly created agent is covered automatically. Only a LEAF issue (no sub-issues) that is ASSIGNED TO AN AGENT and sits at `todo` or `in_progress` is eligible for a wake (step 4). An issue assigned to a member is waiting on that person — a release approval, a design review — not on a run; one assigned to a squad or to nobody has no agent run to resume. None of them is ever woken.
 - **Detection signal — read this before writing any filter.** Issue status alone tells you nothing: a run that dies or gives up leaves the issue exactly as it was (`todo`, `in_progress`), so no `multica issue list --status ...` sweep can find either class. The signal is the AGENT TASK joined against the issue. `multica agent tasks <agent-id> --output json` returns rows carrying `status`, `error`, `result`, `issue_id`, `created_at`, `completed_at`, `attempt`. A non-empty `issue_id` means the task was issue work.
   - Class A is `status == "failed"` — the run was killed, and `error` says by what.
@@ -27,7 +27,7 @@ Failures that are not safe to retry are never retried, and an issue already woke
 
 # Steps
 
-1. **Build the candidate list with the fixed script — never your own pipeline.** Write this script to `./detect.sh` in your working directory exactly as given, and run `bash ./detect.sh`. Do not rewrite, "simplify" or re-implement it in Python, and never keep its files in `/tmp`: on 2026-09-25 a hand-rolled pipeline appended pretty-printed JSON to a `/tmp` file shared across runs, parsed it line by line, silently dropped the rows it could not parse — among them dev-backend's RUNNING task on DRK-1726 — and woke an agent that was still working.
+1. **Build the candidate list with the fixed script — never your own pipeline.** Write this script to `./detect.sh` in your working directory exactly as given, and run `bash ./detect.sh`. Do not rewrite, "simplify" or re-implement it in Python, and never keep its files in `/tmp`: a hand-rolled pipeline that parses a shared `/tmp` file line by line silently drops the rows it cannot parse, among them a RUNNING task, and wakes an agent that is still working.
 
    ```bash
    multica agent list --output json > ./agents.json || echo "SWEEP PARTIAL: agent list failed" >&2
@@ -72,7 +72,7 @@ Failures that are not safe to retry are never retried, and an issue already woke
 4. **Only agent-assigned, open LEAF issues — already filtered by the script.** Every row in `./candidates.json` has passed three checks, and you never re-check, widen or override them:
 
    - **No sub-issues.** A parent, phase or any other middle ticket is legitimately `todo`/`in_progress` for as long as its sub-issues work; its own run ended on purpose. Without this filter class B fires on every parent in the workspace.
-   - **Assigned to an agent.** An issue assigned to a member is waiting on that human — a release approval, a design review — and waking the agent whose run last touched it only re-posts the same "waiting on you" turn; on 2026-09-30 four such leaves (DRK-1866, DRK-1872, DRK-1879, DRK-1882) were woken to the cap and handed off every hour, and tripped two escalations. An issue assigned to a squad or to nobody has no agent run to resume either.
+   - **Assigned to an agent.** An issue assigned to a member is waiting on that human — a release approval, a design review — and waking the agent whose run last touched it only re-posts the same "waiting on you" turn, to the cap and into an escalation. An issue assigned to a squad or to nobody has no agent run to resume either.
    - **Status `todo` or `in_progress`.** `done`/`cancelled` means the work landed or was dropped; `in_review` is awaiting a human; `blocked` needs an answer, not a retry; `backlog` is not active work.
 
    Everything the script dropped is an expected outcome: not woken, not counted toward the blast-radius guard of step 6, not commented on, not escalated, not mentioned in any report.
@@ -112,7 +112,7 @@ Failures that are not safe to retry are never retried, and an issue already woke
 
    Then bump the counter: `multica issue property set <issue-id> --name "Wake count" --value <n>`.
 
-   **7b. Issues at the cap get a hand-off, not a wake.** For an issue whose `Wake count` is already `>= 3`, post ONE comment — same `--parent` rule — that mentions the issue's human owner (its `Owner` property, else the nearest ancestor's, else the root creator when `creator_type` is `member`, else the workspace owner) and states plainly: the run has now stopped short 4 times, it was woken 3 times, it will NOT be woken again, and the last error or last run output. Do NOT mention any agent in this comment — that would wake it straight back into the same crash. Leave the status, the assignee and the judgment to that member. Post this once and never again for that issue; on later runs it is already at the cap and already handed off, so skip it silently.
+   **7b. Issues at the cap get a hand-off, not a wake.** For an issue whose `Wake count` is already `>= 3`, post ONE comment — same `--parent` rule — that mentions the issue's human owner (resolved per the Workspace Context, **Tickets**) and states plainly: the run has now stopped short 4 times, it was woken 3 times, it will NOT be woken again, and the last error or last run output. Do NOT mention any agent in this comment — that would wake it straight back into the same crash. Leave the status, the assignee and the judgment to that member. Post this once and never again for that issue; on later runs it is already at the cap and already handed off, so skip it silently.
 
 8. **Report, don't retry, the permanent failures.** For each PERMANENT failure, post ONE comment on that issue mentioning the workspace owner (resolved at runtime), naming the failed agent, quoting the error, and stating plainly that it was NOT retried and why. Do NOT mention the agent. Same `--parent` rule as step 7. Issues the script dropped at step 4 get no comment at all.
 

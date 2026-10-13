@@ -1,3 +1,8 @@
+---
+name: sdlc-flow-po-orchestration
+description: Product-owner's procedure for classifying and orchestrating the six SDLC workflows (bug, feature, docs, CI/CD, design, delivery). Use when product-owner classifies a new request or runs a cycle.
+---
+
 # Product-Owner Orchestration
 
 Your procedure for six workflows. Shared contract, actors and caps: `sdlc-flow-delivery-pipeline`. Spec contract (sections, Gherkin standard, format rules): `sdlc-spec-template`, authoritative over this file for everything about the spec. Statuses, wakes, titles, `Owner`, `--content-file`: Workspace Context. You are read-only on code, always. Edge cases of Workflow C (duplicate phases, a human flipping the root, leftovers, multi-repo splits) live in `references/workflow-c-edge-cases.md`; open it when one occurs. Two or more changes to one repo run as one bundle: `references/bundle-root.md`.
@@ -64,7 +69,7 @@ No deliverable while any open question remains. Load `multica-brainstorming` and
    - Each new §3 behaviour needs at least one scenario today's code fails. Check with CodeGraph what today's code does for that scenario's Then; never run anything. A scenario that already holds proves nothing, and its acceptance test can never go red: rewrite it. A **Must stay true** scenario may hold today; it guards what must not break (Policy 06 statement 12a).
 4. **Spec gate**: create ONE `[S<num>] Spec review: <scope>` (same project, parent = your ticket, assignee spec-reviewer, `--stage 1`, `todo`). Idempotent: if one exists, act on its state. Then act on the gate's `Gate verdict` property:
    - **APPROVED** (sub-task `done`) → Workflow C, plus ONE FYI to the requester with the score.
-   - **REWORK** (`Gate verdict` = REWORK; the sub-task is normally `blocked`, but the verdict is authoritative — act on it whatever status the sub-task holds) → revise the spec (a finding that exposes a business question goes through the clarification gate first), rerun the step 3 self-check, then re-arm in TWO parts, both mandatory: (a) set the sub-task `in_progress` (`multica issue status <id> in_progress --no-start`), and (b) post ONE resume comment on it carrying spec-reviewer's mention. The mention is the only wake. **Flipping the sub-task to `todo` re-arms nothing** — only a promotion out of `backlog` on a sub-task that has never run enqueues anything, and this one has already run (DRK-1364 sat re-armed at `todo` twice, the first time for over an hour, until a human asked for the next round by hand).
+   - **REWORK** (`Gate verdict` = REWORK; the sub-task is normally `blocked`, but the verdict is authoritative — act on it whatever status the sub-task holds) → revise the spec (a finding that exposes a business question goes through the clarification gate first), rerun the step 3 self-check, then re-arm in TWO parts, both mandatory: (a) set the sub-task `in_progress` (`multica issue status <id> in_progress --no-start`), and (b) post ONE resume comment on it carrying spec-reviewer's mention. The mention is the only wake. **Flipping the sub-task to `todo` re-arms nothing** — only a promotion out of `backlog` on a sub-task that has never run enqueues anything, and this one has already run; a sub-task re-armed at `todo` sits there until a human notices.
    - **ESCALATED** (sub-task reassigned to a human) → their `done` flip releases you; never re-arm while a human holds it.
    - Never delegate while the review sub-task is not `done`.
 

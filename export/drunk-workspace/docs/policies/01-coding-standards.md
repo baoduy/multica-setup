@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-01 |
-| **Version** | 1.10 |
+| **Version** | 1.11 |
 | **Status** | Active |
 | **Owner** | dev-leader |
 | **Applies to** | Every engineer and agent writing or modifying code in any drunk stack: .NET/DDD NuGet libraries, Pulumi/TypeScript npm packages, Python MCP/FastAPI services, Docker images, Helm charts |
@@ -88,8 +88,8 @@ generic rule here where they differ (see Exceptions).
    the repos' CI duplication gate (SonarCloud, new-code duplication over 3%) counts test
    code and fails the PR. DAMP still holds inside a test body: the rule targets copied
    setup, not readable assertions. Where the repo runs a duplication gate, the implementer
-   checks the changed test files locally before pushing (`npx jscpd --min-lines 10
-   --reporters console <changed test dirs>`).
+   runs a local duplication check against the changed test dirs before pushing; the command
+   lives in `sdlc-flow-squad-worker-playbook` check 9, which owns it.
 8. **Less code, no speculative abstraction.** No dead code, no interface with one
    implementation and no test-double need, no redundant forwarding wrapper, no reinvented
    BCL/framework/stdlib behaviour (`CLEAN-LESS-001..004`). SRP size triggers: class >~300
@@ -151,9 +151,8 @@ generic rule here where they differ (see Exceptions).
     OPEN. It reports one `Pre-review` row. One pass, no score, no second loop: the
     pre-review exists to cut the gate's findings, not to repeat the gate, and its answers
     stand in for the implementer's own brief re-read, comments and Standards checks
-    (`sdlc-flow-squad-worker-playbook`, `references/pre-review.md`). Why: 26 of 28 rework
-    rounds from 2026-09 to 2026-10-02 held only findings an earlier check could have caught,
-    and in 37 of their 44 findings the Build report had never mentioned the check.
+    (`sdlc-flow-squad-worker-playbook`, `references/pre-review.md`). Why: a fresh-context
+    pre-review catches what the PR gate would otherwise have to find first (see CHANGELOG).
 
 ## Roles & responsibilities
 

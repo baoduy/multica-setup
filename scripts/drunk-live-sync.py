@@ -69,6 +69,29 @@ class Live:
         return self._skill_full[sid]
 
 
+def frontmatter_description(text):
+    """The description field of a SKILL.md YAML frontmatter, folded to one line; None when absent."""
+    if not text.startswith("---\n"):
+        return None
+    end = text.find("\n---", 4)
+    if end < 0:
+        return None
+    lines = text[4:end].split("\n")
+    for i, line in enumerate(lines):
+        if line.startswith("description:"):
+            v = line[len("description:"):].strip()
+            if v in (">-", ">", "|", "|-"):
+                v = ""
+                for cont in lines[i + 1:]:
+                    if cont and not cont.startswith((" ", "\t")):
+                        break
+                    v += (" " if v else "") + cont.strip()
+            if len(v) >= 2 and v[0] == v[-1] and v[0] in "\"'":
+                v = v[1:-1]
+            return v or None
+    return None
+
+
 def owners(rev):
     """Map each live-text bundle file to (kind, live name, field) using the bundle's own json."""
     out = {}
@@ -131,6 +154,9 @@ def push(live, kind, name, field, text):
         sid = live.skills[name]["id"]
         if field == "SKILL.md":
             run(["multica", "skill", "update", sid, "--content-stdin"], stdin=text)
+            desc = frontmatter_description(text)
+            if desc is not None:
+                run(["multica", "skill", "update", sid, "--description", desc])
         elif field == "config.json":  # the skill's config field, not a file
             run(["multica", "skill", "update", sid, "--config", json.dumps(json.loads(text))])
         else:
@@ -154,7 +180,9 @@ def matches(live, kind, name, field, text):
         if field == "SKILL.md":
             s = mjson("skill", "get", sid)
             data = text.encode()
-            return s.get("content_hash") == hashlib.sha256(data).hexdigest() and s.get("content_size") == len(data)
+            desc = frontmatter_description(text)
+            desc_ok = desc is None or (s.get("description") or "").strip() == desc
+            return desc_ok and s.get("content_hash") == hashlib.sha256(data).hexdigest() and s.get("content_size") == len(data)
         if field == "config.json":
             return (mjson("skill", "get", sid).get("config") or {}) == json.loads(text)
         files = {f["path"]: f["content"] for f in live.skill(sid, refresh=True).get("files") or []}

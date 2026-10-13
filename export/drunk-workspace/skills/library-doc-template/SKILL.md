@@ -1,6 +1,6 @@
 ---
 name: library-doc-template
-description: House template for a LIBRARY doc page — a package, Pulumi component or client SDK a developer installs and calls in their own code (DKNet packages, drunk-pulumi-* components), plus its package README and changelog entry. Not for a feature callers reach over HTTP — that is api-feature-doc-template.
+description: House template for a LIBRARY doc page — a package, Pulumi component or client SDK a developer installs and calls in their own code (DKNet packages, drunk-pulumi-* components), plus its package README and changelog entry. Not for a feature callers reach over HTTP — that is api-feature-doc-template. Use when docs-writer writes or updates a library or package's doc page.
 ---
 
 # Library doc template
@@ -77,10 +77,7 @@ what this deliberately does NOT do. Never empty on a non-trivial package.>
 | Question | Why it matters | Checked | Who can answer |
 |---|---|---|---|
 
-<One row per fact the page needs and the repo cannot prove: a supported
-version range, an intended behaviour the code contradicts, an owner. Checked:
-what you read before giving up. The rest of the page never states a guess as
-fact.>
+<What goes in each row: `references/page-rules.md`.>
 ```
 
 ## Section rules
@@ -98,15 +95,9 @@ fact.>
 | 🔗 Related packages | When siblings exist | Bare links with no "reach for this when" line |
 | ❓ Open questions | When the page needs a fact the repo cannot prove | A guess stated as fact elsewhere on the page; a row with no "Checked" |
 
-Emoji headings are house style on these pages — keep them, exactly as above.
-
-**Point at code by name, never by line.** Name the class or type (`AuthConfig`),
-or the folder that holds it (`ApiEndpoints/DKNet.Notification.Api/Configs/Auth/`).
-A file path is fine when the file itself is the subject (`appsettings.json`,
-`Program.cs`). Never a line number or line range (`AuthConfig.cs:28-29`,
-`#L28`): every edit to the file moves its lines, and the page goes stale with
-nobody noticing. Line-level evidence belongs in the archify IR's `evidence` and
-in your completion report, never on the page.
+Emoji-heading note and code-naming rule (point at code by name, never by
+line): `references/page-rules.md` (open it before writing and again before
+pushing).
 
 ## Diagrams
 
@@ -117,19 +108,10 @@ transforms — gets its own diagram after its example, and how the package sits
 among its siblings goes in 🧱 Where it fits. One diagram per shape; never draw
 the same flow twice.
 
-Every diagram is drawn with archify, never Mermaid — even where the repo's own
-template offers Mermaid as a fallback.
-
-The archify type is your call: pick the one that best shows what that diagram
-must answer, using archify's own type router (its `guide` command settles a
-close call). A Pulumi component's flow is the resources it creates, in order,
-each optional one behind the arg that switches it on.
-
-Every diagram shows the real mechanism: the type, method, resource and arg
-names from the code, never generic boxes ("Service → Database"). Commit both
-the JSON IR and the rendered `.svg`, side by side under `docs/diagrams/` (or
-the repo's existing diagram folder), and reference the `.svg` from the
-Markdown with alt text that narrates the flow in one sentence.
+Archify diagram rules (drawn with archify not Mermaid, picking the type via
+its type router, naming the real mechanism, committing IR + `.svg`):
+`references/page-rules.md`. A Pulumi component's flow is the resources it
+creates, in order, each optional one behind the arg that switches it on.
 
 ## Two smaller shapes
 
@@ -173,6 +155,6 @@ in your report so it can be scheduled as its own change.
 5. 🔄 How it works has its flow diagram, drawn from the call path you traced in
    the code; every diagram's JSON IR and rendered `.svg` are both committed, and
    the `.svg` renders in the Markdown preview.
-6. No line references on the page: `git diff origin/dev... -- '*.md' | grep -E '^\+.*\.(cs|ts|tsx|js|py|json|ya?ml|csproj|props|targets|sh|bicep|tf)(:[0-9]+|#L[0-9]+)'`
-   prints nothing.
-7. `git diff --stat` shows documentation and diagram files only.
+6. Self-check and docs-only diff proof (no line references on the page;
+   `git diff --stat` touches documentation and diagram files only):
+   `references/page-rules.md`.

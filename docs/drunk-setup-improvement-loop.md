@@ -172,7 +172,7 @@ Outcomes:
 ## Guardrails
 
 - `setup-steward` never pushes live, moves the tag, merges or approves the PR,
-  or touches `export/mx-workspace/`, `scripts/`, `.github/` or the root
+  or touches `scripts/`, `.github/` or the root
   `CLAUDE.md`.
 - No agent changes a gate bar, cap, weight or severity deduction; those go to
   the owner.
@@ -184,6 +184,5 @@ Outcomes:
 
 - The Mac mini must be on: the Multica backend, the runtimes and the webhook
   endpoint all run there.
-- mx-workspace has no loop or live sync yet.
 - New or deleted resources, avatars, triggers, labels and properties are still
   manual steps, unless they are applied live before the merge.
