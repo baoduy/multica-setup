@@ -1,3 +1,8 @@
+---
+name: codegraph
+description: Explains the CodeGraph semantic code-search tool and when to query it instead of grep or reading files. Use when any agent must understand, trace, or assess the impact of code in an indexed repo.
+---
+
 # CodeGraph — Semantic Code Intelligence
 
 [CodeGraph](https://github.com/colbymchenry/codegraph) is pre-built knowledge graph of every symbol, call edge, and dependency in your codebase. It hands agent exact code it needs in **one tool call** — no grep, glob, or file-reading loop.

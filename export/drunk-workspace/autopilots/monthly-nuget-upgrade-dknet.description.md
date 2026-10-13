@@ -4,7 +4,7 @@ Each month, upgrade every NuGet package reference in the DKNet repository to its
 
 # Context
 
-- **Requester** — the workspace owner (resolve at runtime: `multica workspace member list --output json`, role `owner`; never a hardcoded UUID).
+- **Requester** — the workspace owner (resolved per the Workspace Context, **Tickets**).
 - **Scope** — ONE repo: `DKNet` — https://github.com/baoduy/DKNet.git. Do NOT touch `DKNet.Templates` or any other repo in this run.
 - **Project** — this run issue and every sub-task live in `drunk-net` (id from `multica project list --output json`). Never cross-file into another project.
 - **How** — run your normal squad cycle (Build → Verify → Review) per your playbook. This description is the approved spec; no product-owner round is needed. Read the repo's own `CLAUDE.md` / `AGENTS.md` first — solution-local conventions override anything generic here.

@@ -1,3 +1,8 @@
+---
+name: sdlc-flow-delivery-pipeline
+description: Shared one-page contract of actors, stage ownership, branch strategy and numeric caps for the SDLC delivery pipeline. Use when product-owner, dev-leader, or a gate needs the platform-wide constants.
+---
+
 # SDLC Delivery Pipeline — Shared Contract
 
 The one-page contract every pipeline agent shares: actors, flows, stage ownership, branch strategy, escalation caps. Platform-wide constants (statuses, wakes, titles, `Owner`, git rules) are in the Workspace Context you already carry and are not repeated here. Role procedure lives in role skills — `sdlc-flow-po-orchestration` (product-owner), `sdlc-flow-squad-leader-playbook` (dev-leader), `spec-review-gate`, `pr-review-gate`; if this file and a role skill disagree, the role skill wins for its owner and the mismatch is reported to the workspace owner.

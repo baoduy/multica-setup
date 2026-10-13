@@ -131,8 +131,6 @@ Then add ONE `## OUT-OF-SCOPE DEFECT (file separately)` section to your terminal
 
 Everything that does not clear the bar — comment wording, loose assertions, alignment, duplication suggestions, coverage of paths this diff never touched, architectural debt — is **dropped** to the monthly arch-review sweep. That loss is the deliberate trade.
 
-`Review follow-ups:` tickets are **retired**.
-
 State the outcome in your score announcement: `Merged with: none | <file:line list>` and `Leftovers: none | out-of-scope defect reported to dev-leader`.
 
 ## Blocked path (cannot review at all)

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-10 |
-| **Version** | 1.3 |
+| **Version** | 1.4 |
 | **Status** | Active |
 | **Owner** | product-owner (sets Owner on the tickets it creates; every agent shares the resolution duty) |
 | **Applies to** | Every ticket in the workspace — main tickets, spec-review sub-tasks, phase tickets, dev sub-tasks, gate handoffs, arch/BDD findings, and autopilot-filed issues |
@@ -40,8 +40,8 @@ Before this policy, agents that needed a human — a gate handing back a review,
 escalating a blocker — resolved the human inconsistently. Some walked to the ROOT creator
 first; the review gates skipped straight to the **workspace owner**. On an agent-created
 root (a QC-filed defect, an arch finding promoted to a bug) that shortcut always landed on
-the workspace owner, so *every* ticket appeared to be owned by one person (the incident on
-MXW-2066). This policy makes ownership **explicit, propagated, and resolved the same way by
+the workspace owner, so *every* ticket appeared to be owned by one person (an owner-pickup incident in a sibling
+workspace, see CHANGELOG). This policy makes ownership **explicit, propagated, and resolved the same way by
 every agent**, so the right human is reached and the workspace owner is only ever the
 fallback.
 
@@ -145,5 +145,5 @@ assignee is a policy amendment, not a local exception.
 - [Policy 05 — SDLC Delivery Lifecycle](05-sdlc-delivery-lifecycle.md) — escalation map, wake/status discipline.
 - [Policy 09 — Agent Roles & Responsibilities](09-agent-roles-and-responsibilities.md) — workspace-identity header, triager routing.
 - The Workspace Context, **Tickets** ("Set the `Owner` property on every issue you create" and the resolution order) — the implementing contract every agent run carries.
-- Incident: MXW-2066 (`[D2058-3] Review`) — gate resolved to workspace owner because the 2-step order skipped the `Owner` property; the fix that motivated this policy.
+- Incident: an owner-pickup incident in a sibling workspace (see CHANGELOG) — gate resolved to workspace owner because the 2-step order skipped the `Owner` property; the fix that motivated this policy.
 

@@ -1,3 +1,8 @@
+---
+name: spec-review-gate
+description: Comprehensive weighted review and automated gate for a product-owner Workflow B spec, replacing human approval. Use when the spec-review-gate sub-task is assigned, promoted, or mentioned.
+---
+
 # Spec Review Gate
 
 Comprehensive review of product-owner Workflow B spec with weighted 1–10 score and automated gate actions for drunk-workspace delivery pipeline. This gate REPLACES human requester-approval step for specs, so its bar is quality bar: a spec approved here goes straight to implementation. Pipeline: **collect → analyze → score → gate**.

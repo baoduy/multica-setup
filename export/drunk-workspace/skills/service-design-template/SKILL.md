@@ -1,6 +1,6 @@
 ---
 name: service-design-template
-description: House template for a NEW SERVICE's architecture design — the docs/architect/ file set service-architect writes before the service's first code (identity card, scope and responsibilities, domain model, integration, data, quality attributes, ADRs). The approved design binds every later spec and implementation in that repo. Not for documenting code that exists — that is library-doc-template or api-feature-doc-template.
+description: House template for a NEW SERVICE's architecture design — the docs/architect/ file set service-architect writes before the service's first code (identity card, scope and responsibilities, domain model, integration, data, quality attributes, ADRs). The approved design binds every later spec and implementation in that repo. Not for documenting code that exists — that is library-doc-template or api-feature-doc-template. Use when service-architect designs a new service before its first code, or revises an approved design.
 ---
 
 # Service design template
@@ -189,12 +189,14 @@ old one superseded; it never edits an accepted decision.
 Every diagram is drawn with archify, never Mermaid — no fallback, no
 placeholder. Required: the context map and at least one main flow (03), the
 domain model (02), a lifecycle per stateful aggregate (02), and the planned
-runtime architecture (05). The archify type
-for each is your call, using archify's type router. Diagrams show the real names
-from this design — never generic boxes ("Service → Database"). Commit the JSON
-IR and the rendered `.svg` side by side under `docs/architect/diagrams/`, and
-reference the `.svg` with alt text that narrates it in one sentence. archify
-will not install, validate or render → `blocked` with the failing command.
+runtime architecture (05). The archify type for each is your call: pick the
+one that best shows what that diagram must answer, using archify's own type
+router. Every diagram shows the real mechanism — the names this design
+defines, never generic boxes ("Service → Database"). Commit both the JSON IR
+and the rendered `.svg`, side by side under `docs/architect/diagrams/`, and
+reference the `.svg` from the Markdown with alt text that narrates it in one
+sentence. archify will not install, validate or render → `blocked` with the
+failing command.
 
 ## Revising an approved design
 

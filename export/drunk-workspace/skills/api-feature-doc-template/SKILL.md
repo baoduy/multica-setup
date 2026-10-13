@@ -1,6 +1,6 @@
 ---
 name: api-feature-doc-template
-description: House template for an API FEATURE doc page — a feature of a running application that callers reach over HTTP, a webhook or an MCP tool (overview, business domain, end-to-end flow from endpoint to database and events, endpoints, entity fields at database level, downstream systems), plus the app's service README and its deployment guide. Not for an installable package — that is library-doc-template.
+description: House template for an API FEATURE doc page — a feature of a running application that callers reach over HTTP, a webhook or an MCP tool (overview, business domain, end-to-end flow from endpoint to database and events, endpoints, entity fields at database level, downstream systems), plus the app's service README and its deployment guide. Not for an installable package — that is library-doc-template. Use when docs-writer writes or updates an API feature's doc page.
 ---
 
 # API feature doc template
@@ -64,13 +64,8 @@ placeholder text under it.
   recovery time and data-loss window, service objectives, the owning team.
   Never inferred, never invented: each goes in ❓ Open questions.
 
-**Point at code by name, never by line.** Name the class or type (`AuthConfig`),
-or the folder that holds it (`ApiEndpoints/DKNet.Notification.Api/Configs/Auth/`).
-A file path is fine when the file itself is the subject (`appsettings.json`,
-`Program.cs`). Never a line number or line range (`AuthConfig.cs:28-29`,
-`#L28`): every edit to the file moves its lines, and the page goes stale with
-nobody noticing. Line-level evidence belongs in the archify IR's `evidence` and
-in your completion report, never on the page.
+Code-naming rule (point at code by name, never by line): `library-doc-template`
+`references/page-rules.md` (open it before writing and again before pushing).
 
 ## The skeleton
 
@@ -214,10 +209,7 @@ to reach for it instead.>
 | Question | Why it matters | Checked | Who can answer |
 |---|---|---|---|
 
-<One row per fact the page needs and the repo cannot prove: a production
-value, a retention or recovery target, an owner, an intended behaviour the
-code contradicts. Checked: what you read before giving up. The rest of the
-page never states a guess as fact.>
+<What goes in each row: `library-doc-template` `references/page-rules.md`.>
 ```
 
 ## Section rules
@@ -238,7 +230,7 @@ page never states a guess as fact.>
 | 🔗 Related features | When siblings or a client SDK exist | Bare links with no "reach for this when" line |
 | ❓ Open questions | When the page needs a fact the repo cannot prove | A guess stated as fact elsewhere on the page; a row with no "Checked" |
 
-Emoji headings are house style on these pages — keep them, exactly as above.
+Emoji-heading note: `library-doc-template` `references/page-rules.md`.
 
 ## Diagrams
 
@@ -255,22 +247,13 @@ that travels on after it is raised may get one in 📣 Events. A deployment guid
 carries one diagram, in 🔄 Release path: the pipeline's real stages, artifacts
 and target environments.
 
-Every diagram is drawn with archify, never Mermaid — even where the repo's own
-template offers Mermaid as a fallback. Only an `erDiagram` a repo template asks
-for may stay Mermaid: archify has no table-schema type.
-
-The archify type is your call: pick the one that best shows what that diagram
-must answer, using archify's own type router (its `guide` command settles a
-close call) — typically a sequence or workflow for the flow, a lifecycle for
-the status. A table schema stays a table. One diagram per shape; never draw the
-same flow twice.
-
-Every diagram shows the real mechanism: the route, handler, table, queue,
-event and partner-system names from the code, never generic boxes
-("Service → Database"). Commit both the JSON IR and the rendered `.svg`, side
-by side under `docs/diagrams/` (or the repo's existing diagram folder), and
-reference the `.svg` from the Markdown with alt text that narrates the flow in
-one sentence.
+Archify diagram rules (drawn with archify not Mermaid, picking the type via
+its type router, naming the real mechanism, committing IR + `.svg`):
+`library-doc-template` `references/page-rules.md`. This template's own
+exception: a repo template that asks for an `erDiagram` may keep it in
+Mermaid — archify has no table-schema type. The flow diagram is typically a
+sequence or workflow; a status diagram is typically a lifecycle; a table
+schema stays a table.
 
 ## Service README
 
@@ -421,12 +404,12 @@ above it.
    what enforces it.
 8. 🌐 Downstream systems lists every registered client and bus endpoint the
    feature touches, each with its "when it is down" behaviour.
-9. No line references on the page: `git diff origin/dev... -- '*.md' | grep -E '^\+.*\.(cs|ts|tsx|js|py|json|ya?ml|csproj|props|targets|sh|bicep|tf)(:[0-9]+|#L[0-9]+)'`
-   prints nothing.
+9. Self-check and docs-only diff proof (no line references on the page;
+   `git diff --stat` touches documentation and diagram files only):
+   `library-doc-template` `references/page-rules.md`.
 10. Every fact the repo cannot prove is a ❓ Open questions row, never a
     sentence elsewhere; every config row has Required, Rules, Secret and Takes
     effect; no secret has a real-looking value.
 11. A deployment guide's 🔄 Release path diagram is drawn from the pipeline
     YAML, ↩️ Roll back names what it leaves behind, and no deploy command was
     run.
-12. `git diff --stat` shows documentation and diagram files only.

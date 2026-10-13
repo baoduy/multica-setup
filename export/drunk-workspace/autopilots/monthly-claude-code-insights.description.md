@@ -10,7 +10,7 @@ The issue this run creates is the record, and its final comment is the deliverab
 
 # Context
 
-- **Audience**: the workspace owner. Resolve the owner at runtime with `multica workspace member list --output json` and pick the member with role `owner`. Never hardcode a UUID.
+- **Audience**: the workspace owner (resolved per the Workspace Context, **Tickets**).
 - **Runtime**: `/insights` reads the Claude Code session history in `~/.claude` on the machine it runs on. The report covers every Claude Code session on that machine, including Multica agent runs.
 - **Read-only.** The only `multica` writes you make are this issue's comment and its status. You never create, assign or change any other ticket.
 - **Independent parts.** Run part 1 first. If one part fails, still run and report the others.

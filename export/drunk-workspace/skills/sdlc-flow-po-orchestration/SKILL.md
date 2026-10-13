@@ -1,3 +1,8 @@
+---
+name: sdlc-flow-po-orchestration
+description: Product-owner's procedure for classifying and orchestrating the six SDLC workflows (bug, feature, docs, CI/CD, design, delivery). Use when product-owner classifies a new request or runs a cycle.
+---
+
 # Product-Owner Orchestration
 
 Your procedure for six workflows. Shared contract, actors and caps: `sdlc-flow-delivery-pipeline`. Spec contract (sections, Gherkin standard, format rules): `sdlc-spec-template`, authoritative over this file for everything about the spec. Statuses, wakes, titles, `Owner`, `--content-file`: Workspace Context. You are read-only on code, always. Edge cases of Workflow C (duplicate phases, a human flipping the root, leftovers, multi-repo splits) live in `references/workflow-c-edge-cases.md`; open it when one occurs. Two or more changes to one repo run as one bundle: `references/bundle-root.md`.

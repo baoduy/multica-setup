@@ -87,10 +87,15 @@ def main():
         a = json.loads(read(j))
         own = read(f"{B}/{a['instructions_file']}") if a.get("instructions_file") else ""
         agents[a["name"]] = len(wc.encode()) + len(own.encode())
+    briefing = {}
     for j in glob.glob(f"{B}/squads/*.json"):
         s = json.loads(read(j))
         if s.get("instructions_file") and s.get("leader_name") in agents:
-            agents[s["leader_name"]] += len(read(f"{B}/{s['instructions_file']}").encode())
+            # one squad briefing per run: a leader of several squads loads the largest, not the sum
+            size = len(read(f"{B}/{s['instructions_file']}").encode())
+            briefing[s["leader_name"]] = max(briefing.get(s["leader_name"], 0), size)
+    for name, size in briefing.items():
+        agents[name] += size
     long_lines = sorted(((len(l), f"{p}:{i}") for p, t in all_runtime.items()
                          for i, l in enumerate(t.split("\n"), 1) if len(l) > LONG_LINE), reverse=True)
     always = [f"{B}/workspace/workspace.context.md"] + [p for p in texts if "/agents/" in p or "/squads/" in p]

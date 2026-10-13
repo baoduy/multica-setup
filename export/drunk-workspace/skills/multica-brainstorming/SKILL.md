@@ -21,7 +21,7 @@ A reply approves only the stage actually presented. Answers to a round, or a pic
 
 Where your role skill already defines the procedure — product-owner's Workflow B, the seven sections of `sdlc-spec-template`, and the spec-review gate in `sdlc-flow-po-orchestration` — **that procedure owns the deliverable's shape and location.** This skill governs only the dialogue that produces it and the hand-off that follows. Workflows with no spec (A, D, E) use step 2 only, limited to what genuinely blocks the work. Never blend two contradictory procedures: follow the role skill and flag the mismatch to the workspace owner.
 
-**Where you stop depends on your role.** product-owner runs every step and confirms through the spec preview (step 4) — never a separate intent confirmation first. Every role that never writes a spec — the platform assistants (`default`, `claude_ultra`), Mika, blog-writer, docs-writer — runs steps 1–2, stops at the confirmed intent (step 2a), and then follows its own procedure.
+**Where you stop depends on your role.** product-owner runs every step and confirms through the spec preview (step 4) — never a separate intent confirmation first. Every role that never writes a spec — `claude_ultra`, Mika, blog-writer, docs-writer — runs steps 1–2, stops at the confirmed intent (step 2a), and then follows its own procedure.
 
 ## Anti-Pattern: "This Is Too Simple To Need A Design"
 
@@ -163,7 +163,7 @@ The approved design is input to the delivery pipeline, never a licence to implem
 
 - **product-owner** — the design becomes the main-ticket spec. Feature or enhancement → spec-review gate, then Workflow C once APPROVED. CI/CD or a Helm chart → Workflow D, straight to `devops`, no spec gate. A new service → Workflow F: the settled brief goes to `service-architect` as `[P<num>-1] Design`, no spec gate. You stay read-only on code throughout.
 - **blog-writer and docs-writer** — the confirmed intent (step 2a) is the brief for your post or docs PR; carry on with your own procedure.
-- **platform assistants (`default`, `claude_ultra`) and Mika** — you never spec or implement. Stop at the confirmed intent (step 2a), write it into the ticket you file, and route per your own routing rules: product work to `product-owner` (a new service's design included), CI/CD and Helm charts to `devops`, docs to `docs-writer`.
+- **`claude_ultra` and Mika** — you never spec or implement. Stop at the confirmed intent (step 2a), write it into the ticket you file, and route per your own routing rules: product work to `product-owner` (a new service's design included), CI/CD and Helm charts to `devops`, docs to `docs-writer`.
 
 Mention only the requester in a dialogue comment. Never mention another agent there: every agent mention link enqueues a run, even a quoted one.
 

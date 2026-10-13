@@ -1,3 +1,8 @@
+---
+name: sdlc-flow-squad-leader-playbook
+description: Dev-leader's wake-up checklist and orchestration machinery for every run of a cycle. Use when dev-leader wakes to a squad briefing, a sub-task comment, or a stalled or blocked child.
+---
+
 # Squad-Leader Playbook
 
 Machinery for dev-leader on every wake. Your squad briefing (delivered with each leader task) carries the roster with mention markdown, the stage table and the routing rules; `sdlc-flow-delivery-pipeline` carries the shared contract; the Workspace Context carries statuses, wakes and ticket conventions. You analyze and orchestrate. Your only hands-on work is the cycle's git-flow (`leader-gitops`): branch cut, one PR, mechanical conflict resolution, closing a duplicate root's PR as superseded, plus read-only `git ls-remote`. Never write code, run tests, or assign issues to yourself.

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-02 |
-| **Version** | 1.15 |
+| **Version** | 1.16 |
 | **Status** | Active |
 | **Owner** | dev-backend |
 | **Applies to** | Every code or behaviour change in a drunk repo, across every stack |
@@ -100,10 +100,9 @@ statements but follows the runner and structure conventions below.
    whole suite green; the PR gate's CI check is the backstop. Surfaces run in sequence only
    when one must change a file the other changes, or needs the other's behaviour — not its
    signature — to turn its tests green and no fake can stand in. A brief over 10 KB splits
-   into parallel surfaces, never into a sequence for size alone. Why: from 2026-09-20 to
-   10-03, 12 cycles had more than one Build and 7 of them ran every Build in sequence
-   (DRK-2013, DRK-2028, DRK-1679), because each Build had to finish on a fully green suite
-   that held its sibling's red tests.
+   into parallel surfaces, never into a sequence for size alone. Why: running every Build in
+   sequence forced each one to finish on a fully green suite that held its sibling's red
+   tests (see CHANGELOG).
 1a. **UI presentation ships without new tests, for now.** A UI presentation change — the screens
    and layouts, components, styling and copy of a front-end app (for example, in DKNet.Accounts.Api:
    `ui/components/**` and the `page`, `layout` and `.css` files under `ui/app/**`) — has no
@@ -151,10 +150,9 @@ statements but follows the runner and structure conventions below.
    is an `important` finding: it belongs in a covered project, unless the owner waived the
    surface's tests (statement 1f). A PR that adds or widens a
    coverage exclusion is `blocking` unless its ticket asks for it ([Policy 04](04-code-and-spec-review.md)
-   statement 5a). Why: DKNet.Accounts.Api's `coverage.runsettings` says of its AppHost "do not
-   write tests to cover them", yet statements 4, 6 and 6a asked DRK-2135's AppHost Build
-   (DRK-2159) for coverage and a mutation report; and DRK-2098 failed the spec gate three
-   times on a requester's "no test for AppHost" that no rule could honour.
+   statement 5a). Why: a repo's own coverage config can already exclude a file from testing,
+   so asking it for coverage and a mutation report anyway demands something the config had
+   already ruled out (see CHANGELOG).
 1f. **The ticket's owner can waive tests for code that never ships.** A surface can be waived
    only when no shipped artifact uses it: no project that is deployed to production or
    published as a package references it, and no released image or package contains it. For
@@ -231,7 +229,7 @@ statements but follows the runner and structure conventions below.
    a repo-wide figure. UI presentation files (statement 1a), coverage-excluded files
    (statement 1e) and owner-waived files (statement 1f) are outside this gate.
 6a. **Mutation report per touched class — coverage's honesty check.** Coverage says a line ran; only mutation says an assertion would have caught it changing. Every Build except a UI presentation one (statement 1a), a `build-excluded` one (statement 1e) and a `build-waived` one (statement 1f) reports a mutation run scoped to the lines the cycle changed in the classes it touched — `dotnet stryker --since:origin/dev` on .NET, `npx stryker run --mutate "<file>:<start>-<end>,…"` over the diff's hunks on TypeScript — never the whole class, whose unchanged code the cycle does not own; reported per touched class, with **every survivor dispositioned** — `killed — added <test>` / `equivalent` / `accepted — <why>`. Tool genuinely unavailable → the manual equivalent: invert each guard the change added, run, confirm RED, restore, and say in the report that the tool was unavailable. A Build reported `done` without a mutation report and its dispositions is incomplete the same way a missing coverage row is; dev-leader sends it back and never promotes past it.
-6b. **Nothing is reported skipped, and CI runs locally first.** A Build in any mode, and a Build's rework fix, never reports `done` with a check it was asked to run marked skipped or deferred. A check that cannot run is a `blocked` with the reason, or the manual fallback its own statement names. Before its last push the implementer makes a throwaway local merge of fresh `origin/dev` into its HEAD (a scratch branch it never pushes; the shared feature branch is never rebased) and, from the repo root, runs the repo's `pull_request` workflow steps that run locally (`.github/workflows/*.yml`: build, lint, typecheck, test, pack, compose and image builds), all of them, not only the test project it changed. A step that needs a secret, uploads, publishes or deploys (SonarCloud scan, codecov or snyk upload, image push) is listed as `not local: <step>`, which is a declared boundary, not a skip; where the repo gates on SonarCloud duplication, `jscpd` runs locally in its place (statement 7a of [Policy 01](01-coding-standards.md)). It reports them in a `CI parity` row. A red also present on `origin/dev` is noted with that proof, and so are a still-running parallel sibling's own `@new` scenarios (statement 1c), named by its key; any other red is the implementer's to fix. A merge conflict there is reported in the row, not resolved: conflicts with `dev` are dev-leader's (`leader-gitops`). dev-leader sends back a Build whose report marks any check skipped. Why: DRK-1830 deferred Stryker and two mutants survived to the gate; DRK-1867 was red on the merge head; DRK-1777 broke a compose job no one ran locally.
+6b. **Nothing is reported skipped, and CI runs locally first.** A Build in any mode, and a Build's rework fix, never reports `done` with a check it was asked to run marked skipped or deferred. A check that cannot run is a `blocked` with the reason, or the manual fallback its own statement names. Before its last push the implementer runs every `pull_request` workflow check locally first, on a throwaway merge of fresh `origin/dev` into its HEAD, not only the test project it changed. A step that needs a secret, uploads, publishes or deploys is listed as `not local: <step>`, which is a declared boundary, not a skip. The mechanics — the throwaway merge, the exact workflow steps, the `jscpd` substitution (statement 7a of [Policy 01](01-coding-standards.md)) — live in `sdlc-flow-squad-worker-playbook` check 9, which owns them. It reports them in a `CI parity` row. A red also present on `origin/dev` is noted with that proof, and so are a still-running parallel sibling's own `@new` scenarios (statement 1c), named by its key; any other red is the implementer's to fix. A merge conflict there is reported in the row, not resolved: conflicts with `dev` are dev-leader's (`leader-gitops`). dev-leader sends back a Build whose report marks any check skipped. Why: DRK-1830 deferred Stryker and two mutants survived to the gate; DRK-1867 was red on the merge head; DRK-1777 broke a compose job no one ran locally.
 7. **Never inflate coverage.** No trivial tests on getters or framework code. If 80% on a
    touched class is genuinely unreachable, flag the untestable paths to dev-leader instead of
    padding; if code is untestable as written, propose the smallest design change rather than

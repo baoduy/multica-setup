@@ -1,3 +1,8 @@
+---
+name: bug-report
+description: Defines the standard body contract for a separate bug or defect ticket. Use when dev-leader or product-owner files a new bug issue outside an in-cycle fix or blocker report.
+---
+
 # bug-report — standard bug/defect issue format
 
 The body contract for every SEPARATE bug or defect issue filed — a new backlog/todo ticket reporting something broken. Does NOT cover in-cycle fix sub-tasks (`Fix:`/`Fix (review):` — those follow the dispatching gate's own format and routing) or blockers (`blocker-report`). Goal: a reader with ZERO context can route the ticket to the right owner, who does the real diagnosis.

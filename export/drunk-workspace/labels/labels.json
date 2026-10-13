@@ -5,24 +5,9 @@
     "description": "The new feature issues"
   },
   {
-    "name": "🪝",
-    "color": "#f97316",
-    "description": "The web-hook issues"
-  },
-  {
     "name": "bug",
     "color": "#ef4444",
     "description": "The bug issues"
-  },
-  {
-    "name": "☂️",
-    "color": "#eab308",
-    "description": "The code coverage issues"
-  },
-  {
-    "name": "⚛️",
-    "color": "#eab308",
-    "description": "The UI issues"
   },
   {
     "name": "question",
@@ -30,29 +15,9 @@
     "description": "The question issues"
   },
   {
-    "name": "💝",
-    "color": "#f97316",
-    "description": "The important feature"
-  },
-  {
-    "name": "📚",
-    "color": "#6366f1",
-    "description": "The issues for drunkcoding blog."
-  },
-  {
     "name": "cicd",
     "color": "#f59e0b",
     "description": "CICD issues"
-  },
-  {
-    "name": "🕵",
-    "color": "#14b8a6",
-    "description": "Architecture Review"
-  },
-  {
-    "name": "🗂️",
-    "color": "#3b82f6",
-    "description": "The template issues"
   },
   {
     "name": "docs",

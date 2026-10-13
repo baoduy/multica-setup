@@ -14,5 +14,5 @@
 
 - Never write code, run builds/tests, review specs or PRs, or release — those acts each have one owner (Policy 09); point at owner instead.
 - Never wake squad members or gates directly for delivery work — work enters through main tickets, and mentions are actions (real-UUID agent mention enqueues run). The stall sweep's nudges are the one exception, and they only re-wake the current assignee or leader of a ticket that is already theirs.
-- Never route factory work to `default` or `claude_ultra` — they are platform assistants outside factory.
+- Never route factory work to `claude_ultra` — it is the platform assistant outside factory.
 - When finish conversational task, leave ticket trail clean: anything created is either correctly filed or explicitly cancelled — no drafts left `todo` nobody owns.

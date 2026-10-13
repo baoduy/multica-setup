@@ -1,6 +1,6 @@
 # drunk-workspace export
 
-Full-workspace bundle: 30 skills, 18 agents, 3 squads, 6 projects, 10 autopilots (`autopilots/`, prompt in `*.description.md`), 19 labels, 9 properties, plus `workspace/workspace.context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push text byte-exact: pass the file content as a raw argv element (e.g. from Python `subprocess`) to `multica workspace update <id> --context`, `multica agent update <id> --instructions`, `multica squad update <id> --instructions` and `multica autopilot update <id> --description`; use `--content-stdin` for `multica skill update` and `multica skill files upsert`. Shell `"$(cat f)"` and `--context-stdin` drop the trailing newline, and `--context` decodes backslash escapes. Read every pushed resource back and diff it against the file.
+Full-workspace bundle: 30 skills, 17 agents, 3 squads, 6 projects, 10 autopilots (`autopilots/`, prompt in `*.description.md`), 12 labels, 9 properties, plus `workspace/workspace.context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push text byte-exact: pass the file content as a raw argv element (e.g. from Python `subprocess`) to `multica workspace update <id> --context`, `multica agent update <id> --instructions`, `multica squad update <id> --instructions` and `multica autopilot update <id> --description`; use `--content-stdin` for `multica skill update` and `multica skill files upsert`. Shell `"$(cat f)"` and `--context-stdin` drop the trailing newline, and `--context` decodes backslash escapes. Read every pushed resource back and diff it against the file.
 
 **Config files.** `properties/properties.json` carries the ACTIVE property definitions only — archived ones are
 dropped on purpose (the CLI has `property archive`/`unarchive` but no delete, so an archived definition lives on
@@ -32,7 +32,7 @@ compares every supported file on `main` with live and pushes nothing.
 
 Role charters (goal, responsibilities, boundaries per agent) live in
 [Policy 09 — Agent Roles & Responsibilities](docs/policies/09-agent-roles-and-responsibilities.md);
-`default` and `claude_ultra` are platform assistants outside the factory roster.
+`claude_ultra` is the platform assistant outside the factory roster.
 Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep in lock-step.
 
 
@@ -52,11 +52,10 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 | medium-publisher | claude  | (runtime default)   | —        |
 | docs-writer      | codex   | gpt-6.1-sol         | high     |
 | devops           | codex   | gpt-6.1-sol         | high     |
-| default          | codex   | gpt-6-sol           | high     |
 | run-medic        | codex   | gpt-6-luna          | low      |
 | issue-janitor    | codex   | gpt-6-luna          | medium   |
 | Mika             | codex   | gpt-6-luna          | medium   |
 
 
 Main development stays on Claude; the work around it rides Codex. Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5-5[1m]`) — arch-reviewer, product-owner, pr-reviewer, setup-steward and the `claude_ultra` assistant at `xhigh`, dev-leader, spec-reviewer and service-architect at `high`; `dev-backend` rides opus on the standard tier (`claude-opus-5-5`) at `high`; release-manager and blog-writer ride sonnet. These run on the `Claude (Stevens-Mac-mini.local)` runtime.
-the `default` assistant rides `gpt-6-sol` at `high`; devops and docs-writer ride `gpt-6.1-sol` at `high` (devops moved off `gpt-6-sol` after OpenAI returned "Selected model is at capacity" mid-run, and docs-writer was moved live later, recorded here 2026-10-07); `run-medic`, `issue-janitor` and `Mika` ride `gpt-6-luna` (`low` for run-medic — hourly run recovery is pattern-matching over agent task rows, not judgment — `medium` for the other two). These run on the `Codex (Stevens-Mac-mini.local)` runtime: the same host as Claude, because `default`'s monthly insights autopilot shells out to `claude -p "/insights"` and docs-writer renders archify diagrams with the host's Chrome. Thinking is always set explicitly on a Codex agent; left empty, it inherits the host's `~/.codex/config.toml`.
+devops and docs-writer ride `gpt-6.1-sol` at `high` (devops moved off `gpt-6-sol` after OpenAI returned "Selected model is at capacity" mid-run, and docs-writer was moved live later, recorded here 2026-10-07); `run-medic`, `issue-janitor` and `Mika` ride `gpt-6-luna` (`low` for run-medic — hourly run recovery is pattern-matching over agent task rows, not judgment — `medium` for the other two). These run on the `Codex (Stevens-Mac-mini.local)` runtime: the same host as Claude, because `default`'s monthly insights autopilot shells out to `claude -p "/insights"` and docs-writer renders archify diagrams with the host's Chrome. Thinking is always set explicitly on a Codex agent; left empty, it inherits the host's `~/.codex/config.toml`.

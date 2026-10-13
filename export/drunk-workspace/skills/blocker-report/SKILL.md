@@ -1,3 +1,8 @@
+---
+name: blocker-report
+description: Defines the fixed completion-report and blocker-report comment shapes every agent posts. Use when an agent finishes work, hits a blocker, or writes a status comment on a sub-task.
+---
+
 # Reports — completion and blocker
 
 Every report an agent posts uses one of the two shapes below. The shape is fixed; only the EVIDENCE table grows with the work. Humans scan headings and tables, so the headings are literal and the prose is short.
