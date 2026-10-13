@@ -11,6 +11,18 @@ analyse first, local bundle first, ask before pushing live).
   fast-forward); never force-push `dev`.
 - One commit per accepted change, message prefixed `drunk:`.
 
+## Avatars
+
+- Every new agent or squad gets an origami animal avatar from
+  `output/origami-avatars/animals/512x512/`, never an emoji. Pick an animal no
+  agent, squad or workspace in the bundle already uses: compare file hashes
+  (`md5 -q` of every `*.avatar.*` in `export/drunk-workspace/` against the pool),
+  not `generation-plan.json`, which has drifted. Copy the file to
+  `agents/<name>.avatar.png` (or `squads/<name>.avatar.png`), set `avatar_file`
+  in the `.json`, and after uploading live (`multica agent avatar`) write the
+  returned URL into `avatar_url`. `scripts/drunk-live-sync.py` does not push
+  avatars; upload by hand and read back.
+
 ## Live sync (drunk)
 
 - `main` is what the live drunk workspace runs. The tag `live/drunk` marks the

@@ -2,7 +2,7 @@
   "name": "run-medic",
   "model": "gpt-6-luna",
   "visibility": "workspace",
-  "avatar_url": "emoji:🦁",
+  "avatar_url": "https://multica.st24.live/uploads/workspaces/4539126d-0687-4993-8852-3554b7c5fb50/01a133b9-f522-7e97-b9f5-12d9dfc0ebd7.png",
   "service_tier": "",
   "permission_mode": "public_to",
   "conversation_starters": [],
@@ -27,5 +27,5 @@
   "had_secrets": false,
   "instructions_file": "agents/run-medic.md",
   "description_file": "agents/run-medic.description.md",
-  "avatar_file": null
+  "avatar_file": "agents/run-medic.avatar.png"
 }

@@ -4,7 +4,7 @@
 
 - **Home project**: the root ticket's domain project, for every `[S<num>]` and `[P<num>-n]` child.
 - **Boundary**: no deployed environment. Shipping is merging `dev`→`main`; CI publishes. You are read-only on code.
-- **Ticket shape decides the tail**: a ticket assigned to you with no `parent` is a root — you own it through release. A ticket with a `parent` is a sub-issue — you own it through development only and create no `[P<num>-2]`; the parent's owner releases all its children together, woken by your `done`.
+- **Ticket shape decides the tail**: a ticket assigned to you with no `parent` is a root — you own it through release. A ticket with a `parent` is a sub-issue — you own it through development only and create no `[P<num>-2]`; the parent's owner releases all its children together, woken by your `done`. Under a bundle root your `[P<num>-1]` starts only after the stage before you is merged into `dev` (else it waits at `backlog`), and handing it to dev-team at `todo` promotes the next stage (`sdlc-flow-po-orchestration` `references/bundle-root.md`).
 
 ## Who does what
 
@@ -38,7 +38,7 @@ Never assign a phase to yourself, never put the root in `in_review`; on a spec o
 
 ## Promotion gates
 
-Never promote on `done` alone. `[S<num>]` → `Gate verdict` APPROVED. `[P<num>-1]` (dev-team) → report carries pr-reviewer's score AND `multica issue pull-requests <id> --output json` shows a PR into `dev` with `state: merged`, no close intent. `[P<num>-1]` (devops, docs-writer, service-architect) → an open PR based on `dev`. `[P<num>-1c]` → merged. `[P<num>-2]` → the `dev`→`main` PR merged; terminal. On a sub-issue the verified `[P<num>-1]` is terminal: flip your ticket `done`, summary naming the parent as release owner. Unsatisfied → resolve on that owner's ticket with its mention; never skip a stage.
+Never promote on `done` alone. `[S<num>]` → `Gate verdict` APPROVED. `[P<num>-1]` (dev-team) → report carries pr-reviewer's score AND `multica issue pull-requests <id> --output json` shows a PR into `dev` with `state: merged`, no close intent. `[P<num>-1]` (devops, docs-writer, service-architect) → an open PR based on `dev`. `[P<num>-1c]` → merged. `[P<num>-2]` → the `dev`→`main` PR merged; terminal. On a sub-issue the verified `[P<num>-1]` is terminal: flip your ticket `done`, summary naming the parent as release owner. On a bundle root a sub-issue's `done` also promotes the `[P<num>-1]` waiting at `backlog` under the next stage, and the stage after that. Unsatisfied → resolve on that owner's ticket with its mention; never skip a stage.
 
 On a `[P<num>-1c] Review design PR` the owner's reply (A / B / C / D) comes to you: relay it per `sdlc-flow-po-orchestration` Workflow F step 6.
 
