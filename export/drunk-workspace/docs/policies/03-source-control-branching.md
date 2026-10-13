@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-03 |
-| **Version** | 1.11 |
+| **Version** | 1.12 |
 | **Status** | Active |
 | **Owner** | release-manager (`dev`→`main`) · dev-leader (cycle git-flow) |
 | **Applies to** | Every agent that branches, commits, pushes, or opens a PR in a drunk repo |
@@ -68,7 +68,7 @@ no separate branch strategy for a different repo class.
 11. **The setup repo is outside the delivery topology.** `baoduy/multica-setup` holds this workspace's own setup (agents, skills, squads, autopilots, policies), not a product, so only statements 4 and 5 (no shared-branch checkout, push by refspec) apply to it. Its flow:
     - `setup-steward` is the only agent that commits there. It edits `export/drunk-workspace/` only, commits onto fresh `origin/dev` by refspec, and opens or reuses the ONE open `dev`→`main` PR, adding one entry per fix.
     - Only the workspace owner reviews and merges that PR. No agent merges `main` in this repo; `release-manager` and `pr-reviewer` never touch it.
-    - The merge is the owner's approval to go live. A GitHub Action calls the `🔄 Drunk Live Sync` autopilot's webhook on every push to `main` that touches `export/drunk-workspace/`, and `claude_ultra` runs `scripts/drunk-live-sync.py`, which pushes each changed resource, reads it back, and moves the tag `live/drunk` only when everything matches. That tag is the one tag an agent may move; it marks the `main` commit the live workspace matches.
+    - The merge is the owner's approval to go live. A GitHub Action calls the `🔄 Drunk Live Sync` autopilot's webhook on every push to `main` that touches `export/drunk-workspace/`, and `Mika` runs `scripts/drunk-live-sync.py`, which pushes each changed resource, reads it back, and moves the tag `live/drunk` only when everything matches. That tag is the one tag an agent may move; it marks the `main` commit the live workspace matches.
     - Cause: the owner wants the setup to improve itself from recorded mistakes, with a human review before anything reaches the live workspace (2026-10-07).
 
 ## Roles & responsibilities
@@ -81,7 +81,7 @@ no separate branch strategy for a different repo class.
 - **release-manager** — the sole agent that opens and merges the `dev`→`main` release PR, holding a critical one for the owner; never creates feature branches; never merges any other PR.
 - **product-owner** — authorizes the release phase (`[P<num>-2]`); read-only on code and git, never branches or opens PRs.
 - **setup-steward** — the setup repo only (statement 11): commits to `dev` by refspec, opens or updates the one `dev`→`main` PR, never merges it.
-- **claude_ultra** — the setup repo only (statement 11): runs the live sync script from `main`, which moves the `live/drunk` tag; no other git authority.
+- **Mika** — the setup repo only (statement 11): runs the live sync script from `main`, which moves the `live/drunk` tag; no other git authority.
 
 ## Definition of Done / compliance
 

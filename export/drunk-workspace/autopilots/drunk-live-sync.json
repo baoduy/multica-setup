@@ -6,7 +6,7 @@
   "issue_title_template": "Drunk Live Sync ({{date}})",
   "project_title": "drunk-setup",
   "assignee_type": "agent",
-  "assignee_name": "claude_ultra",
+  "assignee_name": "Mika",
   "subscriber_names": [],
   "had_webhook_trigger": true,
   "triggers": [],

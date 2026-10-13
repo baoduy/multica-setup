@@ -47,7 +47,7 @@ Interactive diagram: `.archify/workflow-setup-gitflow/setup-gitflow.html`.
 | `drunk-setup` project | live workspace | Holds the retro, fix and sync issues. Led by the owner; only `baoduy/multica-setup` is attached, so the delivery pipeline never routes its issues. |
 | `setup-steward` agent | `export/drunk-workspace/agents/setup-steward.*` | Runs the retro and delivers fixes. Claude Opus, `xhigh`, one run at a time (all fixes commit to `dev`). |
 | `🔁 Weekly Setup Retro` autopilot | `autopilots/weekly-setup-retro.*` | Mondays 09:00 Asia/Singapore. Its description is the retro procedure. |
-| `🔄 Drunk Live Sync` autopilot | `autopilots/drunk-live-sync.*` | Webhook trigger. Assigns `claude_ultra` to run the sync script and report. |
+| `🔄 Drunk Live Sync` autopilot | `autopilots/drunk-live-sync.*` | Webhook trigger. Assigns `Mika` to run the sync script and report. |
 | Sync script | `scripts/drunk-live-sync.py` | Pushes the changed resources, reads them back, moves the tag. |
 | Health script | `scripts/setup-health.py` | The retro's six lens counts. Read-only. |
 | GitHub Action | `.github/workflows/drunk-live-sync.yml` | On a push to `main` touching `export/drunk-workspace/**`, POSTs to the webhook. |
@@ -146,7 +146,8 @@ each changed file:
 | agent `.json`: `model`, `thinking_level`, `max_concurrent_tasks`, `skill_names` | pushed, read back |
 | any agent, project or autopilot `.json` that live already matches | `already_live`: counts as synced |
 | `docs/`, `README.md`, `manifest.json` | ignored (not live) |
-| anything else that differs from live: new or deleted resources, avatars, other agent keys, triggers, labels, properties | `unsupported`: a manual step |
+| an agent avatar file (`avatar_file` in its json) | `multica agent avatar`; read-back downloads the live image and compares bytes; the json `avatar_url` is then ignored |
+| anything else that differs from live: new or deleted resources, other agent keys, triggers, labels, properties | `unsupported`: a manual step |
 
 Outcomes:
 
@@ -176,7 +177,7 @@ Outcomes:
   `CLAUDE.md`.
 - No agent changes a gate bar, cap, weight or severity deduction; those go to
   the owner.
-- `claude_ultra` runs the sync from the autopilot's description only, never
+- `Mika` runs the sync from the autopilot's description only, never
   pushes a resource by hand, and uses `--accept` only on the owner's reply.
 - The sync moves the tag only when every pushed file reads back equal.
 
@@ -184,5 +185,6 @@ Outcomes:
 
 - The Mac mini must be on: the Multica backend, the runtimes and the webhook
   endpoint all run there.
-- New or deleted resources, avatars, triggers, labels and properties are still
-  manual steps, unless they are applied live before the merge.
+- New or deleted resources, triggers, labels and properties are still
+  manual steps, unless they are applied live before the merge. Agent avatars
+  are pushed from their `avatar_file`.

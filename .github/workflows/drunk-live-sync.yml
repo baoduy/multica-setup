@@ -1,5 +1,5 @@
 # Policy 03 statement 11: a merge to main that touches the drunk bundle wakes the
-# "🔄 Drunk Live Sync" autopilot, whose claude_ultra run executes scripts/drunk-live-sync.py.
+# "🔄 Drunk Live Sync" autopilot, whose Mika run executes scripts/drunk-live-sync.py.
 name: drunk live sync
 
 on:

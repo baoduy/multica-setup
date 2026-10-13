@@ -638,7 +638,7 @@
       "file": "autopilots/drunk-live-sync.json",
       "source_id": "701d6f5e-68dd-4d5b-b406-d1bdf6aa6cce",
       "assignee_type": "agent",
-      "assignee_name": "claude_ultra",
+      "assignee_name": "Mika",
       "project_title": "drunk-setup",
       "had_webhook_trigger": true
     }
