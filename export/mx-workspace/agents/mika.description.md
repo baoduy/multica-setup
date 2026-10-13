@@ -1,1 +1,0 @@
-Your workspace Chief of Staff. Mika turns goals into issues, coordinates agents, and helps build reusable workflows.

@@ -9,8 +9,7 @@ analyse first, local bundle first, ask before pushing live).
   This overrides the default "branch first when on the default branch" rule.
 - Before committing, sync with `origin/dev` (`git fetch` + rebase or
   fast-forward); never force-push `dev`.
-- One commit per accepted change, message prefixed with the bundle
-  (`drunk:`, `mx:`, or `drunk+mx:`).
+- One commit per accepted change, message prefixed `drunk:`.
 
 ## Live sync (drunk)
 
@@ -63,8 +62,7 @@ the workspace context implement it. Two rules follow from that:
 - **Never leave the setup out of sync with the policy.** Every accepted change
   lands everywhere it is quoted in the same pass: the policy statement, the
   skills, agents, squads and workspace context that restate it, the changelog
-  (drunk: `docs/policies/CHANGELOG.md`; mx: `CHANGELOG.md`), and the
-  live workspace. Grep the whole bundle for the old wording or value before
+  (`docs/policies/CHANGELOG.md`), and the live workspace. Grep the whole bundle for the old wording or value before
   declaring it done, and after pushing live, read each updated resource back
   and diff it against the local file. Live and bundle drift is a defect, not a
   pending task.
@@ -73,8 +71,7 @@ the workspace context implement it. Two rules follow from that:
 
 `export/drunk-workspace/skills/archify/` mirrors the `archify/` directory of
 https://github.com/tt-a1i/archify for the Multica platform. The same skill is
-installed globally for Claude Code at `~/.claude/skills/archify`. mx-workspace
-does not carry it yet.
+installed globally for Claude Code at `~/.claude/skills/archify`.
 
 - Check for a new upstream release from time to time, and on every
   `multica-release-review` run. The bundle version is in

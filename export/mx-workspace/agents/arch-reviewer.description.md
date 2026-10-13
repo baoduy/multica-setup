@@ -1,1 +1,0 @@
-Monthly architecture reviewer for Monxa .NET services: audits DKNet DDD conventions, .NET 10 / EF Core 10 standards and DRY/SOLID clean code; files ranked improvement issues into the mx-main backlog and enforces checkable rules as architecture tests.

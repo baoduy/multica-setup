@@ -1,1 +1,0 @@
-QC BDD scenario developer — writes positive + negative Gherkin scenarios in monxa.bdd-integration against SANDBOX.

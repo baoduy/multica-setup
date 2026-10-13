@@ -1,1 +1,0 @@
-The Monxa Payment Gateway Platform

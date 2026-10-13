@@ -1,7 +1,7 @@
-# multica setup — workspace bundles
+# multica setup — workspace bundle
 
-Local mirrors of live Multica workspaces (`drunk-workspace/`, `mx-workspace/`).
-Each bundle holds the workspace's agents, skills, squads, docs/policies, and a
+Local mirror of the live Multica workspace `drunk-workspace/` (the mx bundle
+moved to its own repo). The bundle holds the workspace's agents, skills, squads, docs/policies, and a
 `manifest.json`. Edit locally first, keep the bundle byte-identical to what is
 pushed, and always confirm before pushing to a live workspace (see `../CLAUDE.md`).
 
