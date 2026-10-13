@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.39 |
+| **Version** | 1.40 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The fourteen chartered agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika`, `setup-steward` |
@@ -35,8 +35,8 @@ requests that need routing. It holds **no SDLC authority**: no charter here, no 
 gate, no git/branch authority under [Policy 03](03-source-control-branching.md). It may
 file and route tickets (product work to `product-owner`, CI/CD and Helm charts to `devops`, docs to
 `docs-writer`, blog content to `blog-team`) but never execute them; factory work that lands on
-it is declined with a pointer to the owning agent. **One carve-out:** the `🔄 Drunk Live Sync`
-autopilot assigns `claude_ultra` to run the setup repo's live sync script after the owner merges
+it is declined with a pointer to the owning agent. The `🔄 Drunk Live Sync`
+autopilot assigns `Mika` to run the setup repo's live sync script after the owner merges
 `main` ([Policy 03](03-source-control-branching.md) statement 11). The procedure lives in that
 autopilot's description, never in the assistant's instructions.
 
@@ -129,7 +129,7 @@ or the sub-task description.
 
 **Mika — Chief of Staff**
 - **Goal.** Turn human goals into well-formed main tickets in the right project, routed to the owning flow, and answer workspace questions — never execute delivery work yourself.
-- Responsibilities: interview the human until the goal is concrete (`multica-brainstorming`, steps 1–2a); draft main tickets per [Policy 05](05-sdlc-delivery-lifecycle.md) §7 (plain title — product-owner adds the `[Feature]`/`[Enhance]`/`[Bug]`/`[Question]`/`[CICD]`/`[Docs]`/`[Design]` prefix at intake, §7a — right domain project, `main` + type label); route delivery through the product-owner flow and direct-door CI/CD to devops / docs to docs-writer; answer "state of the factory" questions from tickets and CodeGraph evidence; run the `Daily Stall Sweep` autopilot (Policy 05 §9d) — nudging only the current owner of a stalled ticket, changing no status.
+- Responsibilities: interview the human until the goal is concrete (`multica-brainstorming`, steps 1–2a); draft main tickets per [Policy 05](05-sdlc-delivery-lifecycle.md) §7 (plain title — product-owner adds the `[Feature]`/`[Enhance]`/`[Bug]`/`[Question]`/`[CICD]`/`[Docs]`/`[Design]` prefix at intake, §7a — right domain project, `main` + type label); route delivery through the product-owner flow and direct-door CI/CD to devops / docs to docs-writer; answer "state of the factory" questions from tickets and CodeGraph evidence; run the `Daily Stall Sweep` autopilot (Policy 05 §9d) — nudging only the current owner of a stalled ticket, changing no status; run the `🔄 Drunk Live Sync` autopilot ([Policy 03](03-source-control-branching.md) statement 11) from its description only — the script pushes, Mika never pushes a resource by hand.
 - Never: write code, review, or release; never wake squad members for delivery directly — work enters through main tickets; never re-route work `claude_ultra`-ward.
 
 ### Requirements & specification
@@ -217,7 +217,7 @@ or the sub-task description.
   responsibility column matches each member's charter here — same owner, same boundary,
   same numbers (e.g. the ≥80% per-touched-class coverage bar from [Policy 02](02-testing-and-quality.md)).
 - No agent instruction grants an authority its matrix row forbids.
-- `claude_ultra` instructions contain no factory-role duties (the live sync runs from its autopilot's description).
+- `claude_ultra` instructions contain no factory-role duties; the live sync runs from its autopilot's description, assigned to `Mika`.
 - Each charter's Never list is enforceable verbatim: a violated Never in a run report is
   a defect against this policy, handled per [Policy 07](07-bug-and-defect-management.md).
 

@@ -47,7 +47,7 @@ Interactive diagram: `.archify/workflow-setup-gitflow/setup-gitflow.html`.
 | `drunk-setup` project | live workspace | Holds the retro, fix and sync issues. Led by the owner; only `baoduy/multica-setup` is attached, so the delivery pipeline never routes its issues. |
 | `setup-steward` agent | `export/drunk-workspace/agents/setup-steward.*` | Runs the retro and delivers fixes. Claude Opus, `xhigh`, one run at a time (all fixes commit to `dev`). |
 | `🔁 Weekly Setup Retro` autopilot | `autopilots/weekly-setup-retro.*` | Mondays 09:00 Asia/Singapore. Its description is the retro procedure. |
-| `🔄 Drunk Live Sync` autopilot | `autopilots/drunk-live-sync.*` | Webhook trigger. Assigns `claude_ultra` to run the sync script and report. |
+| `🔄 Drunk Live Sync` autopilot | `autopilots/drunk-live-sync.*` | Webhook trigger. Assigns `Mika` to run the sync script and report. |
 | Sync script | `scripts/drunk-live-sync.py` | Pushes the changed resources, reads them back, moves the tag. |
 | Health script | `scripts/setup-health.py` | The retro's six lens counts. Read-only. |
 | GitHub Action | `.github/workflows/drunk-live-sync.yml` | On a push to `main` touching `export/drunk-workspace/**`, POSTs to the webhook. |
@@ -176,7 +176,7 @@ Outcomes:
   `CLAUDE.md`.
 - No agent changes a gate bar, cap, weight or severity deduction; those go to
   the owner.
-- `claude_ultra` runs the sync from the autopilot's description only, never
+- `Mika` runs the sync from the autopilot's description only, never
   pushes a resource by hand, and uses `--accept` only on the owner's reply.
 - The sync moves the tag only when every pushed file reads back equal.
 

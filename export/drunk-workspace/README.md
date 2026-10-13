@@ -16,7 +16,7 @@ there; amend the policy first, then cascade. See the [index](docs/policies/00-po
 
 **Live sync ([Policy 03](docs/policies/03-source-control-branching.md) statement 11).** The tag `live/drunk` marks the
 `main` commit the live workspace matches. A merge to `main` that touches this bundle wakes the `🔄 Drunk Live Sync`
-autopilot through `.github/workflows/drunk-live-sync.yml`; `claude_ultra` runs `scripts/drunk-live-sync.py`, which pushes
+autopilot through `.github/workflows/drunk-live-sync.yml`; `Mika` runs `scripts/drunk-live-sync.py`, which pushes
 the changed resources byte-exact, reads them back and moves the tag. `python3 scripts/drunk-live-sync.py --check`
 compares every supported file on `main` with live and pushes nothing.
 

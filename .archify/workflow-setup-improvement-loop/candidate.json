@@ -183,7 +183,7 @@
       "lane": "steward",
       "col": 5,
       "type": "backend",
-      "label": "claude_ultra Sync",
+      "label": "Mika Sync",
       "sublabel": "sync-live.py from main",
       "tag": "byte-exact + read-back",
       "width": 150
@@ -307,7 +307,7 @@
       "title": "Pending before build",
       "items": [
         "Approve Policy 03 + Workspace Context setup-repo exception",
-        "Retro + fixes: new setup-steward, or claude_ultra too (max 1 run)"
+        "Retro + fixes: new setup-steward, or Mika too (max 1 run)"
       ]
     }
   ]
