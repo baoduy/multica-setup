@@ -3,7 +3,7 @@
 Every hour, find issues whose agent run stopped without finishing and wake that agent back onto them. Two classes, both covered:
 
 - **A — the run was killed.** A transient infrastructure error: API rate limit / overload, or a background-process failure such as the runtime going offline or the daemon restarting mid-task.
-- **B — the run abandoned its turn.** The task ended `completed` with no error, but the ticket never reached `done` or `blocked` — typically the agent ended its turn waiting on something it backgrounded, which never notifies because the run is already over (DRK-1673 ended on "I'll stop issuing calls now and wait for the background run notification" and sat `in_progress` with nobody coming).
+- **B — the run abandoned its turn.** The task ended `completed` with no error, but the ticket never reached `done` or `blocked` — typically the agent ended its turn waiting on something it backgrounded, which never notifies because the run is already over (a turn that ends on "wait for the background run notification" sits `in_progress` with nobody coming).
 
 Failures that are not safe to retry are never retried, and an issue already woken 3 times is left for a human member to review.
 
@@ -27,7 +27,7 @@ Failures that are not safe to retry are never retried, and an issue already woke
 
 # Steps
 
-1. **Build the candidate list with the fixed script — never your own pipeline.** Write this script to `./detect.sh` in your working directory exactly as given, and run `bash ./detect.sh`. Do not rewrite, "simplify" or re-implement it in Python, and never keep its files in `/tmp`: on 2026-09-25 a hand-rolled pipeline appended pretty-printed JSON to a `/tmp` file shared across runs, parsed it line by line, silently dropped the rows it could not parse — among them dev-backend's RUNNING task on DRK-1726 — and woke an agent that was still working.
+1. **Build the candidate list with the fixed script — never your own pipeline.** Write this script to `./detect.sh` in your working directory exactly as given, and run `bash ./detect.sh`. Do not rewrite, "simplify" or re-implement it in Python, and never keep its files in `/tmp`: a hand-rolled pipeline that parses a shared `/tmp` file line by line silently drops the rows it cannot parse, among them a RUNNING task, and wakes an agent that is still working.
 
    ```bash
    multica agent list --output json > ./agents.json || echo "SWEEP PARTIAL: agent list failed" >&2
@@ -72,7 +72,7 @@ Failures that are not safe to retry are never retried, and an issue already woke
 4. **Only agent-assigned, open LEAF issues — already filtered by the script.** Every row in `./candidates.json` has passed three checks, and you never re-check, widen or override them:
 
    - **No sub-issues.** A parent, phase or any other middle ticket is legitimately `todo`/`in_progress` for as long as its sub-issues work; its own run ended on purpose. Without this filter class B fires on every parent in the workspace.
-   - **Assigned to an agent.** An issue assigned to a member is waiting on that human — a release approval, a design review — and waking the agent whose run last touched it only re-posts the same "waiting on you" turn; on 2026-09-30 four such leaves (DRK-1866, DRK-1872, DRK-1879, DRK-1882) were woken to the cap and handed off every hour, and tripped two escalations. An issue assigned to a squad or to nobody has no agent run to resume either.
+   - **Assigned to an agent.** An issue assigned to a member is waiting on that human — a release approval, a design review — and waking the agent whose run last touched it only re-posts the same "waiting on you" turn, to the cap and into an escalation. An issue assigned to a squad or to nobody has no agent run to resume either.
    - **Status `todo` or `in_progress`.** `done`/`cancelled` means the work landed or was dropped; `in_review` is awaiting a human; `blocked` needs an answer, not a retry; `backlog` is not active work.
 
    Everything the script dropped is an expected outcome: not woken, not counted toward the blast-radius guard of step 6, not commented on, not escalated, not mentioned in any report.

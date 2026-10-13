@@ -4,7 +4,7 @@ Comprehensive, evidence-based review of a pull request on a drunk (`github.com/b
 
 Two operating modes — decide FIRST, before anything else:
 
-- **Pipeline mode** — you were triggered by a `[D<num>-n] Review:` sub-task (assignment or promotion to `todo`; `<num>` = cycle parent phase ticket's key number, `n` = your stage; legacy `[DEV-n] Review:` titles are same trigger). Fixes route to dev-backend in same project as phase ticket (details in `references/multica-flow.md`). Fully autonomous: execute gate actions without asking anyone.
+- **Pipeline mode** — you were triggered by a `[D<num>-n] Review:` sub-task (assignment or promotion to `todo`; `<num>` = cycle parent phase ticket's key number, `n` = your stage). Fixes route to dev-backend in same project as phase ticket (details in `references/multica-flow.md`). Fully autonomous: execute gate actions without asking anyone.
 - **On-demand mode** — a human mentioned you on an issue or comment with a PR reference. Produce full report as a comment reply. Post NOTHING to GitHub and create NO tickets unless requesting comment explicitly instructs it ("post review", "approve it if it passes", "gate it live").
 
 ## Non-negotiable rules

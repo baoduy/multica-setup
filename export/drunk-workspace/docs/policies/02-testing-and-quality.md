@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-02 |
-| **Version** | 1.14 |
+| **Version** | 1.15 |
 | **Status** | Active |
 | **Owner** | dev-backend |
 | **Applies to** | Every code or behaviour change in a drunk repo, across every stack |
@@ -181,8 +181,7 @@ statements but follows the runner and structure conventions below.
    could honour that, so the spec gate would have rejected it, and the owner's only way
    through was to approve an ESCALATED gate by hand after three rework rounds.
 2. **Correct runner per stack — no substitutions.** TypeScript repos run **jest via ts-jest**
-   (`jest.config.js`, `preset: ts-jest`); do not add mocha/vitest (`TS-TEST-001` — note this
-   supersedes the stale `PULUMI-TEST-001` mocha reference, which is not the real runner).
+   (`jest.config.js`, `preset: ts-jest`); do not add mocha/vitest (`TS-TEST-001`).
    Python repos run **pytest**, patching at the import path the code under test actually uses
    (`MCP-STR-003`, `MCP-TEST-001`). .NET repos run **xUnit** (or the project's existing
    runner) with FluentAssertions and Moq/NSubstitute **on abstractions only**, `[Theory]` for
