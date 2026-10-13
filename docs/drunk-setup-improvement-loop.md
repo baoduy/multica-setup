@@ -146,7 +146,8 @@ each changed file:
 | agent `.json`: `model`, `thinking_level`, `max_concurrent_tasks`, `skill_names` | pushed, read back |
 | any agent, project or autopilot `.json` that live already matches | `already_live`: counts as synced |
 | `docs/`, `README.md`, `manifest.json` | ignored (not live) |
-| anything else that differs from live: new or deleted resources, avatars, other agent keys, triggers, labels, properties | `unsupported`: a manual step |
+| an agent avatar file (`avatar_file` in its json) | `multica agent avatar`; read-back downloads the live image and compares bytes; the json `avatar_url` is then ignored |
+| anything else that differs from live: new or deleted resources, other agent keys, triggers, labels, properties | `unsupported`: a manual step |
 
 Outcomes:
 
@@ -184,5 +185,6 @@ Outcomes:
 
 - The Mac mini must be on: the Multica backend, the runtimes and the webhook
   endpoint all run there.
-- New or deleted resources, avatars, triggers, labels and properties are still
-  manual steps, unless they are applied live before the merge.
+- New or deleted resources, triggers, labels and properties are still
+  manual steps, unless they are applied live before the merge. Agent avatars
+  are pushed from their `avatar_file`.

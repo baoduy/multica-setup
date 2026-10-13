@@ -19,6 +19,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 
 BUNDLE = "export/drunk-workspace"
 TAG = "live/drunk"
@@ -48,8 +49,24 @@ def git(*args):
     return run(["git", *args]).strip()
 
 
+IMAGE_SUFFIXES = (".png", ".webp", ".jpg", ".jpeg")
+
+
 def show(rev, path):
+    if path.endswith(IMAGE_SUFFIXES):  # avatars: bytes, never decoded
+        p = subprocess.run(["git", "show", "%s:%s/%s" % (rev, BUNDLE, path)], capture_output=True)
+        if p.returncode != 0:
+            raise RuntimeError("git show %s: %s" % (path, p.stderr.decode(errors="replace").strip()[-400:]))
+        return p.stdout
     return run(["git", "show", "%s:%s/%s" % (rev, BUNDLE, path)])
+
+
+def fetch(url):
+    """Bytes behind a live avatar URL; b"" for an emoji avatar or a failed download (urllib gets 403 here, curl does not)."""
+    if not (url or "").startswith("http"):
+        return b""
+    p = subprocess.run(["curl", "-fsSL", "--max-time", "30", url], capture_output=True)
+    return p.stdout if p.returncode == 0 else b""
 
 
 class Live:
@@ -101,6 +118,8 @@ def owners(rev):
         out[cfg["instructions_file"]] = ("agent", cfg["name"], "instructions")
         out[cfg["description_file"]] = ("agent", cfg["name"], "description")
         out[a["file"]] = ("agent", cfg["name"], "config")
+        if cfg.get("avatar_file"):
+            out[cfg["avatar_file"]] = ("agent", cfg["name"], "avatar")
     for s in manifest["squads"]:
         for field in ("instructions", "description"):
             if s.get(field + "_file"):
@@ -165,6 +184,14 @@ def push(live, kind, name, field, text):
     if kind == "agent" and field == "config":
         push_agent_config(live, name, text)
         return
+    if kind == "agent" and field == "avatar":
+        with tempfile.NamedTemporaryFile(suffix=os.path.splitext(name)[1] or ".png", delete=False) as f:
+            f.write(text)
+        try:
+            run(["multica", "agent", "avatar", live.agents[name]["id"], "--file", f.name])
+        finally:
+            os.unlink(f.name)
+        return
     value = norm(kind, field, text)
     if field == "description" and kind == "agent" and len(value) > DESC_MAX:
         raise RuntimeError("agent description is %d characters, cap %d" % (len(value), DESC_MAX))
@@ -189,6 +216,8 @@ def matches(live, kind, name, field, text):
         return files.get(field) == text
     if kind == "agent" and field == "config":
         return agent_config_live(live, name) == agent_config_file(text)
+    if kind == "agent" and field == "avatar":
+        return fetch(live.agents[name].get("avatar_url")) == text
     if field == "config":
         return json_matches_live(live, kind, name, text)
     got = live_value(live, kind, name, field)
@@ -220,9 +249,11 @@ def agent_config_file(text):
 
 
 def agent_config_unsupported(old_text, new_text):
-    """Keys changed in an agent .json that this script cannot push (avatar, env, runtime...)."""
+    """Keys changed in an agent .json that this script cannot push (env, runtime...). With an
+    avatar_file the avatar is pushed from that file and its URL is whatever the upload returned."""
     old, new = json.loads(old_text) if old_text else {}, json.loads(new_text)
-    return sorted(k for k in set(old) | set(new) if old.get(k) != new.get(k) and k not in AGENT_CONFIG)
+    skip = set(AGENT_CONFIG) | ({"avatar_url", "avatar_file"} if new.get("avatar_file") else set())
+    return sorted(k for k in set(old) | set(new) if old.get(k) != new.get(k) and k not in skip)
 
 
 def push_agent_config(live, name, text):
@@ -298,7 +329,10 @@ def json_file_view(kind, text):
 
 
 def json_matches_live(live, kind, name, text):
-    return json_live_view(live, kind, name) == json_file_view(kind, text)
+    want, got = json_file_view(kind, text), json_live_view(live, kind, name)
+    if kind == "agent" and json.loads(text).get("avatar_file"):
+        want.pop("avatar_url", None), got.pop("avatar_url", None)  # the avatar file carries the comparison
+    return got == want
 
 
 def check(head):

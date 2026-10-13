@@ -19,9 +19,10 @@ analyse first, local bundle first, ask before pushing live).
   (`md5 -q` of every `*.avatar.*` in `export/drunk-workspace/` against the pool),
   not `generation-plan.json`, which has drifted. Copy the file to
   `agents/<name>.avatar.png` (or `squads/<name>.avatar.png`), set `avatar_file`
-  in the `.json`, and after uploading live (`multica agent avatar`) write the
-  returned URL into `avatar_url`. `scripts/drunk-live-sync.py` does not push
-  avatars; upload by hand and read back.
+  in the `.json`. The live sync uploads the file (`multica agent avatar`) and
+  compares the live image bytes with it, so `avatar_url` in the json is not
+  compared once `avatar_file` is set; still write the live URL back when you
+  upload by hand.
 
 ## Live sync (drunk)
 
