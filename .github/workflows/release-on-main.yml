@@ -7,6 +7,7 @@ name: release on main
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -30,5 +31,5 @@ jobs:
             *)          patch=$((patch+1)) ;;
           esac
           tag="v$major.$minor.$patch"
-          gh release create "$tag" --target "$SHA" --title "Release $tag" --generate-notes \
+          gh release create "$tag" -R "$REPO" --target "$SHA" --title "Release $tag" --generate-notes \
             ${latest:+--notes-start-tag "$latest"}
