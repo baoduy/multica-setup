@@ -27,5 +27,5 @@
   "had_secrets": false,
   "instructions_file": "agents/run-medic.md",
   "description_file": "agents/run-medic.description.md",
-  "avatar_file": null
+  "avatar_file": "agents/run-medic.avatar.png"
 }
