@@ -1,0 +1,34 @@
+# Every push to main cuts a GitHub release so any earlier setup can be restored:
+# git checkout <tag> -- export/drunk-workspace, commit, merge to main, and the live
+# sync pushes it. Version = latest release + patch; "#minor" or "#major" in the
+# merge commit message bumps that part instead.
+name: release on main
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cut the next release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          MSG: ${{ github.event.head_commit.message }}
+        run: |
+          latest=$(gh api "repos/$REPO/releases/latest" --jq .tag_name 2>/dev/null || true)
+          IFS=. read -r major minor patch <<<"$(printf '%s' "${latest:-v0.0.0}" | sed -E 's/^v\.?//')"
+          case "$MSG" in
+            *'#major'*) major=$((major+1)); minor=0; patch=0 ;;
+            *'#minor'*) minor=$((minor+1)); patch=0 ;;
+            *)          patch=$((patch+1)) ;;
+          esac
+          tag="v$major.$minor.$patch"
+          gh release create "$tag" --target "$SHA" --title "Release $tag" --generate-notes \
+            ${latest:+--notes-start-tag "$latest"}

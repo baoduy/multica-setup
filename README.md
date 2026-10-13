@@ -31,6 +31,20 @@ its interactive HTML source in `.archify/`.
   <img alt="multica-setup improvement loop git flow (drunk-workspace)" src="output/gitflow-presentation/gitflow-archify-animation.gif">
 </a>
 
+## Releases and rollback
+
+Every push to `main` cuts a GitHub release (`.github/workflows/release-on-main.yml`): the
+version is the latest release plus a patch bump, or a minor/major bump when the merge
+commit message carries `#minor` / `#major`. Release notes are generated from the merged PRs.
+To roll the setup back to an earlier release:
+
+```sh
+git checkout <tag> -- export/drunk-workspace   # on dev
+git commit -m "drunk: roll back to <tag>" && git push origin dev
+```
+
+Merge that to `main` as usual; the live sync pushes the restored bundle.
+
 ## Review-gate scoring — design lessons (2026-08)
 
 Learned from auditing `pr-review-gate` and `spec-review-gate`. Apply these to any
