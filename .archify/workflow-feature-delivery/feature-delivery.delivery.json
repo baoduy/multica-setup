@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "eb4d4e59-e1a9-4c85-8588-b74d73ce4bd4",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/candidate.json",
+  "output": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/feature-delivery.html",
+  "specification": {
+    "sha256": "3944b09e9caf59aeeae5470e6d792e74d26d9d684afa0c61b10abcbd59123448",
+    "bytes": 5804
+  },
+  "artifact": {
+    "sha256": "929d1711918c44e8bd69c568178dcc843e616a5c18a7a6973e2d78aaf2a57070",
+    "bytes": 766260
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "afef8520-98f1-4f4d-8628-f3fef0ddd7e5",
+  "status": "current",
+  "command": "deliver",
+  "type": "lifecycle",
+  "input": "/Users/steven/_CODE/multica-setup/.archify/lifecycle-ticket-status/candidate.json",
+  "output": "/Users/steven/_CODE/multica-setup/.archify/lifecycle-ticket-status/ticket-status.html",
+  "specification": {
+    "sha256": "04af59704fba54b0c6531d3b972170d51b330fbde54677c21577c7e31e77e9ea",
+    "bytes": 3364
+  },
+  "artifact": {
+    "sha256": "12a0fdf4abe03629799efc708d62f10c3648b10c51e28ba4080303160379d944",
+    "bytes": 760443
+  }
+}

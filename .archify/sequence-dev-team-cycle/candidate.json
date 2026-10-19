@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "dev-team Cycle: Handoffs, Gates and Rework",
+    "output": ".archify/sequence-dev-team-cycle/dev-team-cycle.html",
+    "column_fit": "spread",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    {
+      "id": "po",
+      "type": "backend",
+      "label": "product-owner",
+      "sublabel": "phase owner"
+    },
+    {
+      "id": "dl",
+      "type": "backend",
+      "label": "dev-leader",
+      "sublabel": "squad leader"
+    },
+    {
+      "id": "db",
+      "type": "backend",
+      "label": "dev-backend",
+      "sublabel": "tests + code"
+    },
+    {
+      "id": "pr",
+      "type": "security",
+      "label": "pr-reviewer",
+      "sublabel": "PR gate"
+    },
+    {
+      "id": "gh",
+      "type": "cloud",
+      "label": "GitHub",
+      "sublabel": "feature branch, dev"
+    }
+  ],
+  "segments": [
+    {
+      "from": 150,
+      "to": 297,
+      "label": "Branch + ATs"
+    },
+    {
+      "from": 303,
+      "to": 387,
+      "label": "Build"
+    },
+    {
+      "from": 393,
+      "to": 447,
+      "label": "PR"
+    },
+    {
+      "from": 453,
+      "to": 567,
+      "label": "Rework"
+    },
+    {
+      "from": 573,
+      "to": 657,
+      "label": "Merge"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m-phase",
+      "from": "po",
+      "to": "dl",
+      "y": 165,
+      "label": "[P#-1] todo, spec frozen",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m-branch",
+      "from": "dl",
+      "to": "gh",
+      "y": 195,
+      "label": "cut feature branch"
+    },
+    {
+      "id": "m-at",
+      "from": "dl",
+      "to": "db",
+      "y": 225,
+      "label": "[D#-1] Acceptance tests"
+    },
+    {
+      "id": "m-red",
+      "from": "db",
+      "to": "gh",
+      "y": 255,
+      "label": "push RED tests"
+    },
+    {
+      "id": "m-at-done",
+      "from": "db",
+      "to": "dl",
+      "y": 285,
+      "label": "done, at_sha",
+      "variant": "return"
+    },
+    {
+      "id": "m-build",
+      "from": "dl",
+      "to": "db",
+      "y": 315,
+      "label": "approve ATs, promote Build"
+    },
+    {
+      "id": "m-green",
+      "from": "db",
+      "to": "gh",
+      "y": 345,
+      "label": "push green build"
+    },
+    {
+      "id": "m-build-done",
+      "from": "db",
+      "to": "dl",
+      "y": 375,
+      "label": "done, coverage + mutation",
+      "variant": "return"
+    },
+    {
+      "id": "m-open",
+      "from": "dl",
+      "to": "gh",
+      "y": 405,
+      "label": "open ONE PR to dev"
+    },
+    {
+      "id": "m-review",
+      "from": "dl",
+      "to": "pr",
+      "y": 435,
+      "label": "promote Review"
+    },
+    {
+      "id": "m-findings",
+      "from": "pr",
+      "to": "dl",
+      "y": 465,
+      "label": "REWORK on own sub-task",
+      "variant": "security"
+    },
+    {
+      "id": "m-rearm",
+      "from": "dl",
+      "to": "db",
+      "y": 495,
+      "label": "re-arm Build + mention",
+      "variant": "dashed"
+    },
+    {
+      "id": "m-fixed",
+      "from": "db",
+      "to": "dl",
+      "y": 525,
+      "label": "done, fix pushed",
+      "variant": "return"
+    },
+    {
+      "id": "m-rereview",
+      "from": "dl",
+      "to": "pr",
+      "y": 555,
+      "label": "re-arm Review",
+      "variant": "dashed"
+    },
+    {
+      "id": "m-merge",
+      "from": "pr",
+      "to": "gh",
+      "y": 585,
+      "label": "APPROVED: merge to dev",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m-pr-done",
+      "from": "pr",
+      "to": "dl",
+      "y": 615,
+      "label": "done, stage barrier wakes leader",
+      "variant": "return"
+    },
+    {
+      "id": "m-back",
+      "from": "dl",
+      "to": "po",
+      "y": 645,
+      "label": "phase done, merged PR",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "dl",
+      "from": 165,
+      "to": 651,
+      "type": "backend"
+    },
+    {
+      "participant": "db",
+      "from": 225,
+      "to": 531,
+      "type": "backend"
+    },
+    {
+      "participant": "pr",
+      "from": 435,
+      "to": 621,
+      "type": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Every hop runs through the leader",
+      "items": [
+        "Members never write on each other's tickets",
+        "Findings go on the reviewer's own sub-task; its handoff wakes the leader"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Re-arm",
+      "items": [
+        "Leader flips the sub-task in_progress with --no-start",
+        "Then posts the mention, which is the wake",
+        "Retrigger on done names the gate to re-arm"
+      ]
+    }
+  ]
+}

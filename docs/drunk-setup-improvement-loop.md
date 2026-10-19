@@ -24,7 +24,7 @@ Interactive diagram: `.archify/workflow-setup-improvement-loop/setup-improvement
  rounds and     issues in            entry to the one                         │ webhook
  failed runs    drunk-setup          open PR, issue                           ▼
                                      goes blocked                       🔄 Drunk Live Sync
-                                                                        claude_ultra runs
+                                                                        Mika runs
                                                                         scripts/drunk-live-sync.py
                                                                           │
                           fix issues set done, tag live/drunk moves ◀─────┘
@@ -143,7 +143,7 @@ live.
 ## 5. Sync to live
 
 The Action calls the webhook, the autopilot creates a `Drunk Live Sync (date)`
-issue, and `claude_ultra` runs the script in a fresh clone of `main`. The
+issue, and `Mika` runs the script in a fresh clone of `main`. The
 script holds a lock, so overlapping runs wait and then find nothing to do.
 
 It diffs `live/drunk..origin/main` under `export/drunk-workspace/` and handles
@@ -166,7 +166,7 @@ Outcomes:
 - **`up-to-date`** (exit 0): nothing to do; the sync issue goes `done`.
 - **`blocked`** (exit 2): something is unsupported or failed. The tag stays,
   and the sync issue lists the manual steps. Apply them, reply `accept`, and
-  `claude_ultra` re-runs with `--accept`, which moves the tag.
+  `Mika` re-runs with `--accept`, which moves the tag.
 - **error** (exit 1): the issue quotes the error.
 
 ## Owner runbook

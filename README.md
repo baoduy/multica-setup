@@ -10,6 +10,10 @@ see [`docs/drunk-setup-improvement-loop.md`](docs/drunk-setup-improvement-loop.m
 
 ## Diagrams (drunk-workspace)
 
+How the agents and squads work together, with four more diagrams (squads,
+feature delivery, dev-team cycle, ticket status):
+[`docs/drunk-squads-and-collaboration.md`](docs/drunk-squads-and-collaboration.md).
+
 Rendered with [archify](https://github.com/tt-a1i/archify). Each image links to
 its interactive HTML source in `.archify/`.
 
