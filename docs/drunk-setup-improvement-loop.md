@@ -46,7 +46,7 @@ Interactive diagram: `.archify/workflow-setup-gitflow/setup-gitflow.html`.
 |---|---|---|
 | `drunk-setup` project | live workspace | Holds the retro, fix and sync issues. Led by the owner; only `baoduy/multica-setup` is attached, so the delivery pipeline never routes its issues. |
 | `setup-steward` agent | `export/drunk-workspace/agents/setup-steward.*` | Runs the retro and delivers fixes. Claude Opus, `xhigh`, one run at a time (all fixes commit to `dev`). |
-| `🔁 Weekly Setup Retro` autopilot | `autopilots/weekly-setup-retro.*` | Mondays 09:00 Asia/Singapore. Its description is the retro procedure. |
+| `🔁 Weekly Multica Setup Retro` autopilot | `autopilots/weekly-setup-retro.*` | Mondays 09:00 Asia/Singapore. Its description is the retro procedure. |
 | `🔄 Drunk Live Sync` autopilot | `autopilots/drunk-live-sync.*` | Webhook trigger. Assigns `Mika` to run the sync script and report. |
 | Sync script | `scripts/drunk-live-sync.py` | Pushes the changed resources, reads them back, moves the tag. |
 | Health script | `scripts/setup-health.py` | The retro's six lens counts. Read-only. |
