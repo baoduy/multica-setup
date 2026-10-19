@@ -21,7 +21,7 @@
     },
     {
       "id": "dev",
-      "label": "dev-team: dev-leader + dev-backend"
+      "label": "dev-team: dev-leader + dev-backend / dev-frontend"
     }
   ],
   "phases": [

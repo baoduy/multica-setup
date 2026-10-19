@@ -5,16 +5,16 @@
   "status": "pass",
   "type": "workflow",
   "quality": "showcase",
-  "startedAt": "2026-10-19T03:52:10.065Z",
+  "startedAt": "2026-10-19T09:01:49.010Z",
   "specification": {
     "path": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/candidate.json",
-    "sha256": "3944b09e9caf59aeeae5470e6d792e74d26d9d684afa0c61b10abcbd59123448",
-    "bytes": 5804
+    "sha256": "d918ac577b7bc1d268f3685b9fa6526d06d3e5765678c1a9c7f5efdaabab065f",
+    "bytes": 5819
   },
   "artifact": {
     "path": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/feature-delivery.html",
-    "sha256": "929d1711918c44e8bd69c568178dcc843e616a5c18a7a6973e2d78aaf2a57070",
-    "bytes": 766260
+    "sha256": "1e87a6e67f3294fe9773a30cc12f07834d759ff0d67173fd5e5dcf7aa404bc7a",
+    "bytes": 766365
   },
   "stages": {
     "validate": {
@@ -38,8 +38,8 @@
         "ok": true,
         "command": "validate",
         "specification": {
-          "sha256": "3944b09e9caf59aeeae5470e6d792e74d26d9d684afa0c61b10abcbd59123448",
-          "bytes": 5804
+          "sha256": "d918ac577b7bc1d268f3685b9fa6526d06d3e5765678c1a9c7f5efdaabab065f",
+          "bytes": 5819
         },
         "validation": {
           "checksPassed": 9,
@@ -54,7 +54,7 @@
     "deliver": {
       "status": "pass",
       "exitCode": 0,
-      "durationMs": 384,
+      "durationMs": 381,
       "command": [
         "/opt/homebrew/Cellar/node/26.12.0/bin/node",
         "/Users/steven/.claude/skills/archify/bin/archify.mjs",
@@ -68,19 +68,19 @@
       ],
       "receipt": {
         "schemaVersion": 1,
-        "receiptId": "eb4d4e59-e1a9-4c85-8588-b74d73ce4bd4",
+        "receiptId": "f9fd07b7-bb28-4712-b199-a81882cd697f",
         "ok": true,
         "command": "deliver",
         "type": "workflow",
         "input": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/candidate.json",
         "output": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/feature-delivery.html",
         "specification": {
-          "sha256": "3944b09e9caf59aeeae5470e6d792e74d26d9d684afa0c61b10abcbd59123448",
-          "bytes": 5804
+          "sha256": "d918ac577b7bc1d268f3685b9fa6526d06d3e5765678c1a9c7f5efdaabab065f",
+          "bytes": 5819
         },
         "artifact": {
-          "sha256": "929d1711918c44e8bd69c568178dcc843e616a5c18a7a6973e2d78aaf2a57070",
-          "bytes": 766260
+          "sha256": "1e87a6e67f3294fe9773a30cc12f07834d759ff0d67173fd5e5dcf7aa404bc7a",
+          "bytes": 766365
         },
         "validation": {
           "checksPassed": 9,
@@ -118,8 +118,8 @@
         "ok": true,
         "file": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/feature-delivery.html",
         "artifact": {
-          "sha256": "929d1711918c44e8bd69c568178dcc843e616a5c18a7a6973e2d78aaf2a57070",
-          "bytes": 766260
+          "sha256": "1e87a6e67f3294fe9773a30cc12f07834d759ff0d67173fd5e5dcf7aa404bc7a",
+          "bytes": 766365
         },
         "checks": [
           {
@@ -261,13 +261,13 @@
           "issues": []
         },
         "provenance": "current",
-        "deliveryReceiptId": "eb4d4e59-e1a9-4c85-8588-b74d73ce4bd4"
+        "deliveryReceiptId": "f9fd07b7-bb28-4712-b199-a81882cd697f"
       }
     },
     "browser-check": {
       "status": "pass",
       "exitCode": 0,
-      "durationMs": 905,
+      "durationMs": 909,
       "command": [
         "/opt/homebrew/Cellar/node/26.12.0/bin/node",
         "/Users/steven/.claude/skills/archify/bin/archify.mjs",
@@ -285,11 +285,11 @@
         "status": "pass",
         "visualReview": "not-requested",
         "provenance": "current",
-        "deliveryReceiptId": "eb4d4e59-e1a9-4c85-8588-b74d73ce4bd4",
+        "deliveryReceiptId": "f9fd07b7-bb28-4712-b199-a81882cd697f",
         "artifact": {
           "path": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/feature-delivery.html",
-          "sha256": "929d1711918c44e8bd69c568178dcc843e616a5c18a7a6973e2d78aaf2a57070",
-          "bytes": 766260
+          "sha256": "1e87a6e67f3294fe9773a30cc12f07834d759ff0d67173fd5e5dcf7aa404bc7a",
+          "bytes": 766365
         },
         "state": {
           "detail": "read",
@@ -1619,8 +1619,8 @@
     "browserCheckReceipt": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/feature-delivery.browser-check.json"
   },
   "visualReview": "not-requested",
-  "finishedAt": "2026-10-19T03:52:11.599Z",
-  "durationMs": 1533,
+  "finishedAt": "2026-10-19T09:01:50.541Z",
+  "durationMs": 1531,
   "update": {
     "status": "update_available",
     "installedVersion": "3.0.1",

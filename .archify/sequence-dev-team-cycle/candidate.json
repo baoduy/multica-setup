@@ -23,8 +23,8 @@
     {
       "id": "db",
       "type": "backend",
-      "label": "dev-backend",
-      "sublabel": "tests + code"
+      "label": "developer",
+      "sublabel": "dev-backend or dev-frontend"
     },
     {
       "id": "pr",
@@ -218,6 +218,15 @@
     }
   ],
   "cards": [
+    {
+      "dot": "cyan",
+      "title": "Which developer",
+      "items": [
+        "Front-end app files: dev-frontend",
+        "Every other file: dev-backend",
+        "A cycle touching both runs one surface per developer"
+      ]
+    },
     {
       "dot": "emerald",
       "title": "Every hop runs through the leader",

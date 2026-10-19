@@ -7,13 +7,13 @@
   "quality": "showcase",
   "specification": {
     "path": "/Users/steven/_CODE/multica-setup/.archify/architecture-squads/candidate.json",
-    "sha256": "7c4bce88bd1f541d9566c78df69dd6ab3a92ad6e979b725d39047c910c824df4",
-    "bytes": 5140
+    "sha256": "47cccb9cf3c1c03b9342a1be58846ebef6afd181db7cf37ec046e9449204b0af",
+    "bytes": 5150
   },
   "artifact": {
     "path": "/Users/steven/_CODE/multica-setup/.archify/architecture-squads/squads.html",
-    "sha256": "61d5e85723cd406dbe29c592947a6eb7775bd8c03ef7e8adf3ab4e19fc4ca761",
-    "bytes": 766755
+    "sha256": "088c57bee2c6516b4a827b7eb417bf1efee4e6999fcf33c4a6cd383a0d9df036",
+    "bytes": 766750
   },
   "gates": {
     "validate": "pass",
@@ -45,5 +45,5 @@
     "eventKey": "archify@sha256:ffedc53390c9da6e859f41e432c5d2d0615a23cf00a503181f07efbba88a7ce8"
   },
   "visualReview": "not-requested",
-  "durationMs": 1471
+  "durationMs": 1807
 }

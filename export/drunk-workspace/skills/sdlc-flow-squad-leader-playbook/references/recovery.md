@@ -39,4 +39,4 @@ Two root tickets share a root cause when their root-cause reports name the same 
 
 ## Substantive merge conflicts
 
-Mechanical conflicts are yours (`leader-gitops`). Overlapping logic or deleted code is feature code: ONE comment on dev-backend's Build sub-task listing the conflicted paths with dev-backend's mention, asking it to report on that sub-task and post its handoff line when pushed; re-verify `MERGEABLE` when it lands. No fix sub-task.
+Mechanical conflicts are yours (`leader-gitops`). Overlapping logic or deleted code is feature code: ONE comment on the Build sub-task whose §3 owns the conflicted paths, with its developer's mention (dev-backend or dev-frontend), asking it to report on that sub-task and post its handoff line when pushed; re-verify `MERGEABLE` when it lands. No fix sub-task.

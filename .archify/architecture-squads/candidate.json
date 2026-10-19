@@ -82,7 +82,7 @@
       "id": "dt",
       "type": "backend",
       "label": "dev-team",
-      "sublabel": "dev-leader + dev-backend",
+      "sublabel": "leader + BE/FE devs",
       "tag": "ATs, build, one PR",
       "pos": [
         780,
@@ -247,8 +247,8 @@
       "title": "Squads",
       "items": [
         "product-team: product-owner leads; spec-reviewer, release-manager, devops, docs-writer, service-architect, pr-reviewer",
-        "dev-team: dev-leader leads; dev-backend, pr-reviewer",
-        "blog-team: dev-leader leads; blog-writer, dev-backend, devops, pr-reviewer"
+        "dev-team: dev-leader leads; dev-backend, dev-frontend, pr-reviewer",
+        "blog-team: dev-leader leads; blog-writer, dev-frontend, devops, pr-reviewer"
       ]
     },
     {

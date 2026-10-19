@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "receiptId": "22c732b8-6bfa-4162-a1e5-4887a572f426",
+  "receiptId": "425e8520-1bcb-4f98-992d-2af94960cbdb",
   "status": "current",
   "command": "deliver",
   "type": "architecture",
   "input": "/Users/steven/_CODE/multica-setup/.archify/architecture-squads/candidate.json",
   "output": "/Users/steven/_CODE/multica-setup/.archify/architecture-squads/squads.html",
   "specification": {
-    "sha256": "7c4bce88bd1f541d9566c78df69dd6ab3a92ad6e979b725d39047c910c824df4",
-    "bytes": 5140
+    "sha256": "47cccb9cf3c1c03b9342a1be58846ebef6afd181db7cf37ec046e9449204b0af",
+    "bytes": 5150
   },
   "artifact": {
-    "sha256": "61d5e85723cd406dbe29c592947a6eb7775bd8c03ef7e8adf3ab4e19fc4ca761",
-    "bytes": 766755
+    "sha256": "088c57bee2c6516b4a827b7eb417bf1efee4e6999fcf33c4a6cd383a0d9df036",
+    "bytes": 766750
   }
 }

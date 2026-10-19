@@ -1,6 +1,6 @@
 ---
 name: nodejs-typescript-standards
-description: Node.js/TypeScript language and tooling standards (pnpm, strict TS, ESM, Prettier) for baoduy TS repos. Use when dev-backend or pr-reviewer builds or reviews code in one of those repos.
+description: Node.js/TypeScript language and tooling standards (pnpm, strict TS, ESM, Prettier) for baoduy TS repos. Use when dev-backend, dev-frontend or pr-reviewer builds or reviews code in one of those repos.
 ---
 
 # Node.js / TypeScript Standards (baoduy TS repos)

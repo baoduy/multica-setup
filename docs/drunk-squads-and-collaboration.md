@@ -54,11 +54,11 @@ From `export/drunk-workspace/squads/*.json`.
 | Squad | Leader | Members | Delivers |
 |---|---|---|---|
 | **product-team** | product-owner | spec-reviewer, release-manager, devops, docs-writer, service-architect, pr-reviewer | A feature end to end: spec, gated review, delegated build, release. Read-only on code. |
-| **dev-team** | dev-leader | dev-backend, pr-reviewer | One approved spec or confirmed bug as exactly ONE merged PR into `dev`. Never releases. |
-| **blog-team** | dev-leader | blog-writer, dev-backend, devops, pr-reviewer | One reviewed PR into `develop` of `hbd.astro-paper`. The owner deploys `develop`→`main`. |
+| **dev-team** | dev-leader | dev-backend, dev-frontend, pr-reviewer | One approved spec or confirmed bug as exactly ONE merged PR into `dev`. Never releases. |
+| **blog-team** | dev-leader | blog-writer, dev-frontend, devops, pr-reviewer | One reviewed PR into `develop` of `hbd.astro-paper`. The owner deploys `develop`→`main`. |
 
 Some agents sit in more than one squad. pr-reviewer is in all three, dev-leader
-leads two, and devops and dev-backend each serve two. The squad a ticket is
+leads two, and devops and dev-frontend each serve two. The squad a ticket is
 assigned to decides which briefing the leader follows.
 
 ### Agents outside the squad flow
@@ -154,10 +154,15 @@ Interactive diagram: `.archify/sequence-dev-team-cycle/dev-team-cycle.html`.
   tests. Route B is configuration only. Route A also has variants: bug fix,
   UI presentation, coverage-excluded wiring and owner test waiver. Each
   variant changes which stages exist (Policy 02 statement 1).
-- **Acceptance tests before code.** dev-backend writes the spec's scenarios
-  as failing tests and pushes them. dev-leader reads them against the spec
-  and freezes them as `at_sha`. dev-backend then builds against the frozen
-  tests. Independent surfaces may build in parallel (Policy 02 statement 1c).
+- **One developer per surface** (Policy 02 statement 1g). Files inside a
+  front-end app (`ui/` in DKNet.Accounts.Api, the Astro site code) go to
+  dev-frontend; every other file goes to dev-backend. A cycle touching both
+  splits into one surface per developer.
+- **Acceptance tests before code.** The surface's developer writes the
+  spec's scenarios as failing tests and pushes them. dev-leader reads them
+  against the spec and freezes them as `at_sha`. The same developer then
+  builds against the frozen tests. Independent surfaces may build in
+  parallel (Policy 02 statement 1c).
 - **One branch, one PR.** dev-leader cuts the feature branch before stage 1
   and opens the single PR after the last Build.
 - **Rework goes through the leader.** pr-reviewer posts findings on its own

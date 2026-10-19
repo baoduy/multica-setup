@@ -13,6 +13,10 @@
       "role": "developer"
     },
     {
+      "agent_name": "dev-frontend",
+      "role": "developer"
+    },
+    {
       "agent_name": "pr-reviewer",
       "role": "reviewer"
     }

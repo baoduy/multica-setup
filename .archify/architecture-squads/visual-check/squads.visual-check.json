@@ -6,11 +6,11 @@
   "status": "pass",
   "visualReview": "pending",
   "provenance": "current",
-  "deliveryReceiptId": "22c732b8-6bfa-4162-a1e5-4887a572f426",
+  "deliveryReceiptId": "425e8520-1bcb-4f98-992d-2af94960cbdb",
   "artifact": {
     "path": "/Users/steven/_CODE/multica-setup/.archify/architecture-squads/squads.html",
-    "sha256": "61d5e85723cd406dbe29c592947a6eb7775bd8c03ef7e8adf3ab4e19fc4ca761",
-    "bytes": 766755
+    "sha256": "088c57bee2c6516b4a827b7eb417bf1efee4e6999fcf33c4a6cd383a0d9df036",
+    "bytes": 766750
   },
   "state": {
     "detail": "read",
@@ -938,23 +938,23 @@
         "file": "squads.visual-check.html"
       },
       {
-        "sha256": "ae539534188d97db5acdb4a5094fa3b7c463b67dfd393bee62dcd92a2469b113",
-        "bytes": 127667,
+        "sha256": "4791d85490a8c94b3fd7a2410c78e09d281be4606f716ece01a55544397a7c7d",
+        "bytes": 126797,
         "file": "squads.visual-check.1440x900.light.png"
       },
       {
-        "sha256": "8dd444e554c500e1020c87a329813bd2e01138651744e46a48dc980ada448ba8",
-        "bytes": 134534,
+        "sha256": "d3ca06ce75f95aebd453ceb274a2f52ddf21f82f69a00e1d9108913dcbfd0792",
+        "bytes": 133647,
         "file": "squads.visual-check.1440x900.dark.png"
       },
       {
-        "sha256": "981f20d7677a818cce3983094ad2a1798e8aaca258d07c579c8d47c1370d7464",
-        "bytes": 185985,
+        "sha256": "e380de18f43a28784d5e9b859a3b97af289f5a965686f060d5e6b523b17b69bb",
+        "bytes": 187244,
         "file": "squads.visual-check.2048x1320.light.png"
       },
       {
-        "sha256": "b7ad110a1adda82426cf4bc8d3abb9c1305539673f1b40a14d04932ed192e70b",
-        "bytes": 197582,
+        "sha256": "50742575bb684878ca13ccfae986672adce88d7e66c4ab116c6ff9ef756b7dcb",
+        "bytes": 198827,
         "file": "squads.visual-check.2048x1320.dark.png"
       }
     ]

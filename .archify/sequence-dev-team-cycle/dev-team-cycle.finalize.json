@@ -5,16 +5,16 @@
   "status": "pass",
   "type": "sequence",
   "quality": "showcase",
-  "startedAt": "2026-10-19T03:51:04.644Z",
+  "startedAt": "2026-10-19T09:01:52.366Z",
   "specification": {
     "path": "/Users/steven/_CODE/multica-setup/.archify/sequence-dev-team-cycle/candidate.json",
-    "sha256": "c09fba1098f8a8e7d2174f305ad445b6a595dfa31f48df84e1e3339a0fbdadfb",
-    "bytes": 4592
+    "sha256": "ac199beae5c0520fd5144c0948f9d3eece53f2e1219ac4c2f41dcc695f820b70",
+    "bytes": 4847
   },
   "artifact": {
     "path": "/Users/steven/_CODE/multica-setup/.archify/sequence-dev-team-cycle/dev-team-cycle.html",
-    "sha256": "c4bf73b01561d05632aa4e7a42143b2751db1cce19be2cfe3170d3da9084b75a",
-    "bytes": 761088
+    "sha256": "2ac6ba35666988ab86d05ea5639c56ce073d72dfc63f4a7fb091b689e745a5a5",
+    "bytes": 761508
   },
   "stages": {
     "validate": {
@@ -38,8 +38,8 @@
         "ok": true,
         "command": "validate",
         "specification": {
-          "sha256": "c09fba1098f8a8e7d2174f305ad445b6a595dfa31f48df84e1e3339a0fbdadfb",
-          "bytes": 4592
+          "sha256": "ac199beae5c0520fd5144c0948f9d3eece53f2e1219ac4c2f41dcc695f820b70",
+          "bytes": 4847
         },
         "validation": {
           "checksPassed": 9,
@@ -54,7 +54,7 @@
     "deliver": {
       "status": "pass",
       "exitCode": 0,
-      "durationMs": 357,
+      "durationMs": 349,
       "command": [
         "/opt/homebrew/Cellar/node/26.12.0/bin/node",
         "/Users/steven/.claude/skills/archify/bin/archify.mjs",
@@ -68,19 +68,19 @@
       ],
       "receipt": {
         "schemaVersion": 1,
-        "receiptId": "d85428df-1979-4ba2-8867-9878e78e2ed6",
+        "receiptId": "9d8f50ed-f9da-411c-9b23-4b1f3c8148a3",
         "ok": true,
         "command": "deliver",
         "type": "sequence",
         "input": "/Users/steven/_CODE/multica-setup/.archify/sequence-dev-team-cycle/candidate.json",
         "output": "/Users/steven/_CODE/multica-setup/.archify/sequence-dev-team-cycle/dev-team-cycle.html",
         "specification": {
-          "sha256": "c09fba1098f8a8e7d2174f305ad445b6a595dfa31f48df84e1e3339a0fbdadfb",
-          "bytes": 4592
+          "sha256": "ac199beae5c0520fd5144c0948f9d3eece53f2e1219ac4c2f41dcc695f820b70",
+          "bytes": 4847
         },
         "artifact": {
-          "sha256": "c4bf73b01561d05632aa4e7a42143b2751db1cce19be2cfe3170d3da9084b75a",
-          "bytes": 761088
+          "sha256": "2ac6ba35666988ab86d05ea5639c56ce073d72dfc63f4a7fb091b689e745a5a5",
+          "bytes": 761508
         },
         "validation": {
           "checksPassed": 9,
@@ -106,7 +106,7 @@
     "check": {
       "status": "pass",
       "exitCode": 0,
-      "durationMs": 153,
+      "durationMs": 157,
       "command": [
         "/opt/homebrew/Cellar/node/26.12.0/bin/node",
         "/Users/steven/.claude/skills/archify/bin/archify.mjs",
@@ -118,8 +118,8 @@
         "ok": true,
         "file": "/Users/steven/_CODE/multica-setup/.archify/sequence-dev-team-cycle/dev-team-cycle.html",
         "artifact": {
-          "sha256": "c4bf73b01561d05632aa4e7a42143b2751db1cce19be2cfe3170d3da9084b75a",
-          "bytes": 761088
+          "sha256": "2ac6ba35666988ab86d05ea5639c56ce073d72dfc63f4a7fb091b689e745a5a5",
+          "bytes": 761508
         },
         "checks": [
           {
@@ -248,13 +248,13 @@
           "issues": []
         },
         "provenance": "current",
-        "deliveryReceiptId": "d85428df-1979-4ba2-8867-9878e78e2ed6"
+        "deliveryReceiptId": "9d8f50ed-f9da-411c-9b23-4b1f3c8148a3"
       }
     },
     "browser-check": {
       "status": "pass",
       "exitCode": 0,
-      "durationMs": 1108,
+      "durationMs": 1215,
       "command": [
         "/opt/homebrew/Cellar/node/26.12.0/bin/node",
         "/Users/steven/.claude/skills/archify/bin/archify.mjs",
@@ -272,11 +272,11 @@
         "status": "pass",
         "visualReview": "not-requested",
         "provenance": "current",
-        "deliveryReceiptId": "d85428df-1979-4ba2-8867-9878e78e2ed6",
+        "deliveryReceiptId": "9d8f50ed-f9da-411c-9b23-4b1f3c8148a3",
         "artifact": {
           "path": "/Users/steven/_CODE/multica-setup/.archify/sequence-dev-team-cycle/dev-team-cycle.html",
-          "sha256": "c4bf73b01561d05632aa4e7a42143b2751db1cce19be2cfe3170d3da9084b75a",
-          "bytes": 761088
+          "sha256": "2ac6ba35666988ab86d05ea5639c56ce073d72dfc63f4a7fb091b689e745a5a5",
+          "bytes": 761508
         },
         "state": {
           "detail": "read",
@@ -970,8 +970,8 @@
     "browserCheckReceipt": "/Users/steven/_CODE/multica-setup/.archify/sequence-dev-team-cycle/dev-team-cycle.browser-check.json"
   },
   "visualReview": "not-requested",
-  "finishedAt": "2026-10-19T03:51:06.357Z",
-  "durationMs": 1713,
+  "finishedAt": "2026-10-19T09:01:54.175Z",
+  "durationMs": 1809,
   "update": {
     "status": "update_available",
     "installedVersion": "3.0.1",

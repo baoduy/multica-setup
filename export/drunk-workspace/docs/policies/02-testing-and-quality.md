@@ -3,9 +3,9 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-02 |
-| **Version** | 1.16 |
+| **Version** | 1.17 |
 | **Status** | Active |
-| **Owner** | dev-backend |
+| **Owner** | dev-backend, dev-frontend |
 | **Applies to** | Every code or behaviour change in a drunk repo, across every stack |
 | **Related skills** | [`test-driven-development`](../../skills/test-driven-development/SKILL.md) · testing rules embedded in [`nodejs-typescript-standards`](../../skills/nodejs-typescript-standards/SKILL.md) (`TS-TEST-*`) · [`python-mcp-standards`](../../skills/python-mcp-standards/SKILL.md) (`MCP-TEST-*`) · [`pulumi-azure-iac-standards`](../../skills/pulumi-azure-iac-standards/SKILL.md) (`PULUMI-TEST-*`) |
 | **Enforced at** | PR review gate ([`pr-review-gate`](../../skills/pr-review-gate/SKILL.md)) |
@@ -38,7 +38,8 @@
         git diff --name-only origin/dev...origin/<feature-branch>   (production files only)
 
    Sign-off = FULL suite green (pre-existing + new) + ≥80% on every touched class + clean
-   `dotnet pack` / `npm pack`, expressed ONLY by dev-backend flipping its Build sub-task to `done`.
+   `dotnet pack` / `npm pack`, expressed ONLY by the surface's developer (dev-backend or
+   dev-frontend, statement 1g) flipping its Build sub-task to `done`.
 ```
 
 ## Purpose
@@ -58,12 +59,12 @@ statements but follows the runner and structure conventions below.
 
 1. **Acceptance-test-first, authored and implemented in separate runs, verified by outcome.**
    Every change is proven by acceptance tests derived from the spec's Gherkin before its PR
-   opens — except a UI presentation change (statement 1a). dev-backend owns both halves, in separate runs except for a confirmed bug fix (statement 1b): the **`Acceptance tests:` stage**
+   opens — except a UI presentation change (statement 1a). The surface's developer (statement 1g) owns both halves, in separate runs except for a confirmed bug fix (statement 1b): the **`Acceptance tests:` stage**
    turns the brief's §7 into executable, RED tests against the package's public API (plus the
    §5 signature stubs so they compile) and pushes them; dev-leader reads them against the spec
    and pins `at_sha`; the **`Build:` stage** implements against those frozen tests until green.
    A modified or deleted approved test after `at_sha` is a `blocking` review finding — a wrong
-   test goes back to the leader, never gets edited to pass. How dev-backend reaches green inside
+   test goes back to the leader, never gets edited to pass. How the developer reaches green inside
    Build (unit red/green/refactor) is its own business and is not reported; what IS reported and
    re-measured is the outcome: frozen ATs green, full suite green, ≥80% coverage and a mutation
    report per touched class, empty drift check. Why: a single run that writes a test and then
@@ -74,7 +75,7 @@ statements but follows the runner and structure conventions below.
    root-cause report (Workflow A), whose acceptance tests are only the Prove-It reproductions
    of the reported defect on one surface and whose brief adds no public signature, gets ONE
    `Build:` sub-task with `Mode: bug-build` instead of the Acceptance-tests + Build pair. In
-   that run dev-backend first commits and pushes the reproduction tests alone (plus any §5
+   that run the surface's developer (statement 1g) first commits and pushes the reproduction tests alone (plus any §5
    stub), each `@new` scenario red for the reason the report names; that commit is `at_sha`,
    reported with its per-scenario RED table. Only then does it implement, in the same run,
    against those frozen tests. dev-leader approves nothing in between. The independent read
@@ -178,6 +179,21 @@ statements but follows the runner and structure conventions below.
    `DKNet.Accounts.EmailProcessor`, a console app only the Accounts AppHost starts. No rule
    could honour that, so the spec gate would have rejected it, and the owner's only way
    through was to approve an ESCALATED gate by hand after three rework rounds.
+1g. **Front-end and back-end code have separate developers.** A front-end app is a repo's
+   browser UI project: everything under `ui/` in DKNet.Accounts.Api, and every file outside
+   `src/data/blog/` and `.github/` in `hbd.astro-paper`. dev-frontend writes the acceptance
+   tests and the Build for every file inside a front-end app, its tests included: UI
+   presentation under statement 1a, the rest of the app at the full bar. dev-backend does the
+   same for every other file. dev-leader assigns each §3 file to its developer by path when it
+   writes the briefs; a file outside a front-end app is dev-backend's. A cycle that touches
+   both is split into surfaces under statement 1c, one developer per surface, and every
+   statement of this policy binds the developer of that surface (a `bug-build`, a Route B
+   update, a `build-ui`, `build-excluded` or `build-waived` Build alike). A §5 stub that a
+   front-end and a back-end surface share is written by the developer whose surface owns the
+   stub's file, in that surface's Acceptance-tests sub-task; the other developer's
+   Acceptance-tests sub-task runs at the next stage, against the pushed stub. The statement 1c
+   cap on parallel Builds counts both developers together: they share one runtime host. Why:
+   the owner moved front-end development off dev-backend (2026-10-19).
 2. **Correct runner per stack — no substitutions.** TypeScript repos run **jest via ts-jest**
    (`jest.config.js`, `preset: ts-jest`); do not add mocha/vitest (`TS-TEST-001`).
    Python repos run **pytest**, patching at the import path the code under test actually uses
@@ -188,14 +204,14 @@ statements but follows the runner and structure conventions below.
 3. **Test naming and placement per stack.** TypeScript: `<unit>.test.ts` matching the
    `testMatch` glob, beside or under the source (`TS-TEST-002`). Python: `tests/` alongside
    the `src/` package it covers (`MCP-STR-001`).
-4. **New logic ships with a test — authored by dev-backend, in the same Build.** New
+4. **New logic ships with a test — authored by the surface's developer, in the same Build.** New
    builder/helper/type-composition TS logic ships with a `*.test.ts` (`TS-TEST-003`); new
    Pulumi builder behaviour ships with a unit test under Pulumi mocks
    (`pulumi.runtime.setMocks`) (`PULUMI-TEST-001`); every class touched in a DEV Team cycle
    reaches the coverage gate in statement 6 before Build can go `done`. Tests are part of
-   dev-backend's done: a Build reported `done` without them is a defect against this policy.
+   the developer's done: a Build reported `done` without them is a defect against this policy.
    **Coverage review is a mandatory Build step**: after the implementation is green,
-   dev-backend measures coverage per touched class and reads each class against its tests —
+   the developer measures coverage per touched class and reads each class against its tests —
    every public behaviour, branch, and error path the change added must be exercised; gaps are
    closed with behaviour tests before sign-off, never left for review to find. UI presentation
    files are exempt under statement 1a, coverage-excluded files under statement 1e, and
@@ -253,8 +269,8 @@ statements but follows the runner and structure conventions below.
 
 ## Roles & responsibilities
 
-- **dev-backend** — the **sole author of the cycle's tests and code**, and owner of this
-  policy's in-repo enforcement: writes the tests first from the spec's acceptance criteria,
+- **dev-backend** and **dev-frontend** — each the **sole author of the tests and code of its
+  own surfaces** (statement 1g), and owner of this policy's in-repo enforcement there: writes the tests first from the spec's acceptance criteria,
   implements against them, runs the coverage review, measures and reports per-touched-class
   coverage, and is the only role whose sign-off (a `done` flip on its Build with a green suite)
   satisfies statement 6. Never flips `done` on a red suite or a coverage gap.

@@ -11,7 +11,7 @@
 | Member | Owns | Never |
 |---|---|---|
 | **blog-writer** | one post per ticket under `src/data/blog/`, `draft: true`, house voice (`astro-paper-blog-conventions`); its own `blog/<slug>` branch and PR to `develop` | site code, merging, `draft: false`, a second PR |
-| **dev-backend** | Astro/TypeScript site code: components, config, styles, content schema | content authoring, branches, PRs |
+| **dev-frontend** | Astro/TypeScript site code: components, config, styles, content schema (Policy 02 §1g) | content authoring, branches, PRs |
 | **devops** | CI workflows, the deploy pipeline, dependency bumps the build needs | content, site features |
 | **pr-reviewer** | the PR gate into `develop` (`pr-review-gate`): scores, merges at ≥ 8.5, reports REWORK on its own Review sub-task | creating issues; handing a passing PR to a human |
 | **you** | triage, routing, decomposition, the single PR on a code cycle, verification, finalize | code, content, merging, `main` |
@@ -27,7 +27,7 @@
 
 | Stage | Title | Assignee | Gate to pass it |
 |---|---|---|---|
-| 1 | `[D<num>-1] Write:` / `Build:` / `CI:` `<scope>` | blog-writer / dev-backend / devops | `done` with the push verified (`git ls-remote`) and, for content, the PR URL in the report |
+| 1 | `[D<num>-1] Write:` / `Build:` / `CI:` `<scope>` | blog-writer / dev-frontend / devops | `done` with the push verified (`git ls-remote`) and, for content, the PR URL in the report |
 | ⚙ | PR open, inline (`leader-gitops`), code cycles only | you | every stage-1 sub-task `done`; head = feature branch, base = `develop`, `MERGEABLE`; URL posted on the parent |
 | 2 | `[D<num>-2] Review: <scope>` | pr-reviewer | created `backlog` at decomposition, promoted after the PR URL is posted; description = pointer table (repo · branch · PR · Build or Write sub-task for rework · root ticket) |
 

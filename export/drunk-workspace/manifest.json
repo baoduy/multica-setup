@@ -195,6 +195,23 @@
       "had_secrets": false
     },
     {
+      "name": "dev-frontend",
+      "file": "agents/dev-frontend.json",
+      "source_id": "ebb70712-8302-41b7-bd39-7dc1f4a1ac1c",
+      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
+      "source_runtime_provider": "claude",
+      "skill_names": [
+        "astro-paper-blog-conventions",
+        "blocker-report",
+        "codegraph",
+        "nodejs-typescript-standards",
+        "sdlc-flow-squad-worker-playbook",
+        "sdlc-gitflow",
+        "test-driven-development"
+      ],
+      "had_secrets": false
+    },
+    {
       "name": "claude_ultra",
       "file": "agents/claude-ultra.json",
       "source_id": "4e429902-8ce5-44b1-85a2-09c3e5c88ee7",
@@ -432,6 +449,10 @@
           "role": "developer"
         },
         {
+          "agent_name": "dev-frontend",
+          "role": "developer"
+        },
+        {
           "agent_name": "pr-reviewer",
           "role": "reviewer"
         }
@@ -492,7 +513,7 @@
           "role": "leader"
         },
         {
-          "agent_name": "dev-backend",
+          "agent_name": "dev-frontend",
           "role": "member"
         },
         {
