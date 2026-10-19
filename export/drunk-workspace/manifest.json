@@ -626,7 +626,7 @@
       "had_webhook_trigger": false
     },
     {
-      "title": "🔁 Weekly Setup Retro",
+      "title": "🔁 Weekly Multica Setup Retro",
       "file": "autopilots/weekly-setup-retro.json",
       "source_id": "2deb281e-87f0-4592-9e72-1960656e675b",
       "assignee_type": "agent",
