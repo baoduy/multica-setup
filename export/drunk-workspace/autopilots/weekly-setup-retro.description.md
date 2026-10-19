@@ -10,10 +10,10 @@ Find what the drunk agents got wrong in the last 7 days, more than once, and fil
 
 # Step 1: Gate digest
 
-Extract the Part 2 script from the monthly insights autopilot, exactly as written there, and run it for 7 days:
+Extract the Gate digest script from the monthly insights autopilot, exactly as written there, and run it for 7 days:
 
 ```bash
-awk '/^# Part 2/{p=1} p&&/^```bash$/{f=1;next} f&&/^```$/{exit} f' \
+awk '/^# Part [0-9]+: Gate digest/{p=1} p&&/^```bash$/{f=1;next} f&&/^```$/{exit} f' \
   setup/export/drunk-workspace/autopilots/monthly-claude-code-insights.description.md > gate-digest.sh
 DAYS=7 bash ./gate-digest.sh > digest.json
 ```
