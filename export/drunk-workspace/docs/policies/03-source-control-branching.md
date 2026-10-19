@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-03 |
-| **Version** | 1.12 |
+| **Version** | 1.13 |
 | **Status** | Active |
 | **Owner** | release-manager (`dev`→`main`) · dev-leader (cycle git-flow) |
 | **Applies to** | Every agent that branches, commits, pushes, or opens a PR in a drunk repo |
@@ -66,7 +66,7 @@ no separate branch strategy for a different repo class.
 9. **Merge conflicts:** resolve mechanical ones (whitespace, import order, trivial renames) on a *detached* checkout of the feature branch (`git checkout --detach origin/<branch>` takes no lock), commit, push by refspec, re-check `mergeable`. Escalate **substantive** conflicts (overlapping logic, deleted code) to the code's owner (dev-backend, via dev-leader) — never guess. **One exception:** when the conflict is an older duplicate root's fix already merged into `dev`, dev-leader closes the PR as superseded instead of resolving it, on the evidence [Policy 07](07-bug-and-defect-management.md) statement 8a requires.
 10. **Release-manager's three acts and nothing else:** open `gh pr create --base main --head dev`; check whether the release is critical ([Policy 08](08-container-build-and-release.md) statement 2a) from commit subjects and PR labels alone; and merge it (`--merge`, no squash/rebase, preserving `dev` history) — a critical release only after the resolved owner replies. Never run, read, or wait on application code, tests, builds, or the CI publish itself — that is CI's job, out of scope even for the custodian of the branch it publishes from.
 11. **The setup repo is outside the delivery topology.** `baoduy/multica-setup` holds this workspace's own setup (agents, skills, squads, autopilots, policies), not a product, so only statements 4 and 5 (no shared-branch checkout, push by refspec) apply to it. Its flow:
-    - `setup-steward` is the only agent that commits there. It edits `export/drunk-workspace/` only, commits onto fresh `origin/dev` by refspec, and opens or reuses the ONE open `dev`→`main` PR, adding one entry per fix.
+    - `setup-steward` is the only agent that commits there. It edits `export/drunk-workspace/` only, plus `release-reviews/` on a Multica release issue, commits onto fresh `origin/dev` by refspec, and opens or reuses the ONE open `dev`→`main` PR, adding one entry per fix.
     - Only the workspace owner reviews and merges that PR. No agent merges `main` in this repo; `release-manager` and `pr-reviewer` never touch it.
     - The merge is the owner's approval to go live. A GitHub Action calls the `🔄 Drunk Live Sync` autopilot's webhook on every push to `main` that touches `export/drunk-workspace/`, and `Mika` runs `scripts/drunk-live-sync.py`, which pushes each changed resource, reads it back, and moves the tag `live/drunk` only when everything matches. That tag is the one tag an agent may move; it marks the `main` commit the live workspace matches.
     - Cause: the owner wants the setup to improve itself from recorded mistakes, with a human review before anything reaches the live workspace (2026-10-07).

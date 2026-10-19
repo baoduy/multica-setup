@@ -1,6 +1,6 @@
 # Goal
 
-Find what the drunk agents got wrong in the last 7 days, more than once, and file one fix issue per recurring problem for setup-steward. Report the setup's health counts too. The issue this run creates is the record, and its final comment is the report. **You change nothing in the repo or the live workspace in this run.**
+Find what the drunk agents got wrong in the last 7 days, more than once, and file one fix issue per recurring problem for setup-steward. File one issue per upstream change too: a new archify release, new Multica releases. Report the setup's health counts. The issue this run creates is the record, and its final comment is the report. **You change nothing in the repo or the live workspace in this run.**
 
 # Context
 
@@ -10,10 +10,10 @@ Find what the drunk agents got wrong in the last 7 days, more than once, and fil
 
 # Step 1: Gate digest
 
-Extract the Part 3 script from the monthly insights autopilot, exactly as written there, and run it for 7 days:
+Extract the Part 2 script from the monthly insights autopilot, exactly as written there, and run it for 7 days:
 
 ```bash
-awk '/^# Part 3/{p=1} p&&/^```bash$/{f=1;next} f&&/^```$/{exit} f' \
+awk '/^# Part 2/{p=1} p&&/^```bash$/{f=1;next} f&&/^```$/{exit} f' \
   setup/export/drunk-workspace/autopilots/monthly-claude-code-insights.description.md > gate-digest.sh
 DAYS=7 bash ./gate-digest.sh > digest.json
 ```
@@ -32,7 +32,7 @@ For each qualifying problem, read the agent instructions, skill or policy in the
 
 Dedupe: list the open issues in `drunk-setup` first. A problem already covered by an open issue gets a comment there with the new evidence, not a second issue.
 
-File at most **3** issues per run, most frequent first. Never file one that changes a gate bar, cap, weight or severity deduction: report it to the owner instead.
+File at most **3** issues per run in this step, most frequent first. Step 7's upstream issues are outside this cap and need no recurrence. Never file one that changes a gate bar, cap, weight or severity deduction: report it to the owner instead.
 
 # Step 4: File each issue
 
@@ -66,16 +66,25 @@ It prints one count per lens. A lens is a standing check of the setup itself, no
 | 5 Built-ins | Multica releases since the last release review |
 | 6 Performance | per gate: first-pass %, mean rounds, escalations |
 
-Find the previous `Weekly Setup Retro` issue in `drunk-setup` and read the `health.json` block in its report comment. Compare each count with it. No previous retro, or its report has no `health.json` block: report the counts with "no baseline"; that is not a failure. A lens never files an issue and never comments on one: lens findings are for the owner. If the script fails, write its error line under `## Setup health` and go on: a lens failure is not a `## BLOCKER`.
+Find the previous `Weekly Setup Retro` issue in `drunk-setup` and read the `health.json` block in its report comment. Compare each count with it. No previous retro, or its report has no `health.json` block: report the counts with "no baseline"; that is not a failure. A lens never files an issue and never comments on one: lens findings are for the owner. Step 7 reads lens 5 for its own check. If the script fails, write its error line under `## Setup health` and go on: a lens failure is not a `## BLOCKER`.
+
+# Step 7: Upstream releases
+
+Two checks. Each files at most one issue in `drunk-setup`, assigned to `setup-steward`, the way step 4 does. Before filing, list the open issues in `drunk-setup`: an open issue with the same title prefix gets a comment with the new tag instead.
+
+- **archify.** Compare the `version` in `setup/export/drunk-workspace/skills/archify/skill-release.json` with `gh api repos/tt-a1i/archify/releases/latest --jq .tag_name`, ignoring a leading `v`. Behind: file `[Enhance] archify: sync to <tag>`. The description names both versions and the release URL.
+- **Multica.** Read `5_builtins` in `health.json`. A non-empty `releases_since`: file `[Enhance] multica: adopt releases after <last_reviewed_tag>`. The description lists the tags. `releases_since` null (the script or `gh` failed): no issue, one line in the report.
+
+These issues need no Evidence or Watch part: setup-steward runs the release review on the issue. A `gh` failure here is one report line, not a `## BLOCKER`.
 
 # Report
 
 Post ONE comment on this issue with `multica issue comment add --content-stdin`:
 
-- `## Filed`: each issue key and title, or "none".
+- `## Filed`: each issue key and title, step 7's included, or "none".
 - `## One-offs`: problems seen once, one line each.
 - `## Previous fixes`: step 5, one line each.
-- `## Setup health`: step 6. One line per lens: the count now, last week's, and the change. For a count that got worse, name up to 3 files from the output. Then the full `health.json` in a fenced `json` block, which next week's retro reads. When releases are listed under lens 5, ask the owner to run the Multica release review.
+- `## Setup health`: step 6. One line per lens: the count now, last week's, and the change. For a count that got worse, name up to 3 files from the output. Then the full `health.json` in a fenced `json` block, which next week's retro reads. Releases listed under lens 5 are step 7's issue.
 - `## For the owner`: gate-change proposals and anything you could not place, or omit the section.
 - `## BLOCKER`: only if a step failed. Name the step and quote its output line.
 - End with one member mention of the workspace owner.

@@ -1,10 +1,9 @@
 # Goal
 
-Monthly report for the workspace owner, in three parts:
+Monthly report for the workspace owner, in two parts:
 
 1. Claude Code `/insights`: the usage report for this runtime.
-2. Multica release review: which new `multica-ai/multica` releases would improve the drunk and mx workspace bundles, or break them.
-3. Gate digest: how the PR and spec gates did over the last 30 days, from their `Gate verdict`, `Gate round` and `Gate score` properties.
+2. Gate digest: how the PR and spec gates did over the last 30 days, from their `Gate verdict`, `Gate round` and `Gate score` properties.
 
 The issue this run creates is the record, and its final comment is the deliverable. **Report only.** You never apply a proposal, edit a bundle, commit, push, or change the live workspace.
 
@@ -21,18 +20,7 @@ The issue this run creates is the record, and its final comment is the deliverab
 2. Take that path, minus the `file://` prefix. Confirm the file exists and was written during this run. If the command fails, prints no path, or the file is missing or old, part 1 has failed. Keep the shortest decisive output line for the BLOCKER.
 3. Read the report HTML and extract its text. Write a summary of at most 25 lines: one line for the period and volume it covers, then each section's two or three key findings in the report's own words, then its top suggestions. Do not invent numbers that the report does not show.
 
-# Part 2: Multica release review
-
-1. Clone the setup repo into your working directory: `gh repo clone baoduy/multica-setup multica-setup -- --branch dev`. Work only inside that clone.
-2. Read `multica-setup/CLAUDE.md` and `multica-setup/.claude/skills/multica-release-review/SKILL.md`. Follow the skill's steps 1 to 5, with these overrides:
-   - **Skip step 6 entirely.** Do not write `release-reviews/last-run.json`. Do not commit or push. The state advances only when the owner runs the skill themselves.
-   - Write the report file inside the clone (`release-reviews/<run_date>_<range>.md`). It is attached to the comment, never committed.
-   - Do not ask which proposals to implement. List the proposal titles in the comment instead.
-   - If the skill finds no release after `last_reviewed_tag`, part 2 is one line: "No new Multica releases since <tag>." Write no report file.
-3. Check the vendored archify skill, as `CLAUDE.md` requires on every release review. Compare the `version` in `export/drunk-workspace/skills/archify/skill-release.json` with `gh api repos/tt-a1i/archify/releases/latest --jq .tag_name`, ignoring a leading `v`. Report one line: "archify up to date at <version>" or "archify <bundle version> behind upstream <tag>". Do not sync.
-4. If the clone, `gh` or the skill fails, part 2 has failed. Keep the shortest decisive output line for the BLOCKER.
-
-# Part 3: Gate digest
+# Part 2: Gate digest
 
 How the two review gates did over the last 30 days. Report only: you propose nothing and change nothing. The owner reads the numbers and decides whether a policy needs to change.
 
@@ -84,7 +72,7 @@ sort findings.txt | uniq -c | sort -rn | head -15 | awk '{print $2" "$1}' | jq -
 jq -s '.[0] + {top_findings: .[1]}' digest.json top-findings.json
 ```
 
-2. If the script fails or prints no JSON, part 3 has failed. Keep the shortest decisive output line for the BLOCKER.
+2. If the script fails or prints no JSON, part 2 has failed. Keep the shortest decisive output line for the BLOCKER.
 3. From `digest.json` write the section, using only its numbers:
    - **PR gate** and **Spec gate**, one line each: reviews, first-pass rate (`first_pass` / `count`, as a percentage), reworked, mean rework rounds, escalated, median score, and the count per verdict.
    - **Most-cited in rework comments:** the `top_findings` entries as `id ×n`. The severity tags (`[blocking]`, `[major]` and the like) count every tagged finding in those comments; the rule-ids are the stack rules the gates cited most.
@@ -96,11 +84,10 @@ jq -s '.[0] + {top_findings: .[1]}' digest.json top-findings.json
 Post ONE comment on this issue with `multica issue comment add` and `--content-stdin`:
 
 - `## Claude Code insights`: the part 1 summary and the HTML report's absolute path on its own line.
-- `## Multica release review`: the installed `multica` version, the range reviewed, the skill's Summary bullets, the proposal titles in rank order with their type, every breaking change to verify, and the archify line. If nothing is new, give the one line plus the archify line.
-- `## Gate digest`: the part 3 section.
+- `## Gate digest`: the part 2 section.
 - `## BLOCKER`: only if a part failed. Name the part and quote its output line.
 - End with one member mention of the workspace owner.
 
-Attach the insights HTML with `--attachment <path> --allow-external-file`, and the release review report with a second `--attachment <path>` when it exists.
+Attach the insights HTML with `--attachment <path> --allow-external-file`.
 
-Then set this issue `blocked` if any part failed, or `done` if all three succeeded.
+Then set this issue `blocked` if any part failed, or `done` if both succeeded.
