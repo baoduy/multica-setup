@@ -82,6 +82,15 @@ report for the owner instead of an issue. The retro also checks whether
 earlier fixes moved their Watch metric and asks about reverting one that did
 not move in 3 weeks.
 
+Upstream releases are the one exception to the recurrence rule. Outside the
+cap of 3, the retro files `[Enhance] archify: sync to <tag>` when the vendored
+archify is behind upstream, and `[Enhance] multica: adopt releases after
+<tag>` when lens 5 lists Multica releases. On the first, `setup-steward`
+syncs archify as the root `CLAUDE.md` says. On the second it runs
+`multica-release-review`, implements the proposals that amend no policy and
+change no gate, and commits the report and the advanced
+`release-reviews/last-run.json` with them.
+
 Every retro also reports the setup's health. `scripts/setup-health.py`
 prints one count per lens, and the report compares each with last week's:
 
@@ -95,7 +104,7 @@ prints one count per lens, and the report compares each with last week's:
 | 6 Performance | per gate: first-pass %, mean rounds, escalations (from the gate digest) |
 
 Lens findings are report only: they file no issue (Policy 09, setup-steward
-charter). The owner picks what to act on. The baseline is
+charter), except lens 5, which the retro turns into the Multica release issue. The owner picks what to act on. The baseline is
 [`drunk-setup-audit-2026-10-07.md`](drunk-setup-audit-2026-10-07.md).
 `setup-steward` never edits the script; owner sessions maintain it
 (`python3 scripts/setup-health.py --selftest` checks its parsers).
@@ -106,7 +115,8 @@ On each fix issue `setup-steward`:
 
 1. clones the repo at `dev` and follows the root `CLAUDE.md` (policy first,
    cascade everywhere a rule is quoted, one CHANGELOG entry);
-2. edits `export/drunk-workspace/` only;
+2. edits `export/drunk-workspace/` only, plus `release-reviews/` on a
+   Multica release issue;
 3. commits `drunk: <change> [DRK-n]` onto fresh `origin/dev` by refspec and
    proves the push with `git ls-remote`;
 4. opens the `dev`→`main` PR, or adds a bullet to the open one:

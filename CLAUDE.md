@@ -86,8 +86,10 @@ the workspace context implement it. Two rules follow from that:
 https://github.com/tt-a1i/archify for the Multica platform. The same skill is
 installed globally for Claude Code at `~/.claude/skills/archify`.
 
-- Check for a new upstream release from time to time, and on every
-  `multica-release-review` run. The bundle version is in
+- The `🔁 Weekly Setup Retro` checks for a new upstream release and files
+  `[Enhance] archify: sync to <tag>` for `setup-steward`, which syncs on
+  `dev` and leaves the global copy to the owner. An owner session checks
+  on every `multica-release-review` run too. The bundle version is in
   `skills/archify/skill-release.json`. The upstream version is
   `gh api repos/tt-a1i/archify/releases/latest --jq .tag_name`.
 - Sync = replace the bundle dir with upstream `archify/` at the release tag.

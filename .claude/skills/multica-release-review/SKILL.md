@@ -12,7 +12,7 @@ it, write a report, and record the run so the next one starts after the newest
 release reviewed.
 
 This skill only analyses and proposes changes. It never edits a bundle or pushes
-to a live workspace. Changes the owner accepts go through the normal flow in
+to a live workspace (`setup-steward` implements some proposals afterwards; see the end of step 6). Changes the owner accepts go through the normal flow in
 `CLAUDE.md`: policy first, one commit per change, and pushing live only with
 approval.
 
@@ -160,3 +160,8 @@ and the state together with the message
 
 Finish by giving the owner the summary and the proposal titles, then ask which
 proposals to implement.
+
+`setup-steward` runs this skill on a `[Enhance] multica: adopt releases after <tag>`
+issue from the weekly retro. There its own instructions replace the commit message
+and the question: it implements the proposals that amend no policy and change no
+gate, and lists the rest on the issue.

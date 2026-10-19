@@ -127,7 +127,7 @@ def main():
     last = json.loads(read("release-reviews/last-run.json"))
     rel = live(["gh", "api", "repos/multica-ai/multica/releases?per_page=100"])
     if rel is not None:
-        behind = sorted(r["tag_name"] for r in rel if r.get("published_at", "") > last["published_at"])
+        behind = sorted(r["tag_name"] for r in rel if not r.get("prerelease") and r.get("published_at", "") > last["published_at"])
 
     # 6 Performance (from the retro's gate digest)
     perf = None
