@@ -24,6 +24,7 @@
   "skill_names": [
     "blocker-report",
     "codegraph",
+    "dotnet10-efcore10-standards",
     "pr-review-gate",
     "sdlc-flow-delivery-pipeline",
     "sdlc-flow-squad-worker-playbook"

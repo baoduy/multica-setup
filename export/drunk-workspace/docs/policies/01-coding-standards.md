@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-01 |
-| **Version** | 1.11 |
+| **Version** | 1.12 |
 | **Status** | Active |
 | **Owner** | dev-leader |
 | **Applies to** | Every engineer and agent writing or modifying code in any drunk stack: .NET/DDD NuGet libraries, Pulumi/TypeScript npm packages, Python MCP/FastAPI services, Docker images, Helm charts |
@@ -118,12 +118,17 @@ generic rule here where they differ (see Exceptions).
     `.Values.*` a template reads is declared with a default and documented (`HELM-STR-003`).
 14. **Async discipline (.NET).** Forward `CancellationToken` on I/O calls that accept one, use
     the `Async` suffix, never `async void` outside an event handler, never sync-over-async
-    (`.Result`/`.Wait()`/`.GetAwaiter().GetResult()`) (`ASYNC-001..007`). An `async void`
+    (`.Result`/`.Wait()`/`.GetAwaiter().GetResult()`) (`ASYNC-001..008`). An `async void`
     event handler catches `Exception` around its whole body, logs it, and leaves the operation
     in a defined state (an intercepted request is continued or aborted, never left hanging):
     an exception that escapes `async void` is rethrown on the thread pool and crashes the host
     process, so catching only a library's own exception type is not enough (`ASYNC-007`;
-    DKNet PR #499, PdfGenerator request interception). Every `Promise` in
+    DKNet PR #499, PdfGenerator request interception). Locks, semaphores and other handles
+    taken one at a time are acquired inside the `try` whose `finally` releases them, so a
+    cancellation or any other exception between the first and the last acquire releases
+    what is already held; a `catch` for one exception type around the acquire loop is not
+    enough, and a test proves the release with a fake that grants the first resource and
+    throws on the second (`ASYNC-008`). Every `Promise` in
     TypeScript is awaited or explicitly handled — no fire-and-forget in the sync path
     (`TS-ERR-002`).
 15. **The implementer proves the standards before handoff, not the reviewer after.** Every
