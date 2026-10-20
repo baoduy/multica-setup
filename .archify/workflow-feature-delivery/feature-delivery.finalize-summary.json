@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/candidate.json",
+    "sha256": "d918ac577b7bc1d268f3685b9fa6526d06d3e5765678c1a9c7f5efdaabab065f",
+    "bytes": 5819
+  },
+  "artifact": {
+    "path": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/feature-delivery.html",
+    "sha256": "1e87a6e67f3294fe9773a30cc12f07834d759ff0d67173fd5e5dcf7aa404bc7a",
+    "bytes": 766365
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/feature-delivery.finalize.json",
+    "summaryReceipt": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/feature-delivery.finalize-summary.json",
+    "browserCheckReceipt": "/Users/steven/_CODE/multica-setup/.archify/workflow-feature-delivery/feature-delivery.browser-check.json"
+  },
+  "update": {
+    "status": "update_available",
+    "installedVersion": "3.0.1",
+    "availableVersion": "3.1.0",
+    "releaseNotes": "https://github.com/tt-a1i/archify/releases/tag/v3.1.0",
+    "severity": "normal",
+    "checkedAt": "2026-10-14T06:10:11.072Z",
+    "source": "cache",
+    "noticeRequired": true,
+    "noticeText": "Archify update: 3.0.1 → 3.1.0. A previous check at 2026-10-14T06:10:11.072Z found a newer release. Release notes: https://github.com/tt-a1i/archify/releases/tag/v3.1.0. The installed Skill has not changed; ask to snooze or ignore this reminder.",
+    "eventKey": "archify@sha256:ffedc53390c9da6e859f41e432c5d2d0615a23cf00a503181f07efbba88a7ce8"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 1531,
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "routesOverSuggestedBends": 2
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [],
+      "detours": [
+        {
+          "relationship": {
+            "id": "e-spec",
+            "from": "write",
+            "to": "sgate",
+            "label": "create [S#]",
+            "collectionIndex": 9,
+            "artifactIndex": 10
+          },
+          "bends": 3,
+          "stretch": 1
+        },
+        {
+          "relationship": {
+            "id": "e-squad",
+            "from": "phase",
+            "to": "build",
+            "label": "to dev-team",
+            "collectionIndex": 10,
+            "artifactIndex": 11
+          },
+          "bends": 3,
+          "stretch": 1.111
+        }
+      ],
+      "truncated": false
+    },
+    "hints": [
+      "write → sgate needs 3 bends: move node write or sgate so they share a row or column with matching centers, or sit diagonally with a clear corner.",
+      "phase → build needs 3 bends: move node phase or build so they share a row or column with matching centers, or sit diagonally with a clear corner."
+    ],
+    "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
+  }
+}

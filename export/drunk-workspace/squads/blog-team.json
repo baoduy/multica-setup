@@ -13,7 +13,7 @@
       "role": "leader"
     },
     {
-      "agent_name": "dev-backend",
+      "agent_name": "dev-frontend",
       "role": "member"
     },
     {

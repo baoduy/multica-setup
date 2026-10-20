@@ -1,7 +1,6 @@
 # multica setup — workspace bundle
 
-Local mirror of the live Multica workspace `drunk-workspace/` (the mx bundle
-moved to its own repo). The bundle holds the workspace's agents, skills, squads, docs/policies, and a
+Local mirror of the live Multica workspace `drunk-workspace/`. The bundle holds the workspace's agents, skills, squads, docs/policies, and a
 `manifest.json`. Edit locally first, keep the bundle byte-identical to what is
 pushed, and always confirm before pushing to a live workspace (see `../CLAUDE.md`).
 
@@ -10,13 +9,17 @@ see [`docs/drunk-setup-improvement-loop.md`](docs/drunk-setup-improvement-loop.m
 
 ## Diagrams (drunk-workspace)
 
+How the agents and squads work together, with four more diagrams (squads,
+feature delivery, dev-team cycle, ticket status):
+[`docs/drunk-squads-and-collaboration.md`](docs/drunk-squads-and-collaboration.md).
+
 Rendered with [archify](https://github.com/tt-a1i/archify). Each image links to
 its interactive HTML source in `.archify/`.
 
 ### Runtime architecture
 
 <a href=".archify/architecture-runtime/runtime.html">
-  <img alt="multica-setup runtime architecture (drunk-workspace)" src="output/runtime-presentation/runtime-animation.gif">
+  <img alt="multica-setup runtime architecture (drunk-workspace)" src="output/runtime-presentation/runtime.png">
 </a>
 
 ### Setup improvement loop

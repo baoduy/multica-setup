@@ -1,11 +1,11 @@
 ---
 name: sdlc-flow-squad-worker-playbook
-description: Handoff and rework contract for squad member agents working staged sub-tasks under a leader. Use when a squad member (dev-backend, docs-writer, service-architect, pr-reviewer, release-manager, devops) finishes, blocks, or reworks a sub-task.
+description: Handoff and rework contract for squad member agents working staged sub-tasks under a leader. Use when a squad member (dev-backend, dev-frontend, docs-writer, service-architect, pr-reviewer, release-manager, devops) finishes, blocks, or reworks a sub-task.
 ---
 
 # SDLC Flow — Squad Worker Playbook
 
-For squad member agents (dev-backend, docs-writer, service-architect, pr-reviewer, release-manager, devops) working staged sub-tasks under a leader. Your own instructions define your role and your quality gates; the Workspace Context defines statuses, wakes and ticket conventions. Your sub-task description is your brief: squad instructions go to the leader only, so everything you need is in the sub-task or in your skills.
+For squad member agents (dev-backend, dev-frontend, docs-writer, service-architect, pr-reviewer, release-manager, devops) working staged sub-tasks under a leader. Your own instructions define your role and your quality gates; the Workspace Context defines statuses, wakes and ticket conventions. Your sub-task description is your brief: squad instructions go to the leader only, so everything you need is in the sub-task or in your skills.
 
 ## Handoff contract
 

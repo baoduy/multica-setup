@@ -1,0 +1,167 @@
+{
+  "schema_version": 2,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Ticket Status and Wakes",
+    "output": ".archify/lifecycle-ticket-status/ticket-status.html",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "Stage work"
+    },
+    {
+      "id": "waiting",
+      "label": "Waiting on someone"
+    },
+    {
+      "id": "terminal",
+      "label": "Closed"
+    }
+  ],
+  "states": [
+    {
+      "id": "backlog",
+      "type": "start",
+      "label": "backlog",
+      "sublabel": "later stage",
+      "lane": "main",
+      "col": 0,
+      "step": "01"
+    },
+    {
+      "id": "todo",
+      "type": "neutral",
+      "label": "todo",
+      "sublabel": "assigned, wakes",
+      "lane": "main",
+      "col": 1,
+      "step": "02"
+    },
+    {
+      "id": "inprog",
+      "type": "active",
+      "label": "in_progress",
+      "sublabel": "agent working",
+      "lane": "main",
+      "col": 2,
+      "step": "03"
+    },
+    {
+      "id": "done",
+      "type": "success",
+      "label": "done",
+      "sublabel": "closes the stage",
+      "lane": "main",
+      "col": 3,
+      "step": "04"
+    },
+    {
+      "id": "blocked",
+      "type": "waiting",
+      "label": "blocked",
+      "sublabel": "handoff line on parent",
+      "lane": "waiting",
+      "col": 2
+    },
+    {
+      "id": "review",
+      "type": "waiting",
+      "label": "in_review",
+      "sublabel": "root only, human",
+      "lane": "waiting",
+      "col": 4
+    },
+    {
+      "id": "cancelled",
+      "type": "failure",
+      "label": "cancelled",
+      "sublabel": "also closes a stage",
+      "lane": "terminal",
+      "col": 1
+    },
+    {
+      "id": "rootdone",
+      "type": "success",
+      "label": "root done",
+      "sublabel": "chain verified",
+      "lane": "terminal",
+      "col": 4
+    }
+  ],
+  "transitions": [
+    {
+      "from": "backlog",
+      "to": "todo",
+      "label": "promoted"
+    },
+    {
+      "from": "todo",
+      "to": "inprog",
+      "label": "flip on wake"
+    },
+    {
+      "from": "inprog",
+      "to": "done",
+      "label": "work complete",
+      "variant": "emphasis"
+    },
+    {
+      "from": "inprog",
+      "to": "blocked",
+      "label": "needs someone",
+      "variant": "security"
+    },
+    {
+      "from": "blocked",
+      "to": "inprog",
+      "label": "leader re-arm",
+      "variant": "dashed"
+    },
+    {
+      "from": "done",
+      "to": "inprog",
+      "label": "fix re-arm",
+      "variant": "dashed",
+      "route": "top-channel"
+    },
+    {
+      "from": "todo",
+      "to": "cancelled",
+      "label": "dropped",
+      "variant": "security"
+    },
+    {
+      "from": "inprog",
+      "to": "review",
+      "label": "root awaits human"
+    },
+    {
+      "from": "review",
+      "to": "rootdone",
+      "label": "human closes"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "What wakes a run",
+      "items": [
+        "Assignment, or promotion out of backlog",
+        "A done or cancelled that closes a stage",
+        "An agent or squad mention",
+        "A member's plain comment wakes its squad leader"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Never",
+      "items": [
+        "in_review on a phase ticket or sub-task",
+        "done reopened by the assignee",
+        "A flip to todo as a re-arm: the mention is the wake"
+      ]
+    }
+  ]
+}

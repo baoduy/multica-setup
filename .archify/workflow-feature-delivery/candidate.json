@@ -1,0 +1,284 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Feature Delivery Across Squads (Workflow B to C)",
+    "quality_profile": "showcase",
+    "output": ".archify/workflow-feature-delivery/feature-delivery.html"
+  },
+  "lanes": [
+    {
+      "id": "human",
+      "label": "Requester / owner"
+    },
+    {
+      "id": "po",
+      "label": "product-team: product-owner, release-manager"
+    },
+    {
+      "id": "gates",
+      "label": "Gates: spec-reviewer, pr-reviewer"
+    },
+    {
+      "id": "dev",
+      "label": "dev-team: dev-leader + dev-backend / dev-frontend"
+    }
+  ],
+  "phases": [
+    {
+      "id": "intake",
+      "label": "Intake + spec",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "spec",
+      "label": "Spec gate",
+      "fromCol": 2,
+      "toCol": 2,
+      "variant": "security"
+    },
+    {
+      "id": "build",
+      "label": "Build",
+      "fromCol": 3,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "review",
+      "label": "PR gate",
+      "fromCol": 4,
+      "toCol": 4,
+      "variant": "security"
+    },
+    {
+      "id": "release",
+      "label": "Release",
+      "fromCol": 5,
+      "toCol": 5
+    }
+  ],
+  "mainPath": [
+    "goal",
+    "intake",
+    "write",
+    "sgate",
+    "phase",
+    "build",
+    "pr",
+    "prgate",
+    "promote",
+    "release",
+    "published"
+  ],
+  "nodes": [
+    {
+      "id": "goal",
+      "lane": "human",
+      "col": 0,
+      "type": "external",
+      "label": "Goal",
+      "sublabel": "via Mika or direct",
+      "width": 130
+    },
+    {
+      "id": "intake",
+      "lane": "po",
+      "col": 0,
+      "type": "backend",
+      "label": "Intake",
+      "sublabel": "classify A to F",
+      "width": 130
+    },
+    {
+      "id": "write",
+      "lane": "po",
+      "col": 1,
+      "type": "backend",
+      "label": "Write spec",
+      "sublabel": "zero open questions",
+      "width": 130
+    },
+    {
+      "id": "phase",
+      "lane": "po",
+      "col": 3,
+      "type": "messagebus",
+      "label": "[P#-1] phase",
+      "sublabel": "frozen spec revision",
+      "width": 130
+    },
+    {
+      "id": "build",
+      "lane": "dev",
+      "col": 3,
+      "type": "backend",
+      "label": "ATs, then Build",
+      "sublabel": "branch, RED, green",
+      "width": 130
+    },
+    {
+      "id": "pr",
+      "lane": "dev",
+      "col": 4,
+      "type": "backend",
+      "label": "One cycle PR",
+      "sublabel": "dev-leader opens",
+      "width": 130
+    },
+    {
+      "id": "sgate",
+      "lane": "gates",
+      "col": 2,
+      "type": "security",
+      "label": "[S#] spec gate",
+      "sublabel": "spec-reviewer scores",
+      "width": 130
+    },
+    {
+      "id": "prgate",
+      "lane": "gates",
+      "col": 4,
+      "type": "security",
+      "label": "Review sub-task",
+      "sublabel": "pr-reviewer scores",
+      "width": 130
+    },
+    {
+      "id": "promote",
+      "lane": "po",
+      "col": 4,
+      "type": "backend",
+      "label": "Verify merge",
+      "sublabel": "PO promotes [P#-2]",
+      "width": 130
+    },
+    {
+      "id": "release",
+      "lane": "po",
+      "col": 5,
+      "type": "cloud",
+      "label": "[P#-2] Release",
+      "sublabel": "release-manager",
+      "width": 130
+    },
+    {
+      "id": "published",
+      "lane": "human",
+      "col": 5,
+      "type": "external",
+      "label": "Published",
+      "sublabel": "CI on main, root done",
+      "width": 130
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-goal",
+      "from": "goal",
+      "to": "intake",
+      "label": "main ticket",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "e-clarify",
+      "from": "intake",
+      "to": "write",
+      "label": "clarify"
+    },
+    {
+      "id": "e-spec",
+      "from": "write",
+      "to": "sgate",
+      "label": "create [S#]",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "e-rework-spec",
+      "from": "sgate",
+      "to": "write",
+      "label": "REWORK",
+      "variant": "security",
+      "role": "return",
+      "fromSide": "top",
+      "toSide": "right"
+    },
+    {
+      "id": "e-approved",
+      "from": "sgate",
+      "to": "phase",
+      "label": "APPROVED",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "bottom"
+    },
+    {
+      "id": "e-squad",
+      "from": "phase",
+      "to": "build",
+      "label": "to dev-team"
+    },
+    {
+      "id": "e-pr",
+      "from": "build",
+      "to": "pr",
+      "label": "pushed"
+    },
+    {
+      "id": "e-gate",
+      "from": "pr",
+      "to": "prgate",
+      "label": "promote",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "e-merge",
+      "from": "prgate",
+      "to": "promote",
+      "label": "merged into dev",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "e-release",
+      "from": "promote",
+      "to": "release",
+      "label": "todo"
+    },
+    {
+      "id": "e-done",
+      "from": "release",
+      "to": "published",
+      "label": "main merged",
+      "fromSide": "top",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Other entry paths",
+      "items": [
+        "A bug: PO root-causes; confident fix hands the root to dev-team",
+        "D CI/CD and Helm: devops, chore PR, PR gate only",
+        "E docs on request: docs-writer, docs PR",
+        "F new service: service-architect, design PR, owner approves"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Rules",
+      "items": [
+        "PR-gate REWORK loops through dev-leader: see the dev-team cycle",
+        "No spec gate outside B; every PR still meets pr-reviewer",
+        "Sub-issues stop at dev; the parent releases once",
+        "Bars and caps: Policies 04 and 06"
+      ]
+    }
+  ]
+}

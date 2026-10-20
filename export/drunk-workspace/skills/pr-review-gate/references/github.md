@@ -29,7 +29,7 @@ gh pr checks $PR -R $R > .pr-review/$PR/checks.txt || true
 
 Gate-relevant fields: `isDraft` (draft ⇒ never approve), `baseRefName` (must be `dev`), `author.login` vs `$SELF` (self-authored ⇒ votes impossible), `reviewDecision` (already `APPROVED` by a human ⇒ comment only, never duplicate votes).
 
-**Coverage on changed lines:** if CI publishes a coverage artifact (Cobertura/lcov), download it (`gh run download -R $R --name coverage`) and intersect with `files.txt`. Otherwise use the coverage numbers dev-backend measured and reported per touched class on the cycle's Build sub-task (its done gates at >=80% per touched class before the PR stage — cite that comment in your report). Otherwise, if the repo's test suite runs cheaply, run it once with coverage from the checkout (read-only; do not commit anything). Else mark coverage **unknown** — state it in the report; it neither caps the score nor blocks the merge. A config/docs-only diff has no coverable lines; say so in the report.
+**Coverage on changed lines:** if CI publishes a coverage artifact (Cobertura/lcov), download it (`gh run download -R $R --name coverage`) and intersect with `files.txt`. Otherwise use the coverage numbers the developer measured and reported per touched class on the cycle's Build sub-task (its done gates at >=80% per touched class before the PR stage — cite that comment in your report). Otherwise, if the repo's test suite runs cheaply, run it once with coverage from the checkout (read-only; do not commit anything). Else mark coverage **unknown** — state it in the report; it neither caps the score nor blocks the merge. A config/docs-only diff has no coverable lines; say so in the report.
 
 ## CI — wait, re-run, attribute
 

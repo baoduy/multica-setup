@@ -3,12 +3,12 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-01 |
-| **Version** | 1.12 |
+| **Version** | 1.13 |
 | **Status** | Active |
 | **Owner** | dev-leader |
 | **Applies to** | Every engineer and agent writing or modifying code in any drunk stack: .NET/DDD NuGet libraries, Pulumi/TypeScript npm packages, Python MCP/FastAPI services, Docker images, Helm charts |
 | **Related skills** | [`nodejs-typescript-standards`](../../skills/nodejs-typescript-standards/SKILL.md) · [`python-mcp-standards`](../../skills/python-mcp-standards/SKILL.md) · [`dotnet10-efcore10-standards`](../../skills/dotnet10-efcore10-standards/SKILL.md) · [`dknet-ddd-conventions`](../../skills/dknet-ddd-conventions/SKILL.md) · [`pulumi-azure-iac-standards`](../../skills/pulumi-azure-iac-standards/SKILL.md) · [`helm-k8s-conventions`](../../skills/helm-k8s-conventions/SKILL.md) |
-| **Enforced at** | dev-backend's Standards self-review (statement 15) · PR review gate ([`pr-review-gate`](../../skills/pr-review-gate/SKILL.md)) · architecture review sweep ([`architecture-review-sweep`](../../skills/architecture-review-sweep/SKILL.md)) |
+| **Enforced at** | the developer's Standards self-review (dev-backend or dev-frontend) (statement 15) · PR review gate ([`pr-review-gate`](../../skills/pr-review-gate/SKILL.md)) · architecture review sweep ([`architecture-review-sweep`](../../skills/architecture-review-sweep/SKILL.md)) |
 
 > **Authority.** This policy is the source of truth for coding standards across every drunk
 > stack. The six skills above **implement** it, one per language/runtime; the review gates
@@ -163,7 +163,7 @@ generic rule here where they differ (see Exceptions).
 
 - **dev-leader** — owns this policy; decomposes work so it lands under the right skill per
   stack; never writes code itself.
-- **dev-backend** — implements against these standards inside the project that owns the ticket's repo
+- **dev-backend** and **dev-frontend** — each implements against these standards, on its own files ([Policy 02](02-testing-and-quality.md) statement 1g), inside the project that owns the ticket's repo
   ([Policy 05](05-sdlc-delivery-lifecycle.md) statement 7c); applies SOLID/KISS/YAGNI and the
   stack's own skill, and proves it in the Standards self-review row (statement 15).
 - **dev-leader** also names the governing skill(s) and the rule-ids most at risk in every
@@ -186,7 +186,7 @@ generic rule here where they differ (see Exceptions).
 
 ## Enforcement
 
-- **dev-backend's Standards self-review** (statement 15) is the first check, before the PR
+- **The developer's Standards self-review** (statement 15) is the first check, before the PR
   exists; pr-reviewer treats a contradicted row as an `important` finding and a
   missing one as a `nit` it checks itself.
 - **`pr-review-gate`** scores every PR against the governing skill's rule-ids (security →

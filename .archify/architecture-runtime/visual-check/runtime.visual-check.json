@@ -6,11 +6,11 @@
   "status": "pass",
   "visualReview": "pending",
   "provenance": "current",
-  "deliveryReceiptId": "3bcebdb2-6e81-448e-b8eb-d0c34d56e2fe",
+  "deliveryReceiptId": "b8d67cbf-5fc2-4cc6-8b23-edbea27fdecc",
   "artifact": {
-    "path": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime-20260930-150438/runtime.html",
-    "sha256": "f3475695bb3b810cc8fdfb3f827027cc6baeba7d6fb713d56b82eb5c69881694",
-    "bytes": 776182
+    "path": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime/runtime.html",
+    "sha256": "4ba94e7324a30095bbe8adc9cb87916f87eba20aa54cb56baa99000a959c7313",
+    "bytes": 775812
   },
   "state": {
     "detail": "read",
@@ -928,7 +928,7 @@
     "contactSheet": "runtime.visual-check.html"
   },
   "sidecars": {
-    "directory": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime-20260930-150438/visual-check",
+    "directory": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime/visual-check",
     "receipt": "runtime.visual-check.json",
     "contactSheet": "runtime.visual-check.html",
     "files": [
@@ -938,23 +938,23 @@
         "file": "runtime.visual-check.html"
       },
       {
-        "sha256": "ac743ee744ac7bb4b3222c66678d354fc60019dc207ad6c9b8b0ec4ff8cd079c",
-        "bytes": 101996,
+        "sha256": "c0328e78e727be65b6602cefa727c20a17efb6f9e7e174c1c99af3583dedde34",
+        "bytes": 101658,
         "file": "runtime.visual-check.1440x900.light.png"
       },
       {
-        "sha256": "40e38d428b15003064406b96714a7ed6a5611319a6cc0f4b0301ab7346edb146",
-        "bytes": 110561,
+        "sha256": "75a1231e6c8101f2ea02bc74c9f74ab6c5c2244f8b13009daa83a978a2415b92",
+        "bytes": 110255,
         "file": "runtime.visual-check.1440x900.dark.png"
       },
       {
-        "sha256": "92d8c60027248523bf864b4cb28d31900fd34114239e7da24d04e64c681c5c73",
-        "bytes": 142235,
+        "sha256": "3d68757c168785ea6f8479914c0ddd17938f4ec2849bf72d6327ff94f6f43482",
+        "bytes": 142196,
         "file": "runtime.visual-check.2048x1320.light.png"
       },
       {
-        "sha256": "8d8f6db11b93611f748d634347d670f71097d2f34f91945f7060fdc084d2bb82",
-        "bytes": 150860,
+        "sha256": "b474fef4eba8b1c94dc956472f69790ec294c3bf6e217e93e2e7297783708a91",
+        "bytes": 150826,
         "file": "runtime.visual-check.2048x1320.dark.png"
       }
     ]

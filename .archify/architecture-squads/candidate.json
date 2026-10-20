@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "drunk-workspace Squads and Delegation",
+    "output": ".archify/architecture-squads/squads.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "human",
+      "type": "external",
+      "label": "Requester / Owner",
+      "sublabel": "human, states a goal",
+      "pos": [
+        40,
+        250
+      ],
+      "size": [
+        150,
+        70
+      ]
+    },
+    {
+      "id": "mika",
+      "type": "frontend",
+      "label": "Mika",
+      "sublabel": "intake, Chief of Staff",
+      "pos": [
+        270,
+        250
+      ],
+      "size": [
+        150,
+        70
+      ]
+    },
+    {
+      "id": "pt",
+      "type": "backend",
+      "label": "product-team",
+      "sublabel": "leader: product-owner",
+      "tag": "spec + orchestrate",
+      "pos": [
+        510,
+        250
+      ],
+      "size": [
+        170,
+        70
+      ]
+    },
+    {
+      "id": "spec",
+      "type": "security",
+      "label": "spec-reviewer",
+      "sublabel": "[S#] spec gate",
+      "pos": [
+        510,
+        70
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "rm",
+      "type": "backend",
+      "label": "release-manager",
+      "sublabel": "[P#-2] dev \u2192 main",
+      "pos": [
+        510,
+        440
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "dt",
+      "type": "backend",
+      "label": "dev-team",
+      "sublabel": "leader + BE/FE devs",
+      "tag": "ATs, build, one PR",
+      "pos": [
+        780,
+        250
+      ],
+      "size": [
+        180,
+        70
+      ]
+    },
+    {
+      "id": "prr",
+      "type": "security",
+      "label": "pr-reviewer",
+      "sublabel": "PR gate, merges",
+      "tag": "in all 3 squads",
+      "pos": [
+        1050,
+        250
+      ],
+      "size": [
+        160,
+        70
+      ]
+    },
+    {
+      "id": "bt",
+      "type": "backend",
+      "label": "blog-team",
+      "sublabel": "dev-leader + blog-writer",
+      "tag": "drunkcoding.net",
+      "pos": [
+        1050,
+        70
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "gh",
+      "type": "cloud",
+      "label": "GitHub repos",
+      "sublabel": "dev, then main",
+      "pos": [
+        1300,
+        250
+      ],
+      "size": [
+        150,
+        70
+      ]
+    },
+    {
+      "id": "pub",
+      "type": "cloud",
+      "label": "CI publish",
+      "sublabel": "NuGet, npm, images",
+      "pos": [
+        1300,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "direct",
+      "type": "messagebus",
+      "label": "Direct-door agents",
+      "sublabel": "devops, docs-writer",
+      "tag": "own PR to dev",
+      "pos": [
+        270,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "goal",
+      "from": "human",
+      "to": "mika",
+      "label": "goal"
+    },
+    {
+      "id": "ticket",
+      "from": "mika",
+      "to": "pt",
+      "label": "main ticket",
+      "variant": "emphasis"
+    },
+    {
+      "id": "direct-door",
+      "from": "mika",
+      "to": "direct",
+      "label": "CI/CD, docs",
+      "variant": "dashed"
+    },
+    {
+      "id": "spec-gate",
+      "from": "pt",
+      "to": "spec",
+      "label": "spec review",
+      "variant": "security"
+    },
+    {
+      "id": "phase",
+      "from": "pt",
+      "to": "dt",
+      "label": "[P#-1] or bug",
+      "variant": "emphasis"
+    },
+    {
+      "id": "review",
+      "from": "dt",
+      "to": "prr",
+      "label": "Review sub-task"
+    },
+    {
+      "id": "blog-pr",
+      "from": "bt",
+      "to": "prr",
+      "label": "PR to develop"
+    },
+    {
+      "id": "merge-dev",
+      "from": "prr",
+      "to": "gh",
+      "label": "merge dev",
+      "variant": "emphasis"
+    },
+    {
+      "id": "release",
+      "from": "pt",
+      "to": "rm",
+      "label": "[P#-2]"
+    },
+    {
+      "id": "merge-main",
+      "from": "rm",
+      "to": "pub",
+      "label": "merge dev to main"
+    },
+    {
+      "id": "publish",
+      "from": "gh",
+      "to": "pub",
+      "label": "CI on main",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Squads",
+      "items": [
+        "product-team: product-owner leads; spec-reviewer, release-manager, devops, docs-writer, service-architect, pr-reviewer",
+        "dev-team: dev-leader leads; dev-backend, dev-frontend, pr-reviewer",
+        "blog-team: dev-leader leads; blog-writer, dev-frontend, devops, pr-reviewer"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Who may write where",
+      "items": [
+        "Only leaders create issues",
+        "Members write on their own sub-task plus one handoff line",
+        "Only release-manager targets main"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Outside the squads",
+      "items": [
+        "run-medic, issue-janitor, arch-reviewer, setup-steward run from autopilots",
+        "claude_ultra is the platform assistant, never routed factory work"
+      ]
+    }
+  ]
+}

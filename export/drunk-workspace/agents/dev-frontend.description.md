@@ -1,0 +1,1 @@
+DEV Team front-end developer: owns every file in a front-end app (Policy 02 §1g). Writes RED acceptance tests, then after at_sha implements to green (>=80% coverage, mutation report, build/typecheck/lint). UI presentation ships without new tests.

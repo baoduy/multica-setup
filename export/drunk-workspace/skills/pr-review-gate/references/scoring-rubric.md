@@ -73,7 +73,7 @@ These never lower a real defect: a finding that passes the proof check keeps its
 | `bug-build` cycle: `at_sha` holds implementation code or follows an implementation commit, or the reproduction is green at `at_sha` (Policy 02 statement 1b) | 6.9 max (`blocking`) |
 | No mutation evidence on touched classes with new logic (neither tool report nor manual run stated) | 7.9 max |
 | CI failing, caused by this PR | 6.9 max (three exceptions below) |
-| Coverage on changed lines measured BELOW threshold (default 80%) | 7.9 max (forces REWORK: dev-backend's bar is measurable and fixable) |
+| Coverage on changed lines measured BELOW threshold (default 80%) | 7.9 max (forces REWORK: the developer's bar is measurable and fixable) |
 | Docs-only / comment-only / typo-fix PR with green CI | floor of 9.0 (fast-path) |
 
 **Caps beat the floor.** The docs-only 9.0 floor applies only when no cap fired: a docs-only PR carrying a `blocking` finding is 6.9 max like any other.

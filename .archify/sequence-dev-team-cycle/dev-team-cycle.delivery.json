@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "9d8f50ed-f9da-411c-9b23-4b1f3c8148a3",
+  "status": "current",
+  "command": "deliver",
+  "type": "sequence",
+  "input": "/Users/steven/_CODE/multica-setup/.archify/sequence-dev-team-cycle/candidate.json",
+  "output": "/Users/steven/_CODE/multica-setup/.archify/sequence-dev-team-cycle/dev-team-cycle.html",
+  "specification": {
+    "sha256": "ac199beae5c0520fd5144c0948f9d3eece53f2e1219ac4c2f41dcc695f820b70",
+    "bytes": 4847
+  },
+  "artifact": {
+    "sha256": "2ac6ba35666988ab86d05ea5639c56ce073d72dfc63f4a7fb091b689e745a5a5",
+    "bytes": 761508
+  }
+}
