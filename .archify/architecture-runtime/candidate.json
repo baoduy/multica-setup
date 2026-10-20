@@ -96,7 +96,7 @@
       "type": "frontend",
       "label": "Operator bundle",
       "sublabel": "Claude Code + multica CLI",
-      "tag": "drunk + mx",
+      "tag": "drunk-workspace",
       "pos": [
         40,
         380
@@ -457,14 +457,6 @@
         "Edit the bundle first; pushing live needs the owner's yes",
         "Byte-exact push flags; read back and diff after every push",
         "The Multica server URL is per-operator config, not in this repo"
-      ]
-    },
-    {
-      "dot": "emerald",
-      "title": "mx-workspace (same shape)",
-      "items": [
-        "Monxa payment services under github.com/the-wixo, plus a qc-team",
-        "Deployed: dev = INTEGRATION, main = SANDBOX via argoCD"
       ]
     }
   ]

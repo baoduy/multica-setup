@@ -6,11 +6,11 @@
   "status": "pass",
   "visualReview": "pending",
   "provenance": "current",
-  "deliveryReceiptId": "5c860a69-63d3-4636-8c36-3ba4b7a9c3c1",
+  "deliveryReceiptId": "c13ed9b9-35fe-4086-9d85-7a17c0acac98",
   "artifact": {
-    "path": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop-20261007-082920/setup-improvement-loop.html",
-    "sha256": "77fb267cfa72e613539bb4146de71f37e32db81a6fd9dbbe1f584065dc93a889",
-    "bytes": 768624
+    "path": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop/setup-improvement-loop.html",
+    "sha256": "2f2885cad261b548e01b595a5abc71f4af5e0409882b8d6ee29d5084c4efedae",
+    "bytes": 768552
   },
   "state": {
     "detail": "read",
@@ -1760,7 +1760,7 @@
     "contactSheet": "setup-improvement-loop.visual-check.html"
   },
   "sidecars": {
-    "directory": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop-20261007-082920/visual-check",
+    "directory": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop/visual-check",
     "receipt": "setup-improvement-loop.visual-check.json",
     "contactSheet": "setup-improvement-loop.visual-check.html",
     "files": [
@@ -1770,23 +1770,23 @@
         "file": "setup-improvement-loop.visual-check.html"
       },
       {
-        "sha256": "4b73633d90c35ae3f72d54049f9f83cb23b7b058ebf4dedede7566c4e3b58616",
-        "bytes": 139899,
+        "sha256": "f767a50dcf204ba2b04b81440a670cadd726b3768e851d90502111a448b25ba5",
+        "bytes": 137438,
         "file": "setup-improvement-loop.visual-check.1440x900.light.png"
       },
       {
-        "sha256": "f2c50db6668e9a3aacd3bc1e135b75e4b4caddb22e8dd88f211549e02dfbbf02",
-        "bytes": 151186,
+        "sha256": "6416299010e6c7b81da971623756413fdbb7370ef3fc3d5b03eb3c7b0f9ee457",
+        "bytes": 148893,
         "file": "setup-improvement-loop.visual-check.1440x900.dark.png"
       },
       {
-        "sha256": "4c667c51d3e6f8764e53038b45c8904b34f37874961f330022604890d403bf26",
-        "bytes": 211078,
+        "sha256": "70adcf9d7081803bb2e679a058a26270dc93ff3356966a28d22f63f8430f6caf",
+        "bytes": 208205,
         "file": "setup-improvement-loop.visual-check.2048x1320.light.png"
       },
       {
-        "sha256": "56888cc290dba149d0fc1cf876b20cc6d975efe814eb05221a0270837f1c0137",
-        "bytes": 228642,
+        "sha256": "31a75719d1dae1a567f628f1eb71434440ab53af508e877693806bcb7ef8fdc9",
+        "bytes": 226076,
         "file": "setup-improvement-loop.visual-check.2048x1320.dark.png"
       }
     ]

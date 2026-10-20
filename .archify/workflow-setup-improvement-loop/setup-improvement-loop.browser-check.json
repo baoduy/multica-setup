@@ -6,11 +6,11 @@
   "status": "pass",
   "visualReview": "not-requested",
   "provenance": "current",
-  "deliveryReceiptId": "5c860a69-63d3-4636-8c36-3ba4b7a9c3c1",
+  "deliveryReceiptId": "c13ed9b9-35fe-4086-9d85-7a17c0acac98",
   "artifact": {
-    "path": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop-20261007-082920/setup-improvement-loop.html",
-    "sha256": "77fb267cfa72e613539bb4146de71f37e32db81a6fd9dbbe1f584065dc93a889",
-    "bytes": 768624
+    "path": "/Users/steven/_CODE/multica-setup/.archify/workflow-setup-improvement-loop/setup-improvement-loop.html",
+    "sha256": "2f2885cad261b548e01b595a5abc71f4af5e0409882b8d6ee29d5084c4efedae",
+    "bytes": 768552
   },
   "state": {
     "detail": "read",
