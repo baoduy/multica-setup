@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "receiptId": "3bcebdb2-6e81-448e-b8eb-d0c34d56e2fe",
+  "receiptId": "8a5d169b-df13-4704-809b-8b078b0cdc7e",
   "status": "current",
   "command": "deliver",
   "type": "architecture",
-  "input": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime-20260930-150438/candidate.json",
-  "output": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime-20260930-150438/runtime.html",
+  "input": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime/candidate.json",
+  "output": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime/runtime.html",
   "specification": {
-    "sha256": "56da94ac7d804ff563e0194e6af34a4390b18eaccb221daf7b4ab438ca4f9b1d",
-    "bytes": 8037
+    "sha256": "3afcdb5df3259c6fd91b142aacd0dfe9734d0b0b6b06b01cd903ce166687f6d5",
+    "bytes": 10728
   },
   "artifact": {
-    "sha256": "f3475695bb3b810cc8fdfb3f827027cc6baeba7d6fb713d56b82eb5c69881694",
-    "bytes": 776182
+    "sha256": "9ef334729789c699297b8d8e0d6a17ae2ad2d3bee94b58782ac3b027416f4cce",
+    "bytes": 776162
   }
 }

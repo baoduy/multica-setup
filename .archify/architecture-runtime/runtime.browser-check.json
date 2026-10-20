@@ -6,11 +6,11 @@
   "status": "pass",
   "visualReview": "not-requested",
   "provenance": "current",
-  "deliveryReceiptId": "3bcebdb2-6e81-448e-b8eb-d0c34d56e2fe",
+  "deliveryReceiptId": "8a5d169b-df13-4704-809b-8b078b0cdc7e",
   "artifact": {
-    "path": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime-20260930-150438/runtime.html",
-    "sha256": "f3475695bb3b810cc8fdfb3f827027cc6baeba7d6fb713d56b82eb5c69881694",
-    "bytes": 776182
+    "path": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime/runtime.html",
+    "sha256": "9ef334729789c699297b8d8e0d6a17ae2ad2d3bee94b58782ac3b027416f4cce",
+    "bytes": 776162
   },
   "state": {
     "detail": "read",

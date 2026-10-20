@@ -20,7 +20,7 @@ its interactive HTML source in `.archify/`.
 ### Runtime architecture
 
 <a href=".archify/architecture-runtime/runtime.html">
-  <img alt="multica-setup runtime architecture (drunk-workspace)" src="output/runtime-presentation/runtime-animation.gif">
+  <img alt="multica-setup runtime architecture (drunk-workspace)" src="output/runtime-presentation/runtime.png">
 </a>
 
 ### Setup improvement loop

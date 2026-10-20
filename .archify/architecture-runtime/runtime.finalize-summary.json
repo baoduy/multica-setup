@@ -6,14 +6,14 @@
   "type": "architecture",
   "quality": "showcase",
   "specification": {
-    "path": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime-20260930-150438/candidate.json",
-    "sha256": "56da94ac7d804ff563e0194e6af34a4390b18eaccb221daf7b4ab438ca4f9b1d",
-    "bytes": 8037
+    "path": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime/candidate.json",
+    "sha256": "3afcdb5df3259c6fd91b142aacd0dfe9734d0b0b6b06b01cd903ce166687f6d5",
+    "bytes": 10728
   },
   "artifact": {
-    "path": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime-20260930-150438/runtime.html",
-    "sha256": "f3475695bb3b810cc8fdfb3f827027cc6baeba7d6fb713d56b82eb5c69881694",
-    "bytes": 776182
+    "path": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime/runtime.html",
+    "sha256": "9ef334729789c699297b8d8e0d6a17ae2ad2d3bee94b58782ac3b027416f4cce",
+    "bytes": 776162
   },
   "gates": {
     "validate": "pass",
@@ -28,20 +28,22 @@
     "truncated": false
   },
   "evidence": {
-    "receipt": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime-20260930-150438/runtime.finalize.json",
-    "summaryReceipt": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime-20260930-150438/runtime.finalize-summary.json",
-    "browserCheckReceipt": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime-20260930-150438/runtime.browser-check.json"
+    "receipt": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime/runtime.finalize.json",
+    "summaryReceipt": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime/runtime.finalize-summary.json",
+    "browserCheckReceipt": "/Users/steven/_CODE/multica-setup/.archify/architecture-runtime/runtime.browser-check.json"
   },
   "update": {
-    "status": "current",
+    "status": "update_available",
     "installedVersion": "3.0.1",
-    "availableVersion": "3.0.1",
-    "releaseNotes": null,
-    "checkedAt": "2026-09-30T07:06:47.053Z",
+    "availableVersion": "3.2.0",
+    "releaseNotes": "https://github.com/tt-a1i/archify/releases/tag/v3.2.0",
+    "severity": "normal",
+    "checkedAt": "2026-10-20T00:45:22.717Z",
     "source": "network",
-    "noticeRequired": false,
-    "noticeText": null
+    "noticeRequired": true,
+    "noticeText": "Archify update: 3.0.1 → 3.2.0. A newer release is available. Release notes: https://github.com/tt-a1i/archify/releases/tag/v3.2.0. The installed Skill has not changed; ask to snooze or ignore this reminder.",
+    "eventKey": "archify@sha256:70e210265c59f24dcbdf2a502ff671104b5454e7ee7d3554aecd86bad32384f5"
   },
   "visualReview": "not-requested",
-  "durationMs": 4008
+  "durationMs": 1903
 }
