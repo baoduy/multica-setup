@@ -170,9 +170,22 @@ Outcomes:
   `Mika` re-runs with `--accept`, which moves the tag.
 - **error** (exit 1): the issue quotes the error.
 
-Values live would reject are caught before merge: the `drunk bundle lint` workflow runs
-`python3 scripts/drunk-live-sync.py --lint` on every PR and `dev` push that touches the bundle
-(agent descriptions over 255 characters, squad members that are not agents).
+Mistakes the sync would hit are caught before merge: the `drunk bundle lint` workflow runs
+`python3 scripts/drunk-live-sync.py --lint` on every PR and `dev` push that touches the bundle,
+after `scripts/test_drunk_lint.py` proves each rule still fires.
+
+| Rule | Fails when |
+|---|---|
+| L1 | an agent description is over 255 characters (live rejects it) |
+| L2 | a squad's leader or member is not an agent in `manifest.json` |
+| L3 | an agent, squad, autopilot or project `.json` is missing from `manifest.json`, or a file it points at does not exist |
+| L4 | `manifest.json`'s copy of a squad's leader or members differs from the squad file |
+| L5 | an agent names a skill not in `manifest.json`, or the manifest's `skill_names` differ from the agent file |
+| L6 | an autopilot is assigned to an agent not in the bundle (archived or deleted) |
+| L7 | two avatar files are the same image |
+| L8 | the bundle README's skill, agent, squad, project or autopilot count differs from `manifest.json` |
+| L9 | the README model table lacks an agent, or its runtime, model or thinking differs from the agent file |
+| L10 | Policy 09's "Applies to" count word differs from the agents it lists, or names an agent not in the bundle |
 
 ## Owner runbook
 
