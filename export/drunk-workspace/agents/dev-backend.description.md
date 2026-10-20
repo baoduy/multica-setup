@@ -1,1 +1,1 @@
-DEV Team back-end developer (every file outside a front-end app): writes the spec's acceptance criteria as RED public-API tests, then after at_sha implements to green (>=80% coverage, mutation report, clean pack). Two runs per cycle; one for a confirmed bug fix. Owns code and tests.
+DEV Team back-end developer (files outside front-end apps): writes the spec's acceptance criteria as RED public-API tests, then after at_sha implements to green (>=80% coverage, mutation report, clean pack). One run for a confirmed bug fix.

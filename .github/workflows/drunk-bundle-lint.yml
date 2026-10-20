@@ -1,0 +1,17 @@
+# Catch values the live sync would reject (agent description over 255 characters, a squad
+# member that is not an agent) before they reach main. Offline: no Multica access needed.
+name: drunk bundle lint
+
+on:
+  pull_request:
+    paths: ['export/drunk-workspace/**', 'scripts/drunk-live-sync.py']
+  push:
+    branches: [dev]
+    paths: ['export/drunk-workspace/**', 'scripts/drunk-live-sync.py']
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/drunk-live-sync.py --lint

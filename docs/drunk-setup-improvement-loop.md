@@ -154,10 +154,11 @@ each changed file:
 | agent instructions and description, squad instructions and description, project and autopilot descriptions, the Workspace Context | pushed byte-exact, read back |
 | skill `SKILL.md`, skill files (added, changed, deleted), skill `config.json` | pushed, read back |
 | agent `.json`: `model`, `thinking_level`, `max_concurrent_tasks`, `skill_names` | pushed, read back |
-| any agent, project or autopilot `.json` that live already matches | `already_live`: counts as synced |
+| squad `.json`: `leader_name` and agent `members` (name and role) | pushed (`squad member add`, `set-role`, `remove`, `squad update --leader`), read back |
+| any agent, squad, project or autopilot `.json` that live already matches | `already_live`: counts as synced |
 | `docs/`, `README.md`, `manifest.json` | ignored (not live) |
 | an agent avatar file (`avatar_file` in its json) | `multica agent avatar`; read-back downloads the live image and compares bytes; the json `avatar_url` is then ignored |
-| anything else that differs from live: new or deleted resources, other agent keys, triggers, labels, properties | `unsupported`: a manual step |
+| anything else that differs from live: new or deleted resources, other agent or squad keys, triggers, labels, properties | `unsupported`: a manual step |
 
 Outcomes:
 
@@ -168,6 +169,10 @@ Outcomes:
   and the sync issue lists the manual steps. Apply them, reply `accept`, and
   `Mika` re-runs with `--accept`, which moves the tag.
 - **error** (exit 1): the issue quotes the error.
+
+Values live would reject are caught before merge: the `drunk bundle lint` workflow runs
+`python3 scripts/drunk-live-sync.py --lint` on every PR and `dev` push that touches the bundle
+(agent descriptions over 255 characters, squad members that are not agents).
 
 ## Owner runbook
 
