@@ -154,10 +154,11 @@ each changed file:
 | agent instructions and description, squad instructions and description, project and autopilot descriptions, the Workspace Context | pushed byte-exact, read back |
 | skill `SKILL.md`, skill files (added, changed, deleted), skill `config.json` | pushed, read back |
 | agent `.json`: `model`, `thinking_level`, `max_concurrent_tasks`, `skill_names` | pushed, read back |
-| any agent, project or autopilot `.json` that live already matches | `already_live`: counts as synced |
+| squad `.json`: `leader_name` and agent `members` (name and role) | pushed (`squad member add`, `set-role`, `remove`, `squad update --leader`), read back |
+| any agent, squad, project or autopilot `.json` that live already matches | `already_live`: counts as synced |
 | `docs/`, `README.md`, `manifest.json` | ignored (not live) |
 | an agent avatar file (`avatar_file` in its json) | `multica agent avatar`; read-back downloads the live image and compares bytes; the json `avatar_url` is then ignored |
-| anything else that differs from live: new or deleted resources, other agent keys, triggers, labels, properties | `unsupported`: a manual step |
+| anything else that differs from live: new or deleted resources, other agent or squad keys, triggers, labels, properties | `unsupported`: a manual step |
 
 Outcomes:
 
@@ -168,6 +169,23 @@ Outcomes:
   and the sync issue lists the manual steps. Apply them, reply `accept`, and
   `Mika` re-runs with `--accept`, which moves the tag.
 - **error** (exit 1): the issue quotes the error.
+
+Mistakes the sync would hit are caught before merge: the `drunk bundle lint` workflow runs
+`python3 scripts/drunk-live-sync.py --lint` on every PR and `dev` push that touches the bundle,
+after `scripts/test_drunk_lint.py` proves each rule still fires.
+
+| Rule | Fails when |
+|---|---|
+| L1 | an agent description is over 255 characters (live rejects it) |
+| L2 | a squad's leader or member is not an agent in `manifest.json` |
+| L3 | an agent, squad, autopilot or project `.json` is missing from `manifest.json`, or a file it points at does not exist |
+| L4 | `manifest.json`'s copy of a squad's leader or members differs from the squad file |
+| L5 | an agent names a skill not in `manifest.json`, or the manifest's `skill_names` differ from the agent file |
+| L6 | an autopilot is assigned to an agent not in the bundle (archived or deleted) |
+| L7 | two avatar files are the same image |
+| L8 | the bundle README's skill, agent, squad, project or autopilot count differs from `manifest.json` |
+| L9 | the README model table lacks an agent, or its runtime, model or thinking differs from the agent file |
+| L10 | Policy 09's "Applies to" count word differs from the agents it lists, or names an agent not in the bundle |
 
 ## Owner runbook
 

@@ -8,6 +8,8 @@ Run from the root of a clone of baoduy/multica-setup, on the host whose
   drunk-live-sync.py --check    compare every supported bundle file with live, push nothing
   drunk-live-sync.py --accept   like the default, but move the tag even when changes were
                                 reported unsupported (only after the owner applied them by hand)
+  drunk-live-sync.py --lint     offline check of the bundle at HEAD: values live would reject
+                                and files that disagree (rules L1-L10); no multica calls
 
 Prints one JSON report. Exit 0 = synced or up to date, 2 = blocked (tag not moved),
 1 = error. The tag moves only when every pushed resource reads back equal to its file.
@@ -121,6 +123,7 @@ def owners(rev):
         if cfg.get("avatar_file"):
             out[cfg["avatar_file"]] = ("agent", cfg["name"], "avatar")
     for s in manifest["squads"]:
+        out[s["file"]] = ("squad", s["name"], "config")
         for field in ("instructions", "description"):
             if s.get(field + "_file"):
                 out[s[field + "_file"]] = ("squad", s["name"], field)
@@ -183,6 +186,9 @@ def push(live, kind, name, field, text):
         return
     if kind == "agent" and field == "config":
         push_agent_config(live, name, text)
+        return
+    if kind == "squad" and field == "config":
+        push_squad_config(live, name, text)
         return
     if kind == "agent" and field == "avatar":
         with tempfile.NamedTemporaryFile(suffix=os.path.splitext(name)[1] or ".png", delete=False) as f:
@@ -264,6 +270,41 @@ def push_agent_config(live, name, text):
     run(["multica", "agent", "skills", "set", a["id"], "--skill-ids", ",".join(ids)])
 
 
+SQUAD_CONFIG = ("leader_name", "members")
+
+
+def squad_members_live(live, name):
+    agents = {a["id"]: a["name"] for a in live.agents.values()}
+    rows = mjson("squad", "member", "list", live.squads[name]["id"])
+    return sorted([agents.get(m["member_id"], m["member_id"]), m["role"]]
+                  for m in rows if m.get("member_type") == "agent")
+
+
+def squad_config_unsupported(old_text, new_text):
+    """Keys changed in a squad .json other than its leader and agent members."""
+    old, new = json.loads(old_text) if old_text else {}, json.loads(new_text)
+    return sorted(k for k in set(old) | set(new)
+                  if old.get(k) != new.get(k) and k not in SQUAD_CONFIG and k != "file")
+
+
+def push_squad_config(live, name, text):
+    """Make the squad's agent members and leader equal the file: add, re-role, remove."""
+    cfg, sid = json.loads(text), live.squads[name]["id"]
+    want = {m["agent_name"]: m["role"] for m in cfg.get("members") or []}
+    have = dict(squad_members_live(live, name))
+    for agent, role in want.items():
+        aid = live.agents[agent]["id"]
+        if agent not in have:
+            run(["multica", "squad", "member", "add", sid, "--member-id", aid, "--type", "agent", "--role", role])
+        elif have[agent] != role:
+            run(["multica", "squad", "member", "set-role", sid, "--member-id", aid, "--role", role])
+    for agent in set(have) - set(want):
+        if agent in live.agents:
+            run(["multica", "squad", "member", "remove", sid, "--member-id", live.agents[agent]["id"]])
+    if cfg.get("leader_name") and live.squads[name].get("leader_id") != live.agents[cfg["leader_name"]]["id"]:
+        run(["multica", "squad", "update", sid, "--leader", cfg["leader_name"]])
+
+
 def json_live_view(live, kind, name):
     """The live side of a bundle .json, in the bundle's own keys (ids resolved to names)."""
     if kind == "agent":
@@ -276,8 +317,12 @@ def json_live_view(live, kind, name):
                 "conversation_starters": a.get("conversation_starters") or [],
                 "disabled_runtime_skills": a.get("disabled_runtime_skills") or [],
                 "mcp_config": a.get("mcp_config"), "has_custom_env": bool(a.get("has_custom_env"))}
-    people = {m["user_id"]: m["name"] for m in mjson("workspace", "member", "list")}
     agents = {a["id"]: a["name"] for a in live.agents.values()}
+    if kind == "squad":
+        sq = live.squads[name]
+        return {"leader_name": agents.get(sq.get("leader_id")), "members": squad_members_live(live, name),
+                "avatar_url": sq.get("avatar_url")}
+    people = {m["user_id"]: m["name"] for m in mjson("workspace", "member", "list")}
     if kind == "project":
         p = live.projects[name]
         res = mjson("project", "resource", "list", p["id"])
@@ -313,6 +358,10 @@ def json_file_view(kind, text):
                 "conversation_starters": c.get("conversation_starters") or [],
                 "disabled_runtime_skills": c.get("disabled_runtime_skills") or [],
                 "mcp_config": c.get("mcp_config"), "has_custom_env": bool(c.get("custom_env") or c.get("had_secrets"))}
+    if kind == "squad":
+        return {"leader_name": c.get("leader_name"),
+                "members": sorted([m["agent_name"], m["role"]] for m in c.get("members") or []),
+                "avatar_url": c.get("avatar_url")}
     if kind == "project":
         return {"icon": c.get("icon"), "priority": c.get("priority"), "status": c.get("status"),
                 "due_date": c.get("due_date"), "start_date": c.get("start_date"),
@@ -379,7 +428,8 @@ def sync(base, head, accept):
                 already.append(path)  # applied live by hand before the merge
                 continue
             old = run(["git", "show", "%s:%s" % (base, full)]) if status == "M" else ""
-            extra = agent_config_unsupported(old, text) if kind == "agent" else ["config"]
+            extra = (agent_config_unsupported(old, text) if kind == "agent"
+                     else squad_config_unsupported(old, text) if kind == "squad" else ["config"])
             if extra:
                 unsupported.append({"path": path, "status": status, "keys": extra})
                 continue
@@ -411,11 +461,108 @@ def sync(base, head, accept):
             "failed": failed, "ignored": ignored, "tag_moved": move}
 
 
+NUMBER_WORDS = {w: n for n, w in enumerate(
+    "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen "
+    "sixteen seventeen eighteen nineteen twenty".split())}
+
+
+def lint(rev):
+    """Offline: bundle values live would reject, and bundle files that disagree with each other.
+    No multica calls. Each error starts with the rule id it broke."""
+    manifest = json.loads(show(rev, "manifest.json"))
+    tree = set(f[len(BUNDLE) + 1:] for f in git("ls-tree", "-r", "--name-only", rev, "--", BUNDLE).splitlines())
+    agents = {a["name"]: json.loads(show(rev, a["file"])) for a in manifest["agents"]}
+    skills = {sk["name"] for sk in manifest["skills"]}
+    errors = []
+
+    def err(rule, msg):
+        errors.append("%s %s" % (rule, msg))
+
+    # L1 agent description within the live cap.
+    for name, cfg in agents.items():
+        desc = norm("agent", "description", show(rev, cfg["description_file"]))
+        if len(desc) > DESC_MAX:
+            err("L1", "%s: agent description is %d characters, cap %d" % (cfg["description_file"], len(desc), DESC_MAX))
+    # L2 squad leader and members are agents; L4 manifest squad entry equals the squad file.
+    for sq in manifest["squads"]:
+        cfg = json.loads(show(rev, sq["file"]))
+        for agent in [cfg.get("leader_name")] + [m["agent_name"] for m in cfg.get("members") or []]:
+            if agent and agent not in agents:
+                err("L2", "%s: squad member %s is not an agent in manifest.json" % (sq["file"], agent))
+        if (sq.get("leader_name"), sorted(map(json.dumps, sq.get("members") or []))) != \
+                (cfg.get("leader_name"), sorted(map(json.dumps, cfg.get("members") or []))):
+            err("L4", "manifest.json squad %s: leader or members differ from %s" % (sq["name"], sq["file"]))
+    # L3 every resource json is in the manifest, and every file the bundle points at exists.
+    listed = {e["file"] for k in ("agents", "squads", "autopilots", "projects") for e in manifest[k]}
+    for f in tree:
+        if re.fullmatch(r"(agents|squads|autopilots|projects)/[^/]+\.json", f) and f not in listed:
+            err("L3", "%s is not listed in manifest.json" % f)
+    for f in listed:
+        cfg = json.loads(show(rev, f)) if f in tree else None
+        if cfg is None:
+            err("L3", "manifest.json lists %s, which does not exist" % f)
+            continue
+        for key in ("instructions_file", "description_file", "avatar_file"):
+            if cfg.get(key) and cfg[key] not in tree:
+                err("L3", "%s: %s %s does not exist" % (f, key, cfg[key]))
+    # L5 agent skills exist, and the manifest copy of skill_names matches the agent file.
+    for a in manifest["agents"]:
+        cfg = agents[a["name"]]
+        for sk in set(cfg.get("skill_names") or []) - skills:
+            err("L5", "%s: skill %s is not in manifest.json" % (a["file"], sk))
+        if sorted(a.get("skill_names") or []) != sorted(cfg.get("skill_names") or []):
+            err("L5", "manifest.json agent %s: skill_names differ from %s" % (a["name"], a["file"]))
+    # L6 an autopilot is assigned to an agent that exists (not an archived or deleted one).
+    for ap in manifest["autopilots"]:
+        cfg = json.loads(show(rev, ap["file"]))
+        if cfg.get("assignee_type") == "agent" and cfg.get("assignee_name") not in agents:
+            err("L6", "%s: assignee %s is not an agent in manifest.json" % (ap["file"], cfg.get("assignee_name")))
+    # L7 every agent, squad and workspace avatar is a different image.
+    seen = {}
+    for f in sorted(f for f in tree if ".avatar." in f):
+        h = hashlib.md5(subprocess.run(["git", "show", "%s:%s/%s" % (rev, BUNDLE, f)],
+                                       capture_output=True, check=True).stdout).hexdigest()
+        if h in seen:
+            err("L7", "%s is the same image as %s" % (f, seen[h]))
+        seen.setdefault(h, f)
+    # L8 the README resource counts match the manifest.
+    readme = show(rev, "README.md")
+    for key in ("skills", "agents", "squads", "projects", "autopilots"):
+        m = re.search(r"(\d+) %s\b" % key, readme)
+        if m and int(m.group(1)) != len(manifest[key]):
+            err("L8", "README.md says %s %s, manifest.json has %d" % (m.group(1), key, len(manifest[key])))
+    # L9 the README model table has one row per agent, matching its runtime, model and thinking.
+    rows = {r[0]: r[1:] for r in (
+        [c.strip() for c in line.strip("|").split("|")] for line in readme.splitlines()
+        if line.startswith("|") and line.count("|") == 5) if r[0] in agents}
+    for name, cfg in agents.items():
+        want = [cfg.get("source_runtime_provider") or "", cfg.get("model") or "(runtime default)",
+                cfg.get("thinking_level") or "—"]
+        if name not in rows:
+            err("L9", "README.md model table has no row for %s" % name)
+        elif rows[name] != want:
+            err("L9", "README.md model table row %s says %s, %s has %s" % (name, rows[name], cfg["instructions_file"].replace(".md", ".json"), want))
+    # L10 Policy 09 names a real agent for every charter it counts, and the count word is right.
+    m = re.search(r"\*\*Applies to\*\* \| The (\w+) chartered agents: ([^|]+)\|",
+                  show(rev, "docs/policies/09-agent-roles-and-responsibilities.md"))
+    if m:
+        names = re.findall(r"`([^`]+)`", m.group(2))
+        if NUMBER_WORDS.get(m.group(1)) != len(names):
+            err("L10", "Policy 09 Applies to says %s chartered agents and lists %d" % (m.group(1), len(names)))
+        for n in set(names) - set(agents):
+            err("L10", "Policy 09 Applies to names %s, which is not an agent in manifest.json" % n)
+    return {"status": "clean" if not errors else "lint-failed", "rev": rev, "errors": sorted(errors)}
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else ""
-    if mode not in ("", "--check", "--accept"):
+    if mode not in ("", "--check", "--accept", "--lint"):
         print(__doc__)
         return 1
+    if mode == "--lint":
+        report = lint(git("rev-parse", "HEAD"))
+        print(json.dumps(report, indent=2))
+        return 0 if report["status"] == "clean" else 2
     os.makedirs(os.path.dirname(LOCK), exist_ok=True)
     with open(LOCK, "w") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)  # a second run waits, then finds nothing left to do
