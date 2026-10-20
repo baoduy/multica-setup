@@ -214,7 +214,7 @@ From `export/drunk-workspace/autopilots/*.json`:
 | 🚀 Monthly Architecture Review — Pulumi repos | 4th of month | arch-reviewer | paused |
 | 🚀 Monthly NuGet Upgrade — DKNet | 15th of month | dev-leader | paused |
 | 🚀 Monthly npm Upgrade — Pulumi repos | 16th of month | dev-leader | paused |
-| 📊 Monthly Insights & Multica Release Review | 1st of month | `default` | active |
+| 📊 Monthly Insights & Multica Release Review | 1st of month | Mika | active |
 
 How this setup improves itself and reaches the live workspace:
 [drunk setup improvement loop](drunk-setup-improvement-loop.md).

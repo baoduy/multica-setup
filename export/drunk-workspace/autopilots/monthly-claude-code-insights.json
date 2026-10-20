@@ -6,7 +6,7 @@
   "issue_title_template": "Monthly Insights & Multica Release Review ({{date}})",
   "project_title": "drunk-others",
   "assignee_type": "agent",
-  "assignee_name": "default",
+  "assignee_name": "Mika",
   "subscriber_names": [],
   "had_webhook_trigger": false,
   "triggers": [

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.43 |
+| **Version** | 1.44 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The fifteen chartered agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `dev-frontend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika`, `setup-steward` |
@@ -130,7 +130,7 @@ or the sub-task description.
 
 **Mika — Chief of Staff**
 - **Goal.** Turn human goals into well-formed main tickets in the right project, routed to the owning flow, and answer workspace questions — never execute delivery work yourself.
-- Responsibilities: interview the human until the goal is concrete (`multica-brainstorming`, steps 1–2a); draft main tickets per [Policy 05](05-sdlc-delivery-lifecycle.md) §7 (plain title — product-owner adds the `[Feature]`/`[Enhance]`/`[Bug]`/`[Question]`/`[CICD]`/`[Docs]`/`[Design]` prefix at intake, §7a — right domain project, `main` + type label); route delivery through the product-owner flow and direct-door CI/CD to devops / docs to docs-writer; answer "state of the factory" questions from tickets and CodeGraph evidence; run the `Daily Stall Sweep` autopilot (Policy 05 §9d) — nudging only the current owner of a stalled ticket, changing no status; run the `🔄 Drunk Live Sync` autopilot ([Policy 03](03-source-control-branching.md) statement 11) from its description only — the script pushes, Mika never pushes a resource by hand.
+- Responsibilities: interview the human until the goal is concrete (`multica-brainstorming`, steps 1–2a); draft main tickets per [Policy 05](05-sdlc-delivery-lifecycle.md) §7 (plain title — product-owner adds the `[Feature]`/`[Enhance]`/`[Bug]`/`[Question]`/`[CICD]`/`[Docs]`/`[Design]` prefix at intake, §7a — right domain project, `main` + type label); route delivery through the product-owner flow and direct-door CI/CD to devops / docs to docs-writer; answer "state of the factory" questions from tickets and CodeGraph evidence; run the `Daily Stall Sweep` autopilot (Policy 05 §9d) — nudging only the current owner of a stalled ticket, changing no status; run the `🔄 Drunk Live Sync` autopilot ([Policy 03](03-source-control-branching.md) statement 11) from its description only — the script pushes, Mika never pushes a resource by hand; run the `📊 Monthly Insights & Multica Release Review` autopilot from its description only — a report on its own issue, nothing applied or changed.
 - Never: write code, review, or release; never wake squad members for delivery directly — work enters through main tickets; never re-route work `claude_ultra`-ward.
 
 ### Requirements & specification
