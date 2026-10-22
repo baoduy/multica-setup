@@ -71,6 +71,7 @@ Code-naming rule (point at code by name, never by line): `library-doc-template`
 ```text
 README.md                         the service README: the application's main page
 docs/
+├── index.md                      GitHub Pages home: the README, links rebased to docs/
 ├── configuration.md              keys the whole application reads
 ├── deployment.md                 the deployment guide
 ├── diagrams/                     runtime architecture + release path (IR + .svg)
@@ -435,6 +436,9 @@ deploy, migration or replay.
 
 A page that no index links to is an orphan and does not count as delivered:
 
+- The service README has its GitHub Pages copy, `docs/index.md`
+  (`library-doc-template` `references/page-rules.md`, **GitHub Pages**).
+
 - Every feature page is listed in its feature's `index.md` 📚 Pages and links
   back to it.
 - Every feature `index.md`, `docs/configuration.md` and the deployment guide
@@ -459,7 +463,8 @@ scheduled as its own change. Never rewrite a whole page unasked.
 4. Every link and anchor resolves, checked by a script, not by eye: emoji
    headings make GitHub slugs easy to get wrong. Every feature page is in its
    `index.md` 📚 Pages and links back; every feature `index.md` is in the
-   README's 📚 Documentation table.
+   README's 📚 Documentation table; `docs/index.md` matches the README (the
+   diff in `library-doc-template` `references/page-rules.md`, **GitHub Pages**).
 5. Each feature `index.md` 🔄 End-to-end flow draws the main route from the
    endpoint through the tables it writes to the events it raises, plus the
    status changes when the entity has a status and the caller's steps when the

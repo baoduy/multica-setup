@@ -66,6 +66,23 @@ Section-rules table row (`api-feature-doc-template`):
   prints nothing.
 - `git diff --stat` shows documentation and diagram files only.
 
+## GitHub Pages: docs/index.md
+
+`docs/` must serve as a GitHub Pages site (deploy from the branch's `/docs`
+folder). Pages builds with Jekyll in safe mode, which ignores symlinks, and
+the repo-root `README.md` lies outside `docs/`. So every repo carries
+`docs/index.md`: a real file, never a symlink, with the same text as the
+repo-root `README.md` and every relative link and image path rebased to
+`docs/` (`docs/features/x/index.md` → `features/x/index.md`,
+`docs/diagrams/runtime.svg` → `diagrams/runtime.svg`, `LICENSE` →
+`../LICENSE`). Change one, change the other in the same commit. A repo that
+already has a `docs/README.md` index keeps it, linked from the README's
+documentation links; `docs/index.md` is the site's home page.
+
+Self-check: the two files match apart from link targets —
+`diff <(sed -E 's/\]\([^)]*\)/]()/g' README.md) <(sed -E 's/\]\([^)]*\)/]()/g' docs/index.md)`
+prints nothing — and every link in `docs/index.md` resolves.
+
 ## Which template
 
 Classify each page by what its reader does with the thing. Decide from the code, not the repo name — one repo can hold both kinds (DKNet.Accounts.Api ships an API and its client package):

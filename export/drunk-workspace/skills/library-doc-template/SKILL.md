@@ -23,6 +23,7 @@ heading with placeholder text under it.
 ## The folder
 
 ```text
+docs/index.md             GitHub Pages home: the repo-root README, links rebased to docs/
 docs/<Package>/
 ├── index.md              the package: what, why, Quick Start, architecture, how it works, feature list
 ├── <feature>.md          one page per capability
@@ -174,6 +175,9 @@ imperative mood, linking the doc page the change affects. No internal refactors.
 These repos navigate by hand-maintained index pages. A page that no index links
 to is an orphan and does not count as delivered:
 
+- The repo-root `README.md` has its GitHub Pages copy, `docs/index.md`
+  (`references/page-rules.md`, **GitHub Pages**).
+
 - Every feature page is listed in its package's `index.md` 🧩 Features.
 - Every `docs/<Package>/index.md` is linked from the index above it:
   `DKNet` → `docs/README.md`; `drunk-pulumi-*` → `doc/README.md`; anything
@@ -194,7 +198,8 @@ be scheduled as its own change. Never rewrite a whole page unasked.
 2. Every default, flag, path, and version matches the code at this commit.
 3. Every link resolves (relative links included); every feature page is listed
    in `index.md` and links back to it; `index.md` is linked from the index
-   above it.
+   above it; `docs/index.md` matches the repo-root README (the diff in
+   `references/page-rules.md`, **GitHub Pages**).
 4. Each feature page's Gotchas names at least one real edge, or the capability
    truly has none.
 5. `index.md` has its 🏗️ Architecture component diagram and its 🔄 How it
