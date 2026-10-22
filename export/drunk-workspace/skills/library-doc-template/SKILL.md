@@ -24,7 +24,7 @@ heading with placeholder text under it.
 
 ```text
 docs/<Package>/
-├── index.md              the package: what, why, Quick Start, how it works, feature list
+├── index.md              the package: what, why, Quick Start, architecture, how it works, feature list
 ├── <feature>.md          one page per capability
 └── diagrams/             every diagram's JSON IR + rendered .svg
 ```
@@ -54,6 +54,14 @@ it. A bullet that could describe any library in the repo is a dead bullet.>
 <Install line, then the smallest runnable example that produces a visible
 result. Copy it from a test or run it — never hand-write it from memory.>
 
+## 🏗️ Architecture
+
+<The component diagram (archify `architecture`): the package's components as
+they run inside the host app — the types the reader registers or calls, the
+stores, handlers and background parts behind them, the host at the edge, every
+external dependency and trust boundary. Then 2–3 sentences on what it cannot
+show: lifetimes, what is shared across requests, what runs where.>
+
 ## 🔄 How it works
 
 <The flow diagram: what runs when the reader's code makes the Quick Start call,
@@ -77,6 +85,7 @@ when and where each step runs.>
 | Title + one-liner | Always | The one-liner restates the package name, or is longer than a sentence |
 | ✨ Why use it? | Always | Reads as a feature list instead of the reader's problem |
 | 🚀 Quick Start | Always | The example was not run, is missing the install step, or needs unstated setup |
+| 🏗️ Architecture | Always | Generic boxes instead of the package's real types; a component, store or external dependency the code has is missing; a single-package repo draws a second copy of `runtime.svg` instead of showing it |
 | 🔄 How it works | Always, unless the package is a set of independent one-call helpers with no order, branch or state | The diagram is not the Quick Start call's real path (generic boxes, invented steps), or it leaves out a failure path the code has |
 | 🧩 Features | Always | A feature page in the folder is missing from the list; a link that does not resolve; a description that restates the method signature |
 | 🔗 Related packages | When siblings exist | Bare links with no "reach for this when" line |
@@ -88,8 +97,8 @@ when and where each step runs.>
 
 Part of [<Package>](index.md). <What it is, the smallest code showing it, then
 the behaviour worth knowing (defaults, order, what happens on the unhappy path).
-A capability with a flow, states or a which-form-do-I-use choice of its own
-gets its own diagram right after its example.>
+Then this capability's diagram, right after its example, with 1–2 sentences on
+what it cannot show.>
 
 ## ⚙️ Configuration reference
 
@@ -109,7 +118,7 @@ what this deliberately does NOT do.>
 
 | Section | Required? | Fails review when |
 |---|---|---|
-| Title + body | Always | No back-link to `index.md`; restates method signatures instead of behaviour; covers more than one capability |
+| Title + body | Always | No back-link to `index.md`; restates method signatures instead of behaviour; covers more than one capability; no diagram, or one that redraws `index.md` 🔄 How it works |
 | ⚙️ Configuration reference | When the capability has options | A default in the table disagrees with the code; an option shared with another feature documented twice instead of linked |
 | 🧱 Where it fits | When the capability works across more than one component, service, or package | Prose that a diagram would say better, or a diagram with no prose around it |
 | ⚠️ Gotchas & limits | Always, unless the capability is genuinely one behaviour with no edges | Empty, or only restates the happy path |
@@ -127,13 +136,19 @@ your ticket. No page states a guess as fact.
 
 ## Diagrams
 
-Every package carries at least one flow or steps diagram, in `index.md`
-🔄 How it works (its section rule names the one exemption). A capability with a
-shape of its own — states it moves through, a which-form-do-I-use choice, a
-value passing through transforms — gets its own diagram on its feature page
-after its example, and how a capability sits among its siblings goes in its
-🧱 Where it fits. One diagram per shape; never draw the same flow twice.
-Diagrams live in `docs/<Package>/diagrams/`.
+Every package's `index.md` carries two diagrams: the component diagram in
+🏗️ Architecture (always archify `architecture`) and the flow or steps diagram
+in 🔄 How it works (its section rule names the one exemption). In a repo that
+ships only this package, 🏗️ Architecture shows the repo's runtime diagram
+(`docs/diagrams/runtime.svg`) when it exists, instead of drawing it twice.
+
+Every feature page carries its own diagram after its example: what that
+capability does, drawn from its call path. The archify type is your call at
+the time — pick it with archify's type router for the shape the capability has
+(steps or a flow, states it moves through, a which-form-do-I-use choice, a
+value passing through transforms, a call between parts). How a capability sits
+among its siblings goes in its 🧱 Where it fits. One diagram per shape; never
+draw the same flow twice. Diagrams live in `docs/<Package>/diagrams/`.
 
 Archify diagram rules (drawn with archify not Mermaid, picking the type via
 its type router, naming the real mechanism, committing IR + `.svg`):
@@ -182,8 +197,9 @@ be scheduled as its own change. Never rewrite a whole page unasked.
    above it.
 4. Each feature page's Gotchas names at least one real edge, or the capability
    truly has none.
-5. `index.md` 🔄 How it works has its flow diagram, drawn from the call path you
-   traced in the code; every diagram's JSON IR and rendered `.svg` are both
+5. `index.md` has its 🏗️ Architecture component diagram and its 🔄 How it
+   works flow diagram, and every feature page has its own diagram, each drawn
+   from what you traced in the code; every diagram's JSON IR and rendered `.svg` are both
    committed under `docs/<Package>/diagrams/`, and the `.svg` renders in the
    Markdown preview.
 6. No guess stated as fact; every fact the repo cannot prove is an open
