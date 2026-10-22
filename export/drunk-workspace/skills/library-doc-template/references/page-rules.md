@@ -25,8 +25,9 @@ close call). One diagram per shape; never draw the same flow twice.
 Every diagram shows the real mechanism — the route, handler, table, queue,
 event, partner-system, type, method, resource and arg names from the code,
 never generic boxes ("Service → Database"). Commit both the JSON IR and the
-rendered `.svg`, side by side under `docs/diagrams/` (or the repo's existing
-diagram folder), and reference the `.svg` from the Markdown with alt text that
+rendered `.svg`, side by side under the diagram folder the template names
+(`library-doc-template`: `docs/<Package>/diagrams/`; otherwise `docs/diagrams/`
+or the repo's existing diagram folder), and reference the `.svg` from the Markdown with alt text that
 narrates the flow in one sentence.
 
 Each template's own `## Diagrams` section still states its own triggers (which
@@ -38,6 +39,10 @@ and its own typical archify type — that part is not shared and stays there.
 Emoji headings are house style on these pages — keep them, exactly as above.
 
 ## ❓ Open questions
+
+API feature pages only. Library pages carry no table (Policy 09): a fact the
+repo cannot prove is left off the page and raised as an open question on the
+ticket.
 
 ```markdown
 ## ❓ Open questions
@@ -51,7 +56,7 @@ value, a retention or recovery target, a supported version range, an owner,
 an intended behaviour the code contradicts. Checked: what you read before
 giving up. The rest of the page never states a guess as fact.
 
-Section-rules table row (same in both templates):
+Section-rules table row (`api-feature-doc-template`):
 `| ❓ Open questions | When the page needs a fact the repo cannot prove | A guess stated as fact elsewhere on the page; a row with no "Checked" |`
 
 ## Self-check items (both run on every push)
@@ -67,10 +72,10 @@ Classify each page by what its reader does with the thing. Decide from the code,
 - **API feature** — the reader calls a running application over HTTP, a webhook or an MCP tool; a host project that maps routes (`Map*`, `[Http*]`, controllers, routers) → `api-feature-doc-template`, which also owns an application's repo-root README and its `docs/deployment.md` guide.
 - **Both** (an endpoint and its client SDK method) → one page each, each in its own template. **Neither** (how-to guide, ADR, migration note, a guide to the template or platform itself, changelog) → the existing page's shape; nothing to follow → ask on your ticket before writing. **UI** (screens, components, a console guide) has no template yet: follow the existing page's shape.
 
-Then look for the repo's own template: `git ls-files | grep -iE '(^|/)docs?/_?templates?/|(^|/)[^/]*doc[^/]*template[^/]*\.md$|skills/[^/]*docs?[^/]*/templates/'`. One that covers the page's kind wins over the house skill — today DKNet's `docs/Package-Doc-Template.md` (library pages) and the `dknet-docs` set in DKNet.Templates or a repo that copied it in (API features). Open the chosen template in full before writing — a house template with the Skill tool, never from memory; it owns the section order, section rules, which diagrams a page carries and the index page — never the drawing tool (Diagram rules above), whatever it says about Mermaid. An existing page in another shape: change only what the ticket asks, in the chosen shape, and flag the page's migration in your report — never rewrite a whole page unasked. Place new pages where the repo already keeps docs (`docs/`, `doc/`, package-level `README`).
+Then look for the repo's own template: `git ls-files | grep -iE '(^|/)docs?/_?templates?/|(^|/)[^/]*doc[^/]*template[^/]*\.md$|skills/[^/]*docs?[^/]*/templates/'`. For an API feature, one that covers the page's kind wins over the house skill — today the `dknet-docs` set in DKNet.Templates or a repo that copied it in. For a library, the house `library-doc-template` folder layout wins over a repo template (today DKNet's `docs/Package-Doc-Template.md`); take the repo template's wording and voice only where it does not conflict. Open the chosen template in full before writing — a house template with the Skill tool, never from memory; it owns the section order, section rules, which diagrams a page carries and the index page — never the drawing tool (Diagram rules above), whatever it says about Mermaid. An existing page in another shape: change only what the ticket asks, in the chosen shape, and flag the page's migration in your report — never rewrite a whole page unasked. Place new pages where the repo already keeps docs (`docs/`, `doc/`, package-level `README`).
 ## Flow diagrams
 
-Every library or API feature page carries at least one flow or steps diagram, placed where the chosen template says (house templates: 🔄 How it works in `library-doc-template`, 🔄 End-to-end flow in `api-feature-doc-template`). The template says what each diagram must show; the archify type is your call — pick the one that shows it best, with archify's type router. Draw it from the path CodeGraph traced, never generic boxes: author the typed JSON IR, validate, render. Commit BOTH the IR source and the exported asset so the diagram stays regenerable — `docs/diagrams/<name>.<type>.json` plus the rendered `.svg` referenced from the Markdown. Static by default; motion only if asked. One diagram per idea.
+Every library package (its `index.md`) and every API feature page carries at least one flow or steps diagram, placed where the chosen template says (house templates: 🔄 How it works in `library-doc-template`'s `index.md`, 🔄 End-to-end flow in `api-feature-doc-template`). The template says what each diagram must show; the archify type is your call — pick the one that shows it best, with archify's type router. Draw it from the path CodeGraph traced, never generic boxes: author the typed JSON IR, validate, render. Commit BOTH the IR source and the exported asset so the diagram stays regenerable — `<diagram folder>/<name>.<type>.json` plus the rendered `.svg` referenced from the Markdown (diagram folder: Diagram rules above). Static by default; motion only if asked. One diagram per idea.
 
 ## Runtime architecture diagram
 

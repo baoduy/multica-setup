@@ -1,6 +1,6 @@
 ---
 name: library-doc-template
-description: House template for a LIBRARY doc page — a package, Pulumi component or client SDK a developer installs and calls in their own code (DKNet packages, drunk-pulumi-* components), plus its package README and changelog entry. Not for a feature callers reach over HTTP — that is api-feature-doc-template. Use when docs-writer writes or updates a library or package's doc page.
+description: House template for a LIBRARY's docs — a package, Pulumi component or client SDK a developer installs and calls in their own code (DKNet packages, drunk-pulumi-* components). One folder per package — index.md plus one page per feature — and its package README and changelog entry. Not for a feature callers reach over HTTP — that is api-feature-doc-template. Use when docs-writer writes or updates a library or package's docs.
 ---
 
 # Library doc template
@@ -8,18 +8,36 @@ description: House template for a LIBRARY doc page — a package, Pulumi compone
 The house shape for one documented package or component: the reader installs it
 and calls its types in their own code. Derived from the most developed page in
 the fleet, `DKNet/docs/AspNetCore/DKNet.AspCore.Idempotency.md` — reader-task
-order, not API order.
+order, not API order — split into one folder per package so each capability
+gets its own page.
 
 Not this template: a feature of a running application that callers reach over
-HTTP, a webhook or an MCP tool → `api-feature-doc-template`. A repo with its own
-template for library pages (today: DKNet's `docs/Package-Doc-Template.md`) →
-that template, not this one.
+HTTP, a webhook or an MCP tool → `api-feature-doc-template`. This layout wins
+over a repo's own library template (today: DKNet's `docs/Package-Doc-Template.md`);
+take the repo template's wording and voice only where it does not conflict.
 
-Fill sections in this order. Omit a section when its trigger below is absent;
-never reorder, never invent a new top-level section, never leave a heading with
-placeholder text under it.
+Fill sections in the order shown. Omit a section when its trigger below is
+absent; never reorder, never invent a new top-level section, never leave a
+heading with placeholder text under it.
 
-## The skeleton
+## The folder
+
+```text
+docs/<Package>/
+├── index.md              the package: what, why, Quick Start, how it works, feature list
+├── <feature>.md          one page per capability
+└── diagrams/             every diagram's JSON IR + rendered .svg
+```
+
+- `docs/` is the repo's existing docs root (`docs/`, `doc/`).
+- `<Package>` is the package id exactly as published (`PackageId`, the
+  `package.json` name, the Pulumi component name).
+- `<feature>.md` follows the repo's existing doc file naming; kebab-case of the
+  capability where the repo has none (`replays-a-cached-response.md`).
+- One capability per feature page. A package with a single capability still
+  gets `index.md` plus one feature page.
+
+## index.md
 
 ```markdown
 # <Package or component name>
@@ -46,41 +64,13 @@ when and where each step runs.>
 
 ## 🧩 Features
 
-### <Capability, phrased as what it does>
-
-<What it is, the smallest code showing it, then the behaviour worth knowing
-(defaults, order, what happens on the unhappy path). One `###` per capability.
-A capability with a flow, states or a which-form-do-I-use choice of its own
-gets its own diagram right after its example.>
-
-## ⚙️ Configuration reference
-
-<Table: option | type | default | effect. Every option the public surface
-exposes, defaults matching the code at this commit.>
-
-## 🧱 Where it fits
-
-<How it sits against the other packages/components and the runtime around it —
-with an `architecture` diagram when it spans more than one.>
-
-## ⚠️ Gotchas & limits
-
-<What bites people: thread-safety, ordering, cost, unsupported combinations,
-what this deliberately does NOT do. Never empty on a non-trivial package.>
+- [<Capability, phrased as what it does>](<feature>.md) — <one line: what it
+  does for the reader>
 
 ## 🔗 Related packages
 
 <Sibling packages, with one line on when to reach for each instead.>
-
-## ❓ Open questions
-
-| Question | Why it matters | Checked | Who can answer |
-|---|---|---|---|
-
-<What goes in each row: `references/page-rules.md`.>
 ```
-
-## Section rules
 
 | Section | Required? | Fails review when |
 |---|---|---|
@@ -88,25 +78,62 @@ what this deliberately does NOT do. Never empty on a non-trivial package.>
 | ✨ Why use it? | Always | Reads as a feature list instead of the reader's problem |
 | 🚀 Quick Start | Always | The example was not run, is missing the install step, or needs unstated setup |
 | 🔄 How it works | Always, unless the package is a set of independent one-call helpers with no order, branch or state | The diagram is not the Quick Start call's real path (generic boxes, invented steps), or it leaves out a failure path the code has |
-| 🧩 Features | Always | Restates method signatures instead of behaviour; a `###` per method rather than per capability |
-| ⚙️ Configuration reference | When the public surface has options | A default in the table disagrees with the code |
-| 🧱 Where it fits | When the package works across more than one component, service, or package | Prose that a diagram would say better, or a diagram with no prose around it |
-| ⚠️ Gotchas & limits | Always, unless the package is genuinely one behaviour with no edges | Empty, or only restates the happy path |
+| 🧩 Features | Always | A feature page in the folder is missing from the list; a link that does not resolve; a description that restates the method signature |
 | 🔗 Related packages | When siblings exist | Bare links with no "reach for this when" line |
-| ❓ Open questions | When the page needs a fact the repo cannot prove | A guess stated as fact elsewhere on the page; a row with no "Checked" |
+
+## Feature page
+
+```markdown
+# <Capability, phrased as what it does>
+
+Part of [<Package>](index.md). <What it is, the smallest code showing it, then
+the behaviour worth knowing (defaults, order, what happens on the unhappy path).
+A capability with a flow, states or a which-form-do-I-use choice of its own
+gets its own diagram right after its example.>
+
+## ⚙️ Configuration reference
+
+<Table: option | type | default | effect. Every option this capability reads,
+defaults matching the code at this commit.>
+
+## 🧱 Where it fits
+
+<How this capability sits against the other packages/components and the
+runtime around it — with an `architecture` diagram when it spans more than one.>
+
+## ⚠️ Gotchas & limits
+
+<What bites people: thread-safety, ordering, cost, unsupported combinations,
+what this deliberately does NOT do.>
+```
+
+| Section | Required? | Fails review when |
+|---|---|---|
+| Title + body | Always | No back-link to `index.md`; restates method signatures instead of behaviour; covers more than one capability |
+| ⚙️ Configuration reference | When the capability has options | A default in the table disagrees with the code; an option shared with another feature documented twice instead of linked |
+| 🧱 Where it fits | When the capability works across more than one component, service, or package | Prose that a diagram would say better, or a diagram with no prose around it |
+| ⚠️ Gotchas & limits | Always, unless the capability is genuinely one behaviour with no edges | Empty, or only restates the happy path |
 
 Emoji-heading note and code-naming rule (point at code by name, never by
 line): `references/page-rules.md` (open it before writing and again before
 pushing).
 
+## What the repo cannot prove
+
+Library pages carry no ❓ Open questions table (Policy 09). A fact the repo
+cannot prove — a supported version range, an intended behaviour the code
+contradicts, an owner — is left off the page and raised as an open question on
+your ticket. No page states a guess as fact.
+
 ## Diagrams
 
-Every page carries at least one flow or steps diagram, in 🔄 How it works
-(Section rules name the one exemption). A capability with a shape of its own —
-states it moves through, a which-form-do-I-use choice, a value passing through
-transforms — gets its own diagram after its example, and how the package sits
-among its siblings goes in 🧱 Where it fits. One diagram per shape; never draw
-the same flow twice.
+Every package carries at least one flow or steps diagram, in `index.md`
+🔄 How it works (its section rule names the one exemption). A capability with a
+shape of its own — states it moves through, a which-form-do-I-use choice, a
+value passing through transforms — gets its own diagram on its feature page
+after its example, and how a capability sits among its siblings goes in its
+🧱 Where it fits. One diagram per shape; never draw the same flow twice.
+Diagrams live in `docs/<Package>/diagrams/`.
 
 Archify diagram rules (drawn with archify not Mermaid, picking the type via
 its type router, naming the real mechanism, committing IR + `.svg`):
@@ -115,46 +142,52 @@ creates, in order, each optional one behind the arg that switches it on.
 
 ## Two smaller shapes
 
-**Package README** (the repo-root or package-root `README.md`): the same
-skeleton truncated to Title + one-liner, Why use it?, Quick Start, then a link
-table into the full `docs/` pages. No Features section — it drifts from the doc
-page that owns it. The repo-root README also carries 🏗️ Runtime architecture
-once the repo has its runtime diagram: `docs/diagrams/runtime.svg` with alt
-text that narrates the primary path in one sentence (Policy 05 statement 3a;
-the shape and the drawing prompt are in docs-writer's procedure, and its
-archify type is always `architecture`).
+**Package README** (the repo-root or package-root `README.md`): Title +
+one-liner, Why use it?, Quick Start, then a link table into
+`docs/<Package>/index.md` and its feature pages. No Features section — it
+drifts from the pages that own it. The repo-root README also carries
+🏗️ Runtime architecture once the repo has its runtime diagram:
+`docs/diagrams/runtime.svg` with alt text that narrates the primary path in one
+sentence (Policy 05 statement 3a; the shape and the drawing prompt are in
+docs-writer's procedure, and its archify type is always `architecture`).
 
 **Changelog entry**: one line per user-visible change under the version heading,
 imperative mood, linking the doc page the change affects. No internal refactors.
 
 ## Keep the index in step
 
-These repos navigate by hand-maintained index pages. A new page that no index
-links to is an orphan and does not count as delivered:
+These repos navigate by hand-maintained index pages. A page that no index links
+to is an orphan and does not count as delivered:
 
-- `DKNet`: the area `README.md` next to the page (e.g. `docs/AspNetCore/README.md`)
-  plus `docs/README.md` where it lists areas.
-- `drunk-pulumi-*`: the area `index.md` and `doc/README.md`.
-- Anything else: whatever `README`/`index` sits above the page.
+- Every feature page is listed in its package's `index.md` 🧩 Features.
+- Every `docs/<Package>/index.md` is linked from the index above it:
+  `DKNet` → `docs/README.md`; `drunk-pulumi-*` → `doc/README.md`; anything
+  else → whatever `README`/`index` sits above it.
 
-## API-dump pages — never a new one
+## Existing pages in another shape
 
-`drunk-pulumi-azure-components/doc/**/*.md` use API-dump order (Purpose →
-Dependencies → Classes → Interfaces → Enums → Exports). It restates the
-TypeScript types the reader can already read and goes stale the moment a
-signature changes. Never write a new page in that shape. Updating one: fix what
-the ticket asks, in this template's shape, and flag the page's full migration
-in your report so it can be scheduled as its own change.
+A single-file library page (DKNet's `docs/<Area>/<Package>.md`) or an API-dump
+page (`drunk-pulumi-azure-components/doc/**/*.md`: Purpose → Dependencies →
+Classes → Interfaces → Enums → Exports) — never write a new one. Updating one:
+change only what the ticket asks, in the file it is in, in this template's
+section shape, and flag the move to `docs/<Package>/` in your report so it can
+be scheduled as its own change. Never rewrite a whole page unasked.
 
 ## Self-check before pushing
 
 1. Every code sample was run, or copied verbatim from a passing test.
 2. Every default, flag, path, and version matches the code at this commit.
-3. Every link resolves (relative links included).
-4. Gotchas section names at least one real edge, or the package truly has none.
-5. 🔄 How it works has its flow diagram, drawn from the call path you traced in
-   the code; every diagram's JSON IR and rendered `.svg` are both committed, and
-   the `.svg` renders in the Markdown preview.
-6. Self-check and docs-only diff proof (no line references on the page;
+3. Every link resolves (relative links included); every feature page is listed
+   in `index.md` and links back to it; `index.md` is linked from the index
+   above it.
+4. Each feature page's Gotchas names at least one real edge, or the capability
+   truly has none.
+5. `index.md` 🔄 How it works has its flow diagram, drawn from the call path you
+   traced in the code; every diagram's JSON IR and rendered `.svg` are both
+   committed under `docs/<Package>/diagrams/`, and the `.svg` renders in the
+   Markdown preview.
+6. No guess stated as fact; every fact the repo cannot prove is an open
+   question on your ticket.
+7. Self-check and docs-only diff proof (no line references on any page;
    `git diff --stat` touches documentation and diagram files only):
    `references/page-rules.md`.
