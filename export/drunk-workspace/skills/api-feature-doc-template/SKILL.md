@@ -457,14 +457,20 @@ scheduled as its own change. Never rewrite a whole page unasked.
 
 1. The `endpoints.md` 🔌 Endpoints table matches the routes the app publishes,
    generated ones included, and each route has its own section.
-2. Every request, response and `curl` was run, or copied from a passing test.
-3. Every status in an Errors table is one the route can return; every default
-   matches the code at this commit.
+2. Every request, response, `curl` and `structuredContent` is pasted from a
+   real call (a test fake, an in-memory client or a run), never written by
+   hand; an abridged example says it is abridged. The 🚀 Quick Start runs from
+   a fresh clone with only the page's own steps; your report quotes that
+   output.
+3. Every status in an Errors table is one the route can return, and its text is
+   pasted from a real call; every default matches the code at this commit.
 4. Every link and anchor resolves, checked by a script, not by eye: emoji
-   headings make GitHub slugs easy to get wrong. Every feature page is in its
-   `index.md` 📚 Pages and links back; every feature `index.md` is in the
-   README's 📚 Documentation table; `docs/index.md` matches the README (the
-   diff in `library-doc-template` `references/page-rules.md`, **GitHub Pages**).
+   headings make GitHub slugs easy to get wrong. Check it in a clean checkout
+   of the commit you will push, never in your working copy, and
+   `git status --porcelain --ignored -- docs/` prints no `!!` line. Every
+   feature page is in its `index.md` 📚 Pages and links back; every feature `index.md` is in the
+   README's 📚 Documentation table; `docs/index.md` matches the README (the diff
+   in `library-doc-template` `references/page-rules.md`, **GitHub Pages**).
 5. Each feature `index.md` 🔄 End-to-end flow draws the main route from the
    endpoint through the tables it writes to the events it raises, plus the
    status changes when the entity has a status and the caller's steps when the
@@ -483,10 +489,14 @@ scheduled as its own change. Never rewrite a whole page unasked.
 10. Self-check and docs-only diff proof (no line references on any page;
     `git diff --stat` touches documentation and diagram files only):
     `library-doc-template` `references/page-rules.md`.
-11. Every fact the repo cannot prove is a row in the feature `index.md`
-    ❓ Open questions (or the README's or deployment guide's own table), never
-    a sentence elsewhere; every config row has Required, Rules, Secret and
-    Takes effect; no key is on two pages; no secret has a real-looking value.
+11. Every fact the repo cannot prove is a row in the feature `index.md` ❓ Open
+    questions (or the README's or deployment guide's own table), never a
+    sentence elsewhere; every behaviour claim (a throw, an "every", "all",
+    "never" or "cannot", a list of supported types) is traced to the
+    `file:line` that does it, cited in your report, never on the page; a page
+    split from an old page keeps the old page's facts unless the code says
+    otherwise; every config row has Required, Rules, Secret and Takes effect;
+    no key is on two pages; no secret has a real-looking value.
 12. A deployment guide's 🔄 Release path diagram is drawn from the pipeline
     YAML, ↩️ Roll back names what it leaves behind, and no deploy command was
     run.

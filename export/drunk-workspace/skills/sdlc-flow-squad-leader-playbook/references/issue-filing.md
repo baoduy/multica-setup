@@ -14,4 +14,4 @@ Only when pr-reviewer's terminal report carries an `## OUT-OF-SCOPE DEFECT (file
 4. **Say what it is** in the body: a defect report triaged on its own merits, not an order inheriting this cycle's priority.
 5. Note the ticket key in your cycle's completion report under LEFT OPEN.
 
-A member-filed issue is a defect against this rule: fold its content into yours and cancel it (`multica issue update <id> --status cancelled`).
+A member-filed issue is a defect against this rule: fold its content into yours and cancel it (`multica issue status <id> cancelled --duplicate-of <your-key>`).
