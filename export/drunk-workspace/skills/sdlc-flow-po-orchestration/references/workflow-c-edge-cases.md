@@ -4,7 +4,7 @@ Open this when a Workflow C wake meets one of the situations below.
 
 ## Duplicate phases
 
-Two concurrent sessions can both create a phase pair (a gate that both flips `done` and mentions you fires two enqueues). After every create or promotion, re-list `multica issue children <root-id> --output json`. Per stage keep the ticket with the earliest `created_at` and cancel every later one (`multica issue cancel-task <run-id> --issue <dup-id>` for any live run first, then `multica issue update <dup-id> --status cancelled`). Never pick by title or memory: only `created_at` gives two sessions the same answer. Two live `[P<num>-1]` tickets means two dev-team cycles, two branches and two PRs on one scope.
+Two concurrent sessions can both create a phase pair (a gate that both flips `done` and mentions you fires two enqueues). After every create or promotion, re-list `multica issue children <root-id> --output json`. Per stage keep the ticket with the earliest `created_at` and cancel every later one (`multica issue cancel-task <run-id> --issue <dup-id>` for any live run first, then `multica issue status <dup-id> cancelled --duplicate-of <kept-key>`). Never pick by title or memory: only `created_at` gives two sessions the same answer. Two live `[P<num>-1]` tickets means two dev-team cycles, two branches and two PRs on one scope.
 
 ## A human flipped the root `done` early
 
