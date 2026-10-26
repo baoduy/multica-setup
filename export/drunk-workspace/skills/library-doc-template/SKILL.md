@@ -194,11 +194,17 @@ be scheduled as its own change. Never rewrite a whole page unasked.
 
 ## Self-check before pushing
 
-1. Every code sample was run, or copied verbatim from a passing test.
+1. The 🚀 Quick Start builds and runs to exit in a fresh project holding only
+   the page's install lines and code, never a reference to `src/`; your report
+   quotes that output. Every other code sample was run, or copied verbatim
+   from a passing test. Every example output is pasted from a real run, never
+   written by hand; an abridged one says it is abridged.
 2. Every default, flag, path, and version matches the code at this commit.
-3. Every link resolves (relative links included); every feature page is listed
-   in `index.md` and links back to it; `index.md` is linked from the index
-   above it; `docs/index.md` matches the repo-root README (the diff in
+3. Every link resolves (relative links included), checked in a clean checkout
+   of the commit you will push, never in your working copy, and
+   `git status --porcelain --ignored -- docs/` prints no `!!` line; every
+   feature page is listed in `index.md` and links back to it; `index.md` is linked from the
+   index above it; `docs/index.md` matches the repo-root README (the diff in
    `references/page-rules.md`, **GitHub Pages**).
 4. Each feature page's Gotchas names at least one real edge, or the capability
    truly has none.
@@ -208,7 +214,11 @@ be scheduled as its own change. Never rewrite a whole page unasked.
    committed under `docs/<Package>/diagrams/`, and the `.svg` renders in the
    Markdown preview.
 6. No guess stated as fact; every fact the repo cannot prove is an open
-   question on your ticket.
+   question on your ticket. Every behaviour claim (a throw, an "every", "all",
+   "never" or "cannot", a list of supported types) is traced to the
+   `file:line` that does it, cited in your report, never on the page; a page
+   split from an old page keeps the old page's facts unless the code says
+   otherwise.
 7. Self-check and docs-only diff proof (no line references on any page;
    `git diff --stat` touches documentation and diagram files only):
    `references/page-rules.md`.
