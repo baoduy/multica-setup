@@ -42,6 +42,7 @@ FAULTS = {
     "L9": lambda b: edit_text(b + "/README.md", "| run-medic        | codex   | gpt-6-luna          | low      |",
                               "| run-medic        | codex   | gpt-6-luna          | high     |"),
     "L10": lambda b: edit_text(b + "/docs/policies/09-agent-roles-and-responsibilities.md", "The fifteen chartered", "The fourteen chartered"),
+    "L11": lambda b: open(b + "/skills/archify/SKILL.md", "a").write("\0"),
 }
 
 
