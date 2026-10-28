@@ -94,9 +94,12 @@ installed globally for Claude Code at `~/.claude/skills/archify`.
   `gh api repos/tt-a1i/archify/releases/latest --jq .tag_name`.
 - Sync = replace the bundle dir with upstream `archify/` at the release tag.
   The bundle intentionally drops `test/` and the rendered `examples/*.html`.
-  It keeps the bundle-only `config.json` (the Multica import origin). Diff
-  first (`diff -rq <clone>/archify export/drunk-workspace/skills/archify`),
-  so the only differences are those three.
+  It keeps the bundle-only `config.json` (the Multica import origin). Live
+  drops NUL bytes from skill files, so each raw NUL in an upstream file
+  becomes the escape `\u0000` (`renderers/shared/diagnostics.mjs` has two).
+  Lint L11 blocks the merge if one is left. Diff first
+  (`diff -rq <clone>/archify export/drunk-workspace/skills/archify`), so the
+  only differences are those four.
 - Read the upstream `CHANGELOG.md` before you sync. A major or minor bump can
   change the CLI, the schemas or the IR shape. Re-check everything in the
   bundle that quotes archify commands, types or file names. Find them with

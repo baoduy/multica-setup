@@ -9,7 +9,7 @@ Run from the root of a clone of baoduy/multica-setup, on the host whose
   drunk-live-sync.py --accept   like the default, but move the tag even when changes were
                                 reported unsupported (only after the owner applied them by hand)
   drunk-live-sync.py --lint     offline check of the bundle at HEAD: values live would reject
-                                and files that disagree (rules L1-L10); no multica calls
+                                and files that disagree (rules L1-L11); no multica calls
 
 Prints one JSON report. Exit 0 = synced or up to date, 2 = blocked (tag not moved),
 1 = error. The tag moves only when every pushed resource reads back equal to its file.
@@ -436,8 +436,9 @@ def sync(base, head, accept):
         try:
             if status == "D":
                 sid = live.skills[name]["id"]
-                if field in {f["path"] for f in live.skill(sid).get("files") or []}:
-                    run(["multica", "skill", "files", "delete", sid, "--path", field])
+                fid = {f["path"]: f["id"] for f in live.skill(sid).get("files") or []}.get(field)
+                if fid:
+                    run(["multica", "skill", "files", "delete", sid, fid])
                 ok = field not in {f["path"] for f in live.skill(sid, refresh=True).get("files") or []}
             else:
                 text = show(head, path)
@@ -551,6 +552,12 @@ def lint(rev):
             err("L10", "Policy 09 Applies to says %s chartered agents and lists %d" % (m.group(1), len(names)))
         for n in set(names) - set(agents):
             err("L10", "Policy 09 Applies to names %s, which is not an agent in manifest.json" % n)
+    # L11 no NUL byte in a live text file: live drops it, so the read-back never matches.
+    owner_map, skill_dirs = owners(rev)
+    for f in sorted(tree):
+        if not f.endswith(IMAGE_SUFFIXES) and classify(f, owner_map, skill_dirs) not in ("ignore", None) \
+                and "\0" in show(rev, f):
+            err("L11", "%s holds a NUL byte; escape it (\\u0000 in JS)" % f)
     return {"status": "clean" if not errors else "lint-failed", "rev": rev, "errors": sorted(errors)}
 
 
