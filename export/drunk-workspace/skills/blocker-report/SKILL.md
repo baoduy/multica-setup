@@ -37,7 +37,7 @@ Deviations from the brief: none | <n>, see below
 | Branch hits | <n>/<n> new branches hit — or `none added` |
 | Mutation | Stryker <score>%, <n> survivors dispositioned — or — manual: <n> guards, each went red |
 | Assertions | fragment grep over added asserts: <n> matches, each anchored — or `0 matches` |
-| Brief re-read | <n> edge cases named, each a fact or "no fact, <reason>" |
+| Brief re-read | <n> edge cases named, <m> type-dispatch sites, each case and type a fact or "no fact, <reason>" |
 | Comments | <n> comments re-read against the code; <n> fixed |
 | Standards | <skills opened> · rule-ids: <ids> · reuse: <result> · SRP: <numbers> · DRY: <result> · docs: <n/a / url> |
 | CodeGraph | <n> explore calls — or `unavailable — <why>` |

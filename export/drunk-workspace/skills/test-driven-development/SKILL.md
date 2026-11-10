@@ -92,6 +92,7 @@ RED is not just the author stage — it is a property every finished test must s
 - **An absence assertion needs a presence sibling.** `dto.Nickname.ShouldBeNull()` for an omitted field also passes when the field is dropped end to end. Pair it with a test that sends a value and asserts it round-trips.
 - **Branch coverage on every branch you added, not line coverage.** A 1-of-2 arm is an untested edge case — report per-branch hits. An arm no input can reach is not a gap: prove it with a probe and say so.
 - **Every edge case the brief names anywhere — §3 row, contract, rules, §9, a prose note — needs a fact or an explicit "no fact, reason".**
+- **Code you added that branches on a value's type gets one test per type in the domain it accepts**, or a "no fact, reason" line naming each type it leaves out. That covers a `switch` on type or `TypeCode`, an allow-list guard, an `object`/`IFormattable` fall-through arm and a generic `TValue` conversion. Branch coverage does not prove it: the fall-through arm counts as covered once any one type reaches it. For .NET numbers the domain is `byte`, `sbyte`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `float`, `decimal`, and `double` both whole-number and fractional. A `TypeCode` allow-list that left out `decimal` broke a decimal read that worked before (DKNet PR #539), and whole-number `double` and every non-`int` integral lost their literal suffix in a fall-through arm while the tests asserted only `int` and doubles containing a `.` (DKNet PR #538).
 - **Never mutate ambient state in a test** (`CultureInfo.CurrentCulture`, environment variables, static config). Scope and restore it, or pin it on a dedicated thread.
 
 ## UI presentation Build (`Mode: build-ui`)
@@ -133,7 +134,7 @@ Policy 02 statement 1f: code no shipped artifact uses (an Aspire AppHost and the
 - Per-branch hits on every branch you added, not the class percentage (worker playbook check 3).
 - Mutation report per touched class with every survivor dispositioned — or the manual run with the tool named unavailable.
 - Assertion-fragment grep over every assertion you added; each match pins exact text or is anchored to its member (check 2).
-- Brief prose re-read: every named edge case is a fact or "no fact, reason" (check 4).
+- Brief prose re-read: every named edge case is a fact or "no fact, reason"; every type a type guard or type switch you added accepts has a test or a "no fact, reason" line (check 4).
 - Every comment and doc comment you wrote or touched re-read against the code beside it (check 5).
 - CodeGraph row: explore calls made, or unavailable with the reason (worker playbook *Research before you edit*).
 - `git diff <at_sha>..HEAD -- <AT paths>` empty; every added test listed.
