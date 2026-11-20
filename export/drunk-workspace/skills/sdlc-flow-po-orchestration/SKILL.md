@@ -20,7 +20,7 @@ Classify on what the request asks you to CHANGE, not on its label, and reclassif
 | a service or repo that does not exist yet, or a change to an approved service design (`docs/architect/`) | **F** → `[P<num>-1] Design` to service-architect + `[P<num>-1c]` to pr-reviewer |
 | delivery of an approved SPEC (Workflow B only) | **C** |
 
-A "docs" change that also edits source, a test, or a config value existing tests assert is **B**. When unsure, B. Blog content belongs to blog-team, never here.
+A "docs" change that also edits source, a test, or a config value existing tests assert is **B**. When unsure, B. Blog posts belong to blog-writer, never here.
 
 ## Shape first: root or sub-issue
 

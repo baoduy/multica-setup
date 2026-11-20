@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.46 |
+| **Version** | 1.47 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The fifteen chartered agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `dev-frontend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika`, `setup-steward` |
@@ -34,7 +34,7 @@ assistant (workspace management, CLI help, ad-hoc questions); `Mika` handles cha
 requests that need routing. It holds **no SDLC authority**: no charter here, no stage ownership, no
 gate, no git/branch authority under [Policy 03](03-source-control-branching.md). It may
 file and route tickets (product work to `product-owner`, CI/CD and Helm charts to `devops`, docs to
-`docs-writer`, blog content to `blog-team`) but never execute them; factory work that lands on
+`docs-writer`, blog posts to `blog-writer`) but never execute them; factory work that lands on
 it is declined with a pointer to the owning agent. The `🔄 Drunk Live Sync`
 autopilot assigns `Mika` to run the setup repo's live sync script after the owner merges
 `main` ([Policy 03](03-source-control-branching.md) statement 11). The procedure lives in that
@@ -163,8 +163,8 @@ or the sub-task description.
 - Never: edit a file inside a front-end app — that is dev-frontend's (Policy 02 statement 1g); invent scope — ambiguity goes to dev-leader from your OWN sub-task; implement anything in an Acceptance-tests run; edit, delete, skip or weaken an approved acceptance test — a wrong one is a `blocked` to dev-leader (UI presentation and its one allowed skip are dev-frontend's, Policy 02 statements 1a and 1g); compute an expected value by calling production code; flip `done` on a red suite, a coverage gap, a non-empty drift check, or unpushed tests — park `blocked` with the gap named; pad coverage with trivial tests on getters/framework code; open or merge PRs; end a run without the status flipped and read back.
 
 **dev-frontend — Front-end Developer**
-- **Goal.** Deliver exactly what the approved spec defines for a front-end app ([Policy 02](02-testing-and-quality.md) statement 1g: everything under `ui/` in DKNet.Accounts.Api, the site code of `hbd.astro-paper`), acceptance-test-first in two separate runs (one `bug-build` run for a confirmed bug fix, Policy 02 statement 1b): the spec's acceptance criteria as executable, RED tests; then, after dev-leader has approved and frozen them at `at_sha`, the implementation that turns them green with ≥80% coverage and a mutation report on every touched class, the app's build, typecheck and lint green, committed and pushed to the feature branch. A UI presentation surface is built without new tests (Policy 02 statement 1a). Nothing more, nothing less.
-- Responsibilities ([Policy 02](02-testing-and-quality.md), `test-driven-development`): the same as dev-backend's — research first with CodeGraph, acceptance tests against the app's public surface (its route handlers, exported modules and rendered output), implementation against the frozen tests, coverage review and mutation report per touched class, the pre-review run before the last push ([Policy 01](01-coding-standards.md) statement 15), CI parity on a throwaway merge of `origin/dev` (Policy 02 statement 6b), every `build-ui`, `build-excluded`, `build-waived` and `bug-build` mode as its brief names it, fixes for PR-gate findings routed by dev-leader on its own Build sub-task; in blog-team, the Astro site's components, layouts, styles, config and content schema (`squads/blog-team.md`).
+- **Goal.** Deliver exactly what the approved spec defines for a front-end app ([Policy 02](02-testing-and-quality.md) statement 1g: everything under `ui/` in DKNet.Accounts.Api), acceptance-test-first in two separate runs (one `bug-build` run for a confirmed bug fix, Policy 02 statement 1b): the spec's acceptance criteria as executable, RED tests; then, after dev-leader has approved and frozen them at `at_sha`, the implementation that turns them green with ≥80% coverage and a mutation report on every touched class, the app's build, typecheck and lint green, committed and pushed to the feature branch. A UI presentation surface is built without new tests (Policy 02 statement 1a). Nothing more, nothing less.
+- Responsibilities ([Policy 02](02-testing-and-quality.md), `test-driven-development`): the same as dev-backend's — research first with CodeGraph, acceptance tests against the app's public surface (its route handlers, exported modules and rendered output), implementation against the frozen tests, coverage review and mutation report per touched class, the pre-review run before the last push ([Policy 01](01-coding-standards.md) statement 15), CI parity on a throwaway merge of `origin/dev` (Policy 02 statement 6b), every `build-ui`, `build-excluded`, `build-waived` and `bug-build` mode as its brief names it, fixes for PR-gate findings routed by dev-leader on its own Build sub-task.
 - Never: edit a file outside a front-end app — that is dev-backend's (Policy 02 statement 1g); author blog posts (blog-writer's); invent scope; implement anything in an Acceptance-tests run; edit, delete, skip or weaken an approved acceptance test (the one skip allowed is an existing test a UI presentation change breaks, with its note, Policy 02 statement 1a); flip `done` on a red suite, a coverage gap, a non-empty drift check, or unpushed tests; create a branch or open or merge a PR; end a run without the status flipped and read back.
 
 **pr-reviewer — PR Review & Merge Gate**

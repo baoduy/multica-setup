@@ -16,7 +16,7 @@ Create tickets in the project that owns the repo (Workspace Context, **Projects 
 | CI/CD pipeline, package-publish automation, or a Helm chart | `devops` |
 | docs-only change to a library repo (README, `docs/`, changelog) | `docs-writer` (`--assignee-id <agent id>` from `multica agent list --output json`) |
 | a new service or repo, or a change to an approved service design (`docs/architect/`) | `product-owner` (it routes the design to `service-architect`; never assign service-architect directly) |
-| blog post for drunkcoding.net | `blog-team` squad |
+| blog post for drunkcoding.net | `blog-writer` agent |
 | mechanical, fully specified code chore the requester already scoped | `dev-team` squad |
 
 Never assign feature or bug work straight to dev-team: that skips the spec gate. Never assign anything to yourself, to `claude_ultra`, or to `Mika`. When you delegate by comment, the mention must be `[@name](mention://agent/<uuid>)` or `mention://squad/<uuid>` with a real id; if no target is clear, mention the issue's creator instead (`creator_type`/`creator_id` from `multica issue get`).

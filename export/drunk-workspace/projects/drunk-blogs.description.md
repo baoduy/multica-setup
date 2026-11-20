@@ -1,1 +1,0 @@
-The project to manage the blog for dunkcoding.net

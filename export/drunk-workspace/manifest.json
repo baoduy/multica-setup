@@ -75,11 +75,6 @@
       "source_id": "88ae7e11-7fcb-4432-9819-8e6c36c9832d"
     },
     {
-      "name": "medium-publishing",
-      "dir": "skills/medium-publishing",
-      "source_id": "707c5c06-0c46-4f4f-a7cd-0f14d48a0fcf"
-    },
-    {
       "name": "multica-brainstorming",
       "dir": "skills/multica-brainstorming",
       "source_id": "93405984-c94c-444f-9cf9-dc78846de0b5"
@@ -201,7 +196,6 @@
       "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
       "source_runtime_provider": "claude",
       "skill_names": [
-        "astro-paper-blog-conventions",
         "blocker-report",
         "codegraph",
         "nodejs-typescript-standards",
@@ -358,22 +352,9 @@
         "astro-paper-blog-conventions",
         "blocker-report",
         "multica-brainstorming",
-        "sdlc-flow-squad-worker-playbook",
         "sdlc-gitflow"
       ],
       "had_secrets": false
-    },
-    {
-      "name": "medium-publisher",
-      "file": "agents/medium-publisher.json",
-      "source_id": "aada2a10-d43e-4adb-94a9-a6fc8639c1de",
-      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
-      "source_runtime_provider": "claude",
-      "skill_names": [
-        "astro-paper-blog-conventions",
-        "medium-publishing"
-      ],
-      "had_secrets": true
     },
     {
       "name": "docs-writer",
@@ -497,46 +478,9 @@
       ],
       "instructions_file": "squads/product-team.md",
       "description_file": "squads/product-team.description.md"
-    },
-    {
-      "name": "blog-team",
-      "file": "squads/blog-team.json",
-      "avatar_url": "emoji:🦉",
-      "leader_name": "dev-leader",
-      "members": [
-        {
-          "agent_name": "blog-writer",
-          "role": "member"
-        },
-        {
-          "agent_name": "dev-leader",
-          "role": "leader"
-        },
-        {
-          "agent_name": "dev-frontend",
-          "role": "member"
-        },
-        {
-          "agent_name": "pr-reviewer",
-          "role": "member"
-        },
-        {
-          "agent_name": "devops",
-          "role": "member"
-        }
-      ],
-      "description_file": "squads/blog-team.description.md",
-      "instructions_file": "squads/blog-team.md"
     }
   ],
   "projects": [
-    {
-      "title": "drunk-blogs",
-      "file": "projects/drunk-blogs.json",
-      "source_id": "de1fe8bc-c0ef-4e03-ac09-b20b1deb9d0f",
-      "lead_name": "blog-writer",
-      "lead_type": "agent"
-    },
     {
       "title": "drunk-others",
       "file": "projects/drunk-others.json",

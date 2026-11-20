@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-05 |
-| **Version** | 1.32 |
+| **Version** | 1.33 |
 | **Status** | Active |
 | **Owner** | product-owner |
 | **Applies to** | Every ticket that flows through the drunk software factory |
@@ -108,7 +108,7 @@ delegated by product-owner only, no spec gate; its PR merges only on the owner's
 
 7b. **The prefix is root-only.** It never appears on a child, and it changes no child's title, numbering or `<num>` keying: `[S<num>]`, `[P<num>-n]` and `[D<num>-n]` are keyed off the root's key NUMBER, never its title. Emitting a type prefix on a sub-task is a defect.
 
-7c. **Projects own repos.** A project's repos are the `github_repo` resources attached to it (`multica project resource list <project-id> --output json`; project ids from `multica project list --output json`). Match a repo by `owner/name`, case-insensitive, ignoring a trailing `.git` or `/`. A root ticket lives in the project whose repos include the repo it changes. Several projects match: keep the ticket where it is when its project is one of them, else ask its human owner. No project matches: the repo is outside the factory's scope; leave the ticket where it is, flip it `blocked` and ask its human owner. A ticket that changes no repo stays in the project it was filed in. No skill, instruction or squad briefing lists projects or repos; the attached repos are the list.
+7c. **Projects own repos.** A project's repos are the `github_repo` resources attached to it (`multica project resource list <project-id> --output json`; project ids from `multica project list --output json`). Match a repo by `owner/name`, case-insensitive, ignoring a trailing `.git` or `/`. A root ticket lives in the project whose repos include the repo it changes. Several projects match: keep the ticket where it is when its project is one of them, else ask its human owner. No project matches: the repo is outside the factory's scope; leave the ticket where it is, flip it `blocked` and ask its human owner. A ticket that changes no repo stays in the project it was filed in. One exception: `blog-writer` writes posts in `hbd.astro-paper`, which no project owns, outside the factory (Policy 03 statement 8c); its tickets carry no project and are not `blocked` for it. No skill, instruction or squad briefing lists projects or repos, except blog-writer's, which names its repo (Policy 03 statement 8c); the attached repos are the list.
 
 **Root-title type prefix.** Exactly one prefix, matching the root ticket's type label:
 

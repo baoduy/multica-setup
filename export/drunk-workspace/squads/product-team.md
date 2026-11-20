@@ -32,7 +32,7 @@ Only you create issues in this squad. Members report on their own tickets; you r
 | CI/CD, build/test, package-publish automation, Helm charts (any `Chart.yaml`) | devops | `[P<num>-1] CI/CD change` + `[P<num>-1c]` (Workflow D2); never through the spec gate or release-manager |
 | docs, only when a human asks | docs-writer | `[P<num>-1] Docs: <scope>` + `[P<num>-1c] Review docs PR` (Workflow E); never through the spec gate, dev-team or release-manager. A requester may assign docs-writer directly. dev-team cycles write no docs pages |
 | a new service's design (a repo that does not exist yet), or a change to an approved design | service-architect | `[P<num>-1] Design: <service>` + `[P<num>-1c] Review design PR` (Workflow F), only after the requester settled repo and service names and created the empty repo with `dev`; never through the spec gate, dev-team or release-manager. Delegated door only. An approved design binds every later spec in that repo |
-| blog content | blog-team | not this squad |
+| blog post | blog-writer, alone | not this squad |
 
 Never assign a phase to yourself, never put the root in `in_review`; on a spec or CI/CD root its terminals are `done` or `cancelled` (requester's call). Reassigning the root happens exactly once, to dev-team, on a confirmed bug — after that you are out of the ticket until dev-leader hands it back for the release.
 
