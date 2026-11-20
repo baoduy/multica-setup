@@ -15,11 +15,11 @@ browser for dark mode, path tracing and export).
 
 - **What it builds.** The open-source `github.com/baoduy` repos: .NET/NuGet
   libraries, Pulumi/npm packages, Python MCP services, Docker images, Helm
-  charts, and the drunkcoding.net blog. There is no deployed environment.
+  charts. There is no deployed environment. blog-writer also writes
+  drunkcoding.net posts, alone and outside the factory (Policy 03 statement 8c).
   Publishing the package or image from `main` IS the release.
 - **Branches.** `dev` is integration, `main` is release. Only
-  release-manager targets `main` (the blog repo uses `develop` and the owner
-  deploys it). See Policy 03.
+  release-manager targets `main`. See Policy 03.
 - **Policy first.** Policies are the source of truth. Skills implement them,
   agents and squads load the skills, and code is checked against them at the
   gates. A change starts with the policy and cascades down
@@ -55,10 +55,8 @@ From `export/drunk-workspace/squads/*.json`.
 |---|---|---|---|
 | **product-team** | product-owner | spec-reviewer, release-manager, devops, docs-writer, service-architect, pr-reviewer | A feature end to end: spec, gated review, delegated build, release. Read-only on code. |
 | **dev-team** | dev-leader | dev-backend, dev-frontend, pr-reviewer | One approved spec or confirmed bug as exactly ONE merged PR into `dev`. Never releases. |
-| **blog-team** | dev-leader | blog-writer, dev-frontend, devops, pr-reviewer | One reviewed PR into `develop` of `hbd.astro-paper`. The owner deploys `develop`→`main`. |
 
-Some agents sit in more than one squad. pr-reviewer is in all three, dev-leader
-leads two, and devops and dev-frontend each serve two. The squad a ticket is
+Some agents sit in more than one squad: pr-reviewer and devops. The squad a ticket is
 assigned to decides which briefing the leader follows.
 
 ### Agents outside the squad flow
@@ -80,17 +78,15 @@ assigned to decides which briefing the leader follows.
 These come from the Workspace Context and Policy 09:
 
 - **Only leaders create issues.** product-owner in product-team, dev-leader in
-  dev-team and blog-team. Members report on their own sub-task.
+  dev-team. Members report on their own sub-task.
 - **Members write only on their own ticket**, plus one handoff line on the
   parent. Anything meant for another member goes on the member's own ticket.
   The handoff line wakes the leader, and the leader routes it.
 - **Members never create a branch or push one of their own** (Policy 03
   statement 3b). The leader cuts the feature branch and opens the one PR;
-  members push their commits onto it by refspec. On a blog-team content
-  ticket, blog-writer opens its own `blog/<slug>` PR instead
-  (`squads/blog-team.md`). devops, docs-writer and service-architect are not
-  squad members, so each cuts its own `chore/`, `docs/` or `design/<key>`
-  branch.
+  members push their commits onto it by refspec. devops, docs-writer,
+  service-architect and blog-writer are not squad members, so each cuts its
+  own `chore/`, `docs/`, `design/<key>` or `blog/<slug>` branch.
 - **Humans act through assignment.** A mention of a human only renders a
   link. To make a human act, reassign the ticket to them at `todo` with a
   `## BLOCKER` comment.
@@ -140,7 +136,7 @@ From `skills/sdlc-flow-po-orchestration/SKILL.md`:
 | **D** | CI/CD, build automation, Helm charts | devops on a `chore/<key>` PR to `dev`, then `[P<num>-1c]` PR gate. No spec gate, no release-manager. |
 | **E** | Docs a human asked for | docs-writer on a `docs/<key>` PR, then the PR gate |
 | **F** | A new service | service-architect on a `design/<key>` PR adding `docs/architect/`; merges only on the owner's reply |
-| Blog | Post, site code or CI for drunkcoding.net | Assigned to the blog-team squad; product-owner never handles it |
+| Blog | A post for drunkcoding.net | blog-writer alone opens a PR to `develop`; the owner reviews, merges and deploys. Site code and CI are not handled here |
 
 ## 4. Inside a dev-team cycle
 
@@ -170,10 +166,6 @@ Interactive diagram: `.archify/sequence-dev-team-cycle/dev-team-cycle.html`.
   re-arms the Review. Members never write on each other's tickets.
 - **Docs impact is a report line**, never a stage. A dev-team cycle writes no
   docs pages (Policy 05 statement 3a).
-
-blog-team follows the same leader playbook with its own routes
-(`squads/blog-team.md`). For content, blog-writer opens the PR itself, and
-everything targets `develop`.
 
 ## 5. Ticket status and wakes
 

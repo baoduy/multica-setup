@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-02 |
-| **Version** | 1.17 |
+| **Version** | 1.18 |
 | **Status** | Active |
 | **Owner** | dev-backend, dev-frontend |
 | **Applies to** | Every code or behaviour change in a drunk repo, across every stack |
@@ -180,9 +180,8 @@ statements but follows the runner and structure conventions below.
    could honour that, so the spec gate would have rejected it, and the owner's only way
    through was to approve an ESCALATED gate by hand after three rework rounds.
 1g. **Front-end and back-end code have separate developers.** A front-end app is a repo's
-   browser UI project: everything under `ui/` in DKNet.Accounts.Api, and every file outside
-   `src/data/blog/` and `.github/` in `hbd.astro-paper`. dev-frontend writes the acceptance
-   tests and the Build for every file inside a front-end app, its tests included: UI
+   browser UI project: everything under `ui/` in DKNet.Accounts.Api. dev-frontend writes the
+   acceptance tests and the Build for every file inside a front-end app, its tests included: UI
    presentation under statement 1a, the rest of the app at the full bar. dev-backend does the
    same for every other file. dev-leader assigns each §3 file to its developer by path when it
    writes the briefs; a file outside a front-end app is dev-backend's. A cycle that touches

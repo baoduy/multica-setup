@@ -109,21 +109,6 @@
       ]
     },
     {
-      "id": "bt",
-      "type": "backend",
-      "label": "blog-team",
-      "sublabel": "dev-leader + blog-writer",
-      "tag": "drunkcoding.net",
-      "pos": [
-        1050,
-        70
-      ],
-      "size": [
-        160,
-        64
-      ]
-    },
-    {
       "id": "gh",
       "type": "cloud",
       "label": "GitHub repos",
@@ -209,12 +194,6 @@
       "label": "Review sub-task"
     },
     {
-      "id": "blog-pr",
-      "from": "bt",
-      "to": "prr",
-      "label": "PR to develop"
-    },
-    {
       "id": "merge-dev",
       "from": "prr",
       "to": "gh",
@@ -247,8 +226,7 @@
       "title": "Squads",
       "items": [
         "product-team: product-owner leads; spec-reviewer, release-manager, devops, docs-writer, service-architect, pr-reviewer",
-        "dev-team: dev-leader leads; dev-backend, dev-frontend, pr-reviewer",
-        "blog-team: dev-leader leads; blog-writer, dev-frontend, devops, pr-reviewer"
+        "dev-team: dev-leader leads; dev-backend, dev-frontend, pr-reviewer"
       ]
     },
     {
