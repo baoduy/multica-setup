@@ -75,11 +75,6 @@
       "source_id": "88ae7e11-7fcb-4432-9819-8e6c36c9832d"
     },
     {
-      "name": "medium-publishing",
-      "dir": "skills/medium-publishing",
-      "source_id": "707c5c06-0c46-4f4f-a7cd-0f14d48a0fcf"
-    },
-    {
       "name": "multica-brainstorming",
       "dir": "skills/multica-brainstorming",
       "source_id": "93405984-c94c-444f-9cf9-dc78846de0b5"
@@ -360,18 +355,6 @@
         "sdlc-gitflow"
       ],
       "had_secrets": false
-    },
-    {
-      "name": "medium-publisher",
-      "file": "agents/medium-publisher.json",
-      "source_id": "aada2a10-d43e-4adb-94a9-a6fc8639c1de",
-      "source_runtime_id": "967b6e3b-974a-47a5-a544-34f722e8f268",
-      "source_runtime_provider": "claude",
-      "skill_names": [
-        "astro-paper-blog-conventions",
-        "medium-publishing"
-      ],
-      "had_secrets": true
     },
     {
       "name": "docs-writer",

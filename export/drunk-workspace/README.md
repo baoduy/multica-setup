@@ -1,6 +1,6 @@
 # drunk-workspace export
 
-Full-workspace bundle: 30 skills, 18 agents, 2 squads, 5 projects, 10 autopilots (`autopilots/`, prompt in `*.description.md`), 12 labels, 9 properties, plus `workspace/workspace.context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push text byte-exact: pass the file content as a raw argv element (e.g. from Python `subprocess`) to `multica workspace update <id> --context`, `multica agent update <id> --instructions`, `multica squad update <id> --instructions` and `multica autopilot update <id> --description`; use `--content-stdin` for `multica skill update` and `multica skill files upsert`. Shell `"$(cat f)"` and `--context-stdin` drop the trailing newline, and `--context` decodes backslash escapes. Read every pushed resource back and diff it against the file.
+Full-workspace bundle: 29 skills, 17 agents, 2 squads, 5 projects, 10 autopilots (`autopilots/`, prompt in `*.description.md`), 12 labels, 9 properties, plus `workspace/workspace.context.md` — the workspace system prompt (Workspace Context) that Multica injects into every agent run. Push text byte-exact: pass the file content as a raw argv element (e.g. from Python `subprocess`) to `multica workspace update <id> --context`, `multica agent update <id> --instructions`, `multica squad update <id> --instructions` and `multica autopilot update <id> --description`; use `--content-stdin` for `multica skill update` and `multica skill files upsert`. Shell `"$(cat f)"` and `--context-stdin` drop the trailing newline, and `--context` decodes backslash escapes. Read every pushed resource back and diff it against the file.
 
 **Config files.** `properties/properties.json` carries the ACTIVE property definitions only — archived ones are
 dropped on purpose (the CLI has `property archive`/`unarchive` but no delete, so an archived definition lives on
@@ -50,7 +50,6 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 | dev-backend      | claude  | claude-opus-5-5     | high     |
 | dev-frontend     | claude  | claude-opus-5-5     | high     |
 | release-manager  | claude  | claude-sonnet-5     | high     |
-| medium-publisher | claude  | (runtime default)   | —        |
 | docs-writer      | codex   | gpt-6.1-sol         | high     |
 | devops           | codex   | gpt-6.1-sol         | high     |
 | run-medic        | codex   | gpt-6-luna          | low      |
