@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-01 |
-| **Version** | 1.13 |
+| **Version** | 1.14 |
 | **Status** | Active |
 | **Owner** | dev-leader |
 | **Applies to** | Every engineer and agent writing or modifying code in any drunk stack: .NET/DDD NuGet libraries, Pulumi/TypeScript npm packages, Python MCP/FastAPI services, Docker images, Helm charts |
@@ -87,9 +87,13 @@ generic rule here where they differ (see Exceptions).
    setup or arrange block of ~10 lines or more is a DRY defect at the second copy, because
    the repos' CI duplication gate (SonarCloud, new-code duplication over 3%) counts test
    code and fails the PR. DAMP still holds inside a test body: the rule targets copied
-   setup, not readable assertions. Where the repo runs a duplication gate, the implementer
-   runs a local duplication check against the changed test dirs before pushing; the command
-   lives in `sdlc-flow-squad-worker-playbook` check 9, which owns it.
+   setup, not readable assertions. The acceptance-test author is bound too: arrange code of
+   ~10 lines or more that two or more ATs share goes into the AT harness or the shared
+   fixture before the RED commit, because no Build may remove a copy from a file `at_sha`
+   froze. Where the repo runs a duplication gate, the acceptance-test author, before pushing
+   the RED commit, and the implementer, before its last push, run a local duplication check
+   against the changed test dirs; the command lives in `sdlc-flow-squad-worker-playbook`
+   check 9, which owns it.
 8. **Less code, no speculative abstraction.** No dead code, no interface with one
    implementation and no test-double need, no redundant forwarding wrapper, no reinvented
    BCL/framework/stdlib behaviour (`CLEAN-LESS-001..004`). SRP size triggers: class >~300

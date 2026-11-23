@@ -39,7 +39,7 @@ Once the code is pushed and the suite is green, run the checks below and carry t
    - **New framework API or pattern** the repo does not already use: check the vendor's current official docs (Context7 or the vendor site) and cite the page.
    The row: `Standards | <skills opened> | rule-ids checked: <ids> | reuse: <symbol → reused X / none found> | SRP: largest class <n> lines, method <n> lines / complexity <n>, ctor <n> deps | DRY: <none / merged file:line> | docs: <n/a / url>`.
 
-EVIDENCE carries one row per check with its measured result, plus the `Pre-review` row. Anything a check or the pre-review found that you could not fix inside §3 goes in LEFT OPEN with `file:line`; a self-review finding declared there is never held against the cycle. Docs and config sub-tasks run checks 4–6; `build-ui` Builds run 4–6, 8 and 9 (4, 5 and 8 through the pre-review); Acceptance-tests sub-tasks run 2 and 4–6 inline; `build` and `bug-build` run all nine plus the pre-review.
+EVIDENCE carries one row per check with its measured result, plus the `Pre-review` row. Anything a check or the pre-review found that you could not fix inside §3 goes in LEFT OPEN with `file:line`; a self-review finding declared there is never held against the cycle. Docs and config sub-tasks run checks 4–6; `build-ui` Builds run 4–6, 8 and 9 (4, 5 and 8 through the pre-review); Acceptance-tests sub-tasks run 2 and 4–6 inline, plus check 9's `jscpd` step alone over their AT files (Policy 01 statement 7a, `test-driven-development` outer loop step 1); `build` and `bug-build` run all nine plus the pre-review.
 
 ## Finishing a task
 
