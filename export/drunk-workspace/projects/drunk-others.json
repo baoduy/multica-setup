@@ -33,6 +33,14 @@
       },
       "label": null,
       "position": 2
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/baoduy/entraid-mcp-server.git"
+      },
+      "label": null,
+      "position": 3
     }
   ],
   "description_file": "projects/drunk-others.description.md"

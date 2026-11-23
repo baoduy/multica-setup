@@ -1,11 +1,6 @@
 ---
 name: compose-delivery
-description: >-
-  Safe procedure for changing a docker-compose deployment file — read
-  current file from tracked branch not a stale worktree, validate
-  resolved config with `docker compose config` before opening PR, and
-  deliver via normal PR flow. Use when editing docker-compose.yml services,
-  env/config blocks, volumes, ports, or adding a service to a compose stack.
+description: "Safe procedure for changing a docker-compose deployment file — read the current file from the tracked branch not a stale worktree, validate the resolved config with docker compose config before opening the PR, and deliver via the normal PR flow. Use when editing docker-compose.yml services, env/config blocks, volumes, ports, or adding a service to a compose stack."
 category: devops
 triggers:
   - docker compose

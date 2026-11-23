@@ -1,6 +1,6 @@
 ---
 name: python-mcp-standards
-description: Conventions for drunk Python MCP/gateway services (drunk-mcp-proxy, entraid-mcp-server) — FastAPI/Starlette provider pattern, config-driven composition, src-layout with relative imports, security-safe error logging, singleton providers, and pytest conventions. Use when writing or reviewing Python MCP-server or FastAPI code in baoduy repos.
+description: "Conventions for the drunk Python MCP/gateway services (drunk-mcp-proxy, entraid-mcp-server) — FastAPI/Starlette provider pattern, config-driven composition, src-layout with relative imports, security-safe error logging, singleton providers, and pytest conventions. Use when writing or reviewing Python MCP-server or FastAPI code in the baoduy repos."
 ---
 
 # Python MCP / FastAPI Standards (drunk MCP services)
