@@ -142,7 +142,7 @@ Policy 02 statement 1f: code no shipped artifact uses (an Aspire AppHost and the
 - Clean `dotnet pack` / `npm pack`. No `TODO`, commented-out code or placeholder left.
 - Standards row: stack skill opened, rule-ids checked, reuse search per new public symbol, SRP and DRY measured (worker playbook check 8, Policy 01 statement 15).
 - Every §6a input-domain row has its proof: an AT scenario or a named test (Policy 06 statement 12b).
-- CI parity: every `pull_request` workflow command green on a throwaway local merge of `origin/dev` into HEAD; no check reported skipped or deferred (Policy 02 statement 6b).
+- CI parity: the gating checks read from a PR's check runs and the `pull_request` workflows, app checks such as SonarCloud included; every `pull_request` workflow command green on a throwaway local merge of `origin/dev` into HEAD; jscpd run where a SonarCloud check gates; every claim about CI cites its check run; no check reported skipped or deferred (worker playbook check 9, Policy 02 statement 6b).
 - Pre-review run once, every `blocking`/`important` finding fixed or in LEFT OPEN (worker playbook, `references/pre-review.md`).
 - Plus the brief's §8 extra checks.
 - Pushed to the cycle's feature branch (`HEAD` == `origin/<branch>`), completion report posted (`blocker-report` shape, DEVIATIONS listed), sub-task `done`.
