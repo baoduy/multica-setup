@@ -97,9 +97,16 @@ installed globally for Claude Code at `~/.claude/skills/archify`.
   It keeps the bundle-only `config.json` (the Multica import origin). Live
   drops NUL bytes from skill files, so each raw NUL in an upstream file
   becomes the escape `\u0000` (`renderers/shared/diagnostics.mjs` has two).
-  Lint L11 blocks the merge if one is left. Diff first
+  Lint L11 blocks the merge if one is left. Live also caps a skill at 1 MB
+  per file and 8 MB (8388608 bytes) of supporting files in total. So the
+  bundle drops `modules/code-analysis/` (22 MB with its vendored parsers),
+  and `SKILL.md`'s Code Analysis paragraph says that the module is absent.
+  `renderers/shared/generated-validators.mjs` (1.5 MB) ships as
+  `generated-validators.gz.b64` (`gzip -9nc <file> | base64`) behind a small
+  loader of the same name. Diff first
   (`diff -rq <clone>/archify export/drunk-workspace/skills/archify`), so the
-  only differences are those four.
+  only differences are those listed here. Before you commit, check that no
+  file is over 1 MB and that the supporting files total under 8 MB.
 - Read the upstream `CHANGELOG.md` before you sync. A major or minor bump can
   change the CLI, the schemas or the IR shape. Re-check everything in the
   bundle that quotes archify commands, types or file names. Find them with

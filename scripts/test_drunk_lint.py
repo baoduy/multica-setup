@@ -71,3 +71,8 @@ if __name__ == "__main__":
         errors = lint_with(rule)
         assert any(e.startswith(rule + " ") for e in errors), (rule, errors)
         print("ok", rule, errors[0])
+    # The blog-team retirement merge removed four resources; the sync retires exactly those.
+    gone = sync.resources(*sync.owners("fdc0261")) - sync.resources(*sync.owners("f1fb2df"))
+    assert gone == {("agent", "medium-publisher"), ("squad", "blog-team"), ("project", "drunk-blogs"),
+                    ("skill", "medium-publishing")}, gone
+    print("ok retire", sorted(gone))

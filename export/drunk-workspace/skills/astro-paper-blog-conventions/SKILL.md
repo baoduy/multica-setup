@@ -1,12 +1,6 @@
 ---
 name: astro-paper-blog-conventions
-description: >-
-  Authoring conventions for the AstroPaper blog at github.com/baoduy/hbd.astro-paper
-  (drunkcoding.net) — where posts live, the Markdown filename pattern, the exact
-  frontmatter schema (required vs optional fields), and the house writing voice
-  taken from the repo's own .prompts/writing.prompt. Use whenever writing,
-  editing, or reviewing a blog post for that repo. Every rule carries a stable
-  rule-id.
+description: "Authoring conventions for the AstroPaper blog at github.com/baoduy/hbd.astro-paper (drunkcoding.net): post location, filename pattern, frontmatter schema, and house writing voice."
 category: content
 triggers:
   - blog post

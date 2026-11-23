@@ -4,8 +4,10 @@
 Run from the root of a clone of baoduy/multica-setup, on the host whose
 `multica` CLI is logged in to the drunk workspace (Policy 03 statement 11).
 
-  drunk-live-sync.py            push what changed between tag live/drunk and origin/main
-  drunk-live-sync.py --check    compare every supported bundle file with live, push nothing
+  drunk-live-sync.py            push what changed between tag live/drunk and origin/main, and
+                                retire (archive or delete) each resource the merge removed
+  drunk-live-sync.py --check    compare every supported bundle file with live, and list live
+                                resources the bundle no longer has; push nothing
   drunk-live-sync.py --accept   like the default, but move the tag even when changes were
                                 reported unsupported (only after the owner applied them by hand)
   drunk-live-sync.py --lint     offline check of the bundle at HEAD: values live would reject
@@ -111,6 +113,11 @@ def frontmatter_description(text):
     return None
 
 
+def resources(owner_map, skill_dirs):
+    """(kind, name) of every resource the bundle manages; the workspace itself is not one."""
+    return {(k, n) for k, n, _ in owner_map.values() if k != "workspace"} | {("skill", n) for n in skill_dirs.values()}
+
+
 def owners(rev):
     """Map each live-text bundle file to (kind, live name, field) using the bundle's own json."""
     out = {}
@@ -156,9 +163,8 @@ def classify(path, owner_map, skill_dirs):
 def live_value(live, kind, name, field):
     if kind == "workspace":
         return mjson("workspace", "get", name).get(field) or ""
-    table = {"agent": live.agents, "squad": live.squads, "project": live.projects,
-             "autopilot": live.autopilots}[kind]
-    return (table[name].get(field) or "") if name in table else None
+    t = table(live, kind)
+    return (t[name].get(field) or "") if name in t else None
 
 
 def norm(kind, field, text):
@@ -201,9 +207,7 @@ def push(live, kind, name, field, text):
     value = norm(kind, field, text)
     if field == "description" and kind == "agent" and len(value) > DESC_MAX:
         raise RuntimeError("agent description is %d characters, cap %d" % (len(value), DESC_MAX))
-    table = {"agent": live.agents, "squad": live.squads, "project": live.projects,
-             "autopilot": live.autopilots}[kind]
-    run(["multica", kind, "update", table[name]["id"], "--" + field, value])
+    run(["multica", kind, "update", table(live, kind)[name]["id"], "--" + field, value])
 
 
 def matches(live, kind, name, field, text):
@@ -230,11 +234,23 @@ def matches(live, kind, name, field, text):
     return got is not None and got == norm(kind, field, text)
 
 
+def table(live, kind):
+    return {"agent": live.agents, "squad": live.squads, "project": live.projects,
+            "autopilot": live.autopilots, "skill": live.skills}[kind]
+
+
 def exists(live, kind, name):
-    if kind == "workspace":
-        return True
-    return name in {"agent": live.agents, "squad": live.squads, "project": live.projects,
-                    "autopilot": live.autopilots, "skill": live.skills}[kind]
+    return kind == "workspace" or name in table(live, kind)
+
+
+# How a resource the merge removed leaves live, in this order: an autopilot or squad before the
+# agent it names, a skill after the agents that load it. Every one can be rebuilt from git.
+RETIRE = {"autopilot": ["autopilot", "delete"], "squad": ["squad", "delete"],  # squad delete archives
+          "project": ["project", "archive"], "agent": ["agent", "archive"], "skill": ["skill", "delete"]}
+
+
+def retire(live, kind, name):
+    run(["multica", *RETIRE[kind], table(live, kind)[name]["id"], *(["--yes"] if kind == "skill" else [])])
 
 
 AGENT_CONFIG = ("model", "thinking_level", "max_concurrent_tasks", "skill_names")
@@ -389,6 +405,8 @@ def check(head):
     owner_map, skill_dirs = owners(head)
     live = Live()
     drift, missing = [], []
+    managed = resources(owner_map, skill_dirs)
+    orphans = sorted("%s %s" % (k, n) for k in RETIRE for n in table(live, k) if (k, n) not in managed)
     files = git("ls-tree", "-r", "--name-only", head, "--", BUNDLE).splitlines()
     for full in files:
         path = full[len(BUNDLE) + 1:]
@@ -401,12 +419,14 @@ def check(head):
         elif not (json_matches_live(live, kind, name, show(head, path)) if field == "config"
                   else matches(live, kind, name, field, show(head, path))):
             drift.append(path)
-    return {"status": "clean" if not drift and not missing else "drift", "rev": head,
-            "drift": drift, "missing_live": missing}
+    return {"status": "clean" if not drift and not missing and not orphans else "drift", "rev": head,
+            "drift": drift, "missing_live": missing, "not_in_bundle": orphans}
 
 
 def sync(base, head, accept):
     owner_map, skill_dirs = owners(head)
+    base_map, base_skills = owners(base)
+    gone = resources(base_map, base_skills) - resources(owner_map, skill_dirs)
     live = Live()
     changes = [l.split("\t") for l in git(
         "diff", "--name-status", "--no-renames", base, head, "--", BUNDLE).splitlines() if l]
@@ -417,6 +437,9 @@ def sync(base, head, accept):
         if c == "ignore":
             ignored.append(path)
             continue
+        cb = classify(path, base_map, base_skills) if status == "D" else None
+        if cb not in (None, "ignore") and (cb[0], cb[1]) in gone:
+            continue  # the whole resource retires below
         if c is None or not exists(live, c[0], c[1]) or (status == "D" and c[0] != "skill") \
                 or (status == "D" and c[2] in ("SKILL.md", "config.json")):
             unsupported.append({"path": path, "status": status})
@@ -450,6 +473,19 @@ def sync(base, head, accept):
             (pushed if ok else failed).append({"path": path, "status": status, **({} if ok else {"error": "read-back differs"})})
         except Exception as e:  # report and keep going; the tag stays put
             failed.append({"path": path, "status": status, "error": str(e)})
+    # Retire after the pushes, so a squad config has already dropped a retiring agent.
+    retired = []
+    for kind, name in sorted(gone, key=lambda r: (list(RETIRE).index(r[0]), r[1])):
+        try:
+            if exists(live, kind, name):
+                retire(live, kind, name)
+                live = Live()
+            if exists(live, kind, name):
+                failed.append({"resource": "%s %s" % (kind, name), "error": "still live after retiring"})
+            else:
+                retired.append("%s %s" % (kind, name))
+        except Exception as e:
+            failed.append({"resource": "%s %s" % (kind, name), "error": str(e)})
     commits = git("log", "--format=%h %s", "%s..%s" % (base, head)).splitlines()
     # A squash merge keeps the fix commits only in the body, so read full messages.
     keys = sorted(set(re.findall(r"\[(DRK-[0-9]+)\]", git("log", "--format=%B", "%s..%s" % (base, head)))))
@@ -458,7 +494,7 @@ def sync(base, head, accept):
         git("tag", "-f", TAG, head)
         git("push", "-f", "origin", "refs/tags/%s" % TAG)
     return {"status": "synced" if move else "blocked", "base": base, "head": head,
-            "commits": commits, "issue_keys": keys, "pushed": pushed, "already_live": already, "unsupported": unsupported,
+            "commits": commits, "issue_keys": keys, "pushed": pushed, "already_live": already, "retired": retired, "unsupported": unsupported,
             "failed": failed, "ignored": ignored, "tag_moved": move}
 
 

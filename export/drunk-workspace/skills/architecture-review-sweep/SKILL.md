@@ -1,6 +1,6 @@
 ---
 name: architecture-review-sweep
-description: End-to-end workflow for recurring architecture review of .NET solution — shard codebase across parallel analyzers, rank findings by severity, dedupe against already-filed issues, file survivors into project backlog, and convert mechanically-checkable rules into permanent architecture tests. Use when running scheduled or on-demand architecture/code-quality review that outputs Multica issues.
+description: "End-to-end workflow for a recurring architecture review of a .NET solution — shard the codebase across parallel analyzers, rank findings by severity, deduplicate against already-filed issues, file the survivors into a project backlog, and convert mechanically-checkable rules into permanent architecture tests. Use when running a scheduled or on-demand architecture/code-quality review that outputs Multica issues."
 ---
 
 # Architecture Review Sweep

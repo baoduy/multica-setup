@@ -25,6 +25,14 @@
       },
       "label": "DKNet.Notification.Api — template-based notification service: renders a template with parameters and delivers it to email or Microsoft Teams",
       "position": 1
+    },
+    {
+      "resource_type": "github_repo",
+      "resource_ref": {
+        "url": "https://github.com/baoduy/DKNet.StaticData.Api.git"
+      },
+      "label": null,
+      "position": 2
     }
   ],
   "description_file": "projects/drunk-banking.description.md"

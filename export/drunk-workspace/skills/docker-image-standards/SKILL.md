@@ -1,6 +1,6 @@
 ---
 name: docker-image-standards
-description: Conventions for drunk container images (dev-environments, action-runners, YarpProxy, mcp-proxy, and per-service Dockerfiles) — multi-stage BuildKit builds, non-root runtime, cache mounts, ARG-driven versions, and slim reproducible runtime stages. Use when writing or reviewing a Dockerfile or image build in baoduy repos.
+description: "Conventions for the drunk container images (dev-environments, action-runners, YarpProxy, mcp-proxy, and the per-service Dockerfiles) — multi-stage BuildKit builds, non-root runtime, cache mounts, ARG-driven versions, and slim reproducible runtime stages. Use when writing or reviewing a Dockerfile or image build in the baoduy repos."
 ---
 
 # Docker Image Standards (drunk images)

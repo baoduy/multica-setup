@@ -1,6 +1,6 @@
 ---
 name: dknet-ddd-conventions
-description: Authoritative reference for DKNet framework DDD conventions (entities, aggregates, domain events, repositories, specifications, hooks, data authorization, SlimMessageBus CQRS). Use when reviewing, designing, or writing .NET code in solution that references DKNet.* packages. Contains verified contract signatures plus violation patterns reviewer must flag.
+description: "Authoritative reference for DKNet framework DDD conventions (entities, aggregates, domain events, repositories, specifications, hooks, data authorization, SlimMessageBus CQRS). Use when reviewing, designing, or writing .NET code in a solution that references DKNet.* packages. Contains verified contract signatures plus the violation patterns a reviewer must flag."
 ---
 
 # DKNet DDD Conventions

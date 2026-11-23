@@ -1,6 +1,6 @@
 ---
 name: pulumi-azure-iac-standards
-description: Conventions for drunk Pulumi Azure/Cloudflare TypeScript IaC libraries (@drunk-pulumi/*) — Builder pattern, convention-over-configuration naming, security-by-default (RBAC, Key Vault, private endpoints), composable type system, and how components/providers are structured and tested, plus the four monthly-review rule families (security-by-default, upstream provider drift, deprecation path, Well-Architected best practice). Use when writing, reviewing, or extending Pulumi TypeScript code in drunk-pulumi-* repos.
+description: "Conventions for the drunk Pulumi Azure/Cloudflare TypeScript IaC libraries (@drunk-pulumi/*) — the Builder pattern, convention-over-configuration naming, security-by-default (RBAC, Key Vault, private endpoints), the composable type system, how components/providers are structured and tested, plus the four monthly-review rule families: security-by-default (PULUMI-SEC-*), upstream provider drift (PULUMI-UP-*), retired Azure surface (PULUMI-DEP-* with the pinned azure-retirements.md list), and Azure Well-Architected best practice (PULUMI-WAF-*). Use when writing, reviewing, or extending Pulumi TypeScript code in the drunk-pulumi-* repos."
 ---
 
 # Pulumi Azure IaC Standards (drunk-pulumi-*)
