@@ -38,15 +38,15 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 
 | Agent            | Runtime | Model               | Thinking |
 | ---------------- | ------- | ------------------- | -------- |
-| arch-reviewer    | claude  | claude-opus-5-5[1m] | xhigh    |
-| setup-steward    | claude  | claude-opus-5-5[1m] | xhigh    |
-| product-owner    | claude  | claude-opus-5-5[1m] | xhigh    |
-| service-architect | claude | claude-opus-5-5[1m] | high     |
-| spec-reviewer    | claude  | claude-opus-5-5[1m] | high     |
-| dev-leader       | claude  | claude-opus-5-5[1m] | high     |
-| pr-reviewer      | claude  | claude-opus-5-5[1m] | xhigh    |
+| arch-reviewer    | claude  | claude-opus-5-5     | xhigh    |
+| setup-steward    | claude  | claude-opus-5-5     | xhigh    |
+| product-owner    | claude  | claude-opus-5-5     | high     |
+| service-architect | claude | claude-opus-5-5     | high     |
+| spec-reviewer    | claude  | claude-opus-5-5     | high     |
+| dev-leader       | claude  | claude-opus-5-5     | high     |
+| pr-reviewer      | claude  | claude-opus-5-5     | xhigh    |
 | blog-writer      | claude  | claude-sonnet-5-5   | high     |
-| claude_ultra     | claude  | claude-opus-5-5[1m] | xhigh    |
+| claude_ultra     | claude  | claude-opus-5-5     | xhigh    |
 | dev-backend      | claude  | claude-opus-5-5     | high     |
 | dev-frontend     | claude  | claude-opus-5-5     | high     |
 | release-manager  | claude  | claude-sonnet-5-5   | high     |
@@ -57,5 +57,5 @@ Generated from `agents/*.json` (`model` / `thinking_level` / runtime) — keep i
 | Mika             | codex   | gpt-6-luna          | medium   |
 
 
-Main development stays on Claude; the work around it rides Codex. Reasoning/judgment roles (orchestration, gates, review) ride opus on the 1M-context tier (`claude-opus-5-5[1m]`) — arch-reviewer, product-owner, pr-reviewer, setup-steward and the `claude_ultra` assistant at `xhigh`, dev-leader, spec-reviewer and service-architect at `high`; `dev-backend` and `dev-frontend` ride opus on the standard tier (`claude-opus-5-5`) at `high`; release-manager and blog-writer ride sonnet (`claude-sonnet-5-5`) at `high`. These run on the `Claude (Stevens-Mac-mini.local)` runtime.
+Main development stays on Claude; the work around it rides Codex. Every Claude agent runs on the plain model ID: Claude Opus 5.5 and Sonnet 5.5 have a 1M context window by default, so there is no `[1m]` variant. Reasoning/judgment roles (orchestration, gates, review) ride opus (`claude-opus-5-5`) — arch-reviewer, pr-reviewer, setup-steward and the `claude_ultra` assistant at `xhigh`, product-owner, dev-leader, spec-reviewer and service-architect at `high`; `dev-backend` and `dev-frontend` ride opus at `high` too; release-manager and blog-writer ride sonnet (`claude-sonnet-5-5`) at `high`. These run on the `Claude (Stevens-Mac-mini.local)` runtime.
 devops rides `gpt-6.1-sol` at `high` (moved off `gpt-6-sol` after OpenAI returned "Selected model is at capacity" mid-run). docs-writer was moved live to `claude-opus-5-5` at `medium` on the `Claude (Stevens-Mac-mini.local)` runtime, recorded here 2026-11-23; `run-medic`, `issue-janitor` and `Mika` ride `gpt-6-luna` (`low` for run-medic — hourly run recovery is pattern-matching over agent task rows, not judgment — `medium` for the other two). These run on the `Codex (Stevens-Mac-mini.local)` runtime: the same host as Claude, because Mika's monthly insights autopilot shells out to `claude -p "/insights"`. Thinking is always set explicitly on a Codex agent; left empty, it inherits the host's `~/.codex/config.toml`.
