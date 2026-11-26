@@ -1,1 +1,1 @@
-Weekly issue-hygiene janitor: propagates terminal parent status to forgotten sub-issues, then deletes long-cancelled issues children-first.
+Weekly issue-hygiene janitor: propagates terminal parent status to forgotten sub-issues, then lists long-cancelled issues, children first, for the owner to delete.

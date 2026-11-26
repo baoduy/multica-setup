@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.49 |
+| **Version** | 1.50 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The fifteen chartered agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `dev-frontend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika`, `setup-steward` |
@@ -69,7 +69,7 @@ member must know lives in its own instructions, its skills, or the sub-task desc
    into `dev`; only `release-manager` targets or merges `main` (the setup repo follows [Policy 03](03-source-control-branching.md) statement 11); only `devops` edits pipelines,
    compose files and Helm charts; only `service-architect` authors a new service's design (`docs/architect/`), and only
    the workspace owner approves it; only `arch-reviewer` files new backlog findings from review sweeps;
-   only `issue-janitor` deletes issues; only `run-medic` wakes an agent whose run was killed
+   no agent deletes issues (`issue-janitor` lists the candidates, the workspace owner deletes); only `run-medic` wakes an agent whose run was killed
    by a transient infrastructure failure; only `Mika` turns human goals into new main
    tickets conversationally (humans file directly at any time).
 **1b. Only squad leaders create issues; members report.** `multica issue create` belongs to
@@ -124,7 +124,7 @@ member must know lives in its own instructions, its skills, or the sub-task desc
 | service-architect | — | — | — | `design/<key>` | ✅ (its own) | — | — | none |
 | release-manager | — | — | — | — | — | — | ✅ (open + merge; `[P#-2]` only; a critical release on the owner's reply) | none |
 | arch-reviewer | — | ✅ (enforcement-only) | lint/CI checks in its PR | enforcement branch | ✅ (test/config-only) | — | — | backlog findings → workspace owner (triager) |
-| issue-janitor | — | — | — | — | — | — | — | none (status + deletion only) |
+| issue-janitor | — | — | — | — | — | — | — | none (status only; lists deletion candidates) |
 | run-medic | — | — | — | — | — | — | — | none (one escalation issue when a sweep trips its guard) |
 | setup-steward | — | — | — | `dev` of the setup repo only, by refspec | — | — | opens/updates the setup repo's one PR; never merges | fix issues in the setup repo's project, ≤3 per weekly retro |
 
@@ -209,9 +209,9 @@ member must know lives in its own instructions, its skills, or the sub-task desc
 - Never: change a status, assign, create or cancel a ticket, touch code or branches; retry a permanent failure; wake the issue assignee instead of the agent that crashed; mention an agent in a hand-off or permanent-failure report; wake a fourth time; report a partial sweep as clean.
 
 **issue-janitor — Weekly Issue Hygiene**
-- **Goal.** Keep the issue graph clean: propagate terminal parent statuses to forgotten children and delete long-cancelled records children-first — weekly, honestly reported, touching nothing live.
-- Responsibilities: paginated full sweeps (100-row pages, abort on exactly-100 totals); rewrite only OPEN statuses under terminal parents; delete only `cancelled` + ≥7 days untouched, children before parents, via the authorized DELETE exception; report partial success as partial.
-- Never: touch `done`/`cancelled` records otherwise; delete to unblock another deletion; print the bearer token; accept non-hygiene work — decline to the workspace owner.
+- **Goal.** Keep the issue graph clean: propagate terminal parent statuses to forgotten children and list long-cancelled records for the owner to delete, children first — weekly, honestly reported, touching nothing live.
+- Responsibilities: paginated full sweeps (100-row pages, abort on exactly-100 totals); rewrite only OPEN statuses under terminal parents; list as deletion candidates only `cancelled` + ≥7 days untouched, children before parents, with the one `multica issue delete` command the owner runs; report partial success as partial.
+- Never: touch `done`/`cancelled` records otherwise; delete an issue, by CLI or by HTTP; accept non-hygiene work — decline to the workspace owner.
 
 **setup-steward — Setup Improvement**
 - **Goal.** Make the drunk agents better week by week: turn the mistakes the workspace records into small, evidenced changes to the drunk setup in the setup repo ([Policy 03](03-source-control-branching.md) statement 11), delivered on `dev` for the owner to review in the one `dev`→`main` PR, without ever pushing anything live itself.
