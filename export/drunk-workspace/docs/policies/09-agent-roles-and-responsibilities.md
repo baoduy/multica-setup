@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Policy ID** | DRK-POL-09 |
-| **Version** | 1.48 |
+| **Version** | 1.49 |
 | **Status** | Active |
 | **Owner** | drunkcoding (workspace owner) |
 | **Applies to** | The fifteen chartered agents: `product-owner`, `spec-reviewer`, `service-architect`, `dev-leader`, `dev-backend`, `dev-frontend`, `pr-reviewer`, `devops`, `docs-writer`, `release-manager`, `arch-reviewer`, `issue-janitor`, `run-medic`, `Mika`, `setup-steward` |
@@ -44,8 +44,12 @@ autopilot's description, never in the assistant's instructions.
 injected into every agent run and carries the platform-wide constants — statuses and wakes,
 ticket conventions, `Owner` resolution, git rules, report shapes. Agent instructions, squad
 briefings and skills do not restate those rules; they cite them. Squad `instructions` reach
-the squad LEADER only; anything a member must know lives in its own instructions, its skills,
-or the sub-task description.
+the squad leader on a leader task only: a ticket assigned to the squad, or a comment that
+mentions it. A leader that is assigned its tickets directly never receives them, so its
+procedure lives in its own instructions and skills, and its squad's briefing is a pointer
+(product-team, whose leader product-owner is assigned directly). A member receives them only
+when it runs on a ticket assigned to the squad itself, which no member here does; anything a
+member must know lives in its own instructions, its skills, or the sub-task description.
 
 ## Policy statements
 
@@ -219,9 +223,11 @@ or the sub-task description.
 - Every in-scope agent's instructions open with its charter **Goal**, and its description
   (`agents/*.description.md`, shown on the workspace roster) summarizes the same goal in
   one or two sentences — no stale capabilities, no duplicated branch-authority prose.
-- Every squad briefing (`squads/*.md`) opens with a **Goal** line, and its member table's
-  responsibility column matches each member's charter here — same owner, same boundary,
-  same numbers (e.g. the ≥80% per-touched-class coverage bar from [Policy 02](02-testing-and-quality.md)).
+- Every squad briefing (`squads/*.md`) opens with a **Goal** line. A briefing that carries a
+  member table (dev-team) keeps its responsibility column matched to each member's charter
+  here — same owner, same boundary, same numbers (e.g. the ≥80% per-touched-class coverage
+  bar from [Policy 02](02-testing-and-quality.md)). A pointer briefing (product-team) carries
+  no member table and no rule of its own: it names the skills that hold the procedure.
 - No agent instruction grants an authority its matrix row forbids.
 - `claude_ultra` instructions contain no factory-role duties; the live sync runs from its autopilot's description, assigned to `Mika`.
 - Each charter's Never list is enforceable verbatim: a violated Never in a run report is
